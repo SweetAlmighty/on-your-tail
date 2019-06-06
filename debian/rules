@@ -1,0 +1,12 @@
+#!/usr/bin/make -f
+
+%:
+	dh $@
+
+override_dh_auto_build:
+	mkdir onyourtail -p
+	cp -a *.lua data maps onyourtail/
+	find onyourtail -type f -exec chmod 0644 {} \;
+	find onyourtail -type f -exec touch --date='@$(SOURCE_DATE_EPOCH)' {} \;
+	cd onyourtail && find -type f | LC_ALL=C sort | \
+               env TZ=UTC zip -r -q -9 -X ../onyourtail.love -@

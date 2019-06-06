@@ -1,0 +1,5 @@
+Source: onyourtail
+Build-Depends: debhelper (>= 11), zip
+
+Package: onyourtail
+Depends: love (>= 11.0), ${misc:Depends}

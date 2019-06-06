@@ -2,12 +2,14 @@
 function love.load()
     love.window.setTitle("On Your Tail")
 
+    love.window.setMode(320, 240)
+
     inputKeyMap = 
     {
-        up = "w",
-        left = "a",
-        down = "s",
-        right = "d",
+        up = "up",
+        left = "left",
+        down = "down",
+        right = "right",
         exit = "escape"
     }
 
