@@ -1,3 +1,8 @@
+
+sceneSpeed = 2
+windowWidth = 320
+windowHeight = 240
+
 -- LOVE2D Functions
 function love.load()
     initializeWindow()
@@ -11,40 +16,43 @@ function love.update(dt)
 end
 
 function love.draw()
-    love.graphics.setColor(1, 1, 0)
-    for i,b in ipairs(buildings) do
-        love.graphics.rectangle("fill", b.x, b.y, b.width, b.height)
-    end
-
-    love.graphics.setColor(0, 0, 1)
-    love.graphics.circle("fill", player.x, player.y, player.radius)
+    love.graphics.draw(sceneOne.image, sceneOne.x, sceneOne.y)
+    love.graphics.draw(sceneTwo.image, sceneTwo.x, sceneTwo.y)
+    love.graphics.draw(player.image, player.x, player.y, nil, nil, nil, player.width / 2, 
+        player.height / 2)
 end
 --
 
 
 function initializeWindow()
-    love.window.setMode(320, 240)
+    love.window.setMode(windowWidth, windowHeight)
     love.window.setTitle("On Your Tail")
-    love.graphics.setBackgroundColor(0.5, 0.5, 0.5)
 end
 
 function initializeScene()
     player = {}
-    player.x = 160
-    player.y = 120
-    player.speed = 180
-    player.radius = 10
+    player.x = windowWidth / 2
+    player.y = windowHeight / 2
+    player.speed = 120
+    player.image = love.graphics.newImage("data/player.png")
+    player.width = player.image:getWidth()
+    player.height = player.image:getHeight()
 
-    street = {}
-    street.XMin = 50
-    street.YMin = 0
-    street.XMax = 270
-    street.YMax = 240
+    streetBorder = {}
+    streetBorder.XMin = 60
+    streetBorder.YMin = 0
+    streetBorder.XMax = 260
+    streetBorder.YMax = 240
+
+    sceneOne = {}
+    sceneOne.x = 0
+    sceneOne.y = 0
+    sceneOne.image = love.graphics.newImage("data/street_one.png")
     
-    buildings = {}
-    sceneSpeed = 180
-
-    spawnBuildings()
+    sceneTwo = {}
+    sceneTwo.x = 0
+    sceneTwo.y = -240
+    sceneTwo.image = love.graphics.newImage("data/street_two.png")
 end
 
 function initializeKeymapping()
@@ -67,16 +75,6 @@ function initializeKeymapping()
     }
 end
 
-function spawnBuildings()
-    for i = 0, 5, 1 do
-        building = {}
-        building.x = (i <= 2) and 0 or 270
-        building.y = ((i <= 2) and i or i - 3) * -120
-        building.width = 50
-        building.height = 100
-        table.insert(buildings, building)
-    end
-end
 
 function processInput(dt)
     for k, v in pairs(inputKeyMap) do
@@ -86,13 +84,23 @@ function processInput(dt)
     end
 end
 
+function processSceneMovement(dt)
+    local y = sceneOne.y + sceneSpeed
+    sceneOne.y = (y > (windowHeight - sceneSpeed)) and (-windowHeight) or (y)
+
+    y = sceneTwo.y + sceneSpeed
+    sceneTwo.y = (y > (windowHeight - sceneSpeed)) and (-windowHeight) or (y)
+end
+
+
 function clampPlayerX(pos) 
     local newPos = pos
+    local width = player.width / 2
 
-    if pos < street.XMin + player.radius then
-        newPos = street.XMin + player.radius
-    elseif pos > street.XMax - player.radius then
-        newPos = street.XMax - player.radius
+    if pos < streetBorder.XMin + width then
+        newPos = streetBorder.XMin + width
+    elseif pos > streetBorder.XMax - width then
+        newPos = streetBorder.XMax - width
     end
 
     player.x = newPos
@@ -100,23 +108,13 @@ end
 
 function clampPlayerY(pos)
     local newPos = pos
+    local height = player.height / 2
 
-    if pos < street.YMin + player.radius then
-        newPos = street.YMin + player.radius
-    elseif pos > street.YMax - player.radius then
-        newPos = street.YMax - player.radius
+    if pos < streetBorder.YMin + height then
+        newPos = streetBorder.YMin + height
+    elseif pos > streetBorder.YMax - height then
+        newPos = streetBorder.YMax - height
     end
 
     player.y = newPos
-end
-
-function processSceneMovement(dt)
-    for i,b in ipairs(buildings) do
-        b.y = b.y + sceneSpeed * dt
-
-        if b.y > love.graphics.getHeight() then
-            b.x = (i > 3) and 0 or 270
-            b.y = -120
-        end
-    end
 end
