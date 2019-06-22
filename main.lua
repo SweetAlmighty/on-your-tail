@@ -2,20 +2,22 @@
 require "cat"
 require "scene"
 require "input"
-
+require "entity"
 
 Entities = {}
 totalCats = 5
 canInteract = false
 World = love.physics.newWorld(0, 0, true)
 
+height = 240
+width = 320
 
 -- LOVE2D --
 function love.load()
     love.window.setTitle("On Your Tail")
-    love.window.setMode(SceneWidth, SceneHeight)
+    love.window.setMode(width, height)
 
-    player = Entity:Create(SceneWidth / 2, SceneHeight / 2, 
+    player = Entity:Create(width / 2, height / 2, 
         love.graphics.newImage("data/player.png"), World, 120, 2)
 
     table.insert(Entities, player)
@@ -105,7 +107,7 @@ end
 function updateCats()
     if player.isInteracting == false then
         for i, cat in ipairs(cats) do
-            Cat:Update(cat, SceneSpeed, SceneHeight)
+            Cat:Update(cat, SceneSpeed, width)
         end
     end
 end

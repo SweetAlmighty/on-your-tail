@@ -5,7 +5,15 @@ require "love.graphics"
 Cat = Entity:CreateEmpty()
 Cat.__index = Cat
 
-CatSprite = dofile("catSprite.lua")
+Sprites = {
+    love.graphics.newQuad(0, 0, 20, 20, 60, 40),
+    love.graphics.newQuad(0, 20, 20, 20, 60, 40),
+    love.graphics.newQuad(20, 0, 20, 20, 60, 40),
+    love.graphics.newQuad(20, 20, 20, 20, 60, 40),
+    love.graphics.newQuad(40, 0, 20, 20, 60, 40)
+}
+
+Image = love.graphics.newImage("data/cats.png")
 
 function Cat:Create(x, y, world, category)
     local this = {}
@@ -34,6 +42,6 @@ function Cat:Update(cat, speed, height)
 end
 
 function Cat:Draw(cat, index)
-    love.graphics.draw(CatSprite.Image, CatSprite.Sprites[index], cat.body:getX(), cat.body:getY(), 
+    love.graphics.draw(Image, Sprites[index], cat.body:getX(), cat.body:getY(), 
         nil, nil, nil, cat.width / 2, cat.height / 2)
 end
