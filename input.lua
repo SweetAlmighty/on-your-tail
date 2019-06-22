@@ -19,16 +19,26 @@ inputKeyMap =
     start = "kpenter"
 }
 
-function setCallbacks(onB, onY, onUp, onLeft, onDown, onRight)
+function setCallbacks(onA, onB, onX, onY, onUp, onLeft, onDown, onRight, onLK1, onLK2, onLK3, onLK4, 
+    onLK5, onMenu, onStart, onSelect)
     inputActionMap =
     {
-        [inputKeyMap.menu]  = function(x) love.event.quit() end,
-        [inputKeyMap.b]     = function(x) onB(x) end,
-        [inputKeyMap.y]     = function(x) onY(x) end,
-        [inputKeyMap.up]    = function(x) onUp(x) end,
-        [inputKeyMap.left]  = function(x) onLeft(x) end,
-        [inputKeyMap.down]  = function(x) onDown(x) end,
-        [inputKeyMap.right] = function(x) onRight(x) end
+        [inputKeyMap.a]      = function(x) onA(x) end,
+        [inputKeyMap.b]      = function(x) onB(x) end,
+        [inputKeyMap.x]      = function(x) onX(x) end,
+        [inputKeyMap.y]      = function(x) onY(x) end,
+        [inputKeyMap.up]     = function(x) onUp(x) end,
+        [inputKeyMap.left]   = function(x) onLeft(x) end,
+        [inputKeyMap.down]   = function(x) onDown(x) end,
+        [inputKeyMap.right]  = function(x) onRight(x) end,
+        [inputKeyMap.lk1]    = function(x) onLK1(x) end,
+        [inputKeyMap.lk2]    = function(x) onLK2(x) end,
+        [inputKeyMap.lk3]    = function(x) onLK3(x) end,
+        [inputKeyMap.lk4]    = function(x) onLK4(x) end,
+        [inputKeyMap.lk5]    = function(x) onLK5(x) end,
+        [inputKeyMap.menu]   = function(x) onMenu(x) end,
+        [inputKeyMap.start]  = function(x) onStart(x) end,
+        [inputKeyMap.select] = function(x) onSelect(x) end
     }
 end
 

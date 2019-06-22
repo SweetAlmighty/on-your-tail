@@ -24,21 +24,32 @@ function love.load()
 
     scene = Scene:Create(
         love.graphics.newImage("data/background.png"),
-        love.graphics.newQuad(0, 0, 320, 240, 320, 480),
-        love.graphics.newQuad(0, 241, 320, 240, 320, 480)) 
+        love.graphics.newQuad(0, 0, width, height, width, 480),
+        love.graphics.newQuad(0, 241, width, height, width, 480)) 
 
     initializeCats()
 
     setCallbacks(
-        function(x) activateInteraction() end,
-        function(x) deactivateInteraction() end,
-        function(x) player.body:setY(player.body:getY() + (player.speed * -x)) end,
-        function(x) player.body:setX(player.body:getX() + (player.speed * -x)) end,
-        function(x) player.body:setY(player.body:getY() + (player.speed * x)) end,
-        function(x) player.body:setX(player.body:getX() + (player.speed * x)) end)
+        function(x) print("A") end,                                                 --[[onA]]
+        function(x) activateInteraction() end,                                      --[[onB]]
+        function(x) print("X") end,                                                 --[[onX]]
+        function(x) deactivateInteraction() end,                                    --[[onY]]
+        function(x) player.body:setY(player.body:getY() + (player.speed * -x)) end, --[[onUp]]
+        function(x) player.body:setX(player.body:getX() + (player.speed * -x)) end, --[[onLeft]]
+        function(x) player.body:setY(player.body:getY() + (player.speed * x)) end,  --[[onDown]]
+        function(x) player.body:setX(player.body:getX() + (player.speed * x)) end,  --[[onRight]]
+        function(x) print("1") end,                                                 --[[onLK1]]
+        function(x) print("2") end,                                                 --[[onLK2]]
+        function(x) print("3") end,                                                 --[[onLK3]]
+        function(x) print("4") end,                                                 --[[onLK4]]
+        function(x) print("5") end,                                                 --[[onLK5]]
+        function(x) love.event.quit() end,                                          --[[onMenu]]
+        function(x) print("START") end,                                             --[[onStart]]
+        function(x) print("SELECT") end)                                            --[[onSelect]]
 
     World:setCallbacks(onCollisionEnter, onCollisionExit, nil, nil)
 end
+
 
 function love.update(dt)
     processInput(dt)
