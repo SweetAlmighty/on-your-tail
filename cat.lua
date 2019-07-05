@@ -10,7 +10,8 @@ Sprites = {
     love.graphics.newQuad(0, 20, 20, 20, 60, 40),
     love.graphics.newQuad(20, 0, 20, 20, 60, 40),
     love.graphics.newQuad(20, 20, 20, 20, 60, 40),
-    love.graphics.newQuad(40, 0, 20, 20, 60, 40)
+    love.graphics.newQuad(40, 0, 20, 20, 60, 40),
+    love.graphics.newQuad(40, 20, 20, 20, 60, 40)
 }
 
 Image = love.graphics.newImage("data/cats.png")
@@ -21,10 +22,10 @@ function Cat:Create(x, y, world, category)
     this.image = nil
     this.width = 20
     this.height = 20
+    this.isInteracting = false
     this.body = love.physics.newBody(world, x, y, "dynamic")
     this.shape = love.physics.newRectangleShape(this.width, this.height)
     this.fixture = love.physics.newFixture(this.body, this.shape, 1)
-    this.isInteracting = false
     this.fixture:setCategory(category)
     setmetatable(this, Cat)
     return this
