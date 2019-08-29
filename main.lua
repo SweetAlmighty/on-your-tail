@@ -3,6 +3,7 @@ require "cat"
 require "scene"
 require "input"
 require "entity"
+require "mainMenu"
 
 delta = 0
 width = 320
@@ -15,6 +16,8 @@ totalCats = 6
 currentCat = nil
 canInteract = false
 World = love.physics.newWorld(0, 0, true)
+
+state = 0
 
 -- LOVE2D --
 function love.load()
@@ -32,20 +35,20 @@ function love.load()
     initializeCats()
 
     setCallbacks(
-        function(x) print("A") end,                                                 --[[onA]]
-        function(x) activateInteraction(x) end,                                     --[[onB]]
+        function(x) OnAccept(x) end,                                                --[[onA]]
+        function(x) OnInteract(x) end,                                              --[[onB]]
         function(x) print("X") end,                                                 --[[onX]]
         function(x) deactivateInteraction() end,                                    --[[onY]]
-        function(x) player.body:setY(player.body:getY() + (player.speed * -x)) end, --[[onUp]]
+        function(x) OnUp(x) end,                                                    --[[onUp]]
         function(x) player.body:setX(player.body:getX() + (player.speed * -x)) end, --[[onLeft]]
-        function(x) player.body:setY(player.body:getY() + (player.speed * x)) end,  --[[onDown]]
+        function(x) OnDown(x) end,                                                  --[[onDown]]
         function(x) player.body:setX(player.body:getX() + (player.speed * x)) end,  --[[onRight]]
         function(x) print("1") end,                                                 --[[onLK1]]
         function(x) print("2") end,                                                 --[[onLK2]]
         function(x) print("3") end,                                                 --[[onLK3]]
         function(x) print("4") end,                                                 --[[onLK4]]
         function(x) print("5") end,                                                 --[[onLK5]]
-        function(x) love.event.quit() end,                                          --[[onMenu]]
+        function(x) state = 0 reset() end,                                          --[[onMenu]]
         function(x) print("START") end,                                             --[[onStart]]
         function(x) print("SELECT") end)                                            --[[onSelect]]
 
@@ -53,43 +56,92 @@ function love.load()
 end
 
 function love.update(dt)
-    checkForReset(dt)
-    processInput(dt)
-    clampPlayerToPlayArea()
-
-    if player.isInteracting == false then
-        updateCats()
-        Scene:Update(scene)
-        World:update(dt, 8, 3)
+    if state == 1 then
+        checkForReset(dt)
+        processInput(dt)
+        clampPlayerToPlayArea()
+    
+        if player.isInteracting == false then
+            updateCats()
+            Scene:Update(scene)
+            World:update(dt, 8, 3)
+        end
     end
 end
 
 function love.draw()
+    if state == 0 then
+        MainMenu:Draw()
+    elseif state == 1 then
+        drawScene()
+    end
+end
+
+function drawScene()
+    -- Move all background and entity drawing to Scene, perhaps.
     Scene:Draw(scene) 
     drawCats()  
     Entity:Draw(player)
-    drawStressBar()
 
-   love.graphics.print(string.format("Time: %.3f", delta), width - 100, 10)
-end
+    -- Move to "UI/HUD" class/function 
+    drawStressBar()  
+    love.graphics.print(string.format("Time: %.3f", delta), width - 100, 10)
+end 
 
 function checkForReset(dt)
     delta = delta + dt
     percent = percent + (dt * SceneSpeed)
 
     if percent >= 120 then
-        player.body:setX(width / 2)
-        player.body:setY(height / 2)
-        
-        for i, cat in ipairs(cats) do 
-            repositionCat(cat)
-        end
-
-        percent = 0
-        delta = 0
+        reset()
     end
 end
+
+function reset()
+    player.body:setX(width / 2)
+    player.body:setY(height / 2)
+    
+    for i, cat in ipairs(cats) do 
+        repositionCat(cat)
+    end
+
+    percent = 0
+    delta = 0
+end
 -------------
+
+
+-------- INPUT --------
+function OnUp(x)
+    if (state == 0) then
+        print("Bye")
+    elseif (state == 1) then
+        player.body:setY(player.body:getY() + (player.speed * -x))
+    end
+end
+function OnDown(x)
+    if (state == 0) then
+        print("Hi")
+    elseif (state == 1) then
+        player.body:setY(player.body:getY() + (player.speed * x))
+    end
+end
+function OnInteract(x)
+    if (state == 0) then
+        print("B")
+    elseif (state == 1) then
+        activateInteraction(x)
+    end
+end
+function OnAccept(x)
+    if (state == 0) then
+        print("A")
+    elseif (state == 1) then
+        print("AAAA")
+    end
+end
+-----------------------
+
 
 -------- Player -------
 function clampPlayerToPlayArea(dt)
@@ -135,11 +187,12 @@ function drawStressBar()
 end
 ----------------
 
+
 ------- Cats -------
 function initializeCats() 
     cats = {}
     for i = 1, totalCats, 1 do
-        cat = Cat:Create(0, 0, World, CATegory)
+        cat = Cat:Create(0, 0, World, CATegory, i)
         cat.body:setPosition(repositionCat(cat))
         table.insert(cats, cat)
     end

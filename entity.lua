@@ -15,8 +15,8 @@ Entity.__index = Entity
 function Entity:Create(x, y, image, world, speed, category)
     local this = {}
     this.speed = speed
-    this.isInteracting = false
     this.image = image
+    this.isInteracting = false
     this.width = (this.image == nil) and 1 or this.image:getWidth()
     this.height = (this.image == nil) and 1 or this.image:getHeight()
     this.body = love.physics.newBody(world, x, y, "dynamic")

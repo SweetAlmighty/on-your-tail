@@ -16,12 +16,13 @@ Sprites = {
 
 Image = love.graphics.newImage("data/cats.png")
 
-function Cat:Create(x, y, world, category)
+function Cat:Create(x, y, world, category, index)
     local this = {}
     this.speed = 2
     this.image = nil
     this.width = 20
     this.height = 20
+    this.index = index
     this.isInteracting = false
     this.body = love.physics.newBody(world, x, y, "dynamic")
     this.shape = love.physics.newRectangleShape(this.width, this.height)
@@ -42,7 +43,7 @@ function Cat:Update(cat, speed, height)
     cat.body:setPosition(catX, catY)
 end
 
-function Cat:Draw(cat, index)
-    love.graphics.draw(Image, Sprites[index], cat.body:getX(), cat.body:getY(), 
+function Cat:Draw(cat)
+    love.graphics.draw(Image, Sprites[cat.index], cat.body:getX(), cat.body:getY(), 
         nil, nil, nil, cat.width / 2, cat.height / 2)
 end

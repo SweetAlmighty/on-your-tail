@@ -43,9 +43,17 @@ function setCallbacks(onA, onB, onX, onY, onUp, onLeft, onDown, onRight, onLK1, 
 end
 
 function processInput(dt)
-    for k, v in pairs(inputKeyMap) do
-        if love.keyboard.isDown(v) then
-            inputActionMap[v](dt)
+    if state == 1 then
+        for k, v in pairs(inputKeyMap) do
+            if love.keyboard.isDown(v) then
+                inputActionMap[v](dt)
+            end
         end
+    end
+end
+
+function love.keypressed(k)
+    if state == 0 then
+        MainMenu:Input(k)
     end
 end
