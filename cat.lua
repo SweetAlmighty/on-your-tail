@@ -33,10 +33,10 @@ function Cat:Create(x, y, world, category, index)
 end
 
 function Cat:Update(cat, speed, height)
-    local catX = cat.body:getX()
-    local catY = cat.body:getY() + speed
+    local catX = cat.body:getX() - speed
+    local catY = cat.body:getY()
 
-    if catY > (height - speed + cat.height) then
+    if catX < (-cat.width) then
         catX, catY = repositionCat(cat)
     end
 

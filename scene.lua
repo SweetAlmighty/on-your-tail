@@ -24,15 +24,15 @@ function Scene:Create(image, one, two)
     }
     this.sceneTwo = 
     {
-        x = 0,
-        y = -SceneHeight,
+        x = SceneWidth,
+        y = 0,
         quad = two
     }
     this.playableArea = 
     {
-        x = 60,
-        y = 0,
-        maxX = 260,
+        x = 0,
+        y = 75,
+        maxX = SceneWidth,
         maxY = SceneHeight
     }
     setmetatable(this, Scene)
@@ -45,9 +45,9 @@ function Scene:Draw(scene)
 end
 
 function Scene:Update(scene)
-    local y = scene.sceneOne.y + SceneSpeed
-    scene.sceneOne.y = (y > (SceneHeight - SceneSpeed)) and (-SceneHeight) or (y)
+    local x = scene.sceneOne.x - SceneSpeed
+    scene.sceneOne.x = (x < (-SceneWidth)) and (SceneWidth) or (x)
 
-    y = scene.sceneTwo.y + SceneSpeed
-    scene.sceneTwo.y = (y > (SceneHeight - SceneSpeed)) and (-SceneHeight) or (y)
+    x = scene.sceneTwo.x - SceneSpeed
+    scene.sceneTwo.x = (x < (-SceneWidth)) and (SceneWidth) or (x)
 end

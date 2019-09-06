@@ -37,3 +37,34 @@ function Entity:Draw(entity)
     love.graphics.draw(entity.image, entity.body:getX(), entity.body:getY(), nil, nil, nil, 
         entity.width / 2, entity.height / 2)
 end
+
+function Entity:Clamp(e)
+    clampEntityToXBounds(e)
+    clampEntityToYBounds(e)
+end
+
+function clampEntityToXBounds(e)
+    local posX = e.body:getX()
+    local width = e.width / 2
+
+    if posX < scene.playableArea.x + width then
+        posX = scene.playableArea.x + width
+    elseif posX > scene.playableArea.maxX - width then
+        posX = scene.playableArea.maxX - width
+    end
+
+    e.body:setX(posX)
+end
+
+function clampEntityToYBounds(e)    
+    local posY = e.body:getY()
+    local height = e.height / 2
+
+    if posY < scene.playableArea.y + height then
+        posY = scene.playableArea.y + height
+    elseif posY > scene.playableArea.maxY - height then
+        posY = scene.playableArea.maxY - height
+    end
+
+    e.body:setY(posY)
+end
