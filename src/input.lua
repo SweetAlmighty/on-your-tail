@@ -1,14 +1,16 @@
 
+require "src/gameStateMachine"
+
 Input = {}
 Input.__index = Input
 
 local delta = 0
 local inputMap = 
 {
-    x = "u",
-    y = "i",
-    a = "j",
-    b = "k",
+    x = 'u',
+    y = 'i',
+    a = 'j',
+    b = 'k',
     lk1 = "home",
     lk2 = "pageup",
     lk3 = "lshift",
@@ -93,17 +95,10 @@ end
 
 -- Face Buttons --
 function OnA()
-    if (state == 0) then
-        print("A")
-    elseif (state == 1) then
-        print("AAAA")
-    end
 end 
 
 function OnB()
-    if (state == 0) then
-        print("B")
-    elseif (state == 1) then
+    if (GameStateMachine:GetState() == 1) then
         Player:Interact(delta)
     end
 end
@@ -113,9 +108,7 @@ function OnX()
 end
 
 function OnY()
-    if (state == 0) then
-        print("Y")
-    elseif (state == 1) then
+    if (GameStateMachine:GetState() == 1) then
         Player:FinishInteraction()
     end
 end
@@ -163,7 +156,7 @@ end
 
 -- Function Buttons --
 function OnMenu()
-    state = 0 
+    GameStateMachine:ChangeState(States.MainMenu)
     reset()
 end
 
@@ -178,7 +171,17 @@ end
 
 -- Handles single key presses
 function love.keypressed(k)
-    if state == 0 then
-        MainMenu:Input(k)
+    if GameStateMachine:GetState() == States.MainMenu then
+        if k == inputMap.up then
+            MainMenu:Up()
+        elseif k == inputMap.down then
+            MainMenu:Down()
+        elseif k == inputMap.a then
+            if MainMenu:GetIndex() == 0 then
+                GameStateMachine:ChangeState(States.Gameplay)
+            else
+                love.event.quit()
+            end
+        end
     end
 end

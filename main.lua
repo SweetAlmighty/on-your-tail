@@ -1,85 +1,77 @@
 
-require "cat"
-require "scene"
-require "input"
-require "entity"
-require "Player"
-require "mainMenu"
+require "src/cat"
+require "src/scene"
+require "src/input"
+require "src/entity"
+require "src/player"
+require "src/mainMenu"
+require "src/gameStateMachine"
 
-delta = 0
-width = 320
-height = 240
 
 totalCats = 6
+elapsedTime = 0
 World = love.physics.newWorld(0, 0, true)
-
-state = 0
 
 -- LOVE2D --
 function love.load()
     love.window.setTitle("On Your Tail")
-    love.window.setMode(width, height)
+    love.window.setMode(Scene:Width(), Scene:Height())
 
+    Scene:Create() 
     Player:Create()
-
-    scene = Scene:Create(
-        love.graphics.newImage("data/background_two.png"),
-        love.graphics.newQuad(0, 0, width, height, width, height),
-        love.graphics.newQuad(0, 0, width, height, width, height)) 
-
     initializeCats()
 
     World:setCallbacks(onCollisionEnter, onCollisionExit, nil, nil)
 end
 
 function love.update(dt)
-    if state == 1 then
+    if GameStateMachine:GetState() == 1 then
         checkForReset(dt)
         Input:Process(dt)
         Player:Update(dt)
     
         if Player:IsInteracting() == false then
             updateCats()
-            Scene:Update(scene)
+            Scene:Update()
             World:update(dt, 8, 3)
         end
     end
 end
 
 function love.draw()
-    if state == 0 then
+    if GameStateMachine:GetState() == 0 then
         MainMenu:Draw()
-    elseif state == 1 then
+    elseif GameStateMachine:GetState() == 1 then
         drawScene()
     end
 end
 
 function drawScene()
     -- Move all background and entity drawing to Scene, perhaps.
-    Scene:Draw(scene) 
+    Scene:Draw() 
     drawCats()  
     Player:Draw()
 
     -- Move to "UI/HUD" class/function 
     drawStressBar()  
-    love.graphics.print(string.format("Time: %.3f", delta), width - 100, 10)
+    love.graphics.print(string.format("Time: %.3f", elapsedTime), Scene:Width() - 100, 10)
 end 
 
 function checkForReset(dt)
-    delta = delta + dt
+    elapsedTime = elapsedTime + dt
     if Player:Stress() >= 120 then
         reset()
     end
 end
 
 function reset()
-    Player:Reset(width/2, height/2)
+    Player:Reset(Scene:Width()/2, Scene:Height()/2)
     
     for i, cat in ipairs(cats) do 
         repositionCat(cat)
     end
 
-    delta = 0
+    elapsedTime = 0
 end
 -------------
 
@@ -110,7 +102,7 @@ end
 function updateCats()
     if Player:IsInteracting() == false then
         for i, cat in ipairs(cats) do
-            Cat:Update(cat, SceneSpeed, width)
+            Cat:Update(cat, Scene:Speed(), Scene:Width())
         end
     end
 end
@@ -122,8 +114,8 @@ function drawCats()
 end
 
 function repositionCat(cat)
-    return math.random(width + cat.width, width * 2), 
-    math.random(scene.playableArea.y, scene.playableArea.maxY)
+    return math.random(Scene:Width() + cat.width, Scene:Width() * 2), 
+    math.random(Scene:PlayableArea().y, Scene:PlayableArea().maxY)
 end
 --------------------
 

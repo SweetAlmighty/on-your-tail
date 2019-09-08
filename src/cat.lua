@@ -1,5 +1,5 @@
 
-require "entity"
+require "src/entity"
 require "love.graphics"
 
 Cat = Entity:CreateEmpty()
@@ -14,7 +14,7 @@ Sprites = {
     love.graphics.newQuad(40, 20, 20, 20, 60, 40)
 }
 
-Image = love.graphics.newImage("data/cats.png")
+Image = love.graphics.newImage("/data/cats.png")
 
 function Cat:Create(x, y, world, category, index)
     local this = {}

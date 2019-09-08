@@ -47,10 +47,10 @@ function clampEntityToXBounds(e)
     local posX = e.body:getX()
     local width = e.width / 2
 
-    if posX < scene.playableArea.x + width then
-        posX = scene.playableArea.x + width
-    elseif posX > scene.playableArea.maxX - width then
-        posX = scene.playableArea.maxX - width
+    if posX < Scene:PlayableArea().x + width then
+        posX = Scene:PlayableArea().x + width
+    elseif posX > Scene:PlayableArea().maxX - width then
+        posX = Scene:PlayableArea().maxX - width
     end
 
     e.body:setX(posX)
@@ -60,10 +60,10 @@ function clampEntityToYBounds(e)
     local posY = e.body:getY()
     local height = e.height / 2
 
-    if posY < scene.playableArea.y + height then
-        posY = scene.playableArea.y + height
-    elseif posY > scene.playableArea.maxY - height then
-        posY = scene.playableArea.maxY - height
+    if posY < Scene:PlayableArea().y + height then
+        posY = Scene:PlayableArea().y + height
+    elseif posY > Scene:PlayableArea().maxY - height then
+        posY = Scene:PlayableArea().maxY - height
     end
 
     e.body:setY(posY)

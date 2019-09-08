@@ -1,5 +1,6 @@
 
-require "entity"
+require "src/scene"
+require "src/entity"
 require "love.graphics"
 
 Player = {}
@@ -14,12 +15,12 @@ local isInteracting = false
 -- Initalize player entity
 function Player:Create()
     player = Entity:Create(320 / 2, 240 / 2, 
-        love.graphics.newImage("data/player.png"), World, 120, playerCategory)
+        love.graphics.newImage("/data/player.png"), World, 120, playerCategory)
 end
 
 -- Update player data
 function Player:Update(dt)
-    stress = stress + (dt * SceneSpeed)
+    stress = stress + (dt * Scene:Speed())
     Entity:Clamp(player) 
 end
 
@@ -63,7 +64,7 @@ end
 -- Sets whether the player is currently interacting
 function Player:SetInteracting(interacting)
     isInteracting = interacting
-    SceneSpeed = (interacting == true) and 0 or 2
+    Scene:SetSpeed((interacting == true) and 0 or 2)
     player.speed = (interacting == true) and 0 or 120
 end
 
