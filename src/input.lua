@@ -32,10 +32,6 @@ function Input:Process(dt)
         OnA()
     end
 
-    if love.keyboard.isDown(inputMap.b) then
-        OnB()
-    end
-
     if love.keyboard.isDown(inputMap.x) then
         OnX()
     end
@@ -182,6 +178,10 @@ function love.keypressed(k)
             else
                 love.event.quit()
             end
+        end
+    else
+        if k == inputMap.b then
+            OnB()
         end
     end
 end
