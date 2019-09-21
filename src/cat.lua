@@ -2,8 +2,9 @@
 require "src/entity"
 require "love.graphics"
 
-Cat = Entity:CreateEmpty()
-Cat.__index = Cat
+local class = require("src/middleclass")
+
+Cat = class("Cat")
 
 Sprites = {
     love.graphics.newQuad(0, 0, 20, 20, 60, 40),
@@ -16,34 +17,27 @@ Sprites = {
 
 Image = love.graphics.newImage("/data/cats.png")
 
-function Cat:Create(x, y, world, category, index)
-    local this = {}
-    this.speed = 2
-    this.image = nil
-    this.width = 20
-    this.height = 20
-    this.index = index
-    this.isInteracting = false
-    this.body = love.physics.newBody(world, x, y, "dynamic")
-    this.shape = love.physics.newRectangleShape(this.width, this.height)
-    this.fixture = love.physics.newFixture(this.body, this.shape, 1)
-    this.fixture:setCategory(category)
-    setmetatable(this, Cat)
-    return this
+function Cat:initialize()
+    Entity.initialize(self, 320 / 2, 240 / 2, love.graphics.newImage("/data/cats.png"), World, 
+        2, 1)
 end
 
-function Cat:Update(cat, speed, height)
-    local catX = cat.body:getX() - speed
-    local catY = cat.body:getY()
+function Cat:setIndex(index)
+    self.index = index
+end
 
-    if catX < (-cat.width) then
-        catX, catY = repositionCat(cat)
+function Cat:update()--cat, speed, height)
+    local catX = self.body:getX() - self.speed
+    local catY = self.body:getY()
+
+    if catX < (-self.width) then
+        catX, catY = repositionCat(self)
     end
 
-    cat.body:setPosition(catX, catY)
+    self.body:setPosition(catX, catY)
 end
 
-function Cat:Draw(cat)
-    love.graphics.draw(Image, Sprites[cat.index], cat.body:getX(), cat.body:getY(), 
-        nil, nil, nil, cat.width / 2, cat.height / 2)
+function Cat:draw()
+    love.graphics.draw(self.image, Sprites[self.index], self.body:getX(), self.body:getY(), 
+        nil, nil, nil, self.width / 2, self.height / 2)
 end

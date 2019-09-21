@@ -1,51 +1,32 @@
+local class = require "src/middleclass"
 
-Entity = 
-{
-    speed = 0,
-    image = nil,
-    width = 0,
-    height = 0,
-    body = nil,
-    shape = nil,
-    fixture = nil,
-    isInteracting = false
-}
-Entity.__index = Entity
+Entity = class('Entity')
 
-function Entity:Create(x, y, image, world, speed, category)
-    local this = {}
-    this.speed = speed
-    this.image = image
-    this.isInteracting = false
-    this.width = (this.image == nil) and 1 or this.image:getWidth()
-    this.height = (this.image == nil) and 1 or this.image:getHeight()
-    this.body = love.physics.newBody(world, x, y, "dynamic")
-    this.shape = love.physics.newRectangleShape(this.width, this.height)
-    this.fixture = love.physics.newFixture(this.body, this.shape, 1)
-    this.fixture:setCategory(category)
-    setmetatable(this, Entity)
-    return this
+function Entity:initialize(x, y, image, world, speed, category)
+    self.speed = speed
+    self.image = image
+    self.interacting = false
+    self.width = (self.image == nil) and 1 or self.image:getWidth()
+    self.height = (self.image == nil) and 1 or self.image:getHeight()
+    self.body = love.physics.newBody(world, x, y, "dynamic")
+    self.shape = love.physics.newRectangleShape(self.width, self.height)
+    self.fixture = love.physics.newFixture(self.body, self.shape, 1)
+    self.fixture:setCategory(category)
 end
 
-function Entity:CreateEmpty()
-    local this = {}
-    setmetatable(this, Entity)
-    return this
+function Entity:draw()
+    love.graphics.draw(self.image, self.body:getX(), self.body:getY(), nil, nil, nil,
+        self.width / 2, self.height / 2)
 end
 
-function Entity:Draw(entity)
-    love.graphics.draw(entity.image, entity.body:getX(), entity.body:getY(), nil, nil, nil, 
-        entity.width / 2, entity.height / 2)
+function Entity:clampToPlayBounds()
+    Entity.clampEntityToXBounds(self)
+    Entity.clampEntityToYBounds(self)
 end
 
-function Entity:Clamp(e)
-    clampEntityToXBounds(e)
-    clampEntityToYBounds(e)
-end
-
-function clampEntityToXBounds(e)
-    local posX = e.body:getX()
-    local width = e.width / 2
+function Entity:clampEntityToXBounds()
+    local posX = self.body:getX()
+    local width = self.width / 2
 
     if posX < Scene:PlayableArea().x + width then
         posX = Scene:PlayableArea().x + width
@@ -53,12 +34,12 @@ function clampEntityToXBounds(e)
         posX = Scene:PlayableArea().maxX - width
     end
 
-    e.body:setX(posX)
+    self.body:setX(posX)
 end
 
-function clampEntityToYBounds(e)    
-    local posY = e.body:getY()
-    local height = e.height / 2
+function Entity:clampEntityToYBounds()    
+    local posY = self.body:getY()
+    local height = self.height / 2
 
     if posY < Scene:PlayableArea().y + height then
         posY = Scene:PlayableArea().y + height
@@ -66,5 +47,5 @@ function clampEntityToYBounds(e)
         posY = Scene:PlayableArea().maxY - height
     end
 
-    e.body:setY(posY)
+    self.body:setY(posY)
 end

@@ -1,5 +1,6 @@
 
 require "src/cat"
+require "src/gui"
 require "src/scene"
 require "src/input"
 require "src/entity"
@@ -11,14 +12,14 @@ require "src/gameStateMachine"
 totalCats = 6
 elapsedTime = 0
 World = love.physics.newWorld(0, 0, true)
+player = Player:new()
 
 -- LOVE2D --
 function love.load()
     love.window.setTitle("On Your Tail")
     love.window.setMode(Scene:Width(), Scene:Height())
 
-    Scene:Create() 
-    Player:Create()
+    Scene:Create()
     initializeCats()
 
     World:setCallbacks(onCollisionEnter, onCollisionExit, nil, nil)
@@ -28,9 +29,9 @@ function love.update(dt)
     if GameStateMachine:GetState() == 1 then
         checkForReset(dt)
         Input:Process(dt)
-        Player:Update(dt)
+        player:update(dt)
     
-        if Player:IsInteracting() == false then
+        if player:isInteracting() == false then
             updateCats()
             Scene:Update()
             World:update(dt, 8, 3)
@@ -50,7 +51,7 @@ function drawScene()
     -- Move all background and entity drawing to Scene, perhaps.
     Scene:Draw() 
     drawCats()  
-    Player:Draw()
+    player:draw()
 
     -- Move to "UI/HUD" class/function 
     drawStressBar()  
@@ -59,13 +60,13 @@ end
 
 function checkForReset(dt)
     elapsedTime = elapsedTime + dt
-    if Player:Stress() >= 120 then
+    if player.stress() >= 120 then
         reset()
     end
 end
 
 function reset()
-    Player:Reset(Scene:Width()/2, Scene:Height()/2)
+    player:reset(Scene:Width()/2, Scene:Height()/2)
     
     for i, cat in ipairs(cats) do 
         repositionCat(cat)
@@ -81,7 +82,7 @@ function drawStressBar()
     love.graphics.rectangle("fill", 10, 10, 120, 20)
 
     love.graphics.setColor(1, 0, 0)
-    love.graphics.rectangle("fill", 10, 10, Player:Stress(), 20)
+    love.graphics.rectangle("fill", 10, 10, player:stress(), 20)
 
     love.graphics.setColor(1, 1, 1)
     love.graphics.rectangle("line", 10, 10, 120, 20)
@@ -93,23 +94,24 @@ end
 function initializeCats() 
     cats = {}
     for i = 1, totalCats, 1 do
-        cat = Cat:Create(0, 0, World, 1, i)
+        cat = Cat:new()
+        cat:setIndex(i)
         cat.body:setPosition(repositionCat(cat))
         table.insert(cats, cat)
     end
 end
 
 function updateCats()
-    if Player:IsInteracting() == false then
+    if player:isInteracting() == false then
         for i, cat in ipairs(cats) do
-            Cat:Update(cat, Scene:Speed(), Scene:Width())
+            cat:update()
         end
     end
 end
 
 function drawCats()
     for i, cat in ipairs(cats) do 
-        Cat:Draw(cat, i) 
+        cat:draw() 
     end
 end
 
@@ -120,19 +122,19 @@ end
 --------------------
 
 
--- Input Callbacks --
+-- World Callbacks --
 function onCollisionEnter(first, second, contact)
     if first:getCategory() == 1 and second:getCategory() == 2 then
-        Player:SetInteractable(true)
+        player:setInteractable(true)
     elseif second:getCategory() == 1 and first:getCategory() == 2 then
-        Player:SetInteractable(true)
+        player:setInteractable(true)
     end 
 end
 
 function onCollisionExit(first, second, contact)
     if first:getCategory() == 1 or second:getCategory() == 1 then
-        Player:SetInteractable(false)
-        Player:SetInteracting(false)
+        player:setInteractable(false)
+        player:setInteracting(false)
     end
 end
 ----------------------

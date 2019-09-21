@@ -95,7 +95,7 @@ end
 
 function OnB()
     if (GameStateMachine:GetState() == 1) then
-        Player:Interact(delta)
+        player:interact(delta)
     end
 end
 
@@ -105,26 +105,26 @@ end
 
 function OnY()
     if (GameStateMachine:GetState() == 1) then
-        Player:FinishInteraction()
+        player:finishInteraction()
     end
 end
 -- Face Buttons --
 
 -- Movement --
 function OnUp()
-    Player:MoveY(-delta)
+    player:moveY(-delta)
 end
 
 function OnLeft()
-    Player:MoveX(-delta)
+    player:moveX(-delta)
 end
 
 function OnDown()
-    Player:MoveY(delta)
+    player:moveY(delta)
 end
 
 function OnRight()
-    Player:MoveX(delta)
+    player:moveX(delta)
 end
 -- Movement --
 
