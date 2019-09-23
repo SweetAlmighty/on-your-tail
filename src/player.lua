@@ -1,8 +1,4 @@
 
-require "src/scene"
-require "src/entity"
-require "love.graphics"
-
 local class = require("src/middleclass")
 
 Player = class('Player', Entity)
@@ -11,13 +7,13 @@ local stress = 0
 
 -- Initalize player entity
 function Player:initialize()
-    Entity.initialize(self, 320 / 2, 240 / 2, love.graphics.newImage("/data/player.png"), World, 
-        120, 2)
+    Entity.initialize(self, scene:getWidth()/2, scene:getHeight()/2, 
+        love.graphics.newQuad(0, 95, 23, 44, 118, 187), "player.png", 120, 2)
 end
 
 -- Update player data
 function Player:update(dt)
-    stress = stress + (dt * Scene:Speed())
+    stress = stress + (dt * scene:getSpeed())
     Entity.clampToPlayBounds(self)
 end
 
@@ -42,10 +38,9 @@ function Player:stress()
 end
 
 -- Resets the player's position and stress
-function Player:reset(x, y)
+function Player:reset()
     stress = 0
-    self.body:setX(x)
-    self.body:setY(y)
+    Entity.reset(self, scene:getWidth() / 2, scene:getHeight() / 2)
 end
 
 -- Sets whether the player can interact
@@ -61,14 +56,14 @@ end
 -- Sets whether the player is currently interacting
 function Player:setInteracting(interacting)
     self.interacting = interacting
-    Scene:SetSpeed((interacting == true) and 0 or 2)
     self.speed = (interacting == true) and 0 or 120
+    scene:setSpeed((interacting == true) and 0 or 2)
 end
 
 -- Handles interaction
 function Player:interact(dt)
     if self.canInteract == true and self.interacting == false then
-        self.setInteracting(true)
+        Player.setInteracting(self, true)
     elseif self.interacting == true then
         stress = stress - (dt * 10)
         if stress < 0 then
@@ -80,6 +75,6 @@ end
 -- Will stop an interaction if one is currently in progress
 function Player:finishInteraction()
     if self.interacting == true then
-        self.setInteracting(false)
+        Player.setInteracting(self, false)
     end
 end

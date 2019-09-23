@@ -1,65 +1,73 @@
 
-require "love.graphics"
+local class = require("src/middleclass")
 
-local speed = 2
-local width = 320
-local height = 240
+Scene = class("Scene")
 
-Scene = {}
-Scene.__index = Scene
-
-function Scene:Create()
-    Scene.image = love.graphics.newImage("/data/background_two.png")
-    Scene.one = 
+function Scene:initialize()
+    self.speed = 2
+    self.width = 320
+    self.height = 240
+    self.image = love.graphics.newImage("/data/background_two.png")
+    self.quad = love.graphics.newQuad(0, 0, self.width, self.height, self.width, self.height)
+    self.one = { x = 0, y = 0, }
+    self.two = { x = self.width, y = 0 }
+    self.playableArea = 
     {
         x = 0,
-        y = 0,
-        quad = love.graphics.newQuad(0, 0, width, height, width, height)
+        y = 110,
+        maxX = self.width,
+        maxY = self.height
     }
-    Scene.two = 
-    {
-        x = width,
-        y = 0,
-        quad = love.graphics.newQuad(0, 0, width, height, width, height)
-    }
-    Scene.playableArea = 
-    {
-        x = 0,
-        y = 75,
-        maxX = width,
-        maxY = height
-    }
+    self.entities = { }
 end
 
-function Scene:Draw()
-    love.graphics.draw(Scene.image, Scene.one.quad, Scene.one.x, Scene.one.y)
-    love.graphics.draw(Scene.image, Scene.two.quad, Scene.two.x, Scene.two.y)
+function Scene:draw()
+    love.graphics.draw(self.image, self.quad, self.one.x, self.one.y)
+    love.graphics.draw(self.image, self.quad, self.two.x, self.two.y)
+        
+    for i, entity in ipairs(self.entities) do
+        entity:draw()
+    end
 end
 
-function Scene:Update()
-    local x = Scene.one.x - speed
-    Scene.one.x = (x < (-width)) and (width) or (x)
+function Scene:update(dt)
+    local x = self.one.x - self.speed
+    self.one.x = (x < (-self.width)) and (self.width) or (x)
 
-    x = Scene.two.x - speed
-    Scene.two.x = (x < (-width)) and (width) or (x)
+    x = self.two.x - self.speed
+    self.two.x = (x < (-self.width)) and (self.width) or (x)
+    
+    for i, entity in ipairs(self.entities) do
+        entity:update(dt)
+    end
 end
 
-function Scene:SetSpeed(s)
-    speed = s
+function Scene:setSpeed(s)
+    self.speed = s
 end
 
-function Scene:Width()
-    return width
+function Scene:getWidth()
+    return self.width
 end
 
-function Scene:Height()
-    return height
+function Scene:getHeight()
+    return self.height
 end
 
-function Scene:Speed()
-    return speed
+function Scene:getSpeed()
+    return self.speed
 end
 
-function Scene:PlayableArea()
-    return Scene.playableArea;
+function Scene:getPlayableArea()
+    return self.playableArea;
+end
+
+function Scene:addEntity(entity)
+    table.insert(self.entities, entity)
+end
+
+function Scene:reset()
+    for i, entity in ipairs(self.entities) do
+        entity:reset()
+    end
 end

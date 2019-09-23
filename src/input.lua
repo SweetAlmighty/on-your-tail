@@ -153,7 +153,7 @@ end
 -- Function Buttons --
 function OnMenu()
     GameStateMachine:ChangeState(States.MainMenu)
-    reset()
+    scene:reset()
 end
 
 function OnStart()

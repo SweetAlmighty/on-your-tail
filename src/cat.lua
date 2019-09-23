@@ -1,7 +1,4 @@
 
-require "src/entity"
-require "love.graphics"
-
 local class = require("src/middleclass")
 
 Cat = class("Cat")
@@ -15,29 +12,39 @@ Sprites = {
     love.graphics.newQuad(40, 20, 20, 20, 60, 40)
 }
 
-Image = love.graphics.newImage("/data/cats.png")
-
 function Cat:initialize()
-    Entity.initialize(self, 320 / 2, 240 / 2, love.graphics.newImage("/data/cats.png"), World, 
-        2, 1)
-end
-
-function Cat:setIndex(index)
-    self.index = index
-end
-
-function Cat:update()--cat, speed, height)
-    local catX = self.body:getX() - self.speed
-    local catY = self.body:getY()
-
-    if catX < (-self.width) then
-        catX, catY = repositionCat(self)
-    end
-
-    self.body:setPosition(catX, catY)
+    Entity.initialize(self, scene:getWidth()/2, scene:getHeight()/2, Sprites[1], "cats.png", 2, 1)
 end
 
 function Cat:draw()
-    love.graphics.draw(self.image, Sprites[self.index], self.body:getX(), self.body:getY(), 
-        nil, nil, nil, self.width / 2, self.height / 2)
+    Entity.draw(self);
+end
+
+function Cat:update(dt)
+    local catX = self.body:getX() - self.speed
+
+    if catX < (-self.width) then
+        Cat.reposition(self)
+    else
+        self.body:setX(catX)
+    end
+
+    Entity.clampEntityToYBounds(self)
+end
+
+function Cat:randomPosition()
+    return math.random(scene:getWidth() - self.width, scene:getWidth() * 2), 
+        math.random(scene:getPlayableArea().y - self.height, scene:getPlayableArea().maxY)
+end
+
+function Cat:reset()
+    Entity.reset(self, Cat.randomPosition(self))
+end
+
+function Cat:reposition()
+    self.body:setPosition(Cat.randomPosition(self))
+end
+
+function Cat:setIndex(index)
+    Entity.setQuad(self, Sprites[index])
 end
