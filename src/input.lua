@@ -1,5 +1,6 @@
 
 require "src/gameStateMachine"
+local lume = require "src/lume"
 
 Input = {}
 Input.__index = Input
@@ -25,68 +26,26 @@ local inputMap =
     start = "kpenter"
 }
 
+local keyDown = lume.fn(love.keyboard.isDown)
+
 function Input:Process(dt)
     delta = dt
 
-    if love.keyboard.isDown(inputMap.a) then
-        OnA()
-    end
-
-    if love.keyboard.isDown(inputMap.x) then
-        OnX()
-    end
-
-    if love.keyboard.isDown(inputMap.y) then
-        OnY()
-    end
-
-    if love.keyboard.isDown(inputMap.up) then
-        OnUp()
-    end
-
-    if love.keyboard.isDown(inputMap.left) then
-        OnLeft()
-    end
-
-    if love.keyboard.isDown(inputMap.down) then
-        OnDown()
-    end
-
-    if love.keyboard.isDown(inputMap.right) then
-        OnRight()
-    end
-
-    if love.keyboard.isDown(inputMap.menu) then
-        OnMenu()
-    end
-
-    if love.keyboard.isDown(inputMap.start) then
-        OnStart()
-    end
-
-    if love.keyboard.isDown(inputMap.select) then
-        OnSelect()
-    end
-
-    if love.keyboard.isDown(inputMap.lk1) then
-        OnLK1()
-    end
-
-    if love.keyboard.isDown(inputMap.lk2) then
-        OnLK2()
-    end
-
-    if love.keyboard.isDown(inputMap.lk3) then
-        OnLK3()
-    end
-
-    if love.keyboard.isDown(inputMap.lk4) then
-        OnLK4()
-    end
-
-    if love.keyboard.isDown(inputMap.lk5) then
-        OnLK5()
-    end
+    if keyDown(inputMap.a) then OnA() end
+    if keyDown(inputMap.x) then OnX() end
+    if keyDown(inputMap.y) then OnY() end
+    if keyDown(inputMap.up) then OnUp() end
+    if keyDown(inputMap.left) then OnLeft() end
+    if keyDown(inputMap.down) then OnDown() end
+    if keyDown(inputMap.right) then OnRight() end
+    if keyDown(inputMap.menu) then OnMenu() end
+    if keyDown(inputMap.start) then OnStart() end
+    if keyDown(inputMap.select) then OnSelect() end
+    if keyDown(inputMap.lk1) then OnLK1() end
+    if keyDown(inputMap.lk2) then OnLK2() end
+    if keyDown(inputMap.lk3) then OnLK3() end
+    if keyDown(inputMap.lk4) then OnLK4() end
+    if keyDown(inputMap.lk5) then OnLK5() end
 end
 
 -- Face Buttons --
@@ -96,6 +55,9 @@ end
 function OnB()
     if (GameStateMachine:GetState() == 1) then
         player:interact(delta)
+        if currentCat ~= nil then
+            currentCat:interact(delta)
+        end
     end
 end
 

@@ -1,4 +1,5 @@
 
+local lume = require "src/lume"
 local class = require "src/middleclass"
 
 Entity = class('Entity')
@@ -9,9 +10,11 @@ function Entity:initialize(x, y, quad, imagePath, speed, category)
 
     local x, y, w, h = self.quad:getViewport()
 
+    self.id = lume.uuid()
     self.interacting = false
+    self.interactable = false
     self.image = love.graphics.newImage("/data/" .. imagePath)
-    self.width = (self.image == nil) and 1 or  w
+    self.width = (self.image == nil) and 1 or w
     self.height = (self.image == nil) and 1 or h
     self.body = love.physics.newBody(World, x, y, "dynamic")
     self.shape = love.physics.newRectangleShape(self.width, self.height)
@@ -31,6 +34,7 @@ function Entity:setQuad(quad)
 end
 
 function Entity:reset(x, y)
+    self.interactable = false
     self.interacting = false
     self.body:setPosition(x, y)
 end

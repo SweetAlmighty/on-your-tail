@@ -43,16 +43,6 @@ function Player:reset()
     Entity.reset(self, scene:getWidth() / 2, scene:getHeight() / 2)
 end
 
--- Sets whether the player can interact
-function Player:setInteractable(interactable)
-    self.canInteract = interactable
-end
-
--- Returns whether the player is interacting with something
-function Player:isInteracting()
-    return self.interacting
-end
-
 -- Sets whether the player is currently interacting
 function Player:setInteracting(interacting)
     self.interacting = interacting
@@ -62,9 +52,11 @@ end
 
 -- Handles interaction
 function Player:interact(dt)
-    if self.canInteract == true and self.interacting == false then
+    if self.interactable == true and self.interacting == false then
         Player.setInteracting(self, true)
-    elseif self.interacting == true then
+    end
+
+    if self.interacting == true then
         stress = stress - (dt * 10)
         if stress < 0 then
             stress = 0
@@ -75,6 +67,6 @@ end
 -- Will stop an interaction if one is currently in progress
 function Player:finishInteraction()
     if self.interacting == true then
-        Player.setInteracting(self, false)
+        self.interacting = false
     end
 end

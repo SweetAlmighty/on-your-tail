@@ -32,7 +32,7 @@ function love.update(dt)
         checkForReset(dt)
         Input:Process(dt)
     
-        if player:isInteracting() == false then
+        if player.interacting == false then
             scene:update(dt)
             World:update(dt, 8, 3)
         end
@@ -88,19 +88,44 @@ function initializeCats()
 end
 --------------------
 
+currentCat = nil
+
 -- World Callbacks --
 function onCollisionEnter(first, second, contact)
-    if first:getCategory() == 1 and second:getCategory() == 2 then
-        player:setInteractable(true)
-    elseif second:getCategory() == 1 and first:getCategory() == 2 then
-        player:setInteractable(true)
-    end 
+    local leftType = first:getCategory()
+    local rightType = second:getCategory()
+    local valid = (leftType == 1 and rightType == 2) or (rightType == 1 and leftType == 2)
+
+    if valid then
+        local cat = (leftType == 2) and findEntity(second) or findEntity(first)
+        local human = (leftType == 1) and findEntity(first) or findEntity(second)
+
+        currentCat = cat
+
+        player.interactable = true
+        currentCat.interactable = true
+    end
 end
 
 function onCollisionExit(first, second, contact)
     if first:getCategory() == 1 or second:getCategory() == 1 then
-        player:setInteractable(false)
         player:setInteracting(false)
+        player.interactable = false;
+        
+        if currentCat ~= nill then
+            currentCat:setInteracting(false)
+            currentCat.interactable = false
+        end
+        
+        currentCat = nil
+    end
+end
+
+function findEntity(fixture)
+    for k,v in ipairs(scene.entities) do
+        if fixture == v.fixture then
+            return v
+        end
     end
 end
 ----------------------
