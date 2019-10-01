@@ -1,7 +1,7 @@
 require "src/mainMenu"
 require "src/gameStateMachine"
 
-local class = require "src/middleclass"
+local class = require "src/lib/middleclass"
 
 GUI = class('GUI')
 

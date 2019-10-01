@@ -1,6 +1,6 @@
 
-local lume = require "src/lume"
-local class = require "src/middleclass"
+local lume = require "src/lib/lume"
+local class = require "src/lib/middleclass"
 
 Entity = class('Entity')
 

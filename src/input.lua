@@ -1,6 +1,6 @@
 
 require "src/gameStateMachine"
-local lume = require "src/lume"
+local lume = require "src/lib/lume"
 
 Input = {}
 Input.__index = Input
@@ -55,8 +55,9 @@ end
 function OnB()
     if (GameStateMachine:GetState() == 1) then
         player:interact(delta)
-        if currentCat ~= nil then
-            currentCat:interact(delta)
+
+        for k,v in ipairs(cats) do
+            v:interact(delta)
         end
     end
 end
@@ -68,6 +69,10 @@ end
 function OnY()
     if (GameStateMachine:GetState() == 1) then
         player:finishInteraction()
+        
+        for k,v in ipairs(cats) do
+            v:finishInteraction()
+        end
     end
 end
 -- Face Buttons --

@@ -1,5 +1,5 @@
 
-local class = require("src/middleclass")
+local class = require("src/lib/middleclass")
 
 Player = class('Player', Entity)
 
@@ -13,7 +13,7 @@ end
 
 -- Update player data
 function Player:update(dt)
-    stress = stress + (dt * scene:getSpeed())
+    stress = stress + (dt * 5)
     Entity.clampToPlayBounds(self)
 end
 
@@ -57,7 +57,7 @@ function Player:interact(dt)
     end
 
     if self.interacting == true then
-        stress = stress - (dt * 10)
+        stress = stress - (dt * 30)
         if stress < 0 then
             stress = 0
         end
@@ -67,6 +67,7 @@ end
 -- Will stop an interaction if one is currently in progress
 function Player:finishInteraction()
     if self.interacting == true then
-        self.interacting = false
+        Player.setInteracting(self, false)
+        self.interactable = false;
     end
 end

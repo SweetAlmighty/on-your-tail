@@ -8,6 +8,8 @@ require "src/player"
 require "src/mainMenu"
 require "src/gameStateMachine"
 
+local lume = require "src/lib/lume"
+
 totalCats = 6
 elapsedTime = 0
 
@@ -31,10 +33,14 @@ function love.update(dt)
     if GameStateMachine:GetState() == 1 then
         checkForReset(dt)
         Input:Process(dt)
-    
+
         if player.interacting == false then
             scene:update(dt)
             World:update(dt, 8, 3)
+        else
+            for k,v in ipairs(cats) do
+                v.button:update(dt)
+            end
         end
     end
 end
@@ -88,7 +94,7 @@ function initializeCats()
 end
 --------------------
 
-currentCat = nil
+cats = { }
 
 -- World Callbacks --
 function onCollisionEnter(first, second, contact)
@@ -98,26 +104,29 @@ function onCollisionEnter(first, second, contact)
 
     if valid then
         local cat = (leftType == 2) and findEntity(second) or findEntity(first)
-        local human = (leftType == 1) and findEntity(first) or findEntity(second)
 
-        currentCat = cat
-
+        cat.interactable = true
         player.interactable = true
-        currentCat.interactable = true
+
+        table.insert(cats, cat)
     end
 end
 
 function onCollisionExit(first, second, contact)
-    if first:getCategory() == 1 or second:getCategory() == 1 then
+    local leftType = first:getCategory()
+    local rightType = second:getCategory()
+    local valid = (leftType == 1 and rightType == 2) or (rightType == 1 and leftType == 2)
+
+    if valid then
+        local cat = (leftType == 2) and findEntity(second) or findEntity(first)
+
         player:setInteracting(false)
         player.interactable = false;
-        
-        if currentCat ~= nill then
-            currentCat:setInteracting(false)
-            currentCat.interactable = false
-        end
-        
-        currentCat = nil
+
+        cat:setInteracting(false)
+        cat.interactable = false
+
+        lume.remove(cats, cat)
     end
 end
 

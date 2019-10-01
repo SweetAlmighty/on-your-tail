@@ -1,5 +1,5 @@
 
-local class = require("src/middleclass")
+local class = require("src/lib/middleclass")
 
 Scene = class("Scene")
 
