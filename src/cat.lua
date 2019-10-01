@@ -46,10 +46,12 @@ function Cat:randomPosition()
 end
 
 function Cat:reset()
+    self.affectionLimit = 2.5
     Entity.reset(self, Cat.randomPosition(self))
 end
 
 function Cat:reposition()
+    self.affectionLimit = 2.5
     self.body:setPosition(Cat.randomPosition(self))
 end
 
