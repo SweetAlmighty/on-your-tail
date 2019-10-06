@@ -67,7 +67,7 @@ end
 -- Will stop an interaction if one is currently in progress
 function Player:finishInteraction()
     if self.interacting == true then
-        Player.setInteracting(self, false)
         self.interactable = false;
+        Player.setInteracting(self, false)
     end
 end

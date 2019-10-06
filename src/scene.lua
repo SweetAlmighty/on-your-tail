@@ -28,15 +28,28 @@ function Scene:draw()
     for i, entity in ipairs(self.entities) do
         entity:draw()
     end
+    
+    love.graphics.setColor(0, 0, 0)
+    love.graphics.rectangle("fill", 10, 10, 120, 20)
+    
+    love.graphics.setColor(1, 0, 0)
+    love.graphics.rectangle("fill", 10, 10, player:stress(), 20)
+    
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.rectangle("line", 10, 10, 120, 20)
+
+    love.graphics.print(string.format("Time: %.3f", elapsedTime), self.width - 100, 10)
 end
 
 function Scene:update(dt)
-    local x = self.one.x - self.speed
-    self.one.x = (x < (-self.width)) and (self.width) or (x)
-
-    x = self.two.x - self.speed
-    self.two.x = (x < (-self.width)) and (self.width) or (x)
+    if player.interacting == false then
+        local x = self.one.x - self.speed
+        self.one.x = (x < (-self.width)) and (self.width) or (x)
     
+        x = self.two.x - self.speed
+        self.two.x = (x < (-self.width)) and (self.width) or (x)
+    end
+
     for i, entity in ipairs(self.entities) do
         entity:update(dt)
     end

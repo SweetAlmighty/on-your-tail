@@ -1,6 +1,5 @@
 
 require "src/cat"
-require "src/gui"
 require "src/scene"
 require "src/input"
 require "src/entity"
@@ -10,6 +9,7 @@ require "src/gameStateMachine"
 
 local lume = require "src/lib/lume"
 
+cats = { }
 totalCats = 6
 elapsedTime = 0
 
@@ -34,14 +34,8 @@ function love.update(dt)
         checkForReset(dt)
         Input:Process(dt)
 
-        if player.interacting == false then
-            scene:update(dt)
-            World:update(dt, 8, 3)
-        else
-            for k,v in ipairs(cats) do
-                v.button:update(dt)
-            end
-        end
+        scene:update(dt)
+        World:update(dt, 8, 3)
     end
 end
 
@@ -49,18 +43,9 @@ function love.draw()
     if GameStateMachine:GetState() == 0 then
         MainMenu:Draw()
     elseif GameStateMachine:GetState() == 1 then
-        drawScene()
+        scene:draw()
     end
 end
-
-function drawScene()
-    -- Move all background and entity drawing to Scene, perhaps.
-    scene:draw()
-
-    -- Move to "UI/HUD" class/function 
-    drawStressBar()  
-    love.graphics.print(string.format("Time: %.3f", elapsedTime), scene:getWidth() - 100, 10)
-end 
 
 function checkForReset(dt)
     elapsedTime = elapsedTime + dt
@@ -71,19 +56,6 @@ function checkForReset(dt)
 end
 -------------
 
--------- Player -------
-function drawStressBar()
-    love.graphics.setColor(0, 0, 0)
-    love.graphics.rectangle("fill", 10, 10, 120, 20)
-
-    love.graphics.setColor(1, 0, 0)
-    love.graphics.rectangle("fill", 10, 10, player:stress(), 20)
-
-    love.graphics.setColor(1, 1, 1)
-    love.graphics.rectangle("line", 10, 10, 120, 20)
-end
-----------------
-
 ------- Cats -------
 function initializeCats() 
     for i = 1, totalCats, 1 do
@@ -93,8 +65,6 @@ function initializeCats()
     end
 end
 --------------------
-
-cats = { }
 
 -- World Callbacks --
 function onCollisionEnter(first, second, contact)

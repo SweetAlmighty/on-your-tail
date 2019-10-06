@@ -29,12 +29,16 @@ function Cat:draw()
 end
 
 function Cat:update(dt)
-    local catX = self.body:getX() - self.speed
-
-    if catX < (-self.width) then
-        Cat.reposition(self)
+    if player.interacting and self.interacting then
+        self.button:update(dt)
     else
-        self.body:setX(catX)
+        local catX = self.body:getX() - self.speed
+    
+        if catX < (-self.width) then
+            Cat.reposition(self)
+        else
+            self.body:setX(catX)
+        end
     end
 
     Entity.clampEntityToYBounds(self)
@@ -73,9 +77,8 @@ function Cat:interact(dt)
     end
     
     if self.interacting == true then
-        self.affectionLimit = self.affectionLimit - (dt * 10)
-        
         self.button:update(dt)
+        self.affectionLimit = self.affectionLimit - (dt * 10)
 
         if self.affectionLimit < 0 then
             self.affectionLimit = 0
@@ -87,11 +90,9 @@ end
 -- Will stop an interaction if one is currently in progress
 function Cat:finishInteraction()
     if self.interacting == true then
-        Cat.setInteracting(self, false)
-        self.interactable = false;
-
         self.button:reset()
-
+        self.interactable = false;
         player:finishInteraction()
+        Cat.setInteracting(self, false)
     end
 end

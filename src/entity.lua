@@ -1,5 +1,4 @@
 
-local lume = require "src/lib/lume"
 local class = require "src/lib/middleclass"
 
 Entity = class('Entity')
@@ -10,7 +9,6 @@ function Entity:initialize(x, y, quad, imagePath, speed, category)
 
     local x, y, w, h = self.quad:getViewport()
 
-    self.id = lume.uuid()
     self.interacting = false
     self.interactable = false
     self.image = love.graphics.newImage("/data/" .. imagePath)
