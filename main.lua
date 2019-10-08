@@ -7,7 +7,7 @@ require "src/player"
 require "src/mainMenu"
 require "src/gameStateMachine"
 
-local lume = require "src/lib/lume"
+local lume = require("src/lib/lume")
 
 cats = { }
 totalCats = 6

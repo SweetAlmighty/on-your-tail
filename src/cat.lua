@@ -31,7 +31,7 @@ end
 function Cat:update(dt)
     if player.interacting and self.interacting then
         self.button:update(dt)
-    else
+    elseif moveCamera then
         local catX = self.body:getX() - self.speed
     
         if catX < (-self.width) then
@@ -46,7 +46,7 @@ end
 
 function Cat:randomPosition()
     return math.random(scene:getWidth() - self.width, scene:getWidth() * 2), 
-        math.random(scene:getPlayableArea().y - self.height, scene:getPlayableArea().maxY)
+        math.random(scene.playableArea.y - self.height, scene.playableArea.maxY)
 end
 
 function Cat:reset()

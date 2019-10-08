@@ -7,6 +7,7 @@ function Scene:initialize()
     self.speed = 2
     self.width = 320
     self.height = 240
+    self.threshold = -(self.width - 1)
     self.image = love.graphics.newImage("/data/background_two.png")
     self.quad = love.graphics.newQuad(0, 0, self.width, self.height, self.width, self.height)
     self.one = { x = 0, y = 0, }
@@ -15,7 +16,7 @@ function Scene:initialize()
     {
         x = 0,
         y = 110,
-        maxX = self.width,
+        maxX = self.width/2,
         maxY = self.height
     }
     self.entities = { }
@@ -42,12 +43,12 @@ function Scene:draw()
 end
 
 function Scene:update(dt)
-    if player.interacting == false then
+    if moveCamera then
         local x = self.one.x - self.speed
-        self.one.x = (x < (-self.width)) and (self.width) or (x)
+        self.one.x = (x < self.threshold) and (self.width) or (x)
     
         x = self.two.x - self.speed
-        self.two.x = (x < (-self.width)) and (self.width) or (x)
+        self.two.x = (x < self.threshold) and (self.width) or (x)
     end
 
     for i, entity in ipairs(self.entities) do
@@ -65,14 +66,6 @@ end
 
 function Scene:getHeight()
     return self.height
-end
-
-function Scene:getSpeed()
-    return self.speed
-end
-
-function Scene:getPlayableArea()
-    return self.playableArea;
 end
 
 function Scene:addEntity(entity)

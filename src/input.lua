@@ -1,6 +1,6 @@
 
 require "src/gameStateMachine"
-local lume = require "src/lib/lume"
+local lume = require("src/lib/lume")
 
 Input = {}
 Input.__index = Input
@@ -150,5 +150,11 @@ function love.keypressed(k)
         if k == inputMap.b then
             OnB()
         end
+    end
+end
+
+function love.keyreleased(k)
+    if k == inputMap.right then
+        player:moveX(0)
     end
 end

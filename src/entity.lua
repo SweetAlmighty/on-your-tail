@@ -1,5 +1,5 @@
 
-local class = require "src/lib/middleclass"
+local class = require("src/lib/middleclass")
 
 Entity = class('Entity')
 
@@ -45,7 +45,7 @@ end
 function Entity:clampEntityToXBounds()
     local posX = self.body:getX()
     local width = self.width / 2
-    local area = scene:getPlayableArea()
+    local area = scene.playableArea
 
     if posX < area.x + width then
         posX = area.x + width
@@ -59,7 +59,7 @@ end
 function Entity:clampEntityToYBounds()    
     local posY = self.body:getY()
     local height = self.height/2
-    local area = scene:getPlayableArea()
+    local area = scene.playableArea
 
     if posY < area.y + height then
         posY = area.y + height
