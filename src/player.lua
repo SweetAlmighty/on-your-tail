@@ -8,17 +8,15 @@ local stress = 0
 
 -- Initalize player entity
 function Player:initialize()
-    Entity.initialize(self, scene:getWidth()/2, scene:getHeight()/2, 
-        love.graphics.newQuad(0, 95, 23, 44, 118, 187), "player.png", 120, 2)
+    Entity.initialize(self, 50, 200, love.graphics.newQuad(0, 95, 23, 44, 118, 187), 
+        "player.png", 120, 2)
 end
 
 -- Update player data
 function Player:update(dt)
     if self.interacting == false then
         stress = stress + (dt * 5)
-        Entity.clampToPlayBounds(self)
-
-        moveCamera = (((self.body:getX() + self.width / 2) == scene.playableArea.maxX) 
+        moveCamera = (((self.x + self.width / 2) == scene.playableArea.maxX) 
             and allowCameraMove)
     end
 end
@@ -33,13 +31,13 @@ function Player:moveX(x)
     if self.interacting == false then
         allowCameraMove = (x ~= 0)
     end
-
-    self.body:setX(self.body:getX() + self.speed * x)
+    
+    Entity.move(self, (self.x + self.speed * x), self.y)
 end
 
 -- Move the player along the Y axis
 function Player:moveY(y)
-    self.body:setY(self.body:getY() + self.speed * y)
+    Entity.move(self, self.x, (self.y + self.speed * y))
 end
 
 -- Returns the player's stress level
@@ -69,7 +67,7 @@ function Player:interact(dt)
     end
 
     if self.interacting then
-        stress = stress - (dt * (15 * lume.count(cats)))
+        stress = stress - (dt * (25 * lume.count(cats)))
 
         if stress < 0 then
             stress = 0

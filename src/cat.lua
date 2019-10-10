@@ -24,24 +24,24 @@ function Cat:draw()
     Entity.draw(self);
 
     if self.interactable then
-        self.button:draw(self.body:getX() + 10, self.body:getY() - 20)
+        self.button:draw(self.x + 10, self.y - 20)
     end
 end
 
 function Cat:update(dt)
     if player.interacting and self.interacting then
         self.button:update(dt)
-    elseif moveCamera then
-        local catX = self.body:getX() - self.speed
-    
-        if catX < (-self.width) then
+    elseif moveCamera then    
+        local _x, _y, cols, len = World:move(self, (self.x - self.speed), self.y, filter)
+
+        if _x < (-self.width) then
             Cat.reposition(self)
         else
-            self.body:setX(catX)
+            self.x = _x
         end
     end
 
-    Entity.clampEntityToYBounds(self)
+    Entity.clampEntityToYBounds(self, self.y)
 end
 
 function Cat:randomPosition()
@@ -56,7 +56,9 @@ end
 
 function Cat:reposition()
     self.affectionLimit = 2.5
-    self.body:setPosition(Cat.randomPosition(self))
+    local _x, _y = Cat.randomPosition(self)
+    _x, _y = World:move(self, _x, _y, filter)
+    self.x, self.y = _x, _y
 end
 
 function Cat:setIndex(index)

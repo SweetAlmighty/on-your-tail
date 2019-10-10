@@ -8,13 +8,14 @@ require "src/mainMenu"
 require "src/gameStateMachine"
 
 local lume = require("src/lib/lume")
+local bump = require("src/lib/bump")
 
 cats = { }
 totalCats = 6
 elapsedTime = 0
 
 -- Needs to happen before anything else.
-World = love.physics.newWorld(0, 0, true)
+World = bump.newWorld(20)
 
 -- LOVE2D --
 function love.load()
@@ -25,17 +26,13 @@ function love.load()
 
     love.window.setTitle("On Your Tail")
     love.window.setMode(scene:getWidth(), scene:getHeight())
-
-    World:setCallbacks(onCollisionEnter, onCollisionExit, nil, nil)
 end
 
 function love.update(dt)
     if GameStateMachine:GetState() == 1 then
+        scene:update(dt)
         checkForReset(dt)
         Input:Process(dt)
-
-        scene:update(dt)
-        World:update(dt, 8, 3)
     end
 end
 
@@ -108,3 +105,7 @@ function findEntity(fixture)
     end
 end
 ----------------------
+
+function filter(item, other)
+    return 'cross'
+end
