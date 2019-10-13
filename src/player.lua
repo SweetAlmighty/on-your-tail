@@ -48,7 +48,7 @@ end
 -- Resets the player's position and stress
 function Player:reset()
     stress = 0
-    Entity.reset(self, scene:getWidth() / 2, scene:getHeight() / 2)
+    Entity.reset(self, 50, 200)
 end
 
 -- Sets whether the player is currently interacting
@@ -68,7 +68,6 @@ function Player:interact(dt)
 
     if self.interacting then
         stress = stress - (dt * (25 * lume.count(cats)))
-
         if stress < 0 then
             stress = 0
         end

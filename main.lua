@@ -58,7 +58,7 @@ function initializeCats()
     for i = 1, totalCats, 1 do
         cat = Cat:new()
         cat:setIndex(i)
-        cat:reposition()
+        cat:reset()
     end
 end
 --------------------
@@ -71,10 +71,8 @@ function onCollisionEnter(first, second, contact)
 
     if valid then
         local cat = (leftType == 2) and findEntity(second) or findEntity(first)
-
         cat.interactable = true
         player.interactable = true
-
         table.insert(cats, cat)
     end
 end

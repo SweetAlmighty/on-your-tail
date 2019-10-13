@@ -35,10 +35,12 @@ function Cat:update(dt)
         local _x, _y, cols, len = World:move(self, (self.x - self.speed), self.y, filter)
 
         if _x < (-self.width) then
-            Cat.reposition(self)
+            Cat.reset(self)
         else
             self.x = _x
         end
+        
+        self.worldX, self.worldY = _x, _y
     end
 
     Entity.clampEntityToYBounds(self, self.y)
@@ -52,13 +54,6 @@ end
 function Cat:reset()
     self.affectionLimit = 2.5
     Entity.reset(self, Cat.randomPosition(self))
-end
-
-function Cat:reposition()
-    self.affectionLimit = 2.5
-    local _x, _y = Cat.randomPosition(self)
-    _x, _y = World:move(self, _x, _y, filter)
-    self.x, self.y = _x, _y
 end
 
 function Cat:setIndex(index)

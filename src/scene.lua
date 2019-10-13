@@ -23,13 +23,24 @@ function Scene:initialize()
 end
 
 function Scene:draw()
+    scene:drawBackground()
+    scene:drawEntities()
+    scene:drawUI()
+end
+
+function Scene:drawBackground()
     love.graphics.draw(self.image, self.quad, self.one.x, self.one.y)
     love.graphics.draw(self.image, self.quad, self.two.x, self.two.y)
-        
-    for i, entity in ipairs(self.entities) do
-        entity:draw()
+end
+
+function Scene:drawEntities()
+    scene:createDrawOrder()
+    for i, entity in ipairs(self.entities) do 
+        entity:draw() 
     end
-    
+end
+
+function Scene:drawUI()
     love.graphics.setColor(0, 0, 0)
     love.graphics.rectangle("fill", 10, 10, 120, 20)
     
@@ -76,4 +87,13 @@ function Scene:reset()
     for i, entity in ipairs(self.entities) do
         entity:reset()
     end
+end
+
+-- Sorts the entities by their Y to mock draw order
+function Scene:createDrawOrder()
+    local newTable = {}
+    for k,v in pairs(scene.entities) do table.insert(newTable, { v:getY(), v }) end
+    table.sort(newTable, function(a,b) return a[1] < b[1] end)
+    scene.entities = {}
+    for k,v in pairs (newTable) do table.insert(scene.entities, v[2]) end
 end

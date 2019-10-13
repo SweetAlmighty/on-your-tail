@@ -4,17 +4,19 @@ local class = require("src/lib/middleclass")
 Entity = class('Entity')
 
 function Entity:initialize(x, y, quad, imagePath, speed, category)
-
     self.x = x
     self.y = y
     self.quad = quad
     self.speed = speed
-    local _x, _y, w, h = self.quad:getViewport()
     self.interacting = false
     self.interactable = false
+    local _x, _y, w, h = self.quad:getViewport()
     self.image = love.graphics.newImage("/data/" .. imagePath)
     self.width = (self.image == nil) and 1 or w
     self.height = (self.image == nil) and 1 or h
+
+    self.worldY = self.y + self.height
+    self.worldX = self.x + self.width / 2
 
     World:add(self, x, y, self.width, self.height)
 
@@ -22,7 +24,7 @@ function Entity:initialize(x, y, quad, imagePath, speed, category)
 end
 
 function Entity:draw()
-    love.graphics.draw(self.image, self.quad, self.x, self.y, nil, nil, nil, self.width / 2, 
+    love.graphics.draw(self.image, self.quad, self.x, self.y, nil, nil, nil, self.width/2, 
         self.height)
     --Entity.showDebugInfo(self)
 end
@@ -32,9 +34,10 @@ function Entity:setQuad(quad)
 end
 
 function Entity:reset(x, y)
-    self.interactable = false
-    self.interacting = false
+    self.x, self.y = x, y
     World:update(self, x, y)
+    self.interacting = false
+    self.interactable = false
 end
 
 function Entity:move(x, y)
@@ -67,6 +70,7 @@ function Entity:clampEntityToXBounds(x)
     end
 
     self.x = _x
+    self.worldX = _x
 end
 
 function Entity:clampEntityToYBounds(y)
@@ -81,6 +85,7 @@ function Entity:clampEntityToYBounds(y)
     end
 
     self.y = _y
+    self.worldY = _y
 end
 
 function Entity:showDebugInfo()
@@ -95,4 +100,8 @@ end
 
 function Entity:showPosition()
     love.graphics.points(self.x, self.y)
+end
+
+function Entity:getY()
+    return self.worldY
 end
