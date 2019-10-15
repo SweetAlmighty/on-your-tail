@@ -16,8 +16,8 @@ function Scene:initialize()
     {
         x = 0,
         y = 110,
-        maxX = self.width/2,
-        maxY = self.height
+        width = self.width/2,
+        height = self.height
     }
     self.entities = { }
 end

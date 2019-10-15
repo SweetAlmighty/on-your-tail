@@ -10,7 +10,6 @@ require "src/gameStateMachine"
 local lume = require("src/lib/lume")
 local bump = require("src/lib/bump")
 
-cats = { }
 totalCats = 6
 elapsedTime = 0
 
@@ -62,48 +61,3 @@ function initializeCats()
     end
 end
 --------------------
-
--- World Callbacks --
-function onCollisionEnter(first, second, contact)
-    local leftType = first:getCategory()
-    local rightType = second:getCategory()
-    local valid = (leftType == 1 and rightType == 2) or (rightType == 1 and leftType == 2)
-
-    if valid then
-        local cat = (leftType == 2) and findEntity(second) or findEntity(first)
-        cat.interactable = true
-        player.interactable = true
-        table.insert(cats, cat)
-    end
-end
-
-function onCollisionExit(first, second, contact)
-    local leftType = first:getCategory()
-    local rightType = second:getCategory()
-    local valid = (leftType == 1 and rightType == 2) or (rightType == 1 and leftType == 2)
-
-    if valid then
-        local cat = (leftType == 2) and findEntity(second) or findEntity(first)
-
-        player:setInteracting(false)
-        player.interactable = false;
-
-        cat:setInteracting(false)
-        cat.interactable = false
-
-        lume.remove(cats, cat)
-    end
-end
-
-function findEntity(fixture)
-    for k,v in ipairs(scene.entities) do
-        if fixture == v.fixture then
-            return v
-        end
-    end
-end
-----------------------
-
-function filter(item, other)
-    return 'cross'
-end

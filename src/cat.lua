@@ -14,17 +14,22 @@ local Sprites = {
     love.graphics.newQuad(40, 20, 20, 20, 60, 40)
 }
 
+local spriteWidth = 20
+local spriteHeight = 20
+
 function Cat:initialize()
     self.affectionLimit = 2.5
     self.button = InteractButton:new()
-    Entity.initialize(self, scene:getWidth()/2, scene:getHeight()/2, Sprites[1], "cats.png", 2, 1)
+
+    local _x, _y = Cat:randomPosition()
+    Entity.initialize(self, _x, _y, Sprites[1], "cats.png", 2, 1)
 end
 
 function Cat:draw()
     Entity.draw(self);
 
     if self.interactable then
-        self.button:draw(self.x + 10, self.y - 20)
+        self.button:draw(self.x + 20, self.y)
     end
 end
 
@@ -32,23 +37,21 @@ function Cat:update(dt)
     if player.interacting and self.interacting then
         self.button:update(dt)
     elseif moveCamera then    
-        local _x, _y, cols, len = World:move(self, (self.x - self.speed), self.y, filter)
+        local _x = World:move(self, (self.x - self.speed), self.y, filter)
 
         if _x < (-self.width) then
             Cat.reset(self)
         else
             self.x = _x
         end
-        
-        self.worldX, self.worldY = _x, _y
     end
 
     Entity.clampEntityToYBounds(self, self.y)
 end
 
 function Cat:randomPosition()
-    return math.random(scene:getWidth() - self.width, scene:getWidth() * 2), 
-        math.random(scene.playableArea.y - self.height, scene.playableArea.maxY)
+    return math.random(scene:getWidth() - spriteWidth, scene:getWidth() * 2), 
+        math.random(scene.playableArea.y - spriteHeight, scene.playableArea.height)
 end
 
 function Cat:reset()
@@ -69,7 +72,7 @@ end
 
 -- Handles interaction
 function Cat:interact(dt)
-    if self.interactable == true and self.interacting == false then
+    if self.interactable and self.interacting == false then
         self.interacting = true
     end
     

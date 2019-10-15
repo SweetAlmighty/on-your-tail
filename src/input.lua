@@ -54,9 +54,7 @@ end
 
 function OnB()
     if (GameStateMachine:GetState() == 1) then
-        player:interact(delta)
-
-        for k,v in ipairs(cats) do
+        for k,v in ipairs(scene.entities) do
             v:interact(delta)
         end
     end
@@ -68,9 +66,7 @@ end
 
 function OnY()
     if (GameStateMachine:GetState() == 1) then
-        player:finishInteraction()
-        
-        for k,v in ipairs(cats) do
+        for k,v in ipairs(scene.entities) do
             v:finishInteraction()
         end
     end

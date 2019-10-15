@@ -1,5 +1,4 @@
 
-local lume = require("src/lib/lume")
 local class = require("src/lib/middleclass")
 
 Player = class('Player', Entity)
@@ -16,7 +15,7 @@ end
 function Player:update(dt)
     if self.interacting == false then
         stress = stress + (dt * 5)
-        moveCamera = (((self.x + self.width / 2) == scene.playableArea.maxX) 
+        moveCamera = (((self.x + self.width / 2) == scene.playableArea.width) 
             and allowCameraMove)
     end
 end
@@ -30,9 +29,8 @@ end
 function Player:moveX(x)
     if self.interacting == false then
         allowCameraMove = (x ~= 0)
+        Entity.move(self, (self.x + self.speed * x), self.y)
     end
-    
-    Entity.move(self, (self.x + self.speed * x), self.y)
 end
 
 -- Move the player along the Y axis
@@ -67,7 +65,7 @@ function Player:interact(dt)
     end
 
     if self.interacting then
-        stress = stress - (dt * (25 * lume.count(cats)))
+        stress = stress - (dt * (25 * #self.collisions))
         if stress < 0 then
             stress = 0
         end
