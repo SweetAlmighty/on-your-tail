@@ -4,9 +4,15 @@ local class = require("src/lib/middleclass")
 
 Entity = class('Entity')
 
-function Entity:initialize(x, y, quad, imagePath, speed, category)
+Types = {
+    Player = 0,
+    Cat = 1
+}
+
+function Entity:initialize(x, y, quad, imagePath, speed, type)
     self.x = x
     self.y = y
+    self.type = type
     self.quad = quad
     self.speed = speed
     self.collisions = {}
@@ -53,15 +59,18 @@ function Entity:handleCollisions(collisions)
                 curr.item.interactable = false
                 curr.item:setInteracting(false)
                 
-                curr.other:setInteracting(false)
                 curr.other.interactable = false
+                curr.other:setInteracting(false)
             end
         end
     end
 
     for i=1, #collisions do
-        self.interactable = true
-        collisions[i].other.interactable = true
+        local player, cat = collisions[i].item, collisions[i].other
+        if cat.affectionLimit ~= 0 then
+            cat.interactable = true
+            player.interactable = true
+        end
     end
 
     if collisions ~= nil then

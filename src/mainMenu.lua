@@ -7,8 +7,8 @@ MainMenu = { }
 local index = 0
 
 function MainMenu:Draw()
-    local halfWidth = scene:getWidth()/2
-    local halfHeight = scene:getHeight()/2
+    local halfWidth = scene.width/2
+    local halfHeight = scene.height/2
 
     if index == 0 then
         love.graphics.setColor(1, 0, 0, 1)

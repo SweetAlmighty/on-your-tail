@@ -3,18 +3,18 @@ local class = require("src/lib/middleclass")
 
 Player = class('Player', Entity)
 
-local stress = 0
+local quad = love.graphics.newQuad(0, 95, 23, 44, 118, 187)
 
 -- Initalize player entity
 function Player:initialize()
-    Entity.initialize(self, 50, 200, love.graphics.newQuad(0, 95, 23, 44, 118, 187), 
-        "player.png", 120, 2)
+    self.stress = 0
+    Entity.initialize(self, 50, 150, quad, "player.png", 120, Types.Player)
 end
 
 -- Update player data
 function Player:update(dt)
     if self.interacting == false then
-        stress = stress + (dt * 5)
+        self.stress = self.stress + (dt * 5)
         moveCamera = (((self.x + self.width / 2) == scene.playableArea.width) 
             and allowCameraMove)
     end
@@ -38,14 +38,9 @@ function Player:moveY(y)
     Entity.move(self, self.x, (self.y + self.speed * y))
 end
 
--- Returns the player's stress level
-function Player:stress()
-    return stress;
-end
-
 -- Resets the player's position and stress
 function Player:reset()
-    stress = 0
+    self.stress = 0
     Entity.reset(self, 50, 200)
 end
 
@@ -53,22 +48,20 @@ end
 function Player:setInteracting(interacting)
     self.interacting = interacting
     self.speed = (interacting == true) and 0 or 120
-    scene:setSpeed((interacting == true) and 0 or 2)
+    scene.speed = ((interacting == true) and 0 or 2)
 end
 
 -- Handles interaction
 function Player:interact(dt)
     if self.interactable and self.interacting == false then
-        Player.setInteracting(self, true)
+        self:setInteracting(true)
         allowCameraMove = false
         moveCamera = false
     end
 
     if self.interacting then
-        stress = stress - (dt * (25 * #self.collisions))
-        if stress < 0 then
-            stress = 0
-        end
+        self.stress = self.stress - (dt * (25 * #self.collisions))
+        if self.stress < 0 then self.stress = 0 end
     end
 end
 
@@ -76,6 +69,6 @@ end
 function Player:finishInteraction()
     if self.interacting == true then
         self.interactable = false;
-        Player.setInteracting(self, false)
+        self:setInteracting(false)
     end
 end

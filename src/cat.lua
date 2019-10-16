@@ -22,7 +22,7 @@ function Cat:initialize()
     self.button = InteractButton:new()
 
     local _x, _y = Cat:randomPosition()
-    Entity.initialize(self, _x, _y, Sprites[1], "cats.png", 2, 1)
+    Entity.initialize(self, _x, _y, Sprites[1], "cats.png", 2, Types.Cat)
 end
 
 function Cat:draw()
@@ -50,7 +50,7 @@ function Cat:update(dt)
 end
 
 function Cat:randomPosition()
-    return math.random(scene:getWidth() - spriteWidth, scene:getWidth() * 2), 
+    return math.random(scene.width - spriteWidth, scene.width * 2), 
         math.random(scene.playableArea.y - spriteHeight, scene.playableArea.height)
 end
 
@@ -93,6 +93,6 @@ function Cat:finishInteraction()
         self.button:reset()
         self.interactable = false;
         player:finishInteraction()
-        Cat.setInteracting(self, false)
+        self:setInteracting(false)
     end
 end

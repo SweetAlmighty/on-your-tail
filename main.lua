@@ -24,7 +24,7 @@ function love.load()
     initializeCats()
 
     love.window.setTitle("On Your Tail")
-    love.window.setMode(scene:getWidth(), scene:getHeight())
+    love.window.setMode(scene.width, scene.height)
 end
 
 function love.update(dt)
@@ -45,7 +45,7 @@ end
 
 function checkForReset(dt)
     elapsedTime = elapsedTime + dt
-    if player.stress() >= 120 then
+    if player.stress >= 120 then
         elapsedTime = 0
         scene:reset()
     end
