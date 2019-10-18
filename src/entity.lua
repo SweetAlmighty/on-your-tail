@@ -9,6 +9,22 @@ Types = {
     Cat = 1
 }
 
+local directions = {
+    N  = { x = 0,  y = 1 },
+    NE = { x = 1,  y = 1 },
+    E  = { x = 1,  y = 0 },
+    SE = { x = 1,  y = -1 },
+    S  = { x = 0,  y = -1 },
+    SW = { x = -1, y = -1 },
+    W  = { x = -1, y = 0 },
+    NW = { x = -1, y = 1 }
+}
+
+Directions = {
+    directions.N, directions.NE, directions.E, directions.SE,
+    directions.S, directions.SW, directions.W, directions.NW
+}
+
 function Entity:initialize(x, y, quad, imagePath, speed, type)
     self.x = x
     self.y = y
@@ -18,6 +34,7 @@ function Entity:initialize(x, y, quad, imagePath, speed, type)
     self.collisions = {}
     self.interacting = false
     self.interactable = false
+    self.direction = directions.W
     local _x, _y, w, h = self.quad:getViewport()
     self.image = love.graphics.newImage("/data/" .. imagePath)
     self.width = (self.image == nil) and 1 or w
@@ -32,10 +49,6 @@ function Entity:draw()
     --Entity.showDebugInfo(self)
 end
 
-function Entity:setQuad(quad)
-    self.quad = quad
-end
-
 function Entity:reset(x, y)
     self.x, self.y = x, y
     World:update(self, x, y)
@@ -45,7 +58,11 @@ end
 
 function Entity:move(x, y)
     local _x, _y, cols, len = World:move(self, x, y, filter)
-    Entity.handleCollisions(self, cols)
+
+    if self.type == Types.Player then
+        Entity.handleCollisions(self, cols)
+    end
+
     Entity.clampToPlayBounds(self, _x, _y)
 end
 
@@ -79,7 +96,9 @@ function Entity:handleCollisions(collisions)
 end
 
 function Entity:clampToPlayBounds(x, y)
-    Entity.clampEntityToXBounds(self, x)
+    if self.type == Types.Player then
+        Entity.clampEntityToXBounds(self, x)
+    end
     Entity.clampEntityToYBounds(self, y)
 end
 

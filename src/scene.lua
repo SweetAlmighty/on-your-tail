@@ -9,9 +9,9 @@ function Scene:initialize()
     self.height = 240
     self.entities = { }
     self.one = { x = 0, y = 0, }
-    self.two = { x = self.width, y = 0 }
     self.threshold = -(self.width - 1)
     self.image = love.graphics.newImage("/data/background_two.png")
+    self.image:setWrap('repeat', 'clampzero')
     self.quad = love.graphics.newQuad(0, 0, self.width, self.height, self.width, self.height)
     self.playableArea = { x = 0, y = 110, width = self.width/2, height = self.height }
 end
@@ -23,8 +23,9 @@ function Scene:draw()
 end
 
 function Scene:drawBackground()
-    love.graphics.draw(self.image, self.quad, self.one.x, self.one.y)
-    love.graphics.draw(self.image, self.quad, self.two.x, self.two.y)
+    local sx = love.graphics:getWidth() / self.image:getWidth()
+    local sy = love.graphics:getHeight() / self.image:getHeight()
+    love.graphics.draw(self.image, self.quad, 0, 0, 0, sx, sy)
 end
 
 function Scene:drawEntities()
@@ -46,10 +47,13 @@ function Scene:drawUI()
 end
 
 function Scene:update(dt)
+
     if moveCamera then
-        local x1, x2 = self.one.x - self.speed, self.two.x - self.speed
+        local x1 = self.one.x - self.speed
         self.one.x = (x1 < self.threshold) and (self.width) or (x1)
-        self.two.x = (x2 < self.threshold) and (self.width) or (x2)
+
+        self.quad = love.graphics.newQuad(-self.one.x, 0, self.image:getWidth() * 2,
+            self.image:getHeight() * 2, self.image:getWidth(), self.image:getHeight())
     end
 
     for i, entity in ipairs(self.entities) do entity:update(dt) end

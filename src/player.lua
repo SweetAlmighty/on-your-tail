@@ -41,7 +41,7 @@ end
 -- Resets the player's position and stress
 function Player:reset()
     self.stress = 0
-    Entity.reset(self, 50, 200)
+    Entity.reset(self, 50, 150)
 end
 
 -- Sets whether the player is currently interacting

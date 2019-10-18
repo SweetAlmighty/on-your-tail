@@ -24,8 +24,11 @@ function love.load()
     initializeCats()
 
     love.window.setTitle("On Your Tail")
+    love.math.setRandomSeed(os.time())
     love.window.setMode(scene.width, scene.height)
 end
+
+local time = 0
 
 function love.update(dt)
     if GameStateMachine:GetState() == 1 then
