@@ -28,8 +28,6 @@ function love.load()
     love.window.setMode(scene.width, scene.height)
 end
 
-local time = 0
-
 function love.update(dt)
     if GameStateMachine:GetState() == 1 then
         scene:update(dt)
