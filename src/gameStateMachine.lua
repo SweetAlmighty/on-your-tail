@@ -3,7 +3,8 @@ GameStateMachine = { }
 
 States = {
     MainMenu = 0,
-    Gameplay = 1
+    Gameplay = 1,
+    Failstate = 2,
 }
 
 local currentState = States.MainMenu

@@ -4,10 +4,8 @@ local class = require("src/lib/middleclass")
 
 Entity = class('Entity')
 
-Types = {
-    Player = 0,
-    Cat = 1
-}
+local showDebugInfo, showCollider, showPosition
+local collisionFilter = function(item, other) return 'cross' end
 
 local directions = {
     N  = { x = 0,  y = 1 },
@@ -23,6 +21,11 @@ local directions = {
 Directions = {
     directions.N, directions.NE, directions.E, directions.SE,
     directions.S, directions.SW, directions.W, directions.NW
+}
+
+Types = {
+    Player = 0,
+    Cat = 1
 }
 
 function Entity:initialize(x, y, quad, imagePath, speed, type)
@@ -46,7 +49,7 @@ end
 
 function Entity:draw()
     love.graphics.draw(self.image, self.quad, self.x, self.y, nil, nil, nil, nil, nil)
-    --Entity.showDebugInfo(self)
+    showDebugInfo(self)
 end
 
 function Entity:reset(x, y)
@@ -57,27 +60,24 @@ function Entity:reset(x, y)
 end
 
 function Entity:move(x, y)
-    local _x, _y, cols, len = World:move(self, x, y, filter)
-
-    if self.type == Types.Player then
-        Entity.handleCollisions(self, cols)
-    end
-
+    local _x, _y, cols = World:check(self, x, y, collisionFilter)
+    if self.type == Types.Player then Entity.handleCollisions(self, cols) end
     Entity.clampToPlayBounds(self, _x, _y)
+    World:update(self, self.x, self.y)
 end
 
 function Entity:handleCollisions(collisions)
     if collisions ~= nil then
         for i = 1, #self.collisions, 1 do
-            local curr = self.collisions[i]
-            local index = lume.find(collisions, curr)
+            local col = self.collisions[i]
+            local index = lume.find(collisions, col)
 
             if index == nil then
-                curr.item.interactable = false
-                curr.item:setInteracting(false)
+                col.item.interactable = false
+                col.item:setInteracting(false)
                 
-                curr.other.interactable = false
-                curr.other:setInteracting(false)
+                col.other.interactable = false
+                col.other:setInteracting(false)
             end
         end
     end
@@ -90,16 +90,12 @@ function Entity:handleCollisions(collisions)
         end
     end
 
-    if collisions ~= nil then
-        self.collisions = collisions
-    end
+    if collisions ~= nil then self.collisions = collisions end
 end
 
 function Entity:clampToPlayBounds(x, y)
-    if self.type == Types.Player then
-        Entity.clampEntityToXBounds(self, x)
-    end
-    Entity.clampEntityToYBounds(self, y)
+    self.x = (self.type == Types.Player) and Entity.clampEntityToXBounds(self, x) or x  
+    self.y = Entity.clampEntityToYBounds(self, y)
 end
 
 function Entity:clampEntityToXBounds(x)
@@ -113,7 +109,7 @@ function Entity:clampEntityToXBounds(x)
         _x = area.width - width
     end
 
-    self.x = _x
+    return _x 
 end
 
 function Entity:clampEntityToYBounds(y)
@@ -127,29 +123,23 @@ function Entity:clampEntityToYBounds(y)
         _y = area.height - height
     end
 
-    self.y = _y
-end
-
-function Entity:showDebugInfo()
-    Entity.showCollider(self)
-    Entity.showPosition(self)
-end
-
-function Entity:showCollider()
-    local x, y, w, h = World:getRect(self)
-    love.graphics.rectangle("line", x, y, w, h)
-end
-
-function Entity:showPosition()
-    love.graphics.points(self.x, self.y)
+    return _y
 end
 
 function Entity:getY()
     return self.y + self.height
 end
 
--- Collision Filter --
-function filter(item, other)
-    return 'cross'
+showDebugInfo = function(entity)
+    showCollider(entity)
+    showPosition(entity)
 end
-----------------------
+
+showCollider = function(entity)
+    local x, y, w, h = World:getRect(entity)
+    love.graphics.rectangle("line", x, y, w, h)
+end
+
+showPosition = function(entity)
+    love.graphics.points(entity.x, entity.y)
+end

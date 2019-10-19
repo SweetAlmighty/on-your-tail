@@ -3,12 +3,11 @@ local class = require("src/lib/middleclass")
 
 Player = class('Player', Entity)
 
-local quad = love.graphics.newQuad(0, 95, 23, 44, 118, 187)
-
 -- Initalize player entity
 function Player:initialize()
     self.stress = 0
-    Entity.initialize(self, 50, 150, quad, "player.png", 120, Types.Player)
+    Entity.initialize(self, 50, 150, love.graphics.newQuad(0, 95, 23, 44, 118, 187), 
+        "player.png", 120, Types.Player)
 end
 
 -- Update player data
