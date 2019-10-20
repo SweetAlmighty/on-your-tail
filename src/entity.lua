@@ -4,8 +4,14 @@ local class = require("src/lib/middleclass")
 
 Entity = class('Entity')
 
-local showDebugInfo, showCollider, showPosition
+local showCollider = function(entity)
+    local x, y, w, h = World:getRect(entity)
+    love.graphics.rectangle("line", x, y, w, h)
+end
+
 local collisionFilter = function(item, other) return 'cross' end
+local showPosition = function(entity) love.graphics.points(entity.x, entity.y) end
+local showDebugInfo = function(entity) showCollider(entity) showPosition(entity) end
 
 local directions = {
     N  = { x = 0,  y = 1 },
@@ -128,18 +134,4 @@ end
 
 function Entity:getY()
     return self.y + self.height
-end
-
-showDebugInfo = function(entity)
-    showCollider(entity)
-    showPosition(entity)
-end
-
-showCollider = function(entity)
-    local x, y, w, h = World:getRect(entity)
-    love.graphics.rectangle("line", x, y, w, h)
-end
-
-showPosition = function(entity)
-    love.graphics.points(entity.x, entity.y)
 end

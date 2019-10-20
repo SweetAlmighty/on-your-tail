@@ -8,10 +8,16 @@ local class = require("src/lib/middleclass")
 Scene = class("Scene")
 World = bump.newWorld(20)
 
-local totalCats = 12
+local totalCats = 8
 local elapsedTime = 0
 
-local checkForReset
+local checkForReset = function(dt)
+    elapsedTime = elapsedTime + dt
+    if player.stress >= 120 then
+        elapsedTime = 0
+        scene:reset()
+    end
+end
 
 function Scene:initialize()
     self.speed = 2
@@ -26,11 +32,6 @@ function Scene:initialize()
     self.playableArea = { x = 0, y = 110, width = self.width/2, height = self.height }
 end
 
-function Scene:createEntities()
-    player = Player:new()
-    for i = 1, totalCats, 1 do cat = Cat:new() end
-end
-
 function Scene:draw()
     scene:drawBackground()
     scene:drawEntities()
@@ -43,8 +44,13 @@ function Scene:drawBackground()
     love.graphics.draw(self.image, self.quad, 0, 0, 0, sx, sy)
 end
 
+function Scene:createEntities()
+    player = Player:new()
+    for i = 1, totalCats, 1 do cat = Cat:new() end
+end
+
 function Scene:drawEntities()
-    scene:createDrawOrder()
+    scene:sortDrawOrder()
     for i, entity in ipairs(self.entities) do entity:draw() end
 end
 
@@ -62,6 +68,7 @@ function Scene:drawUI()
 end
 
 function Scene:update(dt)
+    checkForReset(dt)
     if moveCamera then
         local x1 = self.coords.x - self.speed
         self.coords.x = (x1 < self.threshold) and (self.width) or (x1)
@@ -81,18 +88,10 @@ function Scene:reset()
 end
 
 -- Sorts the entities by their Y to mock draw order
-function Scene:createDrawOrder()
+function Scene:sortDrawOrder()
     local newTable = {}
     for k,v in pairs(scene.entities) do table.insert(newTable, { v:getY(), v }) end
     table.sort(newTable, function(a,b) return a[1] < b[1] end)
     scene.entities = {}
     for k,v in pairs (newTable) do table.insert(scene.entities, v[2]) end
-end
-
-checkForReset = function(dt)
-    elapsedTime = elapsedTime + dt
-    if player.stress >= 120 then
-        elapsedTime = 0
-        scene:reset()
-    end
 end

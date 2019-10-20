@@ -1,14 +1,14 @@
 
 require "src/scene"
 require "src/input"
-require "src/entity"
 require "src/mainMenu"
 require "src/gameStateMachine"
 
 function love.load()
+    love.math.setRandomSeed(os.time())
+    
     scene = Scene:new()
     scene:createEntities()
-    love.math.setRandomSeed(os.time())
     love.window.setTitle("On Your Tail")
     love.window.setMode(scene.width, scene.height)
 end

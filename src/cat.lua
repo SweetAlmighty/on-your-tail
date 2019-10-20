@@ -9,12 +9,56 @@ local class = require("src/lib/middleclass")
 Cat = class("Cat", Entity)
 
 local time = 0
-local spriteWidth = 20
-local spriteHeight = 20
-
+local update = false
 local s_SITTING, s_WALKING = 1, 2
+local imageWidth, imageHeight = 150, 160
+local spriteWidth, spriteHeight = 20, 20
 
-local randomPosition, processMovement, processAnims
+local randomPosition = function()
+    return math.random(scene.width - spriteWidth, scene.width * 2), 
+        math.random(scene.playableArea.y - spriteHeight, scene.playableArea.height)
+end
+
+local processMovement = function(cat)
+    local _x = (cat.x + (cat.speed * cat.direction.x))
+    local _y = (cat.y + (cat.speed * cat.direction.y))
+    if moveCamera == false then
+        if cat.state == s_SITTING then _x, _y = cat.x, cat.y end
+    else
+        if cat.state == s_SITTING then _x, _y = cat.x - scene.speed, cat.y end
+    end
+
+    Entity.move(cat, _x, _y)
+
+    if cat.x < (-cat.width) then cat:reset() end
+end
+
+local processAnims = function(dt, cat)
+    time = time + dt
+    if time > 1 then
+        time = 0
+        if cat.interacting ~= true then
+            cat.state = lume.randomchoice({s_SITTING, s_WALKING})
+            if cat.state == s_WALKING then cat.direction = lume.randomchoice(Directions) end
+            update = true
+        end
+    end
+
+    if update then    
+        if cat.state == s_WALKING and cat.interacting == false then -- Walk
+            cat.currAnim = (cat.direction.x == 1) and cat.walkRight or cat.walkLeft
+        else -- Sit
+            cat.quad = love.graphics.newQuad((cat.direction.x == 1) and 136 or 122, 
+                spriteHeight * (cat.index - 1), 14, 19, imageWidth, imageHeight)
+        end
+        update = false
+    end
+
+    if cat.state == s_WALKING then
+        cat.currAnim:play(dt)
+        cat.quad = cat.currAnim.currentFrame
+    end
+end
 
 function Cat:initialize()
     self.limit = 2.5
@@ -23,17 +67,19 @@ function Cat:initialize()
     self.currAnim = { }
     self.state = s_SITTING
 
-    self.animSit = animat.newAnimat(15)
-    self.animWalk = animat.newAnimat(15)
+    self.walkLeft = animat.newAnimat(15)
+    self.walkRight = animat.newAnimat(15)
 
     local _x, _y = randomPosition()
-    Entity.initialize(self, _x, _y, love.graphics.newQuad(0, 0, spriteWidth, spriteHeight, 150, 120), 
-        "cat-sprites.png", 1, Types.Cat)
+    local index = love.math.random(1, (imageHeight/spriteHeight))
 
-    self.animSit:addSheet(self.image)
-    self.animWalk:addSheet(self.image)
+    Entity.initialize(self, _x, _y, love.graphics.newQuad(0, ((index - 1) * 20), spriteWidth, 
+        spriteHeight, imageWidth, imageHeight), "cats.png", 1, Types.Cat)
 
-    self:setIndex(lume.randomchoice({1, 2, 3, 4, 5, 6}))
+    self.walkLeft:addSheet(self.image)
+    self.walkRight:addSheet(self.image)
+
+    self:setIndex(index)
 end
 
 function Cat:draw()
@@ -57,10 +103,12 @@ end
 
 function Cat:interact(dt)
     if self.interactable and self.interacting == false then
+        update = true
+        self.state = s_SITTING
         self.interacting = true
     end
     
-    if self.interacting == true then
+    if self.interacting then
         self.button:update(dt)
         self.limit = self.limit - (dt * 10)
 
@@ -73,22 +121,21 @@ end
 
 function Cat:setIndex(index)
     self.index = index
-
     local currY = ((index - 1) * 20)
 
-    self.animWalk:addFrame(0,  currY, 20, 20)
-    self.animWalk:addFrame(40, currY, 20, 20)
-    self.animWalk:addFrame(0,  currY, 20, 20)
-    self.animWalk:addFrame(80, currY, 21, 20)
+    self.walkLeft:addFrame(0,  currY, 20, 20)
+    self.walkLeft:addFrame(40, currY, 20, 20)
+    self.walkLeft:addFrame(0,  currY, 20, 20)
+    self.walkLeft:addFrame(80, currY, 21, 20)
 
-    self.animSit:addFrame(20,  currY, 20, 20)
-    self.animSit:addFrame(60,  currY, 20, 20)
-    self.animSit:addFrame(20,  currY, 20, 20)
-    self.animSit:addFrame(101, currY, 21, 20)
+    self.walkRight:addFrame(20,  currY, 20, 20)
+    self.walkRight:addFrame(60,  currY, 20, 20)
+    self.walkRight:addFrame(20,  currY, 20, 20)
+    self.walkRight:addFrame(101, currY, 21, 20)
 end
 
 function Cat:finishInteraction()
-    if self.interacting == true then
+    if self.interacting then
         self.button:reset()
         self.interactable = false;
         player:finishInteraction()
@@ -99,51 +146,4 @@ end
 function Cat:setInteracting(interacting)
     self.interacting = interacting
     self.speed = (interacting == true) and 0 or 2
-end
-
-randomPosition = function()
-    return math.random(scene.width - spriteWidth, scene.width * 2), 
-        math.random(scene.playableArea.y - spriteHeight, scene.playableArea.height)
-end
-
-processMovement = function(cat)
-    local _x = (cat.x + (cat.speed * cat.direction.x))
-    local _y = (cat.y + (cat.speed * cat.direction.y))
-    if moveCamera == false then
-        if cat.state == s_SITTING then
-            _x, _y = cat.x, cat.y
-        end
-    else
-        if cat.state == s_SITTING then
-            _x, _y = cat.x - scene.speed, cat.y
-        end
-    end
-
-    Entity.move(cat, _x, _y)
-
-    if cat.x < (-cat.width) then
-        cat:reset()
-    end
-end
-
-processAnims = function(dt, cat)
-    time = time + dt
-    if time > 1 then
-        time = 0
-        cat.state = lume.randomchoice({s_SITTING, s_WALKING})
-        if cat.state == s_WALKING then
-            cat.direction = lume.randomchoice(Directions)
-        end
-    end
-
-    if cat.state == s_WALKING and cat.interacting == false then
-        cat.currAnim = (cat.direction.x == 1) and cat.animSit or cat.animWalk
-        cat.currAnim:play(dt)
-        cat.quad = cat.currAnim.currentFrame
-    else
-        local _x = (cat.direction.x == 1) and 136 or 122
-        cat.currAnim = (cat.direction.x == 1) and cat.animWalk or cat.animSit
-        cat.currAnim:reset()
-        cat.quad = love.graphics.newQuad(_x, 20 * (cat.index - 1), 14, 19, 150, 120)
-    end
 end
