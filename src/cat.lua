@@ -9,6 +9,7 @@ local class = require("src/lib/middleclass")
 Cat = class("Cat", Entity)
 
 local time = 0
+local index = 1
 local update = false
 local s_SITTING, s_WALKING = 1, 2
 local imageWidth, imageHeight = 150, 160
@@ -67,11 +68,9 @@ function Cat:initialize()
     self.currAnim = { }
     self.state = s_SITTING
 
-    self.walkLeft = animat.newAnimat(15)
-    self.walkRight = animat.newAnimat(15)
-
     local _x, _y = randomPosition()
-    local index = love.math.random(1, (imageHeight/spriteHeight))
+
+    self.walkLeft, self.walkRight = animat.newAnimat(15), animat.newAnimat(15)
 
     Entity.initialize(self, _x, _y, love.graphics.newQuad(0, ((index - 1) * 20), spriteWidth, 
         spriteHeight, imageWidth, imageHeight), "cats.png", 1, Types.Cat)
@@ -80,6 +79,8 @@ function Cat:initialize()
     self.walkRight:addSheet(self.image)
 
     self:setIndex(index)
+
+    index = index + 1
 end
 
 function Cat:draw()
