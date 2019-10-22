@@ -55,7 +55,7 @@ end
 
 function Entity:draw()
     love.graphics.draw(self.image, self.quad, self.x, self.y, nil, nil, nil, nil, nil)
-    showDebugInfo(self)
+    --showDebugInfo(self)
 end
 
 function Entity:reset(x, y)
