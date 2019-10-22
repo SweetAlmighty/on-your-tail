@@ -55,7 +55,7 @@ end
 
 function Entity:draw()
     love.graphics.draw(self.image, self.quad, self.x, self.y, nil, nil, nil, nil, nil)
-    --showDebugInfo(self)
+    showDebugInfo(self)
 end
 
 function Entity:reset(x, y)
@@ -67,17 +67,15 @@ end
 
 function Entity:move(x, y)
     local _x, _y, cols = World:check(self, x, y, collisionFilter)
-    if self.type == Types.Player then Entity.handleCollisions(self, cols) end
+    Entity.handleCollisions(self, cols)
     Entity.clampToPlayBounds(self, _x, _y)
     World:update(self, self.x, self.y)
 end
 
-function Entity:handleCollisions(collisions)
-    if collisions ~= nil then
+function Entity:handleCollisions(cols)
+    if cols ~= nil then
         for i = 1, #self.collisions, 1 do
-            local col = self.collisions[i]
-            local index = lume.find(collisions, col)
-
+            local col, index = self.collisions[i], lume.find(cols, col)
             if index == nil then
                 col.item.interactable = false
                 col.item:setInteracting(false)
@@ -88,15 +86,21 @@ function Entity:handleCollisions(collisions)
         end
     end
 
-    for i=1, #collisions do
-        local player, cat = collisions[i].item, collisions[i].other
-        if cat.affectionLimit ~= 0 then
-            cat.interactable = true
-            player.interactable = true
+    for i=1, #cols do
+        local skip = cols[i].item.type == Types.Cat and cols[i].other.type == Types.Cat
+        if skip == false then
+            local playerType = cols[i].item.type == Types.Player
+            local cat = (playerType and cols[i].other or cols[i].item)
+            local player = (playerType and cols[i].item or cols[i].other)
+
+            if cat.limit ~= 0 then
+                cat.interactable = true
+                player.interactable = true
+            end
         end
     end
 
-    if collisions ~= nil then self.collisions = collisions end
+    if cols ~= nil then self.collisions = cols end
 end
 
 function Entity:clampToPlayBounds(x, y)
