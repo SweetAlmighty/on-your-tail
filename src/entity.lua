@@ -9,7 +9,7 @@ local showCollider = function(entity)
     love.graphics.rectangle("line", x, y, w, h)
 end
 
-local collisionFilter = function(item, other) return 'cross' end
+local collisionFilter = function() return 'cross' end
 local showPosition = function(entity) love.graphics.points(entity.x, entity.y) end
 local showDebugInfo = function(entity) showCollider(entity) showPosition(entity) end
 

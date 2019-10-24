@@ -54,9 +54,7 @@ end
 
 function OnB()
     if (GameStateMachine:GetState() == 1) then
-        for k,v in ipairs(scene.entities) do
-            v:interact(delta)
-        end
+        for i=1, #scene.entities, 1 do scene.entities[i]:interact(delta) end
     end
 end
 
@@ -66,9 +64,7 @@ end
 
 function OnY()
     if (GameStateMachine:GetState() == 1) then
-        for k,v in ipairs(scene.entities) do
-            v:finishInteraction()
-        end
+        for i = 1, #scene.entities, 1 do scene.entities[i]:finishInteraction() end
     end
 end
 -- Face Buttons --
@@ -132,11 +128,11 @@ end
 function love.keypressed(k)
     if GameStateMachine:GetState() == States.MainMenu then
         if k == inputMap.up then
-            MainMenu:Up()
+            mainMenu:Up()
         elseif k == inputMap.down then
-            MainMenu:Down()
+            mainMenu:Down()
         elseif k == inputMap.a then
-            if MainMenu:GetIndex() == 0 then
+            if mainMenu:GetIndex() == 0 then
                 GameStateMachine:ChangeState(States.Gameplay)
             else
                 love.event.quit()

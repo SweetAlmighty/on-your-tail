@@ -6,7 +6,7 @@ Player = class('Player', Entity)
 -- Initalize player entity
 function Player:initialize()
     self.stress = 0
-    Entity.initialize(self, 50, 150, love.graphics.newQuad(0, 95, 23, 44, 118, 187), 
+    Entity.initialize(self, 50, 150, love.graphics.newQuad(0, 95, 23, 44, 118, 187),
         "player.png", 120, Types.Player)
 end
 
@@ -14,7 +14,7 @@ end
 function Player:update(dt)
     if self.interacting == false then
         self.stress = self.stress + (dt * 5)
-        moveCamera = (((self.x + self.width / 2) == scene.playableArea.width) 
+        moveCamera = (((self.x + self.width / 2) == scene.playableArea.width)
             and allowCameraMove)
     end
 end

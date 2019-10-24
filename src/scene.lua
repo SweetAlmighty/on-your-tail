@@ -51,7 +51,7 @@ end
 
 function Scene:drawEntities()
     scene:sortDrawOrder()
-    for i, entity in ipairs(self.entities) do entity:draw() end
+    for i=1, #self.entities, 1 do self.entities[i]:draw() end
 end
 
 function Scene:drawUI()
@@ -76,22 +76,27 @@ function Scene:update(dt)
             self.image:getHeight() * 2, self.image:getWidth(), self.image:getHeight())
     end
 
-    for i, entity in ipairs(self.entities) do entity:update(dt) end
+    for i=1, #scene.entities, 1 do self.entities[i]:update(dt) end
 end
 
 function Scene:addEntity(entity)
-    table.insert(self.entities, entity)
+    self.entities[#self.entities+1] = entity
 end
 
 function Scene:reset()
-    for i, entity in ipairs(self.entities) do entity:reset() end
+    for i=1, #scene.entities, 1 do self.entities[i]:reset() end
 end
 
 -- Sorts the entities by their Y to mock draw order
 function Scene:sortDrawOrder()
     local newTable = {}
-    for k,v in pairs(scene.entities) do table.insert(newTable, { v:getY(), v }) end
+    for i=1, #scene.entities, 1 do
+        newTable[#newTable+1] = { scene.entities[i]:getY(), scene.entities[i] } 
+    end
     table.sort(newTable, function(a,b) return a[1] < b[1] end)
     scene.entities = {}
-    for k,v in pairs (newTable) do table.insert(scene.entities, v[2]) end
+    for i=1, #newTable, 1 do 
+        local v = newTable[i]
+        scene.entities[#scene.entities+1] = v[2]
+    end
 end

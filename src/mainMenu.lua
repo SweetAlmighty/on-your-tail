@@ -1,8 +1,9 @@
 
 require "src/scene"
 require "love.graphics"
+local class = require("src/lib/middleclass")
 
-MainMenu = { }
+MainMenu = class("MainMenu", Menu)
 
 local index = 0
 local totalW, totalH = 121, 65
@@ -10,28 +11,26 @@ local optionW, optionH = 96, 32
 local pointerW, pointerH = 24, 23
 local halfW, halfH = (optionW/2), (optionH/2)
 
-local image   = love.graphics.newImage("/data/menu.png")
-local play    = love.graphics.newQuad(0, 0,  optionW, optionH, totalW, totalH)
-local quit    = love.graphics.newQuad(0, 33, optionW, optionH, totalW, totalH)
-local pointer = love.graphics.newQuad(97, 0, pointerW, pointerH, totalW, totalH)
+function MainMenu:initialize()
+    self.halfWidth = scene.width/2
+    self.halfHeight = scene.height/2
 
-local halfWidth, halfHeight, optionX, pointerX, playHeight, pointerHeight
-
-local calcPositions = function()
-    halfWidth, halfHeight = scene.width/2, scene.height/2
-
-    optionX = halfWidth - halfW
-    playHeight = halfHeight - (optionH + halfH)
-    pointerX = optionX - (pointerW + (pointerW / 2))
-    pointerHeight = (index == 0 and playHeight or halfHeight) + (pointerH / 4)
+    self.optionX = self.halfWidth - halfW
+    self.playHeight = self.halfHeight - (optionH + halfH)
+    self.pointerX = self.optionX - (pointerW + (pointerW / 2))
+    
+    self.image = love.graphics.newImage("/data/menu.png")
+    self.play = love.graphics.newQuad(0, 0,  optionW, optionH, totalW, totalH)
+    self.quit = love.graphics.newQuad(0, 33, optionW, optionH, totalW, totalH)
+    self.pointer = love.graphics.newQuad(97, 0, pointerW, pointerH, totalW, totalH)
 end
 
 function MainMenu:Draw()
-    calcPositions()
+    local pointerHeight = (index == 0 and self.playHeight or self.halfHeight) + (pointerH / 4)
     love.graphics.clear(1, 1, 1, 1)
-    love.graphics.draw(image, play, optionX, playHeight, nil, nil, nil, nil, nil)
-    love.graphics.draw(image, quit, optionX, halfHeight, nil, nil, nil, nil, nil)
-    love.graphics.draw(image, pointer, pointerX, pointerHeight, nil, nil, nil, nil, nil)
+    love.graphics.draw(self.image, self.play, self.optionX, self.playHeight, nil, nil, nil, nil, nil)
+    love.graphics.draw(self.image, self.quit, self.optionX, self.halfHeight, nil, nil, nil, nil, nil)
+    love.graphics.draw(self.image, self.pointer, self.pointerX, pointerHeight, nil, nil, nil, nil, nil)
 end
 
 function MainMenu:GetIndex() return index end

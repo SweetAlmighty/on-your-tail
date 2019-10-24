@@ -6,8 +6,10 @@ require "src/gameStateMachine"
 
 function love.load()
     love.math.setRandomSeed(os.time())
-    
+
     scene = Scene:new()
+    mainMenu = MainMenu:new()
+
     scene:createEntities()
     love.window.setTitle("On Your Tail")
     love.window.setMode(scene.width, scene.height)
@@ -22,7 +24,7 @@ end
 
 function love.draw()
     if GameStateMachine:GetState() == 0 then
-        MainMenu:Draw()
+        mainMenu:Draw()
     elseif GameStateMachine:GetState() == 1 then
         scene:draw()
     end

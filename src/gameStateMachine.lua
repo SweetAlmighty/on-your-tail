@@ -9,13 +9,8 @@ States = {
 
 local currentState = States.MainMenu
 
-function GameStateMachine:ChangeState(state)   
-    for k, v in pairs(States) do
-        if v == state then
-            currentState = state
-            return
-        end
-    end
+function GameStateMachine:ChangeState(state) 
+    currentState = state
 end
 
 function GameStateMachine:GetState()
