@@ -1,5 +1,5 @@
 
-require "src/gameStateMachine"
+--require "src/gameStateMachine"
 local lume = require("src/lib/lume")
 
 Input = {}
@@ -53,7 +53,7 @@ function OnA()
 end 
 
 function OnB()
-    if (GameStateMachine:GetState() == 1) then
+    if (currentState == States.Gameplay) then
         for i=1, #scene.entities, 1 do scene.entities[i]:interact(delta) end
     end
 end
@@ -63,7 +63,7 @@ function OnX()
 end
 
 function OnY()
-    if (GameStateMachine:GetState() == 1) then
+    if (currentState == States.Gameplay) then
         for i = 1, #scene.entities, 1 do scene.entities[i]:finishInteraction() end
     end
 end
@@ -111,7 +111,7 @@ end
 
 -- Function Buttons --
 function OnMenu()
-    GameStateMachine:ChangeState(States.MainMenu)
+    currentState = States.MainMenu
     scene:reset()
 end
 
@@ -126,14 +126,14 @@ end
 
 -- Handles single key presses
 function love.keypressed(k)
-    if GameStateMachine:GetState() == States.MainMenu then
+    if currentState == States.MainMenu then
         if k == inputMap.up then
             mainMenu:Up()
         elseif k == inputMap.down then
             mainMenu:Down()
         elseif k == inputMap.a then
             if mainMenu:GetIndex() == 0 then
-                GameStateMachine:ChangeState(States.Gameplay)
+                currentState = States.Gameplay
             else
                 love.event.quit()
             end

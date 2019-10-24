@@ -2,7 +2,14 @@
 require "src/scene"
 require "src/input"
 require "src/mainMenu"
-require "src/gameStateMachine"
+
+States = {
+    MainMenu = 0,
+    Gameplay = 1,
+    Failstate = 2,
+}
+
+currentState = States.MainMenu
 
 function love.load()
     love.math.setRandomSeed(os.time())
@@ -16,16 +23,16 @@ function love.load()
 end
 
 function love.update(dt)
-    if GameStateMachine:GetState() == 1 then
+    if currentState == 1 then
         scene:update(dt)
         Input:Process(dt)
     end
 end
 
 function love.draw()
-    if GameStateMachine:GetState() == 0 then
+    if currentState == States.MainMenu then
         mainMenu:Draw()
-    elseif GameStateMachine:GetState() == 1 then
+    elseif currentState == States.Gameplay then
         scene:draw()
     end
 end
