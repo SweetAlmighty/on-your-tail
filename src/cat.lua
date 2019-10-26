@@ -9,15 +9,14 @@ local class = require("src/lib/middleclass")
 Cat = class("Cat", Entity)
 
 local time = 0
-local index = 1
 local update = false
 local s_SITTING, s_WALKING = 1, 2
 local imageWidth, imageHeight = 150, 160
 local spriteWidth, spriteHeight = 20, 20
 
 local randomPosition = function()
-    return math.random(scene.width - spriteWidth, scene.width * 2),
-        math.random(scene.playableArea.y - spriteHeight, scene.playableArea.height)
+    return math.random(screenWidth - spriteWidth, screenWidth * 2),
+        math.random(playableArea.y - spriteHeight, playableArea.height)
 end
 
 local processMovement = function(cat)
@@ -26,7 +25,7 @@ local processMovement = function(cat)
     if moveCamera == false then
         if cat.state == s_SITTING then _x, _y = cat.x, cat.y end
     else
-        if cat.state == s_SITTING then _x, _y = cat.x - scene.speed, cat.y end
+        if cat.state == s_SITTING then _x, _y = cat.x - speed, cat.y end
     end
 
     Entity.move(cat, _x, _y)
@@ -62,29 +61,34 @@ local processAnims = function(dt, cat)
 end
 
 function Cat:initialize()
-    self.limit = 2.5
-    self.button = InteractButton:new()
-
+    self.limit = 3
     self.currAnim = { }
     self.state = s_SITTING
+    self.button = InteractButton:new()
+    self.index = math.random(1, imageHeight/spriteHeight)
 
     local _x, _y = randomPosition()
+    local currY = ((self.index - 1) * 20)
+    Entity.initialize(self, _x, _y, love.graphics.newQuad(0, currY, spriteWidth, spriteHeight, 
+        imageWidth, imageHeight), "cats.png", 1, Types.Cat)
 
-    self.walkLeft, self.walkRight = animat.newAnimat(15), animat.newAnimat(15)
-
-    Entity.initialize(self, _x, _y, love.graphics.newQuad(0, ((index - 1) * 20), spriteWidth,
-        spriteHeight, imageWidth, imageHeight), "cats.png", 1, Types.Cat)
-
+    self.walkLeft = animat.newAnimat(15)
     self.walkLeft:addSheet(self.image)
+    self.walkLeft:addFrame(0,  currY, 20, 20)
+    self.walkLeft:addFrame(40, currY, 20, 20)
+    self.walkLeft:addFrame(0,  currY, 20, 20)
+    self.walkLeft:addFrame(80, currY, 21, 20)
+
+    self.walkRight = animat.newAnimat(15)
     self.walkRight:addSheet(self.image)
-
-    self:setIndex(index)
-
-    index = index + 1
+    self.walkRight:addFrame(20,  currY, 20, 20)
+    self.walkRight:addFrame(60,  currY, 20, 20)
+    self.walkRight:addFrame(20,  currY, 20, 20)
+    self.walkRight:addFrame(101, currY, 21, 20)
 end
 
 function Cat:draw()
-    Entity.draw(self);
+    Entity.draw(self)
     if self.interactable then self.button:draw(self.x + 20, self.y) end
 end
 
@@ -120,25 +124,10 @@ function Cat:interact(dt)
     end
 end
 
-function Cat:setIndex(_index)
-    self.index = _index
-    local currY = ((_index - 1) * 20)
-
-    self.walkLeft:addFrame(0,  currY, 20, 20)
-    self.walkLeft:addFrame(40, currY, 20, 20)
-    self.walkLeft:addFrame(0,  currY, 20, 20)
-    self.walkLeft:addFrame(80, currY, 21, 20)
-
-    self.walkRight:addFrame(20,  currY, 20, 20)
-    self.walkRight:addFrame(60,  currY, 20, 20)
-    self.walkRight:addFrame(20,  currY, 20, 20)
-    self.walkRight:addFrame(101, currY, 21, 20)
-end
-
 function Cat:finishInteraction()
     if self.interacting then
         self.button:reset()
-        self.interactable = false;
+        self.interactable = false
         player:finishInteraction()
         self:setInteracting(false)
     end

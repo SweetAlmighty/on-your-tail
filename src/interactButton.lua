@@ -20,10 +20,5 @@ function InteractButton:draw(x, y)
         self.height)
 end
 
-function InteractButton:update(dt)
-    self.animation:play(dt)
-end
-
-function InteractButton:reset()
-    self.animation:reset()
-end
+function InteractButton:update(dt) self.animation:play(dt)end
+function InteractButton:reset() self.animation:reset() end

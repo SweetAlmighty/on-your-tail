@@ -4,16 +4,10 @@ local class = require("src/lib/middleclass")
 
 Entity = class('Entity')
 
-local collisionFilter = function() return 'cross' end
-
---[[
-local showCollider = function(entity)
-    local x, y, w, h = World:getRect(entity)
-    love.graphics.rectangle("line", x, y, w, h)
-end
-local showPosition = function(entity) love.graphics.points(entity.x, entity.y) end
-local showDebugInfo = function(entity) showCollider(entity) showPosition(entity) end
-]]
+Types = {
+    Player = 0,
+    Cat = 1
+}
 
 local directions = {
     N  = { x = 0,  y = 1 },
@@ -31,10 +25,16 @@ Directions = {
     directions.S, directions.SW, directions.W, directions.NW
 }
 
-Types = {
-    Player = 0,
-    Cat = 1
-}
+local collisionFilter = function() return 'cross' end
+
+--[[
+local showCollider = function(entity)
+    local x, y, w, h = World:getRect(entity)
+    love.graphics.rectangle("line", x, y, w, h)
+end
+local showPosition = function(entity) love.graphics.points(entity.x, entity.y) end
+local showDebugInfo = function(entity) showCollider(entity) showPosition(entity) end
+]]
 
 function Entity:initialize(x, y, quad, imagePath, speed, type)
     self.x = x
@@ -50,8 +50,6 @@ function Entity:initialize(x, y, quad, imagePath, speed, type)
     self.image = love.graphics.newImage("/data/" .. imagePath)
     self.width = (self.image == nil) and 1 or w
     self.height = (self.image == nil) and 1 or h
-
-    scene:addEntity(self)
     World:add(self, x, y, self.width, self.height)
 end
 
@@ -113,7 +111,7 @@ end
 function Entity:clampEntityToXBounds(x)
     local _x = x
     local width = self.width/2
-    local area = scene.playableArea
+    local area = playableArea
 
     if _x < area.x then
         _x = area.x
@@ -127,7 +125,7 @@ end
 function Entity:clampEntityToYBounds(y)
     local _y = y
     local height = self.height
-    local area = scene.playableArea
+    local area = playableArea
 
     if _y < area.y - height/2 then
         _y = area.y - height/2
@@ -138,6 +136,4 @@ function Entity:clampEntityToYBounds(y)
     return _y
 end
 
-function Entity:getY()
-    return self.y + self.height
-end
+function Entity:getY() return self.y + self.height end

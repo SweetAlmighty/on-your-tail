@@ -28,7 +28,7 @@ local inputMap =
 
 local keyDown = lume.fn(love.keyboard.isDown)
 
-function Input:Process(dt)
+function Input:process(dt)
     delta = dt
 
     if keyDown(inputMap.a) then OnA() end
@@ -53,8 +53,9 @@ function OnA()
 end
 
 function OnB()
-    if (currentState == States.Gameplay) then
-        for i=1, #scene.entities, 1 do scene.entities[i]:interact(delta) end
+    local state = stateMachine:current()
+    if state.type == States.Gameplay then
+        state:handleInteractions(delta)
     end
 end
 
@@ -63,7 +64,8 @@ function OnX()
 end
 
 function OnY()
-    if (currentState == States.Gameplay) then
+    local state = stateMachine:current()
+    if state.type == States.Gameplay then
         for i = 1, #scene.entities, 1 do scene.entities[i]:finishInteraction() end
     end
 end
@@ -111,8 +113,7 @@ end
 
 -- Function Buttons --
 function OnMenu()
-    currentState = States.MainMenu
-    scene:reset()
+    stateMachine:clear()
 end
 
 function OnStart()
@@ -126,14 +127,15 @@ end
 
 -- Handles single key presses
 function love.keypressed(k)
-    if currentState == States.MainMenu then
+    local state = stateMachine:current()
+    if state.type == States.MainMenu then
         if k == inputMap.up then
-            mainMenu:Up()
+            state:Up()
         elseif k == inputMap.down then
-            mainMenu:Down()
+            state:Down()
         elseif k == inputMap.a then
-            if mainMenu:GetIndex() == 0 then
-                currentState = States.Gameplay
+            if state:GetIndex() == 0 then
+                stateMachine:push(States.Gameplay)
             else
                 love.event.quit()
             end

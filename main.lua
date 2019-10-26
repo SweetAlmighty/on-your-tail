@@ -1,40 +1,33 @@
 
-require "src/scene"
 require "src/input"
-require "src/mainMenu"
+require "src/stateMachine"
 
-States = {
-    MainMenu = 0,
-    Gameplay = 1,
-    Failstate = 2,
-}
+speed = 2
+screenWidth = 320
+screenHeight = 240
+playableArea = { x = 0, y = 110, width = screenWidth/2, height = screenHeight }
 
-currentState = States.MainMenu
-
+stateMachine = StateMachine:new()
 gameFont = love.graphics.newFont("/data/KarmaFuture.ttf", 20)
 
 function love.load()
     love.math.setRandomSeed(os.time())
 
-    scene = Scene:new()
-    mainMenu = MainMenu:new()
+    stateMachine:push(States.MainMenu)
 
-    scene:createEntities()
     love.window.setTitle("On Your Tail")
-    love.window.setMode(scene.width, scene.height)
+    love.window.setMode(screenWidth, screenHeight)
 end
 
 function love.update(dt)
-    if currentState == 1 then
-        scene:update(dt)
-        Input:Process(dt)
+    local state = stateMachine:current()
+    if state.type == States.Gameplay then
+        state:update(dt)
+        Input:process(dt)
     end
 end
 
 function love.draw()
-    if currentState == States.MainMenu then
-        mainMenu:Draw()
-    elseif currentState == States.Gameplay then
-        scene:draw()
-    end
+    local state = stateMachine:current()
+    state:draw()
 end

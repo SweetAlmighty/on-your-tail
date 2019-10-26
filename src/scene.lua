@@ -1,50 +1,46 @@
 
 require "src/cat"
+require "src/state"
 require "src/player"
+require "src/entityController"
 
 local bump = require("src/lib/bump")
 local class = require("src/lib/middleclass")
 
-Scene = class("Scene")
+Scene = class("Scene", State)
 World = bump.newWorld(20)
 
-local totalCats = 8
-local elapsedTime = 0
+local entityController = EntityController:new()
 
-local checkForReset = function(dt)
-    elapsedTime = elapsedTime + dt
+local checkForReset = function(scene, dt)
+    scene.elapsedTime = scene.elapsedTime + dt
     if player.stress >= 120 then
-        elapsedTime = 0
+        scene.elapsedTime = 0
         scene:reset()
     end
 end
 
--- Sorts the entities by their Y to mock draw order
-local sortDrawOrder = function()
-    local newTable = {}
-    for i=1, #scene.entities, 1 do newTable[i] = { scene.entities[i]:getY(), scene.entities[i] } end
-    table.sort(newTable, function(a,b) return a[1] < b[1] end)
-    scene.entities = {}
-    for i=1, #newTable, 1 do scene.entities[#scene.entities+1] = newTable[i][2] end
-end
-
 function Scene:initialize()
     self.speed = 2
-    self.width = 320
-    self.height = 240
+    self.totalCats = 8
     self.entities = { }
+    self.elapsedTime = 0
+    self.width = screenWidth
+    self.height = screenHeight
+    self.type = States.Gameplay
     self.coords = { x = 0, y = 0, }
     self.threshold = -(self.width - 1)
     self.image = love.graphics.newImage("/data/background.png")
     self.image:setWrap('repeat', 'clampzero')
     self.quad = love.graphics.newQuad(0, 0, self.width, self.height, self.width, self.height)
-    self.playableArea = { x = 0, y = 110, width = self.width/2, height = self.height }
+
+    Scene.createEntities(self)
 end
 
 function Scene:draw()
-    scene:drawBackground()
-    scene:drawEntities()
-    scene:drawUI()
+    self:drawBackground()
+    self:drawEntities()
+    self:drawUI()
 end
 
 function Scene:drawBackground()
@@ -55,17 +51,13 @@ end
 
 function Scene:createEntities()
     player = Player:new()
-    for _=1, totalCats, 1 do cat = Cat:new() end
-end
-
-function Scene:drawEntities()
-    sortDrawOrder()
-    for i=1, #self.entities, 1 do self.entities[i]:draw() end
+    entityController:addEntity(player)
+    for _=1, self.totalCats, 1 do entityController:addEntity(Cat:new()) end
 end
 
 function Scene:drawUI()
     local font = gameFont
-    local time = {string.format("%.2f", elapsedTime), "s"}
+    local time = {string.format("%.2f", self.elapsedTime), "s"}
 
     love.graphics.setFont(font)
     love.graphics.setColor(0, 0, 0)
@@ -80,7 +72,7 @@ function Scene:drawUI()
 end
 
 function Scene:update(dt)
-    checkForReset(dt)
+    checkForReset(self, dt)
     if moveCamera then
         local x1 = self.coords.x - self.speed
         self.coords.x = (x1 < self.threshold) and (self.width) or (x1)
@@ -88,13 +80,10 @@ function Scene:update(dt)
             self.image:getHeight() * 2, self.image:getWidth(), self.image:getHeight())
     end
 
-    for i=1, #scene.entities, 1 do self.entities[i]:update(dt) end
+    entityController:update(dt)
 end
 
-function Scene:addEntity(entity)
-    self.entities[#self.entities+1] = entity
-end
-
-function Scene:reset()
-    for i=1, #scene.entities, 1 do self.entities[i]:reset() end
-end
+function Scene:reset() entityController:reset() end
+function Scene:cleanup() entityController:clear() end
+function Scene:drawEntities() entityController:draw() end
+function Scene:handleInteractions(dt) entityController:handleInteractions(dt) end
