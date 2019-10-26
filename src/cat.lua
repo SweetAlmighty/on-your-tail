@@ -69,7 +69,7 @@ function Cat:initialize()
 
     local _x, _y = randomPosition()
     local currY = ((self.index - 1) * 20)
-    Entity.initialize(self, _x, _y, love.graphics.newQuad(0, currY, spriteWidth, spriteHeight, 
+    Entity.initialize(self, _x, _y, love.graphics.newQuad(0, currY, spriteWidth, spriteHeight,
         imageWidth, imageHeight), "cats.png", 1, Types.Cat)
 
     self.walkLeft = animat.newAnimat(15)
