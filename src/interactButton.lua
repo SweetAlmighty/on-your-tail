@@ -16,7 +16,7 @@ function InteractButton:initialize()
 end
 
 function InteractButton:draw(x, y)
-    love.graphics.draw(self.image, self.animation.currentFrame, x, y, nil, nil, nil, self.width / 2, 
+    love.graphics.draw(self.image, self.animation.currentFrame, x, y, nil, nil, nil, self.width / 2,
         self.height)
 end
 

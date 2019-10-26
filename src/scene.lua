@@ -19,6 +19,15 @@ local checkForReset = function(dt)
     end
 end
 
+-- Sorts the entities by their Y to mock draw order
+local sortDrawOrder = function()
+    local newTable = {}
+    for i=1, #scene.entities, 1 do newTable[i] = { scene.entities[i]:getY(), scene.entities[i] } end
+    table.sort(newTable, function(a,b) return a[1] < b[1] end)
+    scene.entities = {}
+    for i=1, #newTable, 1 do scene.entities[#scene.entities+1] = newTable[i][2] end
+end
+
 function Scene:initialize()
     self.speed = 2
     self.width = 320
@@ -46,25 +55,28 @@ end
 
 function Scene:createEntities()
     player = Player:new()
-    for i = 1, totalCats, 1 do cat = Cat:new() end
+    for _=1, totalCats, 1 do cat = Cat:new() end
 end
 
 function Scene:drawEntities()
-    scene:sortDrawOrder()
+    sortDrawOrder()
     for i=1, #self.entities, 1 do self.entities[i]:draw() end
 end
 
 function Scene:drawUI()
+    local font = gameFont
+    local time = {string.format("%.2f", elapsedTime), "s"}
+
+    love.graphics.setFont(font)
     love.graphics.setColor(0, 0, 0)
     love.graphics.rectangle("fill", 10, 10, 120, 20)
-    
+    love.graphics.print(table.concat(time), self.width - 75, 5)
+
     love.graphics.setColor(1, 0, 0)
     love.graphics.rectangle("fill", 10, 10, player.stress, 20)
-    
+
     love.graphics.setColor(1, 1, 1)
     love.graphics.rectangle("line", 10, 10, 120, 20)
-
-    love.graphics.print(string.format("Time: %.3f", elapsedTime), self.width - 100, 10)
 end
 
 function Scene:update(dt)
@@ -85,18 +97,4 @@ end
 
 function Scene:reset()
     for i=1, #scene.entities, 1 do self.entities[i]:reset() end
-end
-
--- Sorts the entities by their Y to mock draw order
-function Scene:sortDrawOrder()
-    local newTable = {}
-    for i=1, #scene.entities, 1 do
-        newTable[#newTable+1] = { scene.entities[i]:getY(), scene.entities[i] } 
-    end
-    table.sort(newTable, function(a,b) return a[1] < b[1] end)
-    scene.entities = {}
-    for i=1, #newTable, 1 do 
-        local v = newTable[i]
-        scene.entities[#scene.entities+1] = v[2]
-    end
 end

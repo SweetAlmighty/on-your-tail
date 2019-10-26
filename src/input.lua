@@ -6,7 +6,7 @@ Input = {}
 Input.__index = Input
 
 local delta = 0
-local inputMap = 
+local inputMap =
 {
     x = 'u',
     y = 'i',
@@ -50,7 +50,7 @@ end
 
 -- Face Buttons --
 function OnA()
-end 
+end
 
 function OnB()
     if (currentState == States.Gameplay) then

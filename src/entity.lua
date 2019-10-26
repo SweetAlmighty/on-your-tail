@@ -4,14 +4,16 @@ local class = require("src/lib/middleclass")
 
 Entity = class('Entity')
 
+local collisionFilter = function() return 'cross' end
+
+--[[
 local showCollider = function(entity)
     local x, y, w, h = World:getRect(entity)
     love.graphics.rectangle("line", x, y, w, h)
 end
-
-local collisionFilter = function() return 'cross' end
 local showPosition = function(entity) love.graphics.points(entity.x, entity.y) end
 local showDebugInfo = function(entity) showCollider(entity) showPosition(entity) end
+]]
 
 local directions = {
     N  = { x = 0,  y = 1 },
@@ -44,7 +46,7 @@ function Entity:initialize(x, y, quad, imagePath, speed, type)
     self.interacting = false
     self.interactable = false
     self.direction = directions.W
-    local _x, _y, w, h = self.quad:getViewport()
+    local _, _, w, h = self.quad:getViewport()
     self.image = love.graphics.newImage("/data/" .. imagePath)
     self.width = (self.image == nil) and 1 or w
     self.height = (self.image == nil) and 1 or h
@@ -79,7 +81,7 @@ function Entity:handleCollisions(cols)
             if index == nil then
                 col.item.interactable = false
                 col.item:setInteracting(false)
-                
+
                 col.other.interactable = false
                 col.other:setInteracting(false)
             end
@@ -104,7 +106,7 @@ function Entity:handleCollisions(cols)
 end
 
 function Entity:clampToPlayBounds(x, y)
-    self.x = (self.type == Types.Player) and Entity.clampEntityToXBounds(self, x) or x  
+    self.x = (self.type == Types.Player) and Entity.clampEntityToXBounds(self, x) or x
     self.y = Entity.clampEntityToYBounds(self, y)
 end
 
@@ -119,7 +121,7 @@ function Entity:clampEntityToXBounds(x)
         _x = area.width - width
     end
 
-    return _x 
+    return _x
 end
 
 function Entity:clampEntityToYBounds(y)

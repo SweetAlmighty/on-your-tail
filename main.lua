@@ -11,6 +11,8 @@ States = {
 
 currentState = States.MainMenu
 
+gameFont = love.graphics.newFont("/data/KarmaFuture.ttf", 20)
+
 function love.load()
     love.math.setRandomSeed(os.time())
 
