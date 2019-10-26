@@ -5,8 +5,6 @@ local class = require("src/lib/middleclass")
 
 MainMenu = class("MainMenu", Menu)
 
-local totalW, totalH = 121, 65
-local pointerW, pointerH = 24, 23
 local halfWidth, halfHeight = 0, 0
 
 function MainMenu:initialize()
@@ -18,12 +16,13 @@ function MainMenu:initialize()
         love.graphics.newText(gameFont, "Quit")
     }
 
-    self.image = love.graphics.newImage("/data/menu.png")
-    self.pointer = love.graphics.newQuad(97, 0, pointerW, pointerH, totalW, totalH)
+    self.title = love.graphics.newImage("/data/title.png")
+    self.pointer = love.graphics.newImage("/data/pointer.png")
 end
 
 function MainMenu:Draw()
     love.graphics.clear(1, 1, 1, 1)
+    love.graphics.draw(self.title, 33, 40, nil, nil, nil, nil, nil)
 
     love.graphics.setColor(0, 0, 0, 1)
     local optionX = halfWidth - (self.options[1]:getWidth()/2)
@@ -32,6 +31,6 @@ function MainMenu:Draw()
     end
 
     love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.draw(self.image, self.pointer, halfWidth - pointerW * 2,
-        (halfHeight + (self.index * 40)), nil, nil, nil, nil, nil)
+    love.graphics.draw(self.pointer, halfWidth - self.pointer:getWidth() * 2,
+        (halfHeight + 5 + (self.index * 40)), nil, nil, nil, nil, nil)
 end
