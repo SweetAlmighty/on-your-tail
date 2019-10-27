@@ -109,9 +109,7 @@ function Entity:clampToPlayBounds(x, y)
 end
 
 function Entity:clampEntityToXBounds(x)
-    local _x = x
-    local width = self.width/2
-    local area = playableArea
+    local _x, width, area = x, self.width/2, playableArea
 
     if _x < area.x then
         _x = area.x
@@ -123,9 +121,7 @@ function Entity:clampEntityToXBounds(x)
 end
 
 function Entity:clampEntityToYBounds(y)
-    local _y = y
-    local height = self.height
-    local area = playableArea
+    local _y, height, area = y, self.height, playableArea
 
     if _y < area.y - height/2 then
         _y = area.y - height/2

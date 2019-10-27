@@ -4,7 +4,7 @@ require "src/mainMenu"
 require "src/pauseMenu"
 local class = require("src/lib/middleclass")
 
-StateMachine = class('StateMachine')
+StateMachine = class("StateMachine")
 
 States = {
     MainMenu = 0,
