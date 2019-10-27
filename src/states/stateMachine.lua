@@ -2,7 +2,7 @@
 require "src/states/scene"
 require "src/states/menus/mainMenu"
 require "src/states/menus/pauseMenu"
-require "src/states/menus/HighscoreMenu"
+require "src/states/menus/highscoreMenu"
 local class = require("src/lib/middleclass")
 
 StateMachine = class("StateMachine")

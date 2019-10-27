@@ -91,6 +91,9 @@ function Scene:createEntities()
 end
 
 function Scene:reset() entityController:reset() end
-function Scene:cleanup() entityController:clear() end
+function Scene:cleanup()
+    bestTime = self.elapsedTime
+    entityController:clear()
+end
 function Scene:drawEntities() entityController:draw() end
 function Scene:handleInteractions(dt) entityController:handleInteractions(dt) end
