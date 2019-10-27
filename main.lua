@@ -1,8 +1,9 @@
 
 require "src/input"
-require "src/stateMachine"
+require "src/states/stateMachine"
 
 speed = 2
+bestTime = 0
 screenWidth = 320
 screenHeight = 240
 stateMachine = StateMachine:new()

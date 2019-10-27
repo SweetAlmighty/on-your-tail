@@ -1,5 +1,5 @@
 
-require "src/menu"
+require "src/states/menus/menu"
 local class = require("src/lib/middleclass")
 
 PauseMenu = class("PauseMenu", Menu)
@@ -15,5 +15,14 @@ function PauseMenu:initialize()
     self.pointer = love.graphics.newImage("/data/pointer.png")
 end
 
-function PauseMenu:draw() PauseMenu.draw(self) end
+function PauseMenu:accept()
+    local state = stateMachine:current()
+    if state:GetIndex() == 1 then
+        stateMachine:pop()
+    elseif state:GetIndex() == 2 then
+        stateMachine:clear()
+    end
+end
+
 function PauseMenu:cleanup() end
+function PauseMenu:draw() Menu.draw(self) end

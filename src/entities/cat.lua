@@ -1,5 +1,5 @@
 
-require "src/entity"
+require "src/entities/entity"
 require "src/interactButton"
 
 local lume = require("src/lib/lume")

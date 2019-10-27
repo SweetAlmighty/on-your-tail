@@ -113,7 +113,11 @@ end
 
 -- Function Buttons --
 function OnMenu()
-    stateMachine:clear()
+    local state = stateMachine:current()
+    if state.type == States.Gameplay then
+        stateMachine:push(States.PauseMenu)
+    end
+    --stateMachine:clear()
 end
 
 function OnStart()
@@ -128,27 +132,26 @@ end
 -- Handles single key presses
 function love.keypressed(k)
     local state = stateMachine:current()
-    if state.type == States.MainMenu then
+    if state.type == States.MainMenu or state.type == States.PauseMenu then
         if k == inputMap.up then
-            state:Up()
+            state:up()
         elseif k == inputMap.down then
-            state:Down()
-        elseif k == inputMap.a then
-            if state:GetIndex() == 0 then
-                stateMachine:push(States.Gameplay)
-            else
-                love.event.quit()
-            end
+            state:down()
         end
-    else
-        if k == inputMap.b then
-            OnB()
-        end
+    end
+
+    if k == inputMap.a then
+        state:accept()
+    elseif k == inputMap.b then
+        OnB()
     end
 end
 
 function love.keyreleased(k)
-    if k == inputMap.right then
-        player:moveX(0)
+    local state = stateMachine:current()
+    if state.type == States.Gameplay then
+        if k == inputMap.right then
+            player:moveX(0)
+        end
     end
 end

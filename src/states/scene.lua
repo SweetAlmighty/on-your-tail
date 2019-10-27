@@ -1,8 +1,8 @@
 
-require "src/cat"
-require "src/state"
-require "src/player"
-require "src/entityController"
+require "src/entities/cat"
+require "src/states/state"
+require "src/entities/player"
+require "src/entities/entityController"
 
 local bump = require("src/lib/bump")
 local class = require("src/lib/middleclass")
@@ -41,7 +41,7 @@ end
 
 function Scene:update(dt)
     self:checkForReset(dt)
-    self.time = {string.format("%.2f", self.elapsedTime), "s"}
+    self.time = { string.format("%.2f", self.elapsedTime), "s" }
     if moveCamera then self:updateBackground(dt) end
     entityController:update(dt)
 end
@@ -78,6 +78,7 @@ end
 function Scene:checkForReset(dt)
     self.elapsedTime = self.elapsedTime + dt
     if player.stress >= 120 then
+        bestTime = self.elapsedTime
         self.elapsedTime = 0
         self:reset()
     end

@@ -1,5 +1,5 @@
 
-require "src/state"
+require "src/states/state"
 local class = require("src/lib/middleclass")
 
 Menu = class('Menu', State)
@@ -14,12 +14,12 @@ States = {
 }
 
 function Menu:initialize()
-    self.index = 0
+    self.index = 1
     self.title = nil
     self.options = {}
-    self.clearColor = {}
     self.startWidth = 0
     self.startHeight = 0
+    self.clearColor = {}
     halfWidth = screenWidth/2
 end
 
@@ -34,10 +34,21 @@ function Menu:draw()
     end
 
     love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.draw(self.pointer, halfWidth - self.pointer:getWidth() * 2,
-        (self.startHeight + 5 + (self.index * 40)), nil, nil, nil, nil, nil)
+    love.graphics.draw(self.pointer, halfWidth - (self.options[self.index]:getWidth()),
+        (self.startHeight + 5 + ((self.index-1) * 40)), nil, nil, nil, nil, nil)
+end
+
+function Menu:up()
+    self.index = self.index - 1
+    self.index = (self.index < 1) and 1 or self.index
+end
+
+function Menu:down()
+    self.index = self.index + 1
+    self.index = (self.index > #self.options) and #self.options or self.index
+end
+
+function Menu:accept()
 end
 
 function Menu:GetIndex() return self.index end
-function Menu:Up() self.index = self.index - 1 if self.index < 0 then self.index = 0 end end
-function Menu:Down() self.index = self.index + 1 if self.index > 1 then self.index = 1 end end
