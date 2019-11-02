@@ -46,7 +46,7 @@ function Menu:setTitle(title)
     self.title = love.graphics.newText(titleFont, title)
     self.titlePos = {
         x = (screenWidth/2) - self.title:getWidth()/2,
-        y = self.startHeight - ((self.title:getHeight()*2) - 10)
+        y = (screenHeight/2) - ((self.title:getHeight()*2) - 10)
     }
 end
 
