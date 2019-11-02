@@ -4,8 +4,6 @@ local class = require("src/lib/middleclass")
 
 Menu = class('Menu', State)
 
-local halfWidth = 0
-
 States = {
     MainMenu = 0,
     Gameplay = 1,
@@ -13,42 +11,47 @@ States = {
     FailState = 3,
 }
 
+
 function Menu:initialize()
     self.index = 1
     self.title = nil
     self.options = {}
     self.startWidth = 0
     self.startHeight = 0
-    self.clearColor = {}
-    halfWidth = screenWidth/2
+    self.titlePos = { x = 0, y = 0}
+    self.clearColor = { r = 1, g = 1, b = 1, a = 1 }
+    self.pointer = love.graphics.newImage("/data/pointer.png")
 end
 
 function Menu:draw()
+    local halfWidth = screenWidth/2
     love.graphics.clear(self.clearColor.r, self.clearColor.g, self.clearColor.b, self.clearColor.a)
-    love.graphics.draw(self.title, 33, 40, nil, nil, nil, nil, nil)
 
     love.graphics.setColor(0, 0, 0, 1)
+    love.graphics.draw(self.title, self.titlePos.x, self.titlePos.y)
+
     for i=1, #self.options, 1 do
         self.startWidth = halfWidth - (self.options[i]:getWidth()/2)
         love.graphics.draw(self.options[i], self.startWidth, self.startHeight + ((i-1) * 40))
     end
 
+    local xPos = halfWidth - ((self.options[self.index]:getWidth() / 2) + self.pointer:getWidth())
+
     love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.draw(self.pointer, halfWidth - (self.options[self.index]:getWidth()),
-        (self.startHeight + 5 + ((self.index-1) * 40)), nil, nil, nil, nil, nil)
+    love.graphics.draw(self.pointer, xPos, (self.startHeight + 5 + ((self.index-1) * 40)), nil,
+        nil, nil, nil, nil)
 end
 
-function Menu:up()
-    self.index = self.index - 1
-    self.index = (self.index < 1) and 1 or self.index
+function Menu:setTitle(title)
+    self.title = love.graphics.newText(titleFont, title)
+    self.titlePos = {
+        x = (screenWidth/2) - self.title:getWidth()/2,
+        y = self.startHeight - ((self.title:getHeight()*2) - 10)
+    }
 end
 
-function Menu:down()
-    self.index = self.index + 1
-    self.index = (self.index > #self.options) and #self.options or self.index
-end
-
-function Menu:accept()
-end
-
-function Menu:GetIndex() return self.index end
+function Menu:left() end
+function Menu:right() end
+function Menu:accept() end
+function Menu:up() self.index = (self.index - 1 < 1) and 1 or self.index - 1 end
+function Menu:down() self.index = (self.index+1>#self.options) and #self.options or self.index+1 end

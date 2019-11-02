@@ -1,6 +1,7 @@
 
 require "src/states/scene"
 require "src/states/menus/mainMenu"
+require "src/states/menus/failMenu"
 require "src/states/menus/pauseMenu"
 require "src/states/menus/highscoreMenu"
 local class = require("src/lib/middleclass")
@@ -24,15 +25,13 @@ end
 
 function StateMachine:push(type)
     local state = nil
-    if type == States.MainMenu then
-        state = MainMenu:new()
-    elseif type == States.Gameplay then
-        state = Scene:new()
-    elseif type == States.PauseMenu then
-        state = PauseMenu:new()
-    elseif type == States.HighscoreMenu then
-        state = HighscoreMenu:new()
-    end
+
+    if type == States.MainMenu then state = MainMenu:new()
+    elseif type == States.Gameplay then state = Scene:new()
+    elseif type == States.PauseMenu then state = PauseMenu:new()
+    elseif type == States.HighscoreMenu then state = HighscoreMenu:new()
+    elseif type == States.FailState then state = FailMenu:new() end
+
     if state ~= nil then table.insert(stack, state) end
 end
 

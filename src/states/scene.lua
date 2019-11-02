@@ -26,8 +26,8 @@ function Scene:initialize()
     self.one = { x = 0, y = 0, id = 0 }
     self.two = { x = self.width, y = 0, id = 0 }
     self.hud = love.graphics.newImage("/data/stressbar.png")
-    self.bar = love.graphics.newQuad(121, 1, 1, 18, 123, 20)
-    self.barbg = love.graphics.newQuad(0, 0, 120, 20, 123, 20)
+    self.bar = love.graphics.newQuad(0, 0, 120, 20, 120, 40)
+    self.barbg = love.graphics.newQuad(0, 20, 120, 20, 120, 40)
     self.image = love.graphics.newImage("/data/background.png")
     self.batch = love.graphics.newSpriteBatch(self.image, 2)
     self.quad = love.graphics.newQuad(0, 0, self.width, self.height, self.width, self.height)
@@ -35,8 +35,7 @@ function Scene:initialize()
     self.two.id = self.batch:add(self.quad, self.two.x, self.two.y)
 
     Scene.createEntities(self)
-
-    love.graphics.setFont(gameFont)
+    love.graphics.setFont(menuFont)
 end
 
 function Scene:update(dt)
@@ -52,17 +51,13 @@ function Scene:draw()
     self:drawUI()
 end
 
-function Scene:drawBackground()
-    love.graphics.draw(self.batch)
-end
-
 function Scene:drawUI()
     love.graphics.setColor(0, 0, 0)
     love.graphics.print(table.concat(self.time), self.width - 75, 5)
 
     love.graphics.setColor(1, 1, 1)
     love.graphics.draw(self.hud, self.barbg, 10, 10, nil, nil, nil, nil, nil)
-    love.graphics.draw(self.hud, self.bar, 11, 11, nil, player.stress, 1, nil, nil)
+    love.graphics.draw(self.hud, self.bar, 11, 10, nil, player.stress/121, 1, nil, nil)
 end
 
 function Scene:updateBackground(dt)
@@ -78,9 +73,8 @@ end
 function Scene:checkForReset(dt)
     self.elapsedTime = self.elapsedTime + dt
     if player.stress >= 120 then
-        bestTime = self.elapsedTime
-        self.elapsedTime = 0
         self:reset()
+        StateMachine:push(States.FailState)
     end
 end
 
@@ -90,10 +84,13 @@ function Scene:createEntities()
     for _=1, self.totalCats, 1 do entityController:addEntity(Cat:new()) end
 end
 
-function Scene:reset() entityController:reset() end
-function Scene:cleanup()
-    bestTime = self.elapsedTime
-    entityController:clear()
+function Scene:reset()
+    currTime = self.elapsedTime
+    self.elapsedTime = 0
+    entityController:reset()
 end
+
+function Scene:cleanup() entityController:clear() end
 function Scene:drawEntities() entityController:draw() end
+function Scene:drawBackground() love.graphics.draw(self.batch) end
 function Scene:handleInteractions(dt) entityController:handleInteractions(dt) end

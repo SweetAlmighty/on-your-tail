@@ -8,20 +8,16 @@ function PauseMenu:initialize()
     Menu.initialize(self)
     self.type = States.PauseMenu
     self.startHeight = screenHeight/2
-    self.options = { love.graphics.newText(gameFont, "Resume"),
-        love.graphics.newText(gameFont, "Main Menu") }
+    Menu.setTitle(self, "Pause")
     self.clearColor = { r = 1, g = 1, b = 1, a = 0.5 }
-    self.title = love.graphics.newImage("/data/title.png")
-    self.pointer = love.graphics.newImage("/data/pointer.png")
+    self.title = love.graphics.newText(titleFont, "Pause")
+    self.options = { love.graphics.newText(menuFont, "Resume"),
+                     love.graphics.newText(menuFont, "Main Menu") }
 end
 
 function PauseMenu:accept()
-    local state = stateMachine:current()
-    if state:GetIndex() == 1 then
-        stateMachine:pop()
-    elseif state:GetIndex() == 2 then
-        stateMachine:clear()
-    end
+    if self.index == 1 then stateMachine:pop()
+    elseif self.index == 2 then stateMachine:clear() end
 end
 
 function PauseMenu:cleanup() end

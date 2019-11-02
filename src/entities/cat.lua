@@ -27,9 +27,7 @@ local processMovement = function(cat)
     else
         if cat.state == s_SITTING then _x, _y = cat.x - speed, cat.y end
     end
-
     Entity.move(cat, _x, _y)
-
     if cat.x < (-cat.width) then cat:reset() end
 end
 
@@ -45,9 +43,11 @@ local processAnims = function(dt, cat)
     end
 
     if update then
-        if cat.state == s_WALKING and cat.interacting == false then -- Walk
+        if cat.state == s_WALKING and cat.interacting == false then
+            -- Walk
             cat.currAnim = (cat.direction.x == 1) and cat.walkRight or cat.walkLeft
-        else -- Sit
+        else
+            -- Sit
             cat.quad = love.graphics.newQuad((cat.direction.x == 1) and 136 or 122,
                 spriteHeight * (cat.index - 1), 14, 19, imageWidth, imageHeight)
         end
@@ -99,24 +99,18 @@ end
 
 function Cat:update(dt)
     processAnims(dt, self)
-    if player.interacting and self.interacting then
-        self.button:update(dt)
-    else
-        processMovement(self)
-    end
+    if player.interacting and self.interacting then self.button:update(dt)
+    else processMovement(self) end
 end
 
 function Cat:interact(dt)
     if self.interactable and self.interacting == false then
-        update = true
         self.state = s_SITTING
-        self.interacting = true
+        self.interacting, update = true, true
     end
 
     if self.interacting then
-        self.button:update(dt)
         self.limit = self.limit - (dt * 10)
-
         if self.limit < 0 then
             self.limit = 0
             Cat.finishInteraction(self)
