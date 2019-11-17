@@ -31,7 +31,7 @@ function Menu:draw()
     love.graphics.draw(self.title, self.titlePos.x, self.titlePos.y)
 
     for i=1, #self.options, 1 do
-        self.startWidth = halfWidth - (self.options[i]:getWidth()/2)
+        self.startWidth = math.floor(halfWidth - (self.options[i]:getWidth()/2))
         love.graphics.draw(self.options[i], self.startWidth, self.startHeight + ((i-1) * 40))
     end
 
