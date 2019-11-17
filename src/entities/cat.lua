@@ -33,9 +33,15 @@ end
 
 local processAnims = function(dt, cat)
     time = time + dt
-    if time > 1 then
+
+    if cat.limit == 0 then
+        cat.limit = -1
+        cat.state = s_WALKING
+        cat.currAnim = cat.walkLeft
+        cat.direction = Directions[7]
+    elseif time > 1 then
         time = 0
-        if cat.interacting ~= true then
+        if cat.interacting == false and cat.limit >= 3 then
             cat.state = lume.randomchoice({s_SITTING, s_WALKING})
             if cat.state == s_WALKING then cat.direction = lume.randomchoice(Directions) end
             update = true
@@ -93,7 +99,7 @@ function Cat:draw()
 end
 
 function Cat:reset()
-    self.limit = 2.5
+    self.limit = 3
     Entity.reset(self, randomPosition())
 end
 
