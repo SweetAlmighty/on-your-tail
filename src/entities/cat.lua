@@ -49,8 +49,8 @@ local processAnims = function(dt, cat)
             time = 0
             if cat.interacting == false and cat.limit >= 3 then
                 cat.state = lume.randomchoice({s_SITTING, s_WALKING})
-                if cat.state == s_WALKING then 
-                    cat.direction = lume.randomchoice(Directions) 
+                if cat.state == s_WALKING then
+                    cat.direction = lume.randomchoice(Directions)
                 end
                 update = true
             end
@@ -104,8 +104,8 @@ end
 
 function Cat:draw()
     Entity.draw(self)
-    if self.interactable and self.limit > 0 then 
-        self.button:draw(self.x + 20, self.y) 
+    if self.interactable and self.limit > 0 then
+        self.button:draw(self.x + 20, self.y)
     end
 end
 
@@ -116,10 +116,10 @@ end
 
 function Cat:update(dt)
     processAnims(dt, self)
-    if player.interacting and self.interacting then 
+    if player.interacting and self.interacting then
         self.button:update(dt)
-    else 
-        processMovement(self) 
+    else
+        processMovement(self)
     end
 end
 
