@@ -19,14 +19,22 @@ local randomPosition = function()
         math.random(playableArea.y - spriteHeight, playableArea.height)
 end
 
+local beginOffscreenTransition = function (cat)
+    cat.limit = -1
+    cat.state = s_WALKING
+    cat.currAnim = cat.walkLeft
+    cat.direction = Directions[7]
+end
+
 local processMovement = function(cat)
     local _x = (cat.x + (cat.speed * cat.direction.x))
     local _y = (cat.y + (cat.speed * cat.direction.y))
-    if moveCamera == false then
-        if cat.state == s_SITTING then _x, _y = cat.x, cat.y end
-    else
-        if cat.state == s_SITTING then _x, _y = cat.x - speed, cat.y end
+
+    if cat.state == s_SITTING then
+        _x = moveCamera and (cat.x - speed) or (cat.x)
+        _y = cat.y
     end
+
     Entity.move(cat, _x, _y)
     if cat.x < (-cat.width) then cat:reset() end
 end
@@ -35,16 +43,17 @@ local processAnims = function(dt, cat)
     time = time + dt
 
     if cat.limit == 0 then
-        cat.limit = -1
-        cat.state = s_WALKING
-        cat.currAnim = cat.walkLeft
-        cat.direction = Directions[7]
-    elseif time > 1 then
-        time = 0
-        if cat.interacting == false and cat.limit >= 3 then
-            cat.state = lume.randomchoice({s_SITTING, s_WALKING})
-            if cat.state == s_WALKING then cat.direction = lume.randomchoice(Directions) end
-            update = true
+        beginOffscreenTransition(cat)
+    else
+        if time > 1 then
+            time = 0
+            if cat.interacting == false and cat.limit >= 3 then
+                cat.state = lume.randomchoice({s_SITTING, s_WALKING})
+                if cat.state == s_WALKING then 
+                    cat.direction = lume.randomchoice(Directions) 
+                end
+                update = true
+            end
         end
     end
 
@@ -95,7 +104,9 @@ end
 
 function Cat:draw()
     Entity.draw(self)
-    if self.interactable then self.button:draw(self.x + 20, self.y) end
+    if self.interactable and self.limit > 0 then 
+        self.button:draw(self.x + 20, self.y) 
+    end
 end
 
 function Cat:reset()
@@ -105,8 +116,11 @@ end
 
 function Cat:update(dt)
     processAnims(dt, self)
-    if player.interacting and self.interacting then self.button:update(dt)
-    else processMovement(self) end
+    if player.interacting and self.interacting then 
+        self.button:update(dt)
+    else 
+        processMovement(self) 
+    end
 end
 
 function Cat:interact(dt)
