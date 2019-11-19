@@ -24,6 +24,12 @@ function Player:moveX(x)
     end
 end
 
+function Player:moveY(y)
+    if self.interacting == false then
+        Entity.move(self, self.x, (self.y + self.speed * y))
+    end
+end
+
 function Player:reset()
     self.stress = 0
     Entity.reset(self, 50, 150)
@@ -56,4 +62,3 @@ function Player:finishInteraction()
 end
 
 function Player:draw() Entity.draw(self) end
-function Player:moveY(y) Entity.move(self, self.x, (self.y + self.speed * y)) end

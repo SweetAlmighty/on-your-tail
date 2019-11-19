@@ -142,7 +142,6 @@ function Cat:finishInteraction()
     if self.interacting then
         self.button:reset()
         self.interactable = false
-        player:finishInteraction()
         self:setInteracting(false)
     end
 end

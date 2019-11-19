@@ -77,13 +77,9 @@ function Entity:handleCollisions(cols)
         for i = 1, #self.collisions, 1 do
             local col, index = self.collisions[i], lume.find(cols, col)
             if index == nil then
-                local playerType = col.item.type == Types.Player
-                local catType = col.other.type == Types.Cat
-
-                if playerType and catType then
+                if (col.item.type == Types.Player) and 
+                    (col.other.type == Types.Cat) then
                     col.item:setInteracting(false)
-                    col.item.interactable = false
-                    col.other.interactable = false
                     col.other:setInteracting(false)
                 end
             end
