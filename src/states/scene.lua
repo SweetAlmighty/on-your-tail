@@ -93,4 +93,3 @@ end
 function Scene:cleanup() entityController:clear() end
 function Scene:drawEntities() entityController:draw() end
 function Scene:drawBackground() love.graphics.draw(self.batch) end
-function Scene:handleInteractions(dt) entityController:handleInteractions(dt) end

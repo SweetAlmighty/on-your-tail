@@ -49,15 +49,10 @@ function Input:process(dt)
 end
 
 -- Face Buttons --
-function onY()
-    if state.type == States.Gameplay then
-        for i = 1, #state.entities, 1 do state.entities[i]:finishInteraction() end
-    end
-end
-
 function onX() print("X") end
 function onA() if state.type ~= States.Gameplay then state:accept() end end
-function onB() if state.type == States.Gameplay then state:handleInteractions(delta) end end
+function onB() if state.type == States.Gameplay then player:petCats(delta) end end
+function onY() if state.type == States.Gameplay then player:finishInteraction() end end
 -- Face Buttons --
 
 -- Movement --

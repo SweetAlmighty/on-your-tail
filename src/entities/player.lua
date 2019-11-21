@@ -5,29 +5,25 @@ Player = class('Player', Entity)
 
 function Player:initialize()
     self.stress = 0
+    self.currentCats = 0
     Entity.initialize(self, 50, 150, love.graphics.newQuad(0, 95, 23, 44, 118, 187),
         "player.png", 120, Types.Player)
 end
 
 function Player:update(dt)
-    if self.interacting == false then
-        self.stress = self.stress + (dt * 5)
-        moveCamera = (((self.x + self.width / 2) == playableArea.width)
-            and allowCameraMove)
-    end
+    self.stress = self.stress + (dt * 5)
+    speed = (self.interacting) and 0 or 2
+    self.speed = (self.interacting) and 0 or 120
+    moveCamera = (((self.x + self.width / 2) == playableArea.width) and allowCameraMove)
 end
 
 function Player:moveX(x)
-    if self.interacting == false then
-        allowCameraMove = (x ~= 0)
-        Entity.move(self, (self.x + self.speed * x), self.y)
-    end
+    allowCameraMove = (x ~= 0)
+    Entity.move(self, (self.x + self.speed * x), self.y)
 end
 
 function Player:moveY(y)
-    if self.interacting == false then
-        Entity.move(self, self.x, (self.y + self.speed * y))
-    end
+    Entity.move(self, self.x, (self.y + self.speed * y))
 end
 
 function Player:reset()
@@ -35,29 +31,28 @@ function Player:reset()
     Entity.reset(self, 50, 150)
 end
 
-function Player:setInteracting(interacting)
-    self.interacting = interacting
-    self.speed = (interacting == true) and 0 or 120
-    speed = ((interacting == true) and 0 or 2)
-end
-
-function Player:interact(dt)
-    if self.interactable and self.interacting == false then
-        self:setInteracting(true)
-        allowCameraMove = false
-        moveCamera = false
+function Player:petCats(dt)
+    if #self.collisions ~= 0 then
+        self:startInteraction();
+        for i=1, #self.collisions, 1 do
+            self.collisions[i]:startInteraction()
+        end
     end
 
     if self.interacting then
-        self.stress = self.stress - (dt * (25 * #self.collisions))
+        self.currentCats = #self.collisions
+        self.stress = self.stress - (dt * (50 * self.currentCats))
         if self.stress < 0 then self.stress = 0 end
     end
 end
 
+function Player:startInteraction()
+    self.interacting = true
+end
+
 function Player:finishInteraction()
-    if self.interacting == true then
-        self.interactable = false
-        self:setInteracting(false)
+    if #self.collisions == 0 then
+        self.interacting = false
     end
 end
 

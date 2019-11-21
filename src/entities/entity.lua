@@ -27,14 +27,12 @@ Directions = {
 
 local collisionFilter = function() return 'cross' end
 
---[[
 local showCollider = function(entity)
     local x, y, w, h = World:getRect(entity)
     love.graphics.rectangle("line", x, y, w, h)
 end
 local showPosition = function(entity) love.graphics.points(entity.x, entity.y) end
 local showDebugInfo = function(entity) showCollider(entity) showPosition(entity) end
-]]
 
 function Entity:initialize(x, y, quad, imagePath, speed, type)
     self.x = x
@@ -61,46 +59,56 @@ end
 function Entity:reset(x, y)
     self.x, self.y = x, y
     World:update(self, x, y)
-    self.interacting = false
-    self.interactable = false
 end
 
 function Entity:move(x, y)
     local _x, _y, cols = World:check(self, x, y, collisionFilter)
-    Entity.handleCollisions(self, cols)
+    self:handleCollisions(cols)
     Entity.clampToPlayBounds(self, _x, _y)
     World:update(self, self.x, self.y)
 end
 
+function Entity:collisionEnter(other)
+    self.interactable = true
+    self.collisions[#self.collisions + 1] = other
+end
+
+function Entity:collisionExit(other)
+    local index = lume.find(self.collisions, other)
+    if index ~= nil then
+        self.interactable = false
+        table.remove(self.collisions, index)
+        if self.type == Types.Player then player:finishInteraction() end
+    end
+end
+
 function Entity:handleCollisions(cols)
-    if cols ~= nil then
-        for i = 1, #self.collisions, 1 do
-            local col, index = self.collisions[i], lume.find(cols, col)
-            if index == nil then
-                if (col.item.type == Types.Player) and 
-                    (col.other.type == Types.Cat) then
-                    col.item:setInteracting(false)
-                    col.other:setInteracting(false)
-                end
-            end
+    if self.type ~= Types.Player then return end
+    
+    local others = {} 
+    for i, v in ipairs(cols) do others[#others + 1] = v.other end
+
+    for i = 1, #others, 1 do
+        local index = lume.find(self.collisions, others[i])
+        if index == nil then
+            -- Enter
+            self:collisionEnter(others[i])
+            others[i]:collisionEnter(self)
         end
     end
 
-    for i=1, #cols do
-        local skip = cols[i].item.type == Types.Cat and cols[i].other.type == Types.Cat
-        if skip == false then
-            local playerType = cols[i].item.type == Types.Player
-            local cat = (playerType and cols[i].other or cols[i].item)
-            local player = (playerType and cols[i].item or cols[i].other)
-
-            if cat.limit ~= 0 then
-                cat.interactable = true
-                player.interactable = true
-            end
+    local remove = {} 
+    for i = 1, #self.collisions, 1 do
+        if lume.find(others, self.collisions[i]) == nil then
+            remove[#remove + 1] = self.collisions[i]
         end
     end
 
-    if cols ~= nil then self.collisions = cols end
+    for i = 1, #remove, 1 do
+        -- Exit
+        remove[i]:collisionExit(self)
+        self:collisionExit(remove[i])
+    end
 end
 
 function Entity:clampToPlayBounds(x, y)
@@ -133,3 +141,5 @@ function Entity:clampEntityToYBounds(y)
 end
 
 function Entity:getY() return self.y + self.height end
+function Entity:startInteraction() end
+function Entity:finishInteraction() end

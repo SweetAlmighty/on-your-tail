@@ -1,4 +1,5 @@
 
+local lume = require("src/lib/lume")
 local class = require("src/lib/middleclass")
 
 EntityController = class('EntityController')
@@ -19,13 +20,12 @@ function EntityController:draw()
     for i=1, #entities, 1 do entities[i]:draw() end
 end
 
-function EntityController:handleInteractions(dt)
-    for i=1, #entities, 1 do entities[i]:interact(dt) end
+function EntityController:update(dt)
+    for i=1, #entities, 1 do entities[i]:update(dt) end
 end
 
 function EntityController:initialize() end
 function EntityController:addEntity(entity) entities[#entities+1] = entity end
 function EntityController:removeEntity(entity) table.remove(entities, entity) end
 function EntityController:reset() for i=1, #entities, 1 do entities[i]:reset() end end
-function EntityController:update(dt) for i=1, #entities, 1 do entities[i]:update(dt) end end
 function EntityController:clear() for _=1, #entities, 1 do entities[#entities] = nil end end
