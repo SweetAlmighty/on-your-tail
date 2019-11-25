@@ -11,7 +11,11 @@ function Player:initialize()
 end
 
 function Player:update(dt)
-    self.stress = self.stress + (dt * 5)
+    Entity.move(self, self.x, self.y)
+    if self.interacting == false then
+        self.stress = self.stress + (dt * 5)
+    end
+
     speed = (self.interacting) and 0 or 2
     self.speed = (self.interacting) and 0 or 120
     moveCamera = (((self.x + self.width / 2) == playableArea.width) and allowCameraMove)
@@ -41,19 +45,11 @@ function Player:petCats(dt)
 
     if self.interacting then
         self.currentCats = #self.collisions
-        self.stress = self.stress - (dt * (50 * self.currentCats))
+        self.stress = self.stress - (dt * (20 * self.currentCats))
         if self.stress < 0 then self.stress = 0 end
     end
 end
 
-function Player:startInteraction()
-    self.interacting = true
-end
-
-function Player:finishInteraction()
-    if #self.collisions == 0 then
-        self.interacting = false
-    end
-end
-
 function Player:draw() Entity.draw(self) end
+function Player:startInteraction() self.interacting = true end
+function Player:finishInteraction() if #self.collisions == 0 then self.interacting = false end end

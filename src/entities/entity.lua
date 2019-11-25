@@ -27,12 +27,14 @@ Directions = {
 
 local collisionFilter = function() return 'cross' end
 
+--[[
 local showCollider = function(entity)
     local x, y, w, h = World:getRect(entity)
     love.graphics.rectangle("line", x, y, w, h)
 end
 local showPosition = function(entity) love.graphics.points(entity.x, entity.y) end
 local showDebugInfo = function(entity) showCollider(entity) showPosition(entity) end
+]]
 
 function Entity:initialize(x, y, quad, imagePath, speed, type)
     self.x = x
@@ -84,22 +86,25 @@ end
 
 function Entity:handleCollisions(cols)
     if self.type ~= Types.Player then return end
-    
-    local others = {} 
-    for i, v in ipairs(cols) do others[#others + 1] = v.other end
+
+    local others = {}
+    for i = 1, #cols, 1 do others[#others + 1] = cols[i].other end
 
     for i = 1, #others, 1 do
         local index = lume.find(self.collisions, others[i])
         if index == nil then
             -- Enter
-            self:collisionEnter(others[i])
-            others[i]:collisionEnter(self)
+            if others[i].limit >= 30 then
+                self:collisionEnter(others[i])
+                others[i]:collisionEnter(self)
+            end
         end
     end
 
-    local remove = {} 
+    local remove = {}
     for i = 1, #self.collisions, 1 do
-        if lume.find(others, self.collisions[i]) == nil then
+        local index = lume.find(others, self.collisions[i])
+        if index == nil or self.collisions[i].limit < 0 then
             remove[#remove + 1] = self.collisions[i]
         end
     end

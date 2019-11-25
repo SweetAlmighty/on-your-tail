@@ -118,7 +118,7 @@ function Cat:update(dt)
     if self.interacting then
         self.button:update(dt)
         self.limit = self.limit - (dt * 10)
-        if self.limit < 0 then
+        if self.limit < 0 and self.interacting then
             self.limit = 0
             self:finishInteraction()
             self.interactable = false
@@ -138,5 +138,6 @@ end
 function Cat:finishInteraction()
     self.button:reset()
     self.interacting = false
+    self.interactable = false
     beginOffscreenTransition(self)
 end
