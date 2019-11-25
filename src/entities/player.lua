@@ -3,6 +3,8 @@ local class = require("src/lib/middleclass")
 
 Player = class('Player', Entity)
 
+pettingReduction = 15
+
 function Player:initialize()
     self.stress = 0
     self.currentCats = 0
@@ -45,7 +47,7 @@ function Player:petCats(dt)
 
     if self.interacting then
         self.currentCats = #self.collisions
-        self.stress = self.stress - (dt * (20 * self.currentCats))
+        self.stress = self.stress - (dt * (pettingReduction * self.currentCats))
         if self.stress < 0 then self.stress = 0 end
     end
 end

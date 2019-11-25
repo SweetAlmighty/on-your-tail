@@ -8,6 +8,8 @@ local class = require("src/lib/middleclass")
 
 Cat = class("Cat", Entity)
 
+catLimit = 30
+
 local time = 0
 local shouldUpdate = false
 local s_SITTING, s_WALKING = 1, 2
@@ -76,7 +78,7 @@ local processAnims = function(dt, cat)
 end
 
 function Cat:initialize()
-    self.limit = 30
+    self.limit = catLimit
     self.currAnim = { }
     self.state = s_SITTING
     self.button = InteractButton:new()
@@ -110,7 +112,7 @@ function Cat:draw()
 end
 
 function Cat:reset()
-    self.limit = 30
+    self.limit = catLimit
     Entity.reset(self, randomPosition())
 end
 

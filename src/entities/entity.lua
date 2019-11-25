@@ -66,7 +66,7 @@ end
 function Entity:move(x, y)
     local _x, _y, cols = World:check(self, x, y, collisionFilter)
     self:handleCollisions(cols)
-    Entity.clampToPlayBounds(self, _x, _y)
+    self:clampToPlayBounds(_x, _y)
     World:update(self, self.x, self.y)
 end
 
@@ -88,13 +88,15 @@ function Entity:handleCollisions(cols)
     if self.type ~= Types.Player then return end
 
     local others = {}
-    for i = 1, #cols, 1 do others[#others + 1] = cols[i].other end
+    for i = 1, #cols, 1 do 
+        others[#others + 1] = cols[i].other 
+    end
 
     for i = 1, #others, 1 do
         local index = lume.find(self.collisions, others[i])
         if index == nil then
             -- Enter
-            if others[i].limit >= 30 then
+            if others[i].limit >= totalLimit then
                 self:collisionEnter(others[i])
                 others[i]:collisionEnter(self)
             end
@@ -123,28 +125,24 @@ end
 
 function Entity:clampEntityToXBounds(x)
     local _x, width, area = x, self.width/2, playableArea
-
     if _x < area.x then
         _x = area.x
     elseif _x > area.width - width then
         _x = area.width - width
     end
-
     return _x
 end
 
 function Entity:clampEntityToYBounds(y)
     local _y, height, area = y, self.height, playableArea
-
     if _y < area.y - height/2 then
         _y = area.y - height/2
     elseif _y > area.height - height then
         _y = area.height - height
     end
-
     return _y
 end
 
-function Entity:getY() return self.y + self.height end
 function Entity:startInteraction() end
 function Entity:finishInteraction() end
+function Entity:getY() return self.y + self.height end
