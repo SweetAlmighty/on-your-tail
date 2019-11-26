@@ -4,6 +4,9 @@ local class = require("src/lib/middleclass")
 
 Entity = class('Entity')
 
+catLimit = 30
+pettingReduction = 15
+
 Types = {
     Player = 0,
     Cat = 1
@@ -54,7 +57,7 @@ function Entity:initialize(x, y, quad, imagePath, speed, type)
 end
 
 function Entity:draw()
-    love.graphics.draw(self.image, self.quad, self.x, self.y, nil, nil, nil, nil, nil)
+    love.graphics.draw(self.image, self.quad, self.x, self.y)
     --showDebugInfo(self)
 end
 
@@ -64,9 +67,12 @@ function Entity:reset(x, y)
 end
 
 function Entity:move(x, y)
+    -- Determine collisions that will happen if Entity moves to x, y
     local _x, _y, cols = World:check(self, x, y, collisionFilter)
     self:handleCollisions(cols)
     self:clampToPlayBounds(_x, _y)
+
+    -- Move Entity to new position
     World:update(self, self.x, self.y)
 end
 
@@ -85,24 +91,28 @@ function Entity:collisionExit(other)
 end
 
 function Entity:handleCollisions(cols)
+    -- Only process player collisions, for the time being.
     if self.type ~= Types.Player then return end
 
+    -- Retrieve Entities from Collision Data
     local others = {}
-    for i = 1, #cols, 1 do 
-        others[#others + 1] = cols[i].other 
+    for i = 1, #cols, 1 do
+        others[#others + 1] = cols[i].other
     end
 
+    -- Process new collisions
     for i = 1, #others, 1 do
         local index = lume.find(self.collisions, others[i])
         if index == nil then
             -- Enter
-            if others[i].limit >= totalLimit then
+            if others[i].limit >= catLimit then
                 self:collisionEnter(others[i])
                 others[i]:collisionEnter(self)
             end
         end
     end
 
+    -- Find collisions to remove
     local remove = {}
     for i = 1, #self.collisions, 1 do
         local index = lume.find(others, self.collisions[i])
@@ -111,6 +121,7 @@ function Entity:handleCollisions(cols)
         end
     end
 
+    -- Process collisions that are no longer valid
     for i = 1, #remove, 1 do
         -- Exit
         remove[i]:collisionExit(self)

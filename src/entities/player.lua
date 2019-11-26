@@ -3,8 +3,6 @@ local class = require("src/lib/middleclass")
 
 Player = class('Player', Entity)
 
-pettingReduction = 15
-
 function Player:initialize()
     self.stress = 0
     self.currentCats = 0

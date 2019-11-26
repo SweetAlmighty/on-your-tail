@@ -11,7 +11,6 @@ States = {
     FailState = 3,
 }
 
-
 function Menu:initialize()
     self.index = 1
     self.title = nil

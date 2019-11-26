@@ -8,8 +8,6 @@ local class = require("src/lib/middleclass")
 
 Cat = class("Cat", Entity)
 
-catLimit = 30
-
 local time = 0
 local shouldUpdate = false
 local s_SITTING, s_WALKING = 1, 2
@@ -22,8 +20,17 @@ local randomPosition = function()
 end
 
 local processMovement = function(cat)
-    local _x = (cat.x + (cat.speed * cat.direction.x))
-    local _y = (cat.y + (cat.speed * cat.direction.y))
+    local modifier = 0
+    if moveCamera then
+        if cat.direction.x == -1 then
+            modifier = 1.5
+        elseif cat.direction == 1 then
+            modifier = 1.5
+        end
+    end
+
+    local _x = (cat.x + ((cat.speed + modifier) * cat.direction.x))
+    local _y = (cat.y + ((cat.speed + modifier) * cat.direction.y))
 
     if cat.state == s_SITTING then
         _x = moveCamera and (cat.x - speed) or (cat.x)
