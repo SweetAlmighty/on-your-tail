@@ -53,7 +53,6 @@ function Entity:initialize(x, y, quad, imagePath, speed, type)
     self.image = love.graphics.newImage("/data/" .. imagePath)
     self.width = (self.image == nil) and 1 or w
     self.height = (self.image == nil) and 1 or h
-    World:add(self, x, y, self.width, self.height)
 end
 
 function Entity:draw()
