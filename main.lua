@@ -20,9 +20,9 @@ function love.load()
     love.window.setMode(screenWidth, screenHeight)
 
     if love.filesystem.getInfo("highscores.txt") == nil then
-        local index, tbl = 1, {}
-        for i=1, 3, 1 do table.insert(tbl, i, ((i==index) and time or {"AAA", 0.00})) end
-        love.filesystem.write("highscores.txt", lume.serialize(tbl))
+        local index, table = 1, {}
+        for i=1, 3, 1 do table.insert(table, i, ((i==index) and time or {"AAA", 0.00})) end
+        love.filesystem.write("highscores.txt", lume.serialize(table))
     end
 end
 
@@ -38,17 +38,14 @@ function setTime(time)
     if love.filesystem.getInfo("highscores.txt") then
         local result, message = lume.deserialize(love.filesystem.read("highscores.txt"))
         if message == nil then
-            local index = 4
             if type(result) == "table" then
-                for i=1, #result, 1 do if time[2] > result[i][2] then index = index - 1 end end
-                if index ~= 4 then
-                    local tbl = {}
-                    for i=1, 3, 1 do table.insert(tbl, i, ((i==index) and time or result[i])) end
-                    local _, error = love.filesystem.write("highscores.txt", lume.serialize(tbl))
-                    if error ~= nil then print("Error: " .. error) end
-                end
+                result[#result+1] = time
+                table.sort(result, function(a, b) return a[2] > b[2] end)
+                table.remove(result, #result)
+                local _, error = love.filesystem.write("highscores.txt", lume.serialize(result))
+                if error ~= nil then print("Save Error: " .. error) end
             end
-        else print("Error: " .. message) end
+        else print("Load Error: " .. message) end
     end
 end
 
