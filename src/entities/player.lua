@@ -1,6 +1,4 @@
 
-local class = require("src/lib/middleclass")
-
 Player = class('Player', Entity)
 
 function Player:initialize()

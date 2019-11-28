@@ -1,7 +1,5 @@
 
-local lume = require("src/lib/lume")
-local class = require("src/lib/middleclass")
-
+require "src/require"
 Entity = class('Entity')
 
 catLimit = 30

@@ -1,6 +1,4 @@
 
-local class = require("src/lib/middleclass")
-
 EntityController = class('EntityController')
 
 local entities = {}

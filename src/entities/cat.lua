@@ -1,10 +1,6 @@
 
-require "src/entities/entity"
 require "src/interactButton"
-
-local lume = require("src/lib/lume")
-local anim = require("src/lib/animat")
-local class = require("src/lib/middleclass")
+require "src/entities/entity"
 
 Cat = class("Cat", Entity)
 

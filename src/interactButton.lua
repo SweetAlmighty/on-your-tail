@@ -1,6 +1,5 @@
 
-local anim = require("src/lib/animat")
-local class = require("src/lib/middleclass")
+require("src/require")
 
 InteractButton = class("InteractButton")
 

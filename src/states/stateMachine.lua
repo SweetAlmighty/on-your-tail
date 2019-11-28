@@ -5,7 +5,6 @@ require "src/states/menus/failMenu"
 require "src/states/menus/pauseMenu"
 require "src/states/menus/highscoreMenu"
 require "src/states/menus/controlsMenu"
-local class = require("src/lib/middleclass")
 
 StateMachine = class("StateMachine")
 

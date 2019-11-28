@@ -1,7 +1,7 @@
 
 require "src/input"
+require "src/require"
 require "src/states/stateMachine"
-local lume = require("src/lib/lume")
 
 speed = 2
 currTime = 0

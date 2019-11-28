@@ -1,8 +1,5 @@
 
 require "src/states/stateMachine"
-local lume = require("src/lib/lume")
-local class = require("src/lib/middleclass")
-local keyDown = lume.fn(love.keyboard.isDown)
 
 Input = class('Input')
 
@@ -27,6 +24,8 @@ local inputMap =
     select = "space",
     start = "kpenter"
 }
+
+local keyDown = lume.fn(love.keyboard.isDown)
 
 function Input:process(dt)
     delta = dt

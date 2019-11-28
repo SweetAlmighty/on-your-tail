@@ -1,7 +1,5 @@
 
 require "src/states/menus/menu"
-local lume = require("src/lib/lume")
-local class = require("src/lib/middleclass")
 
 HighscoreMenu = class("HighscoreMenu", Menu)
 

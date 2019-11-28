@@ -1,6 +1,5 @@
 
 require "src/states/menus/menu"
-local class = require("src/lib/middleclass")
 
 MainMenu = class("MainMenu", Menu)
 

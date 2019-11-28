@@ -5,7 +5,6 @@ require "src/entities/player"
 require "src/entities/entityController"
 
 local bump = require("src/lib/bump")
-local class = require("src/lib/middleclass")
 
 Scene = class("Scene", State)
 World = bump.newWorld(20)
