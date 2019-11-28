@@ -3,7 +3,7 @@ require "src/entities/entity"
 require "src/interactButton"
 
 local lume = require("src/lib/lume")
-local animat = require("src/lib/animat")
+local anim = require("src/lib/animat")
 local class = require("src/lib/middleclass")
 
 Cat = class("Cat", Entity)
@@ -15,8 +15,8 @@ local imageWidth, imageHeight = 150, 160
 local spriteWidth, spriteHeight = 20, 20
 
 local randomPosition = function()
-    return math.random(screenWidth - spriteWidth, screenWidth * 2),
-        math.random(playableArea.y - spriteHeight, playableArea.height)
+    return love.math.random(screenWidth - spriteWidth, screenWidth * 2),
+        love.math.random(playableArea.y - spriteHeight, playableArea.height)
 end
 
 local processMovement = function(cat)
@@ -88,21 +88,21 @@ function Cat:initialize()
     self.currAnim = { }
     self.state = s_SITTING
     self.button = InteractButton:new()
-    self.index = math.random(1, imageHeight/spriteHeight)
+    self.index = love.math.random(1, imageHeight/spriteHeight)
 
     local _x, _y = randomPosition()
     local currY = ((self.index - 1) * 20)
     Entity.initialize(self, _x, _y, love.graphics.newQuad(0, currY, spriteWidth, spriteHeight,
         imageWidth, imageHeight), "cats.png", 1, Types.Cat)
 
-    self.walkLeft = animat.newAnimat(15)
+    self.walkLeft = anim.newAnimat(15)
     self.walkLeft:addSheet(self.image)
     self.walkLeft:addFrame(0,  currY, 20, 20)
     self.walkLeft:addFrame(40, currY, 20, 20)
     self.walkLeft:addFrame(0,  currY, 20, 20)
     self.walkLeft:addFrame(80, currY, 21, 20)
 
-    self.walkRight = animat.newAnimat(15)
+    self.walkRight = anim.newAnimat(15)
     self.walkRight:addSheet(self.image)
     self.walkRight:addFrame(20,  currY, 20, 20)
     self.walkRight:addFrame(60,  currY, 20, 20)
