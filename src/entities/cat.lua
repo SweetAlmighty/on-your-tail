@@ -24,8 +24,16 @@ local processMovement = function(cat)
     local _y = (cat.y + (cat.speed * cat.direction.y))
 
     if cat.state == s_SITTING then
+        -- Maintain sitting position
         _x = moveCamera and (cat.x - speed) or (cat.x)
         _y = cat.y
+    else
+        -- Move relative to the player, if the camera is moving
+        if moveCamera then
+            local deltaX = (cat.direction.x * player.delta.x)
+            if cat.direction.x ~= -1 then deltaX = -player.delta.x end
+            _x = _x + deltaX
+        end
     end
 
     Entity.move(cat, _x, _y)

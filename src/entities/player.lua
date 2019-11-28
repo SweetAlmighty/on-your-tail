@@ -6,6 +6,7 @@ Player = class('Player', Entity)
 function Player:initialize()
     self.stress = 0
     self.currentCats = 0
+    self.delta = { x = 0, y = 0 }
     Entity.initialize(self, 50, 150, love.graphics.newQuad(0, 95, 23, 44, 118, 187),
         "player.png", 120, Types.Player)
 end
@@ -23,11 +24,13 @@ end
 
 function Player:moveX(x)
     allowCameraMove = (x ~= 0)
-    Entity.move(self, (self.x + self.speed * x), self.y)
+    self.delta.x = self.speed * x
+    Entity.move(self, (self.x + self.delta.x), self.y)
 end
 
 function Player:moveY(y)
-    Entity.move(self, self.x, (self.y + self.speed * y))
+    self.delta.y = self.speed * y
+    Entity.move(self, self.x, (self.y + self.delta.y))
 end
 
 function Player:reset()
