@@ -24,7 +24,7 @@ function EntityController:update(dt)
 end
 
 function EntityController:initialize() end
-function EntityController:addEntity(entity) 
+function EntityController:addEntity(entity)
     entities[#entities+1] = entity
     World:add(entity, entity.x, entity.y, entity.width, entity.height)
 end
@@ -33,6 +33,6 @@ function EntityController:reset() for i=1, #entities, 1 do entities[i]:reset() e
 function EntityController:clear()
     for _=1, #entities, 1 do
         World:remove(entities[#entities])
-        entities[#entities] = nil 
+        entities[#entities] = nil
     end
 end
