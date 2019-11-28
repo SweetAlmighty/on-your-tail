@@ -21,17 +21,22 @@ end
 
 function FailMenu:initialize()
     Menu.initialize(self)
+    Menu.setTitle(self, "Enter Score")
+    
+    love.graphics.setFont(menuFont)
+    name = table.concat(self.name) .. " ----------- " .. string.format("%.2f", currTime) .. "\n"
+
     self.type = States.FailState
     self.currX, self.currY = 1, 1
     self.name = { "A", "A", "A" }
-    love.graphics.setFont(menuFont)
     self.startHeight = screenHeight/2
-    Menu.setTitle(self, "Enter Score")
     self.clearColor = { r = 1, g = 1, b = 1, a = 1 }
-    name = table.concat(self.name) .. " ----------- " .. string.format("%.2f", currTime) .. "\n"
-    self.options = { love.graphics.newText(menuFont, name),
-                     love.graphics.newText(menuFont, "Play again"),
-                     love.graphics.newText(menuFont, "Main menu") }
+    self.options = { 
+        love.graphics.newText(menuFont, name),
+        love.graphics.newText(menuFont, "Play again"),
+        love.graphics.newText(menuFont, "Main menu") 
+    }
+    
     for i=65, 90, 1 do table.insert(letters, string.char(i)) end
 end
 

@@ -25,19 +25,21 @@ function Menu:draw()
     local halfWidth = screenWidth/2
     love.graphics.clear(self.clearColor.r, self.clearColor.g, self.clearColor.b, self.clearColor.a)
 
+    -- Draw title
     love.graphics.setColor(0, 0, 0, 1)
     love.graphics.draw(self.title, self.titlePos.x, self.titlePos.y)
 
+    -- Draw menu options
     for i=1, #self.options, 1 do
         self.startWidth = math.floor(halfWidth - (self.options[i]:getWidth()/2))
         love.graphics.draw(self.options[i], self.startWidth, self.startHeight + ((i-1) * 40))
     end
 
-    local xPos = halfWidth - ((self.options[self.index]:getWidth() / 2) + self.pointer:getWidth())
-
+    -- Draw pointer
     love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.draw(self.pointer, xPos, (self.startHeight + 5 + ((self.index-1) * 40)), nil,
-        nil, nil, nil, nil)
+    local yPos = self.startHeight + 5 + ((self.index-1) * 40)
+    local xPos = halfWidth - ((self.options[self.index]:getWidth() / 2) + self.pointer:getWidth())
+    love.graphics.draw(self.pointer, xPos, yPos)
 end
 
 function Menu:setTitle(title)

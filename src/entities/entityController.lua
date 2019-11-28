@@ -17,20 +17,19 @@ function EntityController:draw()
     for i=1, #entities, 1 do entities[i]:draw() end
 end
 
-function EntityController:update(dt)
-    for i=1, #entities, 1 do entities[i]:update(dt) end
-end
-
-function EntityController:initialize() end
 function EntityController:addEntity(entity)
     entities[#entities+1] = entity
     World:add(entity, entity.x, entity.y, entity.width, entity.height)
 end
-function EntityController:removeEntity(entity) table.remove(entities, entity) end
-function EntityController:reset() for i=1, #entities, 1 do entities[i]:reset() end end
+
 function EntityController:clear()
     for _=1, #entities, 1 do
         World:remove(entities[#entities])
         entities[#entities] = nil
     end
 end
+
+function EntityController:initialize() end
+function EntityController:removeEntity(entity) table.remove(entities, entity) end
+function EntityController:reset() for i=1, #entities, 1 do entities[i]:reset() end end
+function EntityController:update(dt) for i=1, #entities, 1 do entities[i]:update(dt) end end
