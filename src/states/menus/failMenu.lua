@@ -23,27 +23,28 @@ function FailMenu:initialize()
     Menu.initialize(self)
     Menu.setTitle(self, "Enter Score")
     
-    love.graphics.setFont(menuFont)
-    name = table.concat(self.name) .. " ----------- " .. string.format("%.2f", currTime) .. "\n"
-
     self.type = States.FailState
     self.currX, self.currY = 1, 1
     self.name = { "A", "A", "A" }
-    self.startHeight = screenHeight/2
+    self.startHeight = screenHeight/2.5
     self.clearColor = { r = 1, g = 1, b = 1, a = 1 }
+    
+    love.graphics.setFont(menuFont)
+    name = table.concat(self.name) .. " ----------- " .. string.format("%.2f", currTime) .. "\n"
+
     self.options = { 
         love.graphics.newText(menuFont, name),
         love.graphics.newText(menuFont, "Play again"),
         love.graphics.newText(menuFont, "Main menu") 
     }
-    
+
     for i=65, 90, 1 do table.insert(letters, string.char(i)) end
 end
 
 function FailMenu:draw()
     Menu.draw(self)
     love.graphics.setColor(0, 0, 0)
-    love.graphics.print("_", (screenWidth / 2) - (127 - (12 * self.currX)), (screenHeight / 2) + 8)
+    love.graphics.print("_", (screenWidth / 2) - (127 - (12 * self.currX)), (screenHeight / 2.5) + 8)
 end
 
 function FailMenu:up()
@@ -61,13 +62,17 @@ function FailMenu:down()
 end
 
 function FailMenu:left()
-    self.currX = (self.currX - 1 < 1) and 1 or self.currX - 1
-    self.currY = getLetterIndex(self.name[self.currX])
+    if self.index == 1 then
+        self.currX = (self.currX - 1 < 1) and 1 or self.currX - 1
+        self.currY = getLetterIndex(self.name[self.currX])
+    end
 end
 
 function FailMenu:right()
-    self.currX = (self.currX + 1 > 3) and 3 or self.currX + 1
-    self.currY = getLetterIndex(self.name[self.currX])
+    if self.index == 1 then
+        self.currX = (self.currX + 1 > 3) and 3 or self.currX + 1
+        self.currY = getLetterIndex(self.name[self.currX])
+    end
 end
 
 function FailMenu:accept()
