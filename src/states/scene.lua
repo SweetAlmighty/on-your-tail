@@ -1,6 +1,7 @@
 
-require "src/entities/cat"
 require "src/states/state"
+require "src/entities/cat"
+require "src/entities/Kitten"
 require "src/entities/player"
 require "src/entities/entityController"
 
