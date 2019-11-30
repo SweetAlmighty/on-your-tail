@@ -7,13 +7,6 @@ Cat = class("Cat", Entity)
 local time = 0
 local shouldUpdate = false
 local s_SITTING, s_WALKING = 1, 2
-local imageWidth, imageHeight = 150, 160
-local spriteWidth, spriteHeight = 20, 20
-
-local randomPosition = function()
-    return love.math.random(screenWidth - spriteWidth, screenWidth * 2),
-        love.math.random(playableArea.y - spriteHeight, playableArea.height)
-end
 
 local processMovement = function(cat)
     local _x = (cat.x + (cat.speed * cat.direction.x))
@@ -45,8 +38,10 @@ end
 
 local beingPettingTransition = function (cat)
     cat.state = s_SITTING
-    cat.quad = love.graphics.newQuad((cat.direction.x == 1) and 136 or 122,
-        spriteHeight * (cat.index - 1), 14, 19, imageWidth, imageHeight)
+    
+    local _, y, w, h = cat.sittingQuad:getViewport()
+    local x = (cat.direction.x == 1) and cat.sittingX.right or cat.sittingX.left
+    cat.quad = love.graphics.newQuad(x, y, w, h, cat.imageWidth, cat.imageHeight)
 end
 
 local processAnims = function(dt, cat)
@@ -66,8 +61,9 @@ local processAnims = function(dt, cat)
                 cat.currAnim = (cat.direction.x == 1) and cat.walkRight or cat.walkLeft
             else
                 -- Sit
-                cat.quad = love.graphics.newQuad((cat.direction.x == 1) and 136 or 122,
-                    spriteHeight * (cat.index - 1), 14, 19, imageWidth, imageHeight)
+                local _, y, w, h = cat.sittingQuad:getViewport()
+                local x = (cat.direction.x == 1) and cat.sittingX.right or cat.sittingX.left
+                cat.quad = love.graphics.newQuad(x, y, w, h, cat.imageWidth, cat.imageHeight)
             end
             shouldUpdate = false
         end
@@ -79,17 +75,32 @@ local processAnims = function(dt, cat)
     end
 end
 
+function randomPosition(cat)
+    return love.math.random(screenWidth - cat.spriteWidth, screenWidth * 2),
+        love.math.random(playableArea.y - cat.spriteHeight, playableArea.height)
+end
+
 function Cat:initialize()
     self.limit = catLimit
     self.currAnim = { }
     self.state = s_SITTING
     self.button = InteractButton:new()
-    self.index = love.math.random(1, imageHeight/spriteHeight)
 
-    local _x, _y = randomPosition()
+    self.imageWidth = 150
+    self.imageHeight = 160
+    self.spriteWidth = 20
+    self.spriteHeight = 20
+
+    self.index = love.math.random(1, self.imageHeight/self.spriteHeight)
+
+    local _x, _y = randomPosition(self)
     local currY = ((self.index - 1) * 20)
-    Entity.initialize(self, _x, _y, love.graphics.newQuad(0, currY, spriteWidth, spriteHeight,
-        imageWidth, imageHeight), "cats.png", 1, Types.Cat)
+    Entity.initialize(self, _x, _y, love.graphics.newQuad(0, currY, self.spriteWidth, 
+        self.spriteHeight, self.imageWidth, self.imageHeight), "cats.png", 1, Types.Cat)
+
+    self.sittingX = { left = 122, right = 136 }
+    self.sittingQuad = love.graphics.newQuad(0, self.spriteHeight * (self.index - 1), 14, 19, 
+        self.imageWidth, self.imageHeight)
 
     self.walkLeft = anim.newAnimat(15)
     self.walkLeft:addSheet(self.image)
@@ -115,7 +126,7 @@ end
 
 function Cat:reset()
     self.limit = catLimit
-    Entity.reset(self, randomPosition())
+    Entity.reset(self, randomPosition(self))
 end
 
 function Cat:update(dt)

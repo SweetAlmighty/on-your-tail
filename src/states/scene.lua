@@ -81,7 +81,7 @@ end
 function Scene:createEntities()
     player = Player:new()
     entityController:addEntity(player)
-    for _=1, self.totalCats, 1 do entityController:addEntity(Cat:new()) end
+    for _=1, self.totalCats, 1 do entityController:addEntity(Kitten:new()) end
 end
 
 function Scene:reset()

@@ -7,7 +7,8 @@ pettingReduction = 15
 
 Types = {
     Player = 0,
-    Cat = 1
+    Cat = 1,
+    Kitten =2
 }
 
 local directions = {
