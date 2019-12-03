@@ -4,25 +4,25 @@ require "src/entities/cat"
 Kitten = class("Kitten", Cat)
 
 function Kitten:initialize()
-    self.limit = catLimit
     self.currAnim = { }
+    self.limit = catLimit
     self.state = s_SITTING
     self.button = InteractButton:new()
 
     self.imageWidth = 122
-    self.imageHeight = 15
+    self.imageHeight = 120
     self.spriteWidth = 16
     self.spriteHeight = 15
-    
+
     self.index = love.math.random(1, self.imageHeight/self.spriteHeight)
 
-    local currY = 0
     local _x, _y = randomPosition(self)
-    Entity.initialize(self, _x, _y, love.graphics.newQuad(0, currY, self.spriteWidth, 
-        self.spriteHeight, self.imageWidth, self.imageHeight), "kittens.png", 1, Types.Cat)
+    local currY = ((self.index - 1) * self.spriteHeight)
+    Entity.initialize(self, _x, _y, love.graphics.newQuad(0, currY, self.spriteWidth,
+        self.spriteHeight, self.imageWidth, self.imageHeight), "kittens.png", 1, Types.Kitten)
 
     self.sittingX = { left = 98, right = 110 }
-    self.sittingQuad = love.graphics.newQuad(0, self.spriteHeight * (self.index - 1), 12, 15, 
+    self.sittingQuad = love.graphics.newQuad(0, self.spriteHeight * (self.index - 1), 12, 15,
         self.imageWidth, self.imageHeight)
 
     self.walkLeft = anim.newAnimat(15)

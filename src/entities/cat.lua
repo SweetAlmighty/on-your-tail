@@ -26,7 +26,13 @@ local processMovement = function(cat)
     end
 
     Entity.move(cat, _x, _y)
-    if cat.x < (-cat.width) then cat:reset() end
+    if cat.x < (-cat.width) then
+        if cat.type == Types.Kitten then
+            StateMachine:current():removeKitten(cat)
+        else
+            cat:reset()
+        end
+    end
 end
 
 local beginOffscreenTransition = function (cat)
@@ -38,7 +44,7 @@ end
 
 local beingPettingTransition = function (cat)
     cat.state = s_SITTING
-    
+
     local _, y, w, h = cat.sittingQuad:getViewport()
     local x = (cat.direction.x == 1) and cat.sittingX.right or cat.sittingX.left
     cat.quad = love.graphics.newQuad(x, y, w, h, cat.imageWidth, cat.imageHeight)
@@ -94,12 +100,12 @@ function Cat:initialize()
     self.index = love.math.random(1, self.imageHeight/self.spriteHeight)
 
     local _x, _y = randomPosition(self)
-    local currY = ((self.index - 1) * 20)
-    Entity.initialize(self, _x, _y, love.graphics.newQuad(0, currY, self.spriteWidth, 
+    local currY = ((self.index - 1) * self.spriteHeight)
+    Entity.initialize(self, _x, _y, love.graphics.newQuad(0, currY, self.spriteWidth,
         self.spriteHeight, self.imageWidth, self.imageHeight), "cats.png", 1, Types.Cat)
 
     self.sittingX = { left = 122, right = 136 }
-    self.sittingQuad = love.graphics.newQuad(0, self.spriteHeight * (self.index - 1), 14, 19, 
+    self.sittingQuad = love.graphics.newQuad(0, self.spriteHeight * (self.index - 1), 14, 19,
         self.imageWidth, self.imageHeight)
 
     self.walkLeft = anim.newAnimat(15)

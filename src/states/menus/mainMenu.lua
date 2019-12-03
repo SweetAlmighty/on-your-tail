@@ -10,11 +10,11 @@ function MainMenu:initialize()
     self.type = States.MainMenu
     self.startHeight = screenHeight/3
     self.clearColor = { r = 1, g = 1, b = 1, a = 1}
-    self.options = { 
+    self.options = {
         love.graphics.newText(menuFont, "Play"),
         love.graphics.newText(menuFont, "Scores"),
         love.graphics.newText(menuFont, "Controls"),
-        love.graphics.newText(menuFont, "Quit") 
+        love.graphics.newText(menuFont, "Quit")
     }
 end
 
