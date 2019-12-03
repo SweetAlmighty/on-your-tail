@@ -17,9 +17,10 @@ function EntityController:draw()
     for i=1, #entities, 1 do entities[i]:draw() end
 end
 
-function EntityController:addEntity(entity)
-    entities[#entities+1] = entity
-    World:add(entity, entity.x, entity.y, entity.width, entity.height)
+function EntityController:update(dt) 
+    for i=1, #entities, 1 do 
+        if entities[i] ~= nil then entities[i]:update(dt) end
+    end 
 end
 
 function EntityController:clear()
@@ -29,15 +30,23 @@ function EntityController:clear()
     end
 end
 
+function EntityController:addEntity(entity)
+    entities[#entities+1] = entity
+    World:add(entity, entity.x, entity.y, entity.width, entity.height)
+end
+
 function EntityController:removeEntity(entity)
-    local newEntity = {}
+    local newEntities = {}
     for i=1, #entities, 1 do
-        if entities[i] ~= entity then newEntity[#newEntity + 1] = entities[i] end
+        if entities[i] ~= entity then 
+            newEntities[#newEntities + 1] = entities[i] 
+        end
     end
+
     entity = nil
+    entities = newEntities
 end
 
 function EntityController:initialize() end
 function EntityController:count() return #entities end
 function EntityController:reset() for i=1, #entities, 1 do entities[i]:reset() end end
-function EntityController:update(dt) for i=1, #entities, 1 do entities[i]:update(dt) end end
