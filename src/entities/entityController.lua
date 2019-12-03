@@ -30,18 +30,11 @@ function EntityController:clear()
 end
 
 function EntityController:removeEntity(entity)
-    local index = -1
+    local newEntity = {}
     for i=1, #entities, 1 do
-        if index == -1 then
-            if entities[i] == entity then index = i end
-        end
+        if entities[i] ~= entity then newEntity[#newEntity + 1] = entities[i] end
     end
-
-    if index ~= -1 then
-        entity = nil
-        index = index - 1
-        entities[index] = nil
-    end
+    entity = nil
 end
 
 function EntityController:initialize() end
