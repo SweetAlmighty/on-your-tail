@@ -20,9 +20,9 @@ function love.load()
     love.window.setMode(screenWidth, screenHeight)
 
     if love.filesystem.getInfo("highscores.txt") == nil then
-        local index, table = 1, {}
-        for i=1, 3, 1 do table.insert(table, i, ((i==index) and time or {"AAA", 0.00})) end
-        love.filesystem.write("highscores.txt", lume.serialize(table))
+        local index, tbl = 1, {}
+        for i=1, 3, 1 do table.insert(tbl, i, ((i==index) and time or {"AAA", 0.00})) end
+        love.filesystem.write("highscores.txt", lume.serialize(tbl))
     end
 end
 
