@@ -3,7 +3,6 @@ Player = class('Player', Entity)
 
 local processAnims = function(dt, player)
     if player.interacting == false then
-        print(player.direction.x)
         player.currAnim = (player.direction.x == 1) and player.walkRight or player.walkLeft
         player.currAnim:play(dt)
         player.quad = player.currAnim.currentFrame
