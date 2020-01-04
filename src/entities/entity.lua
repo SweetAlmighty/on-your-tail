@@ -29,14 +29,13 @@ Directions = {
 
 local collisionFilter = function() return 'cross' end
 
---[[
 local showCollider = function(entity)
     local x, y, w, h = World:getRect(entity)
     love.graphics.rectangle("line", x, y, w, h)
 end
 local showPosition = function(entity) love.graphics.points(entity.x, entity.y) end
 local showDebugInfo = function(entity) showCollider(entity) showPosition(entity) end
-]]
+
 
 function Entity:initialize(x, y, quad, imagePath, speed, type)
     self.x = x
@@ -56,7 +55,7 @@ end
 
 function Entity:draw()
     love.graphics.draw(self.image, self.quad, self.x, self.y)
-    --showDebugInfo(self)
+    showDebugInfo(self)
 end
 
 function Entity:reset(x, y)
