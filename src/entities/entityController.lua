@@ -17,10 +17,10 @@ function EntityController:draw()
     for i=1, #entities, 1 do entities[i]:draw() end
 end
 
-function EntityController:update(dt) 
-    for i=1, #entities, 1 do 
+function EntityController:update(dt)
+    for i=1, #entities, 1 do
         if entities[i] ~= nil then entities[i]:update(dt) end
-    end 
+    end
 end
 
 function EntityController:clear()
@@ -38,8 +38,8 @@ end
 function EntityController:removeEntity(entity)
     local newEntities = {}
     for i=1, #entities, 1 do
-        if entities[i] ~= entity then 
-            newEntities[#newEntities + 1] = entities[i] 
+        if entities[i] ~= entity then
+            newEntities[#newEntities + 1] = entities[i]
         end
     end
 

@@ -23,14 +23,14 @@ function Player:initialize()
 
     Entity.initialize(self, 50, 150, love.graphics.newQuad(0, 95, self.spriteWidth,
         self.spriteHeight, self.imageWidth, self.imageHeight), "man.png", 120, Types.Player)
-        
+
     self.walkLeft = anim.newAnimat(10)
     self.walkLeft:addSheet(self.image)
     self.walkLeft:addFrame(0,  0, 40, 73)
     self.walkLeft:addFrame(80, 4, 40, 73)
     self.walkLeft:addFrame(0,  0, 40, 73)
     self.walkLeft:addFrame(160, 4, 40, 73)
- 
+
     self.pettingLeft = anim.newAnimat(10)
     self.pettingLeft:addSheet(self.image)
     self.pettingLeft:addFrame(280, 0, 40, 73)
@@ -42,7 +42,7 @@ function Player:initialize()
     self.walkRight:addFrame(120, 0, 40, 73)
     self.walkRight:addFrame(40, 0, 40, 73)
     self.walkRight:addFrame(200, 0, 40, 73)
-    
+
     self.pettingRight = anim.newAnimat(10)
     self.pettingRight:addSheet(self.image)
     self.pettingRight:addFrame(240, 0, 40, 73)
@@ -58,7 +58,7 @@ function Player:update(dt)
     speed = (self.interacting) and 0 or 2
     self.speed = (self.interacting) and 0 or 120
     moveCamera = (((self.x + self.width / 2) == playableArea.width) and allowCameraMove)
-    
+
     processAnims(dt, self)
 end
 
