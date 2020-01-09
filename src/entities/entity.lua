@@ -5,13 +5,19 @@ Entity = class('Entity')
 catLimit = 30
 pettingReduction = 15
 
-Types = {
-    Player = 0,
-    Cat = 1,
-    Kitten =2
+e_States = {
+    IDLE = 0, 
+    MOVING = 1, 
+    INTERACT = 2 
 }
 
-local directions = {
+Types = {
+    PLAYER = 0,
+    CAT    = 1,
+    KITTEN = 2
+}
+
+Directions = {
     N  = { x = 0,  y = 1 },
     NE = { x = 1,  y = 1 },
     E  = { x = 1,  y = 0 },
@@ -22,45 +28,92 @@ local directions = {
     NW = { x = -1, y = 1 }
 }
 
-Directions = {
-    directions.N, directions.NE, directions.E, directions.SE,
-    directions.S, directions.SW, directions.W, directions.NW
+DirectionsIndices = {
+    Directions.N,
+    Directions.NE,
+    Directions.E,
+    Directions.SE,
+    Directions.S,
+    Directions.SW,
+    Directions.W,
+    Directions.NW,
 }
 
 local collisionFilter = function() return 'cross' end
 
+--[[
 local showCollider = function(entity)
     local x, y, w, h = World:getRect(entity)
     love.graphics.rectangle("line", x, y, w, h)
 end
 local showPosition = function(entity) love.graphics.points(entity.x, entity.y) end
 local showDebugInfo = function(entity) showCollider(entity) showPosition(entity) end
+]]
 
-
-function Entity:initialize(x, y, quad, imagePath, speed, type)
-    self.x = x
-    self.y = y
+function Entity:initialize(type, speed)
     self.type = type
-    self.quad = quad
     self.speed = speed
     self.collisions = {}
     self.interacting = false
     self.interactable = false
-    self.direction = directions.W
+end
+
+function Entity:setImageDefaults(imageWidth, imageHeight, spriteWidth, spriteHeight)
+    self.imageWidth = imageWidth
+    self.imageHeight = imageHeight
+    self.spriteWidth = spriteWidth
+    self.spriteHeight = spriteHeight
+end
+
+function Entity:setAnims(idle, move, interact)
+    self.idleAnim = idle
+    self.moveAnim = move
+    self.interactAnim = interact
+
+    self.currentAnim = nil
+    Entity.resetAnim(self, e_States.IDLE)
+end
+
+function Entity:resetAnim(state)
+    if state == e_States.IDLE then
+        self.currentAnim = self.idleAnim
+    elseif state == e_States.MOVING then
+        self.currentAnim = self.moveAnim
+    elseif state == e_States.INTERACT then
+        self.currentAnim = self.interactAnim
+    end
+
+    self.currentAnim:reset()
+
+    self.quad = self.currentAnim.currentFrame
     local _, _, w, h = self.quad:getViewport()
-    self.image = love.graphics.newImage("/data/" .. imagePath)
-    self.width = (self.image == nil) and 1 or w
-    self.height = (self.image == nil) and 1 or h
+    self.width  = w
+    self.height = h
+end
+
+function Entity:setDirection(direction)
+    self.direction = direction
+end
+
+function Entity:setPosition(position)
+    self.x = position[1]
+    self.y = position[2]
+end
+
+function Entity:setState(state)
+    self.state = state
 end
 
 function Entity:draw()
-    love.graphics.draw(self.image, self.quad, self.x, self.y)
-    showDebugInfo(self)
+    local rot = (self.direction.x == -1) and -1 or 1
+    local offset = (rot == -1) and self.width or 0
+    love.graphics.draw(self.currentAnim.img, self.quad, self.x, self.y, 0, rot, 1, offset, 0)
+    --showDebugInfo(self)
 end
 
-function Entity:reset(x, y)
-    self.x, self.y = x, y
-    World:update(self, x, y)
+function Entity:reset(_position)
+    Entity.setPosition(self, _position)
+    World:update(self, self.x, self.y, self.width, self.height)
 end
 
 function Entity:move(x, y)
@@ -70,7 +123,7 @@ function Entity:move(x, y)
     self:clampToPlayBounds(_x, _y)
 
     -- Move Entity to new position
-    World:update(self, self.x, self.y)
+    World:update(self, self.x, self.y, self.width, self.height)
 end
 
 function Entity:collisionEnter(other)
@@ -83,19 +136,17 @@ function Entity:collisionExit(other)
     if index ~= nil then
         self.interactable = false
         table.remove(self.collisions, index)
-        if self.type == Types.Player then player:finishInteraction() end
+        if self.type == Types.PLAYER then player:finishInteraction() end
     end
 end
 
 function Entity:handleCollisions(cols)
     -- Only process player collisions, for the time being.
-    if self.type ~= Types.Player then return end
+    if self.type ~= Types.PLAYER then return end
 
     -- Retrieve Entities from Collision Data
     local others = {}
-    for i = 1, #cols, 1 do
-        others[#others + 1] = cols[i].other
-    end
+    for i = 1, #cols, 1 do others[#others + 1] = cols[i].other end
 
     -- Process new collisions
     for i = 1, #others, 1 do
@@ -127,7 +178,7 @@ function Entity:handleCollisions(cols)
 end
 
 function Entity:clampToPlayBounds(x, y)
-    self.x = (self.type == Types.Player) and Entity.clampEntityToXBounds(self, x) or x
+    self.x = (self.type == Types.PLAYER) and Entity.clampEntityToXBounds(self, x) or x
     self.y = Entity.clampEntityToYBounds(self, y)
 end
 

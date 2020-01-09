@@ -1,52 +1,43 @@
 
 Player = class('Player', Entity)
 
+moveCamera = false
+
+local setState = function(player, state)
+    player.state = state--flag and e_States.MOVING or e_States.IDLE
+    Entity.setState(player, player.state)
+end
+
+local determineState = function(player)
+end
+
+local previousState = nil
 local processAnims = function(dt, player)
-    if player.interacting == false then
-        player.currAnim = (player.direction.x == 1) and player.walkRight or player.walkLeft
-        player.currAnim:play(dt)
-        player.quad = player.currAnim.currentFrame
-    else
-        -- Petting logic
+    if previousState ~= player.state then
+        Entity.resetAnim(player, player.state)
+        previousState = player.state
     end
+
+    player.currentAnim:play(dt)
+    player.quad = player.currentAnim.currentFrame
 end
 
 function Player:initialize()
+    Entity.initialize(self, Types.PLAYER, 120)
+
+    Entity.setState(self, e_States.IDLE)
+    Entity.setPosition(self, {50, 150})
+    Entity.setDirection(self, Directions.E)
+    Entity.setImageDefaults(self, 160, 73, 40, 73)
+    Entity.setAnims(self,
+        animatFactory:create("player_Idle", 1),
+        animatFactory:create("player_Walk", 4), 
+        animatFactory:create("player_Pet", 4)
+    )
+
     self.stress = 0
     self.currentCats = 0
     self.delta = { x = 0, y = 0 }
-
-    self.imageWidth = 400
-    self.imageHeight = 73
-    self.spriteWidth = 40
-    self.spriteHeight = 73
-
-    Entity.initialize(self, 50, 150, love.graphics.newQuad(0, 95, self.spriteWidth,
-        self.spriteHeight, self.imageWidth, self.imageHeight), "man.png", 120, Types.Player)
-
-    self.walkLeft = anim.newAnimat(10)
-    self.walkLeft:addSheet(self.image)
-    self.walkLeft:addFrame(0,  0, 40, 73)
-    self.walkLeft:addFrame(80, 4, 40, 73)
-    self.walkLeft:addFrame(0,  0, 40, 73)
-    self.walkLeft:addFrame(160, 4, 40, 73)
-
-    self.pettingLeft = anim.newAnimat(10)
-    self.pettingLeft:addSheet(self.image)
-    self.pettingLeft:addFrame(280, 0, 40, 73)
-    self.pettingLeft:addFrame(360, 0, 40, 73)
-
-    self.walkRight = anim.newAnimat(10)
-    self.walkRight:addSheet(self.image)
-    self.walkRight:addFrame(40, 0, 40, 73)
-    self.walkRight:addFrame(120, 0, 40, 73)
-    self.walkRight:addFrame(40, 0, 40, 73)
-    self.walkRight:addFrame(200, 0, 40, 73)
-
-    self.pettingRight = anim.newAnimat(10)
-    self.pettingRight:addSheet(self.image)
-    self.pettingRight:addFrame(240, 0, 40, 73)
-    self.pettingRight:addFrame(320, 0, 40, 73)
 end
 
 function Player:update(dt)
@@ -57,25 +48,36 @@ function Player:update(dt)
 
     speed = (self.interacting) and 0 or 2
     self.speed = (self.interacting) and 0 or 120
-    moveCamera = (((self.x + self.width / 2) == playableArea.width) and allowCameraMove)
-
+    moveCamera = (((self.x + self.width / 2) >= playableArea.width) and allowCameraMove)
+    
     processAnims(dt, self)
 end
 
 function Player:moveX(x)
+    if self.interacting then return end
+
     allowCameraMove = (x ~= 0)
+    setState(self, allowCameraMove and e_States.MOVING or e_States.IDLE)
+    
+    if x ~= 0 then 
+        self.direction = (x < 0) and Directions.W or Directions.E 
+    end
+    
     self.delta.x = self.speed * x
     Entity.move(self, (self.x + self.delta.x), self.y)
 end
 
 function Player:moveY(y)
+    if self.interacting then return end
+
+    setState(self, (y ~= 0) and e_States.MOVING or e_States.IDLE)
     self.delta.y = self.speed * y
     Entity.move(self, self.x, (self.y + self.delta.y))
 end
 
 function Player:reset()
     self.stress = 0
-    Entity.reset(self, 50, 150)
+    Entity.reset(self, { 50, 150 })
 end
 
 function Player:petCats(dt)
@@ -93,6 +95,16 @@ function Player:petCats(dt)
     end
 end
 
+function Player:startInteraction()
+    self.interacting = true
+    setState(player, e_States.INTERACT)
+end
+
+function Player:finishInteraction() 
+    if #self.collisions == 0 then
+        self.interacting = false
+        setState(player, e_States.IDLE)
+    end
+end
+
 function Player:draw() Entity.draw(self) end
-function Player:startInteraction() self.interacting = true end
-function Player:finishInteraction() if #self.collisions == 0 then self.interacting = false end end

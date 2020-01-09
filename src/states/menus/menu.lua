@@ -3,13 +3,6 @@ require "src/states/state"
 
 Menu = class('Menu', State)
 
-States = {
-    MainMenu = 0,
-    Gameplay = 1,
-    PauseMenu = 2,
-    FailState = 3,
-}
-
 function Menu:initialize()
     self.index = 1
     self.title = nil

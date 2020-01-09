@@ -6,13 +6,12 @@ Cat = class("Cat", Entity)
 
 local time = 0
 local shouldUpdate = false
-local s_SITTING, s_WALKING = 1, 2
 
 local processMovement = function(cat)
     local _x = (cat.x + (cat.speed * cat.direction.x))
     local _y = (cat.y + (cat.speed * cat.direction.y))
 
-    if cat.state == s_SITTING then
+    if cat.state == e_States.INTERACT then
         -- Maintain sitting position
         _x = moveCamera and (cat.x - speed) or (cat.x)
         _y = cat.y
@@ -27,7 +26,7 @@ local processMovement = function(cat)
 
     Entity.move(cat, _x, _y)
     if cat.x < (-cat.width) then
-        if cat.type == Types.Kitten then
+        if cat.type == Types.KITTEN then
             StateMachine:current():removeKitten(cat)
         else
             cat:reset()
@@ -37,17 +36,14 @@ end
 
 local beginOffscreenTransition = function (cat)
     cat.limit = -1
-    cat.state = s_WALKING
-    cat.currAnim = cat.walkLeft
-    cat.direction = Directions[7]
+    cat.state = e_States.MOVING
+    Entity.resetAnim(cat, cat.state)
+    cat.direction = Directions.W
 end
 
 local beingPettingTransition = function (cat)
-    cat.state = s_SITTING
-
-    local _, y, w, h = cat.sittingQuad:getViewport()
-    local x = (cat.direction.x == 1) and cat.sittingX.right or cat.sittingX.left
-    cat.quad = love.graphics.newQuad(x, y, w, h, cat.imageWidth, cat.imageHeight)
+    cat.state = e_States.INTERACT
+    Entity.resetAnim(cat, cat.state)
 end
 
 local processAnims = function(dt, cat)
@@ -56,71 +52,43 @@ local processAnims = function(dt, cat)
 
         if time > 1 and cat.limit > 0 then
             time = 0
-            cat.state = lume.randomchoice({s_SITTING, s_WALKING})
-            if cat.state == s_WALKING then cat.direction = lume.randomchoice(Directions) end
+            cat.state = lume.randomchoice({e_States.INTERACT, e_States.MOVING})
+            if cat.state == e_States.MOVING then 
+                cat.direction = lume.randomchoice(DirectionsIndices) 
+            end
             shouldUpdate = true
         end
 
         if shouldUpdate then
-            if cat.state == s_WALKING then
-                -- Walk
-                cat.currAnim = (cat.direction.x == 1) and cat.walkRight or cat.walkLeft
-            else
-                -- Sit
-                local _, y, w, h = cat.sittingQuad:getViewport()
-                local x = (cat.direction.x == 1) and cat.sittingX.right or cat.sittingX.left
-                cat.quad = love.graphics.newQuad(x, y, w, h, cat.imageWidth, cat.imageHeight)
-            end
+            Entity.resetAnim(cat, cat.state)
             shouldUpdate = false
         end
 
-        if cat.state == s_WALKING then
-            cat.currAnim:play(dt)
-            cat.quad = cat.currAnim.currentFrame
-        end
+        cat.currentAnim:play(dt)
+        cat.quad = cat.currentAnim.currentFrame
     end
 end
 
 function randomPosition(cat)
-    return love.math.random(screenWidth - cat.spriteWidth, screenWidth * 2),
-        love.math.random(playableArea.y - cat.spriteHeight, playableArea.height)
+    return { love.math.random(screenWidth - cat.spriteWidth, screenWidth * 2),
+        love.math.random(playableArea.y - cat.spriteHeight, playableArea.height) }
 end
 
 function Cat:initialize()
+    Entity.initialize(self, Types.CAT, 1)
+
+    Entity.setState(self, e_States.IDLE)
+    Entity.setDirection(self, Directions.E)
+    Entity.setImageDefaults(self, 150, 160, 20, 20)
+    Entity.setPosition(self, randomPosition(self))
+    Entity.setAnims(self,
+        animatFactory:create("cat_Sit", 1), -- should be idle
+        animatFactory:create("cat_Walk", 4), 
+        animatFactory:create("cat_Sit", 1)
+    )
+
     self.limit = catLimit
-    self.currAnim = { }
-    self.state = s_SITTING
     self.button = InteractButton:new()
-
-    self.imageWidth = 150
-    self.imageHeight = 160
-    self.spriteWidth = 20
-    self.spriteHeight = 20
-
-    self.index = love.math.random(1, self.imageHeight/self.spriteHeight)
-
-    local _x, _y = randomPosition(self)
-    local currY = ((self.index - 1) * self.spriteHeight)
-    Entity.initialize(self, _x, _y, love.graphics.newQuad(0, currY, self.spriteWidth,
-        self.spriteHeight, self.imageWidth, self.imageHeight), "cats.png", 1, Types.Cat)
-
-    self.sittingX = { left = 122, right = 136 }
-    self.sittingQuad = love.graphics.newQuad(0, self.spriteHeight * (self.index - 1), 14, 19,
-        self.imageWidth, self.imageHeight)
-
-    self.walkLeft = anim.newAnimat(15)
-    self.walkLeft:addSheet(self.image)
-    self.walkLeft:addFrame(0,  currY, 20, 20)
-    self.walkLeft:addFrame(40, currY, 20, 20)
-    self.walkLeft:addFrame(0,  currY, 20, 20)
-    self.walkLeft:addFrame(80, currY, 21, 20)
-
-    self.walkRight = anim.newAnimat(15)
-    self.walkRight:addSheet(self.image)
-    self.walkRight:addFrame(20,  currY, 20, 20)
-    self.walkRight:addFrame(60,  currY, 20, 20)
-    self.walkRight:addFrame(20,  currY, 20, 20)
-    self.walkRight:addFrame(101, currY, 21, 20)
 end
 
 function Cat:draw()
