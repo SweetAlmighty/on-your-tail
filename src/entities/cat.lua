@@ -53,8 +53,8 @@ local processAnims = function(dt, cat)
         if time > 1 and cat.limit > 0 then
             time = 0
             cat.state = lume.randomchoice({e_States.INTERACT, e_States.MOVING})
-            if cat.state == e_States.MOVING then 
-                cat.direction = lume.randomchoice(DirectionsIndices) 
+            if cat.state == e_States.MOVING then
+                cat.direction = lume.randomchoice(DirectionsIndices)
             end
             shouldUpdate = true
         end
@@ -83,7 +83,7 @@ function Cat:initialize()
     Entity.setPosition(self, randomPosition(self))
     Entity.setAnims(self,
         animatFactory:create("cat_Sit", 1), -- should be idle
-        animatFactory:create("cat_Walk", 4), 
+        animatFactory:create("cat_Walk", 4),
         animatFactory:create("cat_Sit", 1)
     )
 

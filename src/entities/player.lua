@@ -4,11 +4,8 @@ Player = class('Player', Entity)
 moveCamera = false
 
 local setState = function(player, state)
-    player.state = state--flag and e_States.MOVING or e_States.IDLE
+    player.state = state
     Entity.setState(player, player.state)
-end
-
-local determineState = function(player)
 end
 
 local previousState = nil
@@ -31,7 +28,7 @@ function Player:initialize()
     Entity.setImageDefaults(self, 160, 73, 40, 73)
     Entity.setAnims(self,
         animatFactory:create("player_Idle", 1),
-        animatFactory:create("player_Walk", 4), 
+        animatFactory:create("player_Walk", 4),
         animatFactory:create("player_Pet", 4)
     )
 
@@ -49,7 +46,7 @@ function Player:update(dt)
     speed = (self.interacting) and 0 or 2
     self.speed = (self.interacting) and 0 or 120
     moveCamera = (((self.x + self.width / 2) >= playableArea.width) and allowCameraMove)
-    
+
     processAnims(dt, self)
 end
 
@@ -58,11 +55,11 @@ function Player:moveX(x)
 
     allowCameraMove = (x ~= 0)
     setState(self, allowCameraMove and e_States.MOVING or e_States.IDLE)
-    
-    if x ~= 0 then 
-        self.direction = (x < 0) and Directions.W or Directions.E 
+
+    if x ~= 0 then
+        self.direction = (x < 0) and Directions.W or Directions.E
     end
-    
+
     self.delta.x = self.speed * x
     Entity.move(self, (self.x + self.delta.x), self.y)
 end
@@ -100,7 +97,7 @@ function Player:startInteraction()
     setState(player, e_States.INTERACT)
 end
 
-function Player:finishInteraction() 
+function Player:finishInteraction()
     if #self.collisions == 0 then
         self.interacting = false
         setState(player, e_States.IDLE)

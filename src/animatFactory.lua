@@ -25,7 +25,7 @@ function AnimatFactory:create(filename, frames)
             local x, y, w, h = frame["x"], frame["y"], frame["w"], frame["h"]
             anim:addFrame(x, y, w, h)
         end
-        
+
         return anim
     end
 end

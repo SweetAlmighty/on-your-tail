@@ -6,9 +6,9 @@ catLimit = 30
 pettingReduction = 15
 
 e_States = {
-    IDLE = 0, 
-    MOVING = 1, 
-    INTERACT = 2 
+    IDLE     = 0,
+    MOVING   = 1,
+    INTERACT = 2
 }
 
 Types = {

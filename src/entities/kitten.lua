@@ -17,7 +17,7 @@ function Kitten:initialize()
     --self.walkRight:addFrame(48, currY, 16, 15)
     --self.walkRight:addFrame(16, currY, 16, 15)
     --self.walkRight:addFrame(81, currY, 17, 15)
- 
+
     Entity.initialize(self, Types.KITTEN, 1)
 
     Entity.setState(self, e_States.IDLE)
@@ -26,7 +26,7 @@ function Kitten:initialize()
     Entity.setPosition(self, randomPosition(self))
     --Entity.setAnims(self,
     --    animatFactory:create("cat_WalkLeft", 1), -- should be idle
-    --    animatFactory:create("cat_WalkLeft", 4), 
+    --    animatFactory:create("cat_WalkLeft", 4),
     --    animatFactory:create("cat_SitLeft", 1)
     --)
 
