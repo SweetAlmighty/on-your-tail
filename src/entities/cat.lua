@@ -7,6 +7,17 @@ Cat = class("Cat", Entity)
 local time = 0
 local shouldUpdate = false
 
+local catType = {
+    "Winston",
+    "Snowflake",
+    "Phoenix",
+    "Arya",
+    "Gadget",
+    "Savannah",
+    "Tux",
+    "Layer 8"
+}
+
 local processMovement = function(cat)
     local _x = (cat.x + (cat.speed * cat.direction.x))
     local _y = (cat.y + (cat.speed * cat.direction.y))
@@ -81,11 +92,9 @@ function Cat:initialize()
     Entity.setDirection(self, Directions.E)
     Entity.setImageDefaults(self, 150, 160, 20, 20)
     Entity.setPosition(self, randomPosition(self))
-    Entity.setAnims(self,
-        animatFactory:create("cat_Sit", 1), -- should be idle
-        animatFactory:create("cat_Walk", 4),
-        animatFactory:create("cat_Sit", 1)
-    )
+
+    local animats = animatFactory:createWithLayer("cat", lume.randomchoice(catType))
+    Entity.setAnims(self, { animats[2], animats[1], animats[2] })
 
     self.limit = catLimit
     self.button = InteractButton:new()

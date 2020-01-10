@@ -65,12 +65,10 @@ function Entity:setImageDefaults(imageWidth, imageHeight, spriteWidth, spriteHei
     self.spriteHeight = spriteHeight
 end
 
-function Entity:setAnims(idle, move, interact)
-    self.idleAnim = idle
-    self.moveAnim = move
-    self.interactAnim = interact
-
-    self.currentAnim = nil
+function Entity:setAnims(anims)
+    self.idleAnim = anims[1]
+    self.moveAnim = anims[2]
+    self.interactAnim = anims[3]
     Entity.resetAnim(self, e_States.IDLE)
 end
 

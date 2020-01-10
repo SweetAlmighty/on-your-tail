@@ -26,11 +26,7 @@ function Player:initialize()
     Entity.setPosition(self, {50, 150})
     Entity.setDirection(self, Directions.E)
     Entity.setImageDefaults(self, 160, 73, 40, 73)
-    Entity.setAnims(self,
-        animatFactory:create("player_Idle", 1),
-        animatFactory:create("player_Walk", 4),
-        animatFactory:create("player_Pet", 4)
-    )
+    Entity.setAnims(self, animatFactory:create("player"))
 
     self.stress = 0
     self.currentCats = 0
