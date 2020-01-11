@@ -75,33 +75,39 @@ function AnimatFactory:createWithLayer(filename, layerName)
             return nil
         end
 
-        local animats = {}
+        local animats = { }
+        local currentFrames = { }
         local frames = frameData["frames"]
         local tags = frameData["meta"]["frameTags"]
         local image = love.graphics.newImage("/data/" .. filename .. ".png")
 
+        -- Loop through all available frames
         for i=1, #frames, 1 do
             local name = frames[i]["filename"]
             if string.find(name, layerName) then
+                -- Loop through all available tags
                 for j=1, #tags, 1 do
                     if string.find(name, tags[j]["name"]) then
-                        --FROM TO VALUES NEED TO BE INDICES INTO TABLE OF FRAMES
-                        --TABLE OF FRAMES MADE UP WHEN TAG AND LAYER NAMES MATCH
-                        local from, to = tags[j]["from"]+1, tags[j]["to"]+1
-                        local a = animat.newAnimat(frames[1]["duration"] / 10)
-                        a:addSheet(image)
-
-                        for k=from, to, 1 do
-                            local frame = frames[k]["frame"]
-                            local x, y, w, h = frame["x"], frame["y"], frame["w"], frame["h"]
-                            a:addFrame(x, y, w, h)
-                        end
-
-                        print(name)
-                        animats[#animats+1] = a
+                        currentFrames[#currentFrames+1] = frames[i]
                     end
                 end
             end
+        end
+
+        for i=1, #tags, 1 do
+            -- Frame tags contain indices for the animation the tag represents
+            -- Indices are zero-based, while lua tables are one-based
+            local from, to = tags[i]["from"]+1, tags[i]["to"]+1
+            local a = animat.newAnimat(currentFrames[1]["duration"] / 10)
+            a:addSheet(image)
+
+            for j=from, to, 1 do
+                local frame = currentFrames[j]["frame"]
+                local x, y, w, h = frame["x"], frame["y"], frame["w"], frame["h"]
+                a:addFrame(x, y, w, h)
+            end
+
+            animats[#animats+1] = a
         end
 
         return animats
