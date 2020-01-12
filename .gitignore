@@ -1,4 +1,5 @@
 .vscode/**
+New folder/**
 *.love
 *.exe
 *.luacheckrc

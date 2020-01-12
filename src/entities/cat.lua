@@ -1,139 +1,140 @@
 
-require "src/entities/entity"
 require "src/interactButton"
-
-local lume = require("src/lib/lume")
-local animat = require("src/lib/animat")
-local class = require("src/lib/middleclass")
+require "src/entities/entity"
 
 Cat = class("Cat", Entity)
 
 local time = 0
-local update = false
-local s_SITTING, s_WALKING = 1, 2
-local imageWidth, imageHeight = 150, 160
-local spriteWidth, spriteHeight = 20, 20
+local shouldUpdate = false
 
-local randomPosition = function()
-    return math.random(screenWidth - spriteWidth, screenWidth * 2),
-        math.random(playableArea.y - spriteHeight, playableArea.height)
-end
+catType = {
+    "Winston",
+    "Snowflake",
+    "Phoenix",
+    "Arya",
+    "Gadget",
+    "Savannah",
+    "Tux",
+    "Layer 8"
+}
 
 local processMovement = function(cat)
     local _x = (cat.x + (cat.speed * cat.direction.x))
     local _y = (cat.y + (cat.speed * cat.direction.y))
-    if moveCamera == false then
-        if cat.state == s_SITTING then _x, _y = cat.x, cat.y end
+
+    if cat.state == e_States.INTERACT then
+        -- Maintain sitting position
+        _x = moveCamera and (cat.x - speed) or (cat.x)
+        _y = cat.y
     else
-        if cat.state == s_SITTING then _x, _y = cat.x - speed, cat.y end
+        -- Move relative to the player, if the camera is moving
+        if moveCamera then
+            local deltaX = (cat.direction.x * player.delta.x)
+            if cat.direction.x ~= -1 then deltaX = -player.delta.x end
+            _x = _x + deltaX
+        end
     end
 
     Entity.move(cat, _x, _y)
+    if cat.x < (-cat.width) then
+        if cat.type == Types.KITTEN then
+            StateMachine:current():removeKitten(cat)
+        else
+            cat:reset()
+        end
+    end
+end
 
-    if cat.x < (-cat.width) then cat:reset() end
+local beginOffscreenTransition = function (cat)
+    cat.limit = -1
+    cat.state = e_States.MOVING
+    Entity.resetAnim(cat, cat.state)
+    cat.direction = Directions.W
+end
+
+local beingPettingTransition = function (cat)
+    cat.state = e_States.INTERACT
+    Entity.resetAnim(cat, cat.state)
 end
 
 local processAnims = function(dt, cat)
-    time = time + dt
-    if time > 1 then
-        time = 0
-        if cat.interacting ~= true then
-            cat.state = lume.randomchoice({s_SITTING, s_WALKING})
-            if cat.state == s_WALKING then cat.direction = lume.randomchoice(Directions) end
-            update = true
-        end
-    end
+    if not cat.interacting then
+        time = time + dt
 
-    if update then
-        if cat.state == s_WALKING and cat.interacting == false then -- Walk
-            cat.currAnim = (cat.direction.x == 1) and cat.walkRight or cat.walkLeft
-        else -- Sit
-            cat.quad = love.graphics.newQuad((cat.direction.x == 1) and 136 or 122,
-                spriteHeight * (cat.index - 1), 14, 19, imageWidth, imageHeight)
+        if time > 1 and cat.limit > 0 then
+            time = 0
+            cat.state = lume.randomchoice({e_States.INTERACT, e_States.MOVING})
+            if cat.state == e_States.MOVING then
+                cat.direction = lume.randomchoice(DirectionsIndices)
+            end
+            shouldUpdate = true
         end
-        update = false
-    end
 
-    if cat.state == s_WALKING then
-        cat.currAnim:play(dt)
-        cat.quad = cat.currAnim.currentFrame
+        if shouldUpdate then
+            Entity.resetAnim(cat, cat.state)
+            shouldUpdate = false
+        end
+
+        cat.currentAnim:play(dt)
+        cat.quad = cat.currentAnim.currentFrame
     end
 end
 
+function randomPosition(cat)
+    return { love.math.random(screenWidth - cat.spriteWidth, screenWidth * 2),
+        love.math.random(playableArea.y - cat.spriteHeight, playableArea.height) }
+end
+
 function Cat:initialize()
-    self.limit = 3
-    self.currAnim = { }
-    self.state = s_SITTING
+    Entity.initialize(self, Types.CAT, 1)
+
+    Entity.setState(self, e_States.IDLE)
+    Entity.setDirection(self, Directions.E)
+    Entity.setImageDefaults(self, 150, 160, 20, 20)
+    Entity.setPosition(self, randomPosition(self))
+
+    local animats = animatFactory:createWithLayer("cat", lume.randomchoice(catType))
+    Entity.setAnims(self, { animats[2], animats[1], animats[2] })
+
+    self.limit = catLimit
+    self.stressReduction = 15
     self.button = InteractButton:new()
-    self.index = math.random(1, imageHeight/spriteHeight)
-
-    local _x, _y = randomPosition()
-    local currY = ((self.index - 1) * 20)
-    Entity.initialize(self, _x, _y, love.graphics.newQuad(0, currY, spriteWidth, spriteHeight,
-        imageWidth, imageHeight), "cats.png", 1, Types.Cat)
-
-    self.walkLeft = animat.newAnimat(15)
-    self.walkLeft:addSheet(self.image)
-    self.walkLeft:addFrame(0,  currY, 20, 20)
-    self.walkLeft:addFrame(40, currY, 20, 20)
-    self.walkLeft:addFrame(0,  currY, 20, 20)
-    self.walkLeft:addFrame(80, currY, 21, 20)
-
-    self.walkRight = animat.newAnimat(15)
-    self.walkRight:addSheet(self.image)
-    self.walkRight:addFrame(20,  currY, 20, 20)
-    self.walkRight:addFrame(60,  currY, 20, 20)
-    self.walkRight:addFrame(20,  currY, 20, 20)
-    self.walkRight:addFrame(101, currY, 21, 20)
 end
 
 function Cat:draw()
     Entity.draw(self)
-    if self.interactable then self.button:draw(self.x + 20, self.y) end
+    if self.interactable and self.limit > 0 then
+        self.button:draw(self.x + 20, self.y)
+    end
 end
 
 function Cat:reset()
-    self.limit = 2.5
-    Entity.reset(self, randomPosition())
+    self.limit = catLimit
+    Entity.reset(self, randomPosition(self))
 end
 
 function Cat:update(dt)
-    processAnims(dt, self)
-    if player.interacting and self.interacting then
-        self.button:update(dt)
-    else
-        processMovement(self)
-    end
-end
-
-function Cat:interact(dt)
-    if self.interactable and self.interacting == false then
-        update = true
-        self.state = s_SITTING
-        self.interacting = true
-    end
-
     if self.interacting then
         self.button:update(dt)
         self.limit = self.limit - (dt * 10)
-
-        if self.limit < 0 then
+        if self.limit < 0 and self.interacting then
             self.limit = 0
-            Cat.finishInteraction(self)
+            self:finishInteraction()
+            self.interactable = false
         end
-    end
+    else processMovement(self) end
+
+    processAnims(dt, self)
+end
+
+function Cat:startInteraction()
+    self.interacting = true
+    beingPettingTransition(self)
 end
 
 function Cat:finishInteraction()
-    if self.interacting then
-        self.button:reset()
-        self.interactable = false
-        player:finishInteraction()
-        self:setInteracting(false)
-    end
-end
-
-function Cat:setInteracting(interacting)
-    self.interacting = interacting
-    self.speed = (interacting == true) and 0 or 2
+    self.button:reset()
+    self.interacting = false
+    self.interactable = false
+    beginOffscreenTransition(self)
 end

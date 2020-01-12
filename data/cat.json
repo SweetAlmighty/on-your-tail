@@ -1,0 +1,385 @@
+{ "frames": [
+   {
+    "filename": "cat (Winston) #Walk 0.aseprite",
+    "frame": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Winston) #Walk 1.aseprite",
+    "frame": { "x": 21, "y": 0, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Winston) #Walk 2.aseprite",
+    "frame": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Winston) #Walk 3.aseprite",
+    "frame": { "x": 42, "y": 0, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Snowflake) #Walk 0.aseprite",
+    "frame": { "x": 63, "y": 0, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Snowflake) #Walk 1.aseprite",
+    "frame": { "x": 84, "y": 0, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Snowflake) #Walk 2.aseprite",
+    "frame": { "x": 63, "y": 0, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Snowflake) #Walk 3.aseprite",
+    "frame": { "x": 105, "y": 0, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Phoenix) #Walk 0.aseprite",
+    "frame": { "x": 0, "y": 20, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Phoenix) #Walk 1.aseprite",
+    "frame": { "x": 21, "y": 20, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Phoenix) #Walk 2.aseprite",
+    "frame": { "x": 0, "y": 20, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Phoenix) #Walk 3.aseprite",
+    "frame": { "x": 42, "y": 20, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Arya) #Walk 0.aseprite",
+    "frame": { "x": 63, "y": 20, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Arya) #Walk 1.aseprite",
+    "frame": { "x": 84, "y": 20, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Arya) #Walk 2.aseprite",
+    "frame": { "x": 63, "y": 20, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Arya) #Walk 3.aseprite",
+    "frame": { "x": 105, "y": 20, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Gadget) #Walk 0.aseprite",
+    "frame": { "x": 0, "y": 40, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Gadget) #Walk 1.aseprite",
+    "frame": { "x": 21, "y": 40, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Gadget) #Walk 2.aseprite",
+    "frame": { "x": 0, "y": 40, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Gadget) #Walk 3.aseprite",
+    "frame": { "x": 42, "y": 40, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Savannah) #Walk 0.aseprite",
+    "frame": { "x": 63, "y": 40, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Savannah) #Walk 1.aseprite",
+    "frame": { "x": 84, "y": 40, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Savannah) #Walk 2.aseprite",
+    "frame": { "x": 63, "y": 40, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Savannah) #Walk 3.aseprite",
+    "frame": { "x": 105, "y": 40, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Tux) #Walk 0.aseprite",
+    "frame": { "x": 0, "y": 60, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Tux) #Walk 1.aseprite",
+    "frame": { "x": 21, "y": 60, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Tux) #Walk 2.aseprite",
+    "frame": { "x": 0, "y": 60, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Tux) #Walk 3.aseprite",
+    "frame": { "x": 42, "y": 60, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Layer 8) #Walk 0.aseprite",
+    "frame": { "x": 63, "y": 60, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Layer 8) #Walk 1.aseprite",
+    "frame": { "x": 84, "y": 60, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Layer 8) #Walk 2.aseprite",
+    "frame": { "x": 63, "y": 60, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Layer 8) #Walk 3.aseprite",
+    "frame": { "x": 105, "y": 60, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Winston) #Idle.aseprite",
+    "frame": { "x": 0, "y": 80, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Snowflake) #Idle.aseprite",
+    "frame": { "x": 21, "y": 80, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Phoenix) #Idle.aseprite",
+    "frame": { "x": 42, "y": 80, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Arya) #Idle.aseprite",
+    "frame": { "x": 63, "y": 80, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Gadget) #Idle.aseprite",
+    "frame": { "x": 84, "y": 80, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Savannah) #Idle.aseprite",
+    "frame": { "x": 105, "y": 80, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Tux) #Idle.aseprite",
+    "frame": { "x": 0, "y": 100, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "cat (Layer 8) #Idle.aseprite",
+    "frame": { "x": 21, "y": 100, "w": 21, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 20 },
+    "sourceSize": { "w": 21, "h": 20 },
+    "duration": 100
+   }
+ ],
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.2.16.3-x64",
+  "image": "cat.png",
+  "format": "RGBA8888",
+  "size": { "w": 126, "h": 120 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "Walk", "from": 0, "to": 3, "direction": "forward" },
+   { "name": "Idle", "from": 4, "to": 4, "direction": "forward" }
+  ],
+  "layers": [
+   { "name": "Winston", "opacity": 255, "blendMode": "normal" },
+   { "name": "Snowflake", "opacity": 255, "blendMode": "normal" },
+   { "name": "Phoenix", "opacity": 255, "blendMode": "normal" },
+   { "name": "Arya", "opacity": 255, "blendMode": "normal" },
+   { "name": "Gadget", "opacity": 255, "blendMode": "normal" },
+   { "name": "Savannah", "opacity": 255, "blendMode": "normal" },
+   { "name": "Tux", "opacity": 255, "blendMode": "normal" },
+   { "name": "Layer 8", "opacity": 255, "blendMode": "normal" }
+  ]
+ }
+}

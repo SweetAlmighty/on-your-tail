@@ -1,12 +1,10 @@
 
 require "src/states/stateMachine"
-local lume = require("src/lib/lume")
-local class = require("src/lib/middleclass")
-local keyDown = lume.fn(love.keyboard.isDown)
 
 Input = class('Input')
 
 local delta = 0
+local state = nil
 local inputMap =
 {
     x = 'u',
@@ -26,10 +24,12 @@ local inputMap =
     select = "space",
     start = "kpenter"
 }
-local state = nil
+
+local keyDown = lume.fn(love.keyboard.isDown)
 
 function Input:process(dt)
     delta = dt
+    state = stateMachine:current()
     if keyDown(inputMap.a) then onA() end
     if keyDown(inputMap.x) then onX() end
     if keyDown(inputMap.y) then onY() end
@@ -48,53 +48,17 @@ function Input:process(dt)
 end
 
 -- Face Buttons --
-function onA()
-    state = stateMachine:current()
-    if state.type ~= States.Gameplay then
-        state:accept()
-    end
-end
-
-function onB()
-    state = stateMachine:current()
-    if state.type == States.Gameplay then
-        state:handleInteractions(delta)
-    end
-end
-
-function onX()
-    print("X")
-end
-
-function onY()
-    state = stateMachine:current()
-    if state.type == States.Gameplay then
-        for i = 1, #state.entities, 1 do state.entities[i]:finishInteraction() end
-    end
-end
+function onX() print("X") end
+function onA() if state.type ~= States.Gameplay then state:accept() end end
+function onB() if state.type == States.Gameplay then player:petCats(delta) end end
+function onY() if state.type == States.Gameplay then player:finishInteraction() end end
 -- Face Buttons --
 
 -- Movement --
-function onUp()
-    state = stateMachine:current()
-    if state.type == States.Gameplay then
-        player:moveY(-delta)
-    else
-        state:up()
-    end
-end
-
-function onDown()
-    state = stateMachine:current()
-    if state.type == States.Gameplay then
-        player:moveY(delta)
-    else
-        state:down()
-    end
-end
-
-function onLeft() if state.type == States.Gameplay then player:moveX(-delta) end end
-function onRight() if state.type == States.Gameplay then player:moveX(delta) end end
+function onUp() if state.type == States.Gameplay then player:moveY(-delta) else state:up() end end
+function onDown() if state.type == States.Gameplay then player:moveY(delta) else state:down() end end
+function onLeft() if state.type == States.Gameplay then player:moveX(-delta) else state:left() end end
+function onRight() if state.type == States.Gameplay then player:moveX(delta) else state:right() end end
 -- Movement --
 
 -- Light Keys --
@@ -106,36 +70,32 @@ function onLK5() print("5") end
 -- Light Keys --
 
 -- Function Buttons --
-function onMenu()
-    state = stateMachine:current()
-    if state.type == States.Gameplay then
-        stateMachine:push(States.PauseMenu)
-    end
-end
-
 function onStart() print("START") end
 function onSelect() print("SELECT") end
+function onMenu() if state.type == States.Gameplay then stateMachine:push(States.PauseMenu) end end
 -- Function Buttons --
 
 -- Handles single key presses
 function love.keypressed(k)
     state = stateMachine:current()
-    if k == inputMap.up then
-        onUp()
-    elseif k == inputMap.down then
-        onDown()
-    elseif k == inputMap.a then
-        onA()
-    elseif k == inputMap.b then
-        onB()
+    if k == inputMap.up then onUp()
+    elseif k == inputMap.down then onDown()
+    elseif k == inputMap.left then onLeft()
+    elseif k == inputMap.right then onRight()
+    elseif k == inputMap.a then onA()
+    elseif k == inputMap.b then onB()
     end
 end
 
 function love.keyreleased(k)
     state = stateMachine:current()
+    --if state.type == States.Gameplay then if k == inputMap.right then player:moveX(0) end end
     if state.type == States.Gameplay then
-        if k == inputMap.right then
+        if k == inputMap.left or k == inputMap.right then
             player:moveX(0)
+        end
+        if k == inputMap.up or k == inputMap.down then
+            player:moveY(0)
         end
     end
 end

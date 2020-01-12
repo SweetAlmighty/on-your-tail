@@ -1,59 +1,108 @@
 
-local class = require("src/lib/middleclass")
-
 Player = class('Player', Entity)
 
+moveCamera = false
+
+local setState = function(player, state)
+    player.state = state
+    Entity.setState(player, player.state)
+end
+
+local previousState = nil
+local processAnims = function(dt, player)
+    if previousState ~= player.state then
+        Entity.resetAnim(player, player.state)
+        previousState = player.state
+    end
+
+    player.currentAnim:play(dt)
+    player.quad = player.currentAnim.currentFrame
+end
+
 function Player:initialize()
+    Entity.initialize(self, Types.PLAYER, 120)
+
+    Entity.setState(self, e_States.IDLE)
+    Entity.setPosition(self, {50, 150})
+    Entity.setDirection(self, Directions.E)
+    Entity.setImageDefaults(self, 160, 73, 40, 73)
+    Entity.setAnims(self, animatFactory:create("player"))
+
     self.stress = 0
-    Entity.initialize(self, 50, 150, love.graphics.newQuad(0, 95, 23, 44, 118, 187),
-        "player.png", 120, Types.Player)
+    self.delta = { x = 0, y = 0 }
 end
 
 function Player:update(dt)
-    if self.interacting == false then
+    Entity.move(self, self.x, self.y)
+    if not self.interacting then
         self.stress = self.stress + (dt * 5)
-        moveCamera = (((self.x + self.width / 2) == playableArea.width)
-            and allowCameraMove)
     end
+
+    speed = (self.interacting) and 0 or 2
+    self.speed = (self.interacting) and 0 or 120
+    moveCamera = (((self.x + self.width / 2) == playableArea.width) and allowCameraMove)
+
+    processAnims(dt, self)
 end
 
 function Player:moveX(x)
-    if self.interacting == false then
-        allowCameraMove = (x ~= 0)
-        Entity.move(self, (self.x + self.speed * x), self.y)
+    if self.interacting then
+        allowCameraMove = false
+        return 
     end
+
+    allowCameraMove = (x ~= 0)
+    setState(self, allowCameraMove and e_States.MOVING or e_States.IDLE)
+
+    if x ~= 0 then
+        self.direction = (x < 0) and Directions.W or Directions.E
+    end
+
+    self.delta.x = self.speed * x
+    Entity.move(self, (self.x + self.delta.x), self.y)
+end
+
+function Player:moveY(y)
+    if self.interacting then return end
+
+    setState(self, (y ~= 0) and e_States.MOVING or e_States.IDLE)
+    self.delta.y = self.speed * y
+    Entity.move(self, self.x, (self.y + self.delta.y))
 end
 
 function Player:reset()
     self.stress = 0
-    Entity.reset(self, 50, 150)
+    Entity.reset(self, { 50, 150 })
 end
 
-function Player:setInteracting(interacting)
-    self.interacting = interacting
-    self.speed = (interacting == true) and 0 or 120
-    speed = ((interacting == true) and 0 or 2)
-end
-
-function Player:interact(dt)
-    if self.interactable and self.interacting == false then
-        self:setInteracting(true)
-        allowCameraMove = false
-        moveCamera = false
+function Player:petCats(dt)
+    local amount = 0
+    local stressReduction = 0
+    if #self.collisions ~= 0 then
+        self:startInteraction();
+        for i=1, #self.collisions, 1 do
+            self.collisions[i]:startInteraction()
+            amount = self.collisions[i].stressReduction
+            stressReduction = stressReduction + (dt * amount)
+        end
     end
 
     if self.interacting then
-        self.stress = self.stress - (dt * (25 * #self.collisions))
+        self.stress = self.stress - stressReduction
         if self.stress < 0 then self.stress = 0 end
     end
 end
 
+function Player:startInteraction()
+    self.interacting = true
+    setState(player, e_States.INTERACT)
+end
+
 function Player:finishInteraction()
-    if self.interacting == true then
-        self.interactable = false
-        self:setInteracting(false)
+    if #self.collisions == 0 then
+        self.interacting = false
+        setState(player, e_States.IDLE)
     end
 end
 
 function Player:draw() Entity.draw(self) end
-function Player:moveY(y) Entity.move(self, self.x, (self.y + self.speed * y)) end
