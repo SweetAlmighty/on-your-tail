@@ -69,6 +69,7 @@ function Entity:setAnims(anims)
     self.idleAnim = anims[1]
     self.moveAnim = anims[2]
     self.interactAnim = anims[3]
+    self.colliders = anims[#anims]
     Entity.resetAnim(self, e_States.IDLE)
 end
 
@@ -82,9 +83,31 @@ function Entity:resetAnim(state)
     end
 
     self.currentAnim:reset()
-
     self.quad = self.currentAnim.currentFrame
+
+    Entity.setCollider(self)
+end
+
+function Entity:setCollider()
     local _, _, w, h = self.quad:getViewport()
+
+    self.offsetX = 0
+    self.offsetY = 0
+    if self.type == Types.PLAYER then
+        if self.state == e_States.IDLE or self.state == e_States.MOVING then
+            print("o")
+            w = self.colliders[1]["idle"]["w"]
+            h = self.colliders[1]["idle"]["h"]
+            self.offsetX = self.colliders[1]["idle"]["x"]
+            self.offsetY = self.colliders[1]["idle"]["y"]
+        elseif self.state == e_States.INTERACT then
+            w = self.colliders[2]["petting"]["w"]
+            h = self.colliders[2]["petting"]["h"]
+            self.offsetX = self.colliders[2]["petting"]["x"]
+            self.offsetY = self.colliders[2]["petting"]["y"]
+        end
+    end
+
     self.width  = w
     self.height = h
 end
@@ -105,13 +128,14 @@ end
 function Entity:draw()
     local rot = (self.direction.x == -1) and -1 or 1
     local offset = (rot == -1) and self.width or 0
+    offset = (self.type == Types.PLAYER) and offset * 2 or offset
     love.graphics.draw(self.currentAnim.img, self.quad, self.x, self.y, 0, rot, 1, offset, 0)
     --showDebugInfo(self)
 end
 
 function Entity:reset(_position)
     Entity.setPosition(self, _position)
-    World:update(self, self.x, self.y, self.width, self.height)
+    World:update(self, self.x + self.offsetX, self.y + self.offsetY, self.width, self.height)
 end
 
 function Entity:move(x, y)
@@ -121,7 +145,7 @@ function Entity:move(x, y)
     self:clampToPlayBounds(_x, _y)
 
     -- Move Entity to new position
-    World:update(self, self.x, self.y, self.width, self.height)
+    World:update(self, self.x + self.offsetX, self.y + self.offsetY, self.width, self.height)
 end
 
 function Entity:collisionEnter(other)
@@ -181,21 +205,21 @@ function Entity:clampToPlayBounds(x, y)
 end
 
 function Entity:clampEntityToXBounds(x)
-    local _x, width, area = x, self.width/2, playableArea
-    if _x < area.x then
-        _x = area.x
-    elseif _x > area.width - width then
-        _x = area.width - width
+    local _x, width = x, self.width/2
+    if _x < playableArea.x then
+        _x = playableArea.x
+    elseif _x > playableArea.width - width then
+        _x = playableArea.width - width
     end
     return _x
 end
 
 function Entity:clampEntityToYBounds(y)
-    local _y, height, area = y, self.height, playableArea
-    if _y < area.y - height/2 then
-        _y = area.y - height/2
-    elseif _y > area.height - height then
-        _y = area.height - height
+    local _y, height = y, self.height
+    if _y < playableArea.y - height/2 then
+        _y = playableArea.y - height/2
+    elseif _y > playableArea.height - height then
+        _y = playableArea.height - height
     end
     return _y
 end

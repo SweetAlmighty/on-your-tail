@@ -101,6 +101,10 @@
    { "name": "Idle", "from": 0, "to": 1, "direction": "forward" },
    { "name": "Walk", "from": 2, "to": 5, "direction": "forward" },
    { "name": "Pet", "from": 6, "to": 9, "direction": "forward" }
+  ],
+  "slices": [
+   { "name": "idle", "color": "#0000ffff", "keys": [{ "frame": 0, "bounds": {"x": 10, "y": 0, "w": 19, "h": 73 } }] },
+   { "name": "petting", "color": "#0000ffff", "keys": [{ "frame": 6, "bounds": {"x": 10, "y": 17, "w": 19, "h": 56 } }] }
   ]
  }
 }
