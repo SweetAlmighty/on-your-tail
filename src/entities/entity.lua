@@ -95,7 +95,6 @@ function Entity:setCollider()
     self.offsetY = 0
     if self.type == Types.PLAYER then
         if self.state == e_States.IDLE or self.state == e_States.MOVING then
-            print("o")
             w = self.colliders[1]["idle"]["w"]
             h = self.colliders[1]["idle"]["h"]
             self.offsetX = self.colliders[1]["idle"]["x"]
