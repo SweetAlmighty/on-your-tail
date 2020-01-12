@@ -41,13 +41,16 @@ function Player:update(dt)
 
     speed = (self.interacting) and 0 or 2
     self.speed = (self.interacting) and 0 or 120
-    moveCamera = (((self.x + self.width / 2) >= playableArea.width) and allowCameraMove)
+    moveCamera = (((self.x + self.width / 2) == playableArea.width) and allowCameraMove)
 
     processAnims(dt, self)
 end
 
 function Player:moveX(x)
-    if self.interacting then return end
+    if self.interacting then
+        allowCameraMove = false
+        return 
+    end
 
     allowCameraMove = (x ~= 0)
     setState(self, allowCameraMove and e_States.MOVING or e_States.IDLE)
