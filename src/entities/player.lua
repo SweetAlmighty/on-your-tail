@@ -29,13 +29,12 @@ function Player:initialize()
     Entity.setAnims(self, animatFactory:create("player"))
 
     self.stress = 0
-    self.currentCats = 0
     self.delta = { x = 0, y = 0 }
 end
 
 function Player:update(dt)
     Entity.move(self, self.x, self.y)
-    if self.interacting == false then
+    if not self.interacting then
         self.stress = self.stress + (dt * 5)
     end
 
@@ -77,16 +76,19 @@ function Player:reset()
 end
 
 function Player:petCats(dt)
+    local amount = 0
+    local stressReduction = 0
     if #self.collisions ~= 0 then
         self:startInteraction();
         for i=1, #self.collisions, 1 do
             self.collisions[i]:startInteraction()
+            amount = self.collisions[i].stressReduction
+            stressReduction = stressReduction + (dt * amount)
         end
     end
 
     if self.interacting then
-        self.currentCats = #self.collisions
-        self.stress = self.stress - (dt * (pettingReduction * self.currentCats))
+        self.stress = self.stress - stressReduction
         if self.stress < 0 then self.stress = 0 end
     end
 end

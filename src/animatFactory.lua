@@ -5,9 +5,6 @@ AnimatFactory = class('AnimatFactory')
 
 function AnimatFactory:initialize() end
 
-local retrieveSlices = function()
-end
-
 function AnimatFactory:create(filename)
     local file = "/data/" .. filename .. ".json"
 

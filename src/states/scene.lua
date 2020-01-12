@@ -11,7 +11,7 @@ Scene = class("Scene", State)
 World = bump.newWorld(20)
 
 local mod = 0
---local factor = love.math.random(5, 15)
+local factor = love.math.random(5, 15)
 local entityController = EntityController:new()
 
 function Scene:initialize()
@@ -48,14 +48,14 @@ function Scene:update(dt)
     self:checkForReset(dt)
     self.time = { string.format("%.2f", self.elapsedTime), "s" }
 
-    --local integral, _ = math.modf(mod)
-    --if integral == factor then
-    --    mod = 0
-    --    if entityController:count() - 1 == self.totalCats then
-    --        factor = love.math.random(5, 15)
-    --        entityController:addEntity(Kitten:new())
-    --    end
-    --end
+    local integral, _ = math.modf(mod)
+    if integral == factor then
+        mod = 0
+        if entityController:count() - 1 == self.totalCats then
+            factor = love.math.random(5, 15)
+            entityController:addEntity(Kitten:new())
+        end
+    end
 
     if moveCamera then self:updateBackground(dt) end
     entityController:update(dt)

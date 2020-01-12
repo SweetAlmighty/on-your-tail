@@ -7,7 +7,7 @@ Cat = class("Cat", Entity)
 local time = 0
 local shouldUpdate = false
 
-local catType = {
+catType = {
     "Winston",
     "Snowflake",
     "Phoenix",
@@ -58,7 +58,7 @@ local beingPettingTransition = function (cat)
 end
 
 local processAnims = function(dt, cat)
-    if cat.interacting == false then
+    if not cat.interacting then
         time = time + dt
 
         if time > 1 and cat.limit > 0 then
@@ -97,6 +97,7 @@ function Cat:initialize()
     Entity.setAnims(self, { animats[2], animats[1], animats[2] })
 
     self.limit = catLimit
+    self.stressReduction = 15
     self.button = InteractButton:new()
 end
 
