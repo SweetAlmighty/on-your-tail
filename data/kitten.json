@@ -91,7 +91,7 @@
    },
    {
     "filename": "kitten (Phoenix) #Walk 2.aseprite",
-    "frame": { "x": 34, "y": 15, "w": 17, "h": 15 },
+    "frame": { "x": 0, "y": 15, "w": 17, "h": 15 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 15 },
@@ -100,7 +100,7 @@
    },
    {
     "filename": "kitten (Phoenix) #Walk 3.aseprite",
-    "frame": { "x": 51, "y": 15, "w": 17, "h": 15 },
+    "frame": { "x": 34, "y": 15, "w": 17, "h": 15 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 15 },
@@ -109,7 +109,7 @@
    },
    {
     "filename": "kitten (Arya) #Walk 0.aseprite",
-    "frame": { "x": 68, "y": 15, "w": 17, "h": 15 },
+    "frame": { "x": 51, "y": 15, "w": 17, "h": 15 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 15 },
@@ -118,15 +118,6 @@
    },
    {
     "filename": "kitten (Arya) #Walk 1.aseprite",
-    "frame": { "x": 85, "y": 15, "w": 17, "h": 15 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 15 },
-    "sourceSize": { "w": 17, "h": 15 },
-    "duration": 100
-   },
-   {
-    "filename": "kitten (Arya) #Walk 2.aseprite",
     "frame": { "x": 68, "y": 15, "w": 17, "h": 15 },
     "rotated": false,
     "trimmed": false,
@@ -135,8 +126,17 @@
     "duration": 100
    },
    {
+    "filename": "kitten (Arya) #Walk 2.aseprite",
+    "frame": { "x": 51, "y": 15, "w": 17, "h": 15 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 15 },
+    "sourceSize": { "w": 17, "h": 15 },
+    "duration": 100
+   },
+   {
     "filename": "kitten (Arya) #Walk 3.aseprite",
-    "frame": { "x": 0, "y": 30, "w": 17, "h": 15 },
+    "frame": { "x": 85, "y": 15, "w": 17, "h": 15 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 15 },
@@ -145,7 +145,7 @@
    },
    {
     "filename": "kitten (Gadget) #Walk 0.aseprite",
-    "frame": { "x": 17, "y": 30, "w": 17, "h": 15 },
+    "frame": { "x": 0, "y": 30, "w": 17, "h": 15 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 15 },
@@ -154,15 +154,6 @@
    },
    {
     "filename": "kitten (Gadget) #Walk 1.aseprite",
-    "frame": { "x": 34, "y": 30, "w": 17, "h": 15 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 15 },
-    "sourceSize": { "w": 17, "h": 15 },
-    "duration": 100
-   },
-   {
-    "filename": "kitten (Gadget) #Walk 2.aseprite",
     "frame": { "x": 17, "y": 30, "w": 17, "h": 15 },
     "rotated": false,
     "trimmed": false,
@@ -171,8 +162,17 @@
     "duration": 100
    },
    {
+    "filename": "kitten (Gadget) #Walk 2.aseprite",
+    "frame": { "x": 0, "y": 30, "w": 17, "h": 15 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 15 },
+    "sourceSize": { "w": 17, "h": 15 },
+    "duration": 100
+   },
+   {
     "filename": "kitten (Gadget) #Walk 3.aseprite",
-    "frame": { "x": 51, "y": 30, "w": 17, "h": 15 },
+    "frame": { "x": 34, "y": 30, "w": 17, "h": 15 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 15 },
@@ -181,7 +181,7 @@
    },
    {
     "filename": "kitten (Tux) #Walk 0.aseprite",
-    "frame": { "x": 68, "y": 30, "w": 17, "h": 15 },
+    "frame": { "x": 51, "y": 30, "w": 17, "h": 15 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 15 },
@@ -190,15 +190,6 @@
    },
    {
     "filename": "kitten (Tux) #Walk 1.aseprite",
-    "frame": { "x": 85, "y": 30, "w": 17, "h": 15 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 15 },
-    "sourceSize": { "w": 17, "h": 15 },
-    "duration": 100
-   },
-   {
-    "filename": "kitten (Tux) #Walk 2.aseprite",
     "frame": { "x": 68, "y": 30, "w": 17, "h": 15 },
     "rotated": false,
     "trimmed": false,
@@ -207,8 +198,17 @@
     "duration": 100
    },
    {
+    "filename": "kitten (Tux) #Walk 2.aseprite",
+    "frame": { "x": 51, "y": 30, "w": 17, "h": 15 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 15 },
+    "sourceSize": { "w": 17, "h": 15 },
+    "duration": 100
+   },
+   {
     "filename": "kitten (Tux) #Walk 3.aseprite",
-    "frame": { "x": 0, "y": 45, "w": 17, "h": 15 },
+    "frame": { "x": 85, "y": 30, "w": 17, "h": 15 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 15 },
@@ -217,7 +217,7 @@
    },
    {
     "filename": "kitten (Layer 8) #Walk 0.aseprite",
-    "frame": { "x": 17, "y": 45, "w": 17, "h": 15 },
+    "frame": { "x": 0, "y": 45, "w": 17, "h": 15 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 15 },
@@ -226,15 +226,6 @@
    },
    {
     "filename": "kitten (Layer 8) #Walk 1.aseprite",
-    "frame": { "x": 34, "y": 45, "w": 17, "h": 15 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 15 },
-    "sourceSize": { "w": 17, "h": 15 },
-    "duration": 100
-   },
-   {
-    "filename": "kitten (Layer 8) #Walk 2.aseprite",
     "frame": { "x": 17, "y": 45, "w": 17, "h": 15 },
     "rotated": false,
     "trimmed": false,
@@ -243,8 +234,17 @@
     "duration": 100
    },
    {
+    "filename": "kitten (Layer 8) #Walk 2.aseprite",
+    "frame": { "x": 0, "y": 45, "w": 17, "h": 15 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 15 },
+    "sourceSize": { "w": 17, "h": 15 },
+    "duration": 100
+   },
+   {
     "filename": "kitten (Layer 8) #Walk 3.aseprite",
-    "frame": { "x": 51, "y": 45, "w": 17, "h": 15 },
+    "frame": { "x": 34, "y": 45, "w": 17, "h": 15 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 15 },
@@ -253,7 +253,7 @@
    },
    {
     "filename": "kitten (Savannah) #Walk 0.aseprite",
-    "frame": { "x": 68, "y": 45, "w": 17, "h": 15 },
+    "frame": { "x": 51, "y": 45, "w": 17, "h": 15 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 15 },
@@ -262,15 +262,6 @@
    },
    {
     "filename": "kitten (Savannah) #Walk 1.aseprite",
-    "frame": { "x": 85, "y": 45, "w": 17, "h": 15 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 15 },
-    "sourceSize": { "w": 17, "h": 15 },
-    "duration": 100
-   },
-   {
-    "filename": "kitten (Savannah) #Walk 2.aseprite",
     "frame": { "x": 68, "y": 45, "w": 17, "h": 15 },
     "rotated": false,
     "trimmed": false,
@@ -279,8 +270,17 @@
     "duration": 100
    },
    {
+    "filename": "kitten (Savannah) #Walk 2.aseprite",
+    "frame": { "x": 51, "y": 45, "w": 17, "h": 15 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 15 },
+    "sourceSize": { "w": 17, "h": 15 },
+    "duration": 100
+   },
+   {
     "filename": "kitten (Savannah) #Walk 3.aseprite",
-    "frame": { "x": 0, "y": 60, "w": 17, "h": 15 },
+    "frame": { "x": 85, "y": 45, "w": 17, "h": 15 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 15 },
@@ -289,7 +289,7 @@
    },
    {
     "filename": "kitten (Winston) #Idle.aseprite",
-    "frame": { "x": 17, "y": 60, "w": 17, "h": 15 },
+    "frame": { "x": 0, "y": 60, "w": 17, "h": 15 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 15 },
@@ -298,7 +298,7 @@
    },
    {
     "filename": "kitten (Snowflake) #Idle.aseprite",
-    "frame": { "x": 34, "y": 60, "w": 17, "h": 15 },
+    "frame": { "x": 17, "y": 60, "w": 17, "h": 15 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 15 },
@@ -307,7 +307,7 @@
    },
    {
     "filename": "kitten (Phoenix) #Idle.aseprite",
-    "frame": { "x": 51, "y": 60, "w": 17, "h": 15 },
+    "frame": { "x": 34, "y": 60, "w": 17, "h": 15 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 15 },
@@ -316,7 +316,7 @@
    },
    {
     "filename": "kitten (Arya) #Idle.aseprite",
-    "frame": { "x": 68, "y": 60, "w": 17, "h": 15 },
+    "frame": { "x": 51, "y": 60, "w": 17, "h": 15 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 15 },
@@ -325,7 +325,7 @@
    },
    {
     "filename": "kitten (Gadget) #Idle.aseprite",
-    "frame": { "x": 85, "y": 60, "w": 17, "h": 15 },
+    "frame": { "x": 68, "y": 60, "w": 17, "h": 15 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 15 },
@@ -334,7 +334,7 @@
    },
    {
     "filename": "kitten (Tux) #Idle.aseprite",
-    "frame": { "x": 0, "y": 75, "w": 17, "h": 15 },
+    "frame": { "x": 85, "y": 60, "w": 17, "h": 15 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 15 },
@@ -343,7 +343,7 @@
    },
    {
     "filename": "kitten (Layer 8) #Idle.aseprite",
-    "frame": { "x": 17, "y": 75, "w": 17, "h": 15 },
+    "frame": { "x": 0, "y": 75, "w": 17, "h": 15 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 15 },
@@ -352,7 +352,7 @@
    },
    {
     "filename": "kitten (Savannah) #Idle.aseprite",
-    "frame": { "x": 34, "y": 75, "w": 17, "h": 15 },
+    "frame": { "x": 17, "y": 75, "w": 17, "h": 15 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 17, "h": 15 },
@@ -372,14 +372,6 @@
    { "name": "Idle", "from": 4, "to": 4, "direction": "forward" }
   ],
   "layers": [
-   { "name": "Winston", "opacity": 255, "blendMode": "normal" },
-   { "name": "Snowflake", "opacity": 255, "blendMode": "normal" },
-   { "name": "Phoenix", "opacity": 255, "blendMode": "normal" },
-   { "name": "Arya", "opacity": 255, "blendMode": "normal" },
-   { "name": "Gadget", "opacity": 255, "blendMode": "normal" },
-   { "name": "Tux", "opacity": 255, "blendMode": "normal" },
-   { "name": "Layer 8", "opacity": 255, "blendMode": "normal" },
-   { "name": "Savannah", "opacity": 255, "blendMode": "normal" },
    { "name": "Winston", "opacity": 255, "blendMode": "normal" },
    { "name": "Snowflake", "opacity": 255, "blendMode": "normal" },
    { "name": "Phoenix", "opacity": 255, "blendMode": "normal" },

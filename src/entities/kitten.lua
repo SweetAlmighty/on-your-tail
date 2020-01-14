@@ -8,7 +8,7 @@ function Kitten:initialize()
 
     Entity.setState(self, e_States.IDLE)
     Entity.setDirection(self, Directions.E)
-    Entity.setImageDefaults(self, 122, 120, 16, 15)
+    Entity.setImageDefaults(self, 102, 90, 17, 15)
     Entity.setPosition(self, randomPosition(self))
 
     local animats = animatFactory:createWithLayer("kitten", lume.randomchoice(catType))

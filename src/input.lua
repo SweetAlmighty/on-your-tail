@@ -89,7 +89,6 @@ end
 
 function love.keyreleased(k)
     state = stateMachine:current()
-    --if state.type == States.Gameplay then if k == inputMap.right then player:moveX(0) end end
     if state.type == States.Gameplay then
         if k == inputMap.left or k == inputMap.right then
             player:moveX(0)

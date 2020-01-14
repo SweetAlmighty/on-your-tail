@@ -4,8 +4,10 @@ Player = class('Player', Entity)
 moveCamera = false
 
 local setState = function(player, state)
-    player.state = state
-    Entity.setState(player, player.state)
+    if player.state ~= state then
+        player.state = state
+        Entity.setState(player, player.state)
+    end
 end
 
 local previousState = nil
@@ -25,7 +27,7 @@ function Player:initialize()
     Entity.setState(self, e_States.IDLE)
     Entity.setPosition(self, {50, 150})
     Entity.setDirection(self, Directions.E)
-    Entity.setImageDefaults(self, 160, 73, 40, 73)
+    Entity.setImageDefaults(self, 120, 146, 40, 73)
     Entity.setAnims(self, animatFactory:create("player"))
 
     self.stress = 0

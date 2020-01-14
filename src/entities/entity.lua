@@ -128,13 +128,13 @@ function Entity:draw()
     local rot = (self.direction.x == -1) and -1 or 1
     local offset = (rot == -1) and self.width or 0
     offset = (self.type == Types.PLAYER) and offset * 2 or offset
-    love.graphics.draw(self.currentAnim.img, self.quad, self.x, self.y, 0, rot, 1, offset, 0)
+    love.graphics.draw(self.currentAnim.img, self.quad, self.x - self.offsetX, self.y - self.offsetY, 0, rot, 1, offset, 0)
     --showDebugInfo(self)
 end
 
 function Entity:reset(_position)
     Entity.setPosition(self, _position)
-    World:update(self, self.x + self.offsetX, self.y + self.offsetY, self.width, self.height)
+    World:update(self, self.x, self.y, self.width, self.height)
 end
 
 function Entity:move(x, y)
@@ -144,7 +144,7 @@ function Entity:move(x, y)
     self:clampToPlayBounds(_x, _y)
 
     -- Move Entity to new position
-    World:update(self, self.x + self.offsetX, self.y + self.offsetY, self.width, self.height)
+    World:update(self, self.x, self.y, self.width, self.height)
 end
 
 function Entity:collisionEnter(other)
@@ -157,7 +157,9 @@ function Entity:collisionExit(other)
     if index ~= nil then
         self.interactable = false
         table.remove(self.collisions, index)
-        if self.type == Types.PLAYER then player:finishInteraction() end
+        if self.type == Types.PLAYER and self.interacting then 
+            player:finishInteraction() 
+        end
     end
 end
 

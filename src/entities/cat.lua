@@ -90,7 +90,7 @@ function Cat:initialize()
 
     Entity.setState(self, e_States.IDLE)
     Entity.setDirection(self, Directions.E)
-    Entity.setImageDefaults(self, 150, 160, 20, 20)
+    Entity.setImageDefaults(self, 126, 120, 20, 20)
     Entity.setPosition(self, randomPosition(self))
 
     local animats = animatFactory:createWithLayer("cat", lume.randomchoice(catType))
