@@ -127,7 +127,7 @@ function Entity:draw()
     local offset = (rot == -1) and self.width or 0
     offset = (self.type == Types.PLAYER) and offset * 2 or offset
     love.graphics.draw(self.currentAnim.img, self.quad, self.x - self.offsetX,
-        self.y - self.offsetY, 0, rot, 1, offset, 0)
+        self.y, 0, rot, 1, offset, 0)
     showDebugInfo(self)
 end
 
