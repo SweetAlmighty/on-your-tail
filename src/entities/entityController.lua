@@ -43,7 +43,7 @@ function EntityController:removeEntity(entity)
         end
     end
 
-    entity = nil
+    --entity = nil
     entities = newEntities
 end
 

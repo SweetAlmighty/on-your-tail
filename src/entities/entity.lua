@@ -41,14 +41,12 @@ DirectionsIndices = {
 
 local collisionFilter = function() return 'cross' end
 
---[[
 local showCollider = function(entity)
     local x, y, w, h = World:getRect(entity)
     love.graphics.rectangle("line", x, y, w, h)
 end
 local showPosition = function(entity) love.graphics.points(entity.x, entity.y) end
 local showDebugInfo = function(entity) showCollider(entity) showPosition(entity) end
-]]
 
 function Entity:initialize(type, speed)
     self.type = type
@@ -128,8 +126,9 @@ function Entity:draw()
     local rot = (self.direction.x == -1) and -1 or 1
     local offset = (rot == -1) and self.width or 0
     offset = (self.type == Types.PLAYER) and offset * 2 or offset
-    love.graphics.draw(self.currentAnim.img, self.quad, self.x - self.offsetX, self.y - self.offsetY, 0, rot, 1, offset, 0)
-    --showDebugInfo(self)
+    love.graphics.draw(self.currentAnim.img, self.quad, self.x - self.offsetX,
+        self.y - self.offsetY, 0, rot, 1, offset, 0)
+    showDebugInfo(self)
 end
 
 function Entity:reset(_position)
@@ -157,8 +156,8 @@ function Entity:collisionExit(other)
     if index ~= nil then
         self.interactable = false
         table.remove(self.collisions, index)
-        if self.type == Types.PLAYER and self.interacting then 
-            player:finishInteraction() 
+        if self.type == Types.PLAYER and self.interacting then
+            player:finishInteraction()
         end
     end
 end

@@ -50,7 +50,7 @@ end
 function Player:moveX(x)
     if self.interacting then
         allowCameraMove = false
-        return 
+        return
     end
 
     allowCameraMove = (x ~= 0)
@@ -78,13 +78,12 @@ function Player:reset()
 end
 
 function Player:petCats(dt)
-    local amount = 0
     local stressReduction = 0
     if #self.collisions ~= 0 then
         self:startInteraction();
         for i=1, #self.collisions, 1 do
             self.collisions[i]:startInteraction()
-            amount = self.collisions[i].stressReduction
+            local amount = self.collisions[i].stressReduction
             stressReduction = stressReduction + (dt * amount)
         end
     end

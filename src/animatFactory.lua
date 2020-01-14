@@ -41,7 +41,7 @@ function AnimatFactory:create(filename)
             colliders[#colliders+1] = { [slices[i]["name"]] = slices[i]["keys"][1]["bounds"] }
         end
 
-        animats[#animats+1] = colliders 
+        animats[#animats+1] = colliders
 
         return animats
     end
