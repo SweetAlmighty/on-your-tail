@@ -1,5 +1,5 @@
 .vscode/**
-onyourtail/**
+build/**
 *.love
 *.exe
 *.luacheckrc

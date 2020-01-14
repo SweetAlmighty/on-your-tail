@@ -15,6 +15,6 @@ function Kitten:initialize()
     Entity.setAnims(self, { animats[2], animats[1], animats[2] })
 
     self.limit = catLimit
-    self.stressReduction = 30
+    self.stressReduction = 15
     self.button = InteractButton:new()
 end

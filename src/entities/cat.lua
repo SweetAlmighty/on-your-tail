@@ -97,7 +97,7 @@ function Cat:initialize()
     Entity.setAnims(self, { animats[2], animats[1], animats[2] })
 
     self.limit = catLimit
-    self.stressReduction = 15
+    self.stressReduction = 8
     self.button = InteractButton:new()
 end
 

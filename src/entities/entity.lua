@@ -41,12 +41,14 @@ DirectionsIndices = {
 
 local collisionFilter = function() return 'cross' end
 
+--[[
 local showCollider = function(entity)
     local x, y, w, h = World:getRect(entity)
     love.graphics.rectangle("line", x, y, w, h)
 end
 local showPosition = function(entity) love.graphics.points(entity.x, entity.y) end
 local showDebugInfo = function(entity) showCollider(entity) showPosition(entity) end
+]]
 
 function Entity:initialize(type, speed)
     self.type = type
@@ -128,7 +130,7 @@ function Entity:draw()
     offset = (self.type == Types.PLAYER) and offset * 2 or offset
     love.graphics.draw(self.currentAnim.img, self.quad, self.x - self.offsetX,
         self.y, 0, rot, 1, offset, 0)
-    showDebugInfo(self)
+    --showDebugInfo(self)
 end
 
 function Entity:reset(_position)
