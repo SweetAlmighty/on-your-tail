@@ -125,7 +125,7 @@ function Cat:update(dt)
     else processMovement(self) end
 
     processAnims(dt, self)
-    
+
     Entity.update(self, dt)
 end
 

@@ -138,7 +138,7 @@ function Entity:draw()
     -- HACK: "(rot == -1 and 20 or offset)" because offset retrieved from file
     -- produces too large an offset
     offset = (self.type ~= Types.PLAYER) and (rot == -1 and 20 or offset) or offset
-    
+
     love.graphics.draw(self.currentAnim.img, self.quad, self.x,-- - self.offsetX,
         self.y, 0, rot, 1, offset, 0)
     --showDebugInfo(self)
