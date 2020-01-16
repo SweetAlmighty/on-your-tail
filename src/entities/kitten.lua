@@ -12,7 +12,8 @@ function Kitten:initialize()
     Entity.setPosition(self, randomPosition(self))
 
     local animats = animatFactory:createWithLayer("kitten", lume.randomchoice(catType))
-    Entity.setAnims(self, { animats[2], animats[1], animats[2] })
+    Entity.setAnims(self, { animats[2], animats[1], animats[2], animats[3] })
+
 
     self.limit = catLimit
     self.stressReduction = 15

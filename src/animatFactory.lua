@@ -117,6 +117,14 @@ function AnimatFactory:createWithLayer(filename, layerName)
             animats[#animats+1] = a
         end
 
+        local colliders = { }
+        local slices = frameData["meta"]["slices"]
+        for i=1, #slices, 1 do
+            colliders[#colliders+1] = { [slices[i]["name"]] = slices[i]["keys"][1]["bounds"] }
+        end
+
+        animats[#animats+1] = colliders
+
         return animats
     end
 end

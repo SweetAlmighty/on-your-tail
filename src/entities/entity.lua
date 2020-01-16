@@ -39,12 +39,9 @@ DirectionsIndices = {
     Directions.NW,
 }
 
-local collisionFilter = function() return 'cross' end
-
 --[[
 local showCollider = function(entity)
-    local x, y, w, h = World:getRect(entity)
-    love.graphics.rectangle("line", x, y, w, h)
+    love.graphics.rectangle("line", entity.x, entity.y, entity.width, entity.height)
 end
 local showPosition = function(entity) love.graphics.points(entity.x, entity.y) end
 local showDebugInfo = function(entity) showCollider(entity) showPosition(entity) end
@@ -91,24 +88,21 @@ end
 function Entity:setCollider()
     local _, _, w, h = self.quad:getViewport()
 
-    self.offsetX = 0
-    self.offsetY = 0
-    if self.type == Types.PLAYER then
-        if self.state == e_States.IDLE or self.state == e_States.MOVING then
-            w = self.colliders[1]["idle"]["w"]
-            h = self.colliders[1]["idle"]["h"]
-            self.offsetX = self.colliders[1]["idle"]["x"]
-            self.offsetY = self.colliders[1]["idle"]["y"]
-        elseif self.state == e_States.INTERACT then
-            w = self.colliders[2]["petting"]["w"]
-            h = self.colliders[2]["petting"]["h"]
-            self.offsetX = self.colliders[2]["petting"]["x"]
-            self.offsetY = self.colliders[2]["petting"]["y"]
-        end
+    local type = ""
+    local index = 0
+    
+    if self.state == e_States.IDLE or self.state == e_States.MOVING then
+        index = 1
+        type  = (self.type == Types.PLAYER) and "idle" or "Walk"
+    elseif self.state == e_States.INTERACT then
+        index = 2
+        type  = (self.type == Types.PLAYER) and "petting" or "Idle"
     end
 
-    self.width  = w
-    self.height = h
+    self.offsetX = (index == 0) and 0 or self.colliders[index][type]["x"]
+    self.offsetY = (index == 0) and 0 or self.colliders[index][type]["y"]
+    self.width   = (index == 0) and w or self.colliders[index][type]["w"]
+    self.height  = (index == 0) and h or self.colliders[index][type]["h"]
 end
 
 function Entity:setDirection(direction)
@@ -127,7 +121,11 @@ end
 function Entity:draw()
     local rot = (self.direction.x == -1) and -1 or 1
     local offset = (rot == -1) and self.width or 0
-    offset = (self.type == Types.PLAYER) and offset * 2 or offset
+
+    -- HACK: "(rot == -1 and 20 or offset)" because offset retrieved from file
+    -- produces too large an offset
+    offset = (self.type == Types.PLAYER) and offset * 2 or (rot == -1 and 20 or offset)
+    
     love.graphics.draw(self.currentAnim.img, self.quad, self.x - self.offsetX,
         self.y, 0, rot, 1, offset, 0)
     --showDebugInfo(self)
@@ -135,17 +133,10 @@ end
 
 function Entity:reset(_position)
     Entity.setPosition(self, _position)
-    World:update(self, self.x, self.y, self.width, self.height)
 end
 
 function Entity:move(x, y)
-    -- Determine collisions that will happen if Entity moves to x, y
-    local _x, _y, cols = World:check(self, x, y, collisionFilter)
-    self:handleCollisions(cols)
-    self:clampToPlayBounds(_x, _y)
-
-    -- Move Entity to new position
-    World:update(self, self.x, self.y, self.width, self.height)
+    self:clampToPlayBounds(x, y)
 end
 
 function Entity:collisionEnter(other)
@@ -168,18 +159,14 @@ function Entity:handleCollisions(cols)
     -- Only process player collisions, for the time being.
     if self.type ~= Types.PLAYER then return end
 
-    -- Retrieve Entities from Collision Data
-    local others = {}
-    for i = 1, #cols, 1 do others[#others + 1] = cols[i].other end
-
     -- Process new collisions
-    for i = 1, #others, 1 do
-        local index = lume.find(self.collisions, others[i])
+    for i = 1, #cols, 1 do
+        local index = lume.find(self.collisions, cols[i])
         if index == nil then
             -- Enter
-            if others[i].limit >= catLimit then
-                self:collisionEnter(others[i])
-                others[i]:collisionEnter(self)
+            if cols[i].limit >= catLimit then
+                self:collisionEnter(cols[i])
+                cols[i]:collisionEnter(self)
             end
         end
     end
@@ -187,7 +174,7 @@ function Entity:handleCollisions(cols)
     -- Find collisions to remove
     local remove = {}
     for i = 1, #self.collisions, 1 do
-        local index = lume.find(others, self.collisions[i])
+        local index = lume.find(cols, self.collisions[i])
         if index == nil or self.collisions[i].limit < 0 then
             remove[#remove + 1] = self.collisions[i]
         end

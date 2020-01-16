@@ -379,7 +379,11 @@
    { "name": "Gadget", "opacity": 255, "blendMode": "normal" },
    { "name": "Tux", "opacity": 255, "blendMode": "normal" },
    { "name": "Layer 8", "opacity": 255, "blendMode": "normal" },
-   { "name": "Savannah", "opacity": 255, "blendMode": "normal" }
+   { "name": "Savannah", "opacity": 255, "blendMode": "normal" },
+  ],
+  "slices": [
+   { "name": "Walk", "color": "#0000ffff", "keys": [{ "frame": 3, "bounds": {"x": 0, "y": 0, "w": 17, "h": 15 } }] },
+   { "name": "Idle", "color": "#0000ffff", "keys": [{ "frame": 4, "bounds": {"x": 2, "y": 0, "w": 12, "h": 15 } }] }
   ]
  }
 }

@@ -5,10 +5,7 @@ require "src/entities/kitten"
 require "src/entities/player"
 require "src/entities/entityController"
 
-local bump = require("src/lib/bump")
-
 Scene = class("Scene", State)
-World = bump.newWorld(20)
 
 local mod = 0
 local factor = love.math.random(5, 15)

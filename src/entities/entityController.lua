@@ -1,3 +1,4 @@
+lume = require("src/lib/lume")
 
 EntityController = class('EntityController')
 
@@ -19,20 +20,42 @@ end
 
 function EntityController:update(dt)
     for i=1, #entities, 1 do
-        if entities[i] ~= nil then entities[i]:update(dt) end
+        local cols = { }
+        for j=1, #entities, 1 do
+            if i ~= j then
+                if EntityController:CheckCollision(i, j) then cols[#cols+1] = entities[j] end
+            end
+        end
+        entities[i]:handleCollisions(cols)
     end
+
+    for i=1, #entities, 1 do if entities[i] ~= nil then entities[i]:update(dt) end end
+end
+
+function EntityController:CheckCollision(colOne, colTwo)
+    local x1, y1, w1, h1 = entities[colOne].x, entities[colOne].y, entities[colOne].width, entities[colOne].height
+    local x2, y2, w2, h2 = entities[colTwo].x, entities[colTwo].y, entities[colTwo].width, entities[colTwo].height
+    return x1 < x2+w2 and x2 < x1+w1 and y1 < y2+h2 and y2 < y1+h1
+end
+
+function EntityController:CheckCurrentCollisions(entity, collision)
+    for i=1, #entity.collisions, 1 do
+        if entity.collisions[i] == collision then
+            return true
+        end
+    end
+
+    return false
 end
 
 function EntityController:clear()
     for _=1, #entities, 1 do
-        World:remove(entities[#entities])
         entities[#entities] = nil
     end
 end
 
 function EntityController:addEntity(entity)
     entities[#entities+1] = entity
-    World:add(entity, entity.x, entity.y, entity.width, entity.height)
 end
 
 function EntityController:removeEntity(entity)
@@ -42,8 +65,6 @@ function EntityController:removeEntity(entity)
             newEntities[#newEntities + 1] = entities[i]
         end
     end
-
-    --entity = nil
     entities = newEntities
 end
 
