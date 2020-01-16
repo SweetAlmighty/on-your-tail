@@ -90,7 +90,7 @@ function Entity:setCollider()
 
     local type = ""
     local index = 0
-    
+
     if self.state == e_States.IDLE or self.state == e_States.MOVING then
         index = 1
         type  = (self.type == Types.PLAYER) and "idle" or "Walk"
@@ -125,7 +125,7 @@ function Entity:draw()
     -- HACK: "(rot == -1 and 20 or offset)" because offset retrieved from file
     -- produces too large an offset
     offset = (self.type == Types.PLAYER) and offset * 2 or (rot == -1 and 20 or offset)
-    
+
     love.graphics.draw(self.currentAnim.img, self.quad, self.x - self.offsetX,
         self.y, 0, rot, 1, offset, 0)
     --showDebugInfo(self)
