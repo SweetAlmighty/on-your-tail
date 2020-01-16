@@ -36,29 +36,24 @@ end
 
 function Player:update(dt)
     Entity.move(self, self.x, self.y)
-    if not self.interacting then
-        self.stress = self.stress + (dt * 5)
-    end
+    if not self.interacting then self.stress = self.stress + (dt * 5) end
 
     speed = (self.interacting) and 0 or 2
     self.speed = (self.interacting) and 0 or 120
     moveCamera = (((self.x + self.width / 2) == playableArea.width) and allowCameraMove)
 
     processAnims(dt, self)
+
+    Entity.update(self, dt)
 end
 
 function Player:moveX(x)
-    if self.interacting then
-        allowCameraMove = false
-        return
-    end
+    if self.interacting then allowCameraMove = false return end
 
     allowCameraMove = (x ~= 0)
     setState(self, allowCameraMove and e_States.MOVING or e_States.IDLE)
 
-    if x ~= 0 then
-        self.direction = (x < 0) and Directions.W or Directions.E
-    end
+    if x ~= 0 then self.direction = (x < 0) and Directions.W or Directions.E end
 
     self.delta.x = self.speed * x
     Entity.move(self, (self.x + self.delta.x), self.y)

@@ -14,8 +14,11 @@ function Kitten:initialize()
     local animats = animatFactory:createWithLayer("kitten", lume.randomchoice(catType))
     Entity.setAnims(self, { animats[2], animats[1], animats[2], animats[3] })
 
-
     self.limit = catLimit
     self.stressReduction = 15
     self.button = InteractButton:new()
+end
+
+function Kitten:update(dt)
+    Entity.update(self, dt)
 end

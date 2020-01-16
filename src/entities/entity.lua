@@ -41,7 +41,7 @@ DirectionsIndices = {
 
 --[[
 local showCollider = function(entity)
-    love.graphics.rectangle("line", entity.x, entity.y, entity.width, entity.height)
+    love.graphics.rectangle("line", entity.collider.x, entity.collider.y, entity.collider.w, entity.collider.h)
 end
 local showPosition = function(entity) love.graphics.points(entity.x, entity.y) end
 local showDebugInfo = function(entity) showCollider(entity) showPosition(entity) end
@@ -50,12 +50,16 @@ local showDebugInfo = function(entity) showCollider(entity) showPosition(entity)
 function Entity:initialize(type, speed)
     self.type = type
     self.speed = speed
-    self.collisions = {}
+    self.collider = { }
+    self.collisions = { }
     self.interacting = false
     self.interactable = false
+    self.currentCollider = { }
 end
 
 function Entity:setImageDefaults(imageWidth, imageHeight, spriteWidth, spriteHeight)
+    self.width = spriteWidth
+    self.height = spriteHeight
     self.imageWidth = imageWidth
     self.imageHeight = imageHeight
     self.spriteWidth = spriteWidth
@@ -99,10 +103,19 @@ function Entity:setCollider()
         type  = (self.type == Types.PLAYER) and "petting" or "Idle"
     end
 
-    self.offsetX = (index == 0) and 0 or self.colliders[index][type]["x"]
-    self.offsetY = (index == 0) and 0 or self.colliders[index][type]["y"]
-    self.width   = (index == 0) and w or self.colliders[index][type]["w"]
-    self.height  = (index == 0) and h or self.colliders[index][type]["h"]
+    self.currentCollider = {
+        x = (index == 0) and 0 or self.colliders[index][type]["x"],
+        y = (index == 0) and 0 or self.colliders[index][type]["y"],
+        w = (index == 0) and w or self.colliders[index][type]["w"],
+        h = (index == 0) and h or self.colliders[index][type]["h"]
+    }
+
+    self.collider = {
+        x = self.currentCollider.x + self.x,
+        y = self.currentCollider.y + self.y,
+        w = self.currentCollider.w,
+        h = self.currentCollider.h
+    }
 end
 
 function Entity:setDirection(direction)
@@ -124,11 +137,20 @@ function Entity:draw()
 
     -- HACK: "(rot == -1 and 20 or offset)" because offset retrieved from file
     -- produces too large an offset
-    offset = (self.type == Types.PLAYER) and offset * 2 or (rot == -1 and 20 or offset)
-
-    love.graphics.draw(self.currentAnim.img, self.quad, self.x - self.offsetX,
+    offset = (self.type ~= Types.PLAYER) and (rot == -1 and 20 or offset) or offset
+    
+    love.graphics.draw(self.currentAnim.img, self.quad, self.x,-- - self.offsetX,
         self.y, 0, rot, 1, offset, 0)
     --showDebugInfo(self)
+end
+
+function Entity:update(dt)
+    self.collider = {
+        x = self.currentCollider.x + self.x,
+        y = self.currentCollider.y + self.y,
+        w = self.currentCollider.w,
+        h = self.currentCollider.h
+    }
 end
 
 function Entity:reset(_position)

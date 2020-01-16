@@ -33,9 +33,14 @@ function EntityController:update(dt)
 end
 
 function EntityController:CheckCollision(colOne, colTwo)
-    local x1, y1, w1, h1 = entities[colOne].x, entities[colOne].y, entities[colOne].width, entities[colOne].height
-    local x2, y2, w2, h2 = entities[colTwo].x, entities[colTwo].y, entities[colTwo].width, entities[colTwo].height
-    return x1 < x2+w2 and x2 < x1+w1 and y1 < y2+h2 and y2 < y1+h1
+    local x1, y1, w1, h1 = entities[colOne].collider.x, entities[colOne].collider.y, entities[colOne].collider.w, entities[colOne].collider.h
+    local x2, y2, w2, h2 = entities[colTwo].collider.x, entities[colTwo].collider.y, entities[colTwo].collider.w, entities[colTwo].collider.h
+    
+    return 
+    x1 < x2+w2 and 
+    x2 < x1+w1 and 
+    y1 < y2+h2 and 
+    y2 < y1+h1
 end
 
 function EntityController:CheckCurrentCollisions(entity, collision)
