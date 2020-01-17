@@ -16,12 +16,12 @@ local image = function(name) return (imagePath .. name .. imageType) end
 function Resources:initialize() end
 
 function Resources:LoadFont(name, size)
-    local font = love.graphics.newFont(font(name), size)
-    if font == nil then
+    local file = love.graphics.newFont(font(name), size)
+    if file == nil then
         print("Font Error: Font could not be created.")
         return nil
     end
-    return font
+    return file
 end
 
 function Resources:LoadAnim(name)
@@ -36,10 +36,10 @@ function Resources:LoadAnim(name)
 end
 
 function Resources:LoadImage(name)
-    local image = love.graphics.newImage(image(name))
-    if image == nil then
+    local file = love.graphics.newImage(image(name))
+    if file == nil then
         print("Image Error: Image could not be created.")
         return nil
     end
-    return image
+    return file
 end

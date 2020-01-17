@@ -23,12 +23,12 @@ function Gameplay:initialize()
     self.coords = { x = 0, y = 0, }
     self.threshold = -(self.width - 1)
     self.one = { x = 0, y = 0, id = 0 }
-    self.hud = resources:LoadImage("stressbar") 
+    self.hud = resources:LoadImage("stressbar")
     self.two = { x = self.width, y = 0, id = 0 }
     self.image = resources:LoadImage("background")
+    self.batch = love.graphics.newSpriteBatch(self.image, 2)
     self.bar = love.graphics.newQuad(0, 0, 120, 20, 120, 40)
     self.barbg = love.graphics.newQuad(0, 20, 120, 20, 120, 40)
-    self.batch = love.graphics.newSpriteBatch(self.image, 2)
     self.quad = love.graphics.newQuad(0, 0, self.width, self.height, self.width, self.height)
     self.one.id = self.batch:add(self.quad, self.one.x, self.one.y)
     self.two.id = self.batch:add(self.quad, self.two.x, self.two.y)
