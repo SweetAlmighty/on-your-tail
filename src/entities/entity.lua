@@ -142,7 +142,7 @@ function Entity:draw()
 
     love.graphics.draw(self.currentAnim.img, self.quad, self.x,-- - self.offsetX,
         self.y, 0, rot, 1, offset, 0)
-    --showDebugInfo(self)
+     --showDebugInfo(self)
 end
 
 function Entity:update(dt)

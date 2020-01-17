@@ -103,8 +103,8 @@
    { "name": "Pet", "from": 6, "to": 9, "direction": "forward" }
   ],
   "slices": [
-   { "name": "idle", "color": "#0000ffff", "keys": [{ "frame": 0, "bounds": {"x": 10, "y": 0, "w": 19, "h": 73 } }] },
-   { "name": "petting", "color": "#0000ffff", "keys": [{ "frame": 6, "bounds": {"x": 10, "y": 17, "w": 19, "h": 56 } }] }
+   { "name": "idle", "color": "#0000ffff", "keys": [{ "frame": 0, "bounds": {"x": 10, "y": 48, "w": 19, "h": 25 } }, { "frame": 6, "bounds": {"x": 10, "y": 48, "w": 19, "h": 25 } }] },
+   { "name": "petting", "color": "#0000ffff", "keys": [{ "frame": 0, "bounds": {"x": 10, "y": 48, "w": 19, "h": 25 } }, { "frame": 6, "bounds": {"x": 10, "y": 48, "w": 19, "h": 25 } }] }
   ]
  }
 }

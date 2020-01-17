@@ -18,8 +18,8 @@ titleFont = resources:LoadFont("KarmaFuture", 50)
 playableArea = { x = 0, y = 110, width = screenWidth/2, height = screenHeight }
 
 function love.load()
-    love.math.setRandomSeed(os.time())
     stateMachine:push(States.MainMenu)
+    love.math.setRandomSeed(os.time())
     love.window.setTitle("On Your Tail")
     love.window.setMode(screenWidth, screenHeight)
 
