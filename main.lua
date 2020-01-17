@@ -1,9 +1,9 @@
 
-require "src/input"
-require "src/require"
-require "resources"
-require "src/animatFactory"
+require "src/backend/input"
+require "src/backend/require"
+require "src/backend/resources"
 require "src/states/stateMachine"
+require "src/backend/animatFactory"
 
 speed = 2
 currTime = 0

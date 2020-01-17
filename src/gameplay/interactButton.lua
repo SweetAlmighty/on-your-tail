@@ -1,5 +1,5 @@
 
-require("src/require")
+require("src/backend/require")
 
 InteractButton = class("InteractButton")
 

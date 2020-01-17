@@ -1,6 +1,6 @@
 
-require "src/interactButton"
 require "src/entities/entity"
+require "src/gameplay/interactButton"
 
 Cat = class("Cat", Entity)
 

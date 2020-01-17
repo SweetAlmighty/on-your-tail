@@ -1,5 +1,5 @@
 
-require "src/states/scene"
+require "src/states/gameplay"
 require "src/states/menus/mainMenu"
 require "src/states/menus/failMenu"
 require "src/states/menus/pauseMenu"
@@ -17,7 +17,7 @@ States = {
     FailState = 5,
 }
 
-local stack = {}
+local stack = { }
 
 function StateMachine:pop()
     stack[#stack]:cleanup()
@@ -28,7 +28,7 @@ function StateMachine:push(type)
     local state = nil
 
     if type == States.MainMenu then state = MainMenu:new()
-    elseif type == States.Gameplay then state = Scene:new()
+    elseif type == States.Gameplay then state = Gameplay:new()
     elseif type == States.PauseMenu then state = PauseMenu:new()
     elseif type == States.HighscoreMenu then state = HighscoreMenu:new()
     elseif type == States.ControlsMenu then state = ControlsMenu:new()

@@ -5,13 +5,13 @@ require "src/entities/kitten"
 require "src/entities/player"
 require "src/entities/entityController"
 
-Scene = class("Scene", State)
+Gameplay = class("Gameplay", Gameplay)
 
 local mod = 0
 local factor = love.math.random(5, 15)
 local entityController = EntityController:new()
 
-function Scene:initialize()
+function Gameplay:initialize()
     self.time = {}
     self.speed = 2
     self.totalCats = 8
@@ -33,15 +33,15 @@ function Scene:initialize()
     self.one.id = self.batch:add(self.quad, self.one.x, self.one.y)
     self.two.id = self.batch:add(self.quad, self.two.x, self.two.y)
 
-    Scene.createEntities(self)
+    Gameplay.createEntities(self)
     love.graphics.setFont(menuFont)
 end
 
-function Scene:removeKitten(kitten)
+function Gameplay:removeKitten(kitten)
     entityController:removeEntity(kitten)
 end
 
-function Scene:update(dt)
+function Gameplay:update(dt)
     self:checkForReset(dt)
     self.time = { string.format("%.2f", self.elapsedTime), "s" }
 
@@ -58,13 +58,13 @@ function Scene:update(dt)
     entityController:update(dt)
 end
 
-function Scene:draw()
+function Gameplay:draw()
     self:drawBackground()
     self:drawEntities()
     self:drawUI()
 end
 
-function Scene:drawUI()
+function Gameplay:drawUI()
     love.graphics.setColor(0, 0, 0)
     love.graphics.print(table.concat(self.time), self.width - 75, 5)
 
@@ -73,7 +73,7 @@ function Scene:drawUI()
     love.graphics.draw(self.hud, self.bar, 11, 10, nil, player.stress/121, 1, nil, nil)
 end
 
-function Scene:updateBackground(dt)
+function Gameplay:updateBackground(dt)
     local x1 = self.one.x - speed
     self.one.x = (x1 < self.threshold) and (self.width) or (x1)
     self.batch:set(self.one.id, self.quad, self.one.x, self.one.y)
@@ -83,7 +83,7 @@ function Scene:updateBackground(dt)
     self.batch:set(self.two.id, self.quad, self.two.x, self.two.y)
 end
 
-function Scene:checkForReset(dt)
+function Gameplay:checkForReset(dt)
     mod = mod + dt
     self.elapsedTime = self.elapsedTime + dt
 
@@ -93,18 +93,18 @@ function Scene:checkForReset(dt)
     end
 end
 
-function Scene:createEntities()
+function Gameplay:createEntities()
     player = Player:new()
     entityController:addEntity(player)
     for _=1, self.totalCats, 1 do entityController:addEntity(Cat:new()) end
 end
 
-function Scene:reset()
+function Gameplay:reset()
     currTime = self.elapsedTime
     self.elapsedTime = 0
     entityController:reset()
 end
 
-function Scene:cleanup() entityController:clear() end
-function Scene:drawEntities() entityController:draw() end
-function Scene:drawBackground() love.graphics.draw(self.batch) end
+function Gameplay:cleanup() entityController:clear() end
+function Gameplay:drawEntities() entityController:draw() end
+function Gameplay:drawBackground() love.graphics.draw(self.batch) end

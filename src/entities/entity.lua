@@ -1,5 +1,6 @@
 
-require "src/require"
+require "src/backend/require"
+
 Entity = class('Entity')
 
 catLimit = 30

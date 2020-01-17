@@ -1,4 +1,4 @@
-require("src/require")
+require("src/backend/require")
 
 State = class("State")
 function State:initialize() self.type = nil end
