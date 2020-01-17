@@ -4,7 +4,7 @@ require("src/require")
 InteractButton = class("InteractButton")
 
 function InteractButton:initialize()
-    self.image = love.graphics.newImage("/data/button_press.png")
+    self.image = resources:LoadImage("button_press")
     self.width = (self.image == nil) and 1 or self.image:getWidth()
     self.height = (self.image == nil) and 1 or self.image:getHeight()
 

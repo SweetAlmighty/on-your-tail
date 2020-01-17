@@ -6,20 +6,13 @@ AnimatFactory = class('AnimatFactory')
 function AnimatFactory:initialize() end
 
 function AnimatFactory:create(filename)
-    local file = "/data/" .. filename .. ".json"
+    local file = resources:LoadAnim(filename)
 
-    if love.filesystem.getInfo(file) then
-        local frameData = json.decode(love.filesystem.read(file))
-
-        if frameData == nil then
-            print("Load Error: Frame Data is null")
-            return nil
-        end
-
+    if file ~= nil then
         local animats = {}
-        local frames = frameData["frames"]
-        local tags = frameData["meta"]["frameTags"]
-        local image = love.graphics.newImage("/data/" .. filename .. ".png")
+        local frames = file["frames"]
+        local tags = file["meta"]["frameTags"]
+        local image = resources:LoadImage(filename)
 
         for i=1, #tags, 1 do
             local from, to = tags[i]["from"]+1, tags[i]["to"]+1
@@ -36,7 +29,7 @@ function AnimatFactory:create(filename)
         end
 
         local colliders = { }
-        local slices = frameData["meta"]["slices"]
+        local slices = file["meta"]["slices"]
         for i=1, #slices, 1 do
             colliders[#colliders+1] = { [slices[i]["name"]] = slices[i]["keys"][1]["bounds"] }
         end
@@ -48,18 +41,11 @@ function AnimatFactory:create(filename)
 end
 
 function AnimatFactory:createWithFrames(filename, frames)
-    local file = "/data/" .. filename .. ".json"
+    local file = resources:LoadAnim(filename)
 
-    if love.filesystem.getInfo(file) then
-        local frameData = json.decode(love.filesystem.read(file))
-
-        if frameData == nil then
-            print("Load Error: Frame Data is null")
-            return nil
-        end
-
+    if file ~= nil then
         local anim = animat.newAnimat(frameData["frames"][1]["duration"] / 10)
-        anim:addSheet(love.graphics.newImage("/data/" .. filename .. ".png"))
+        anim:addSheet(resources:LoadImage(filename))
 
         for i=1, frames, 1 do
             local frame = frameData["frames"][i]["frame"]
@@ -72,21 +58,14 @@ function AnimatFactory:createWithFrames(filename, frames)
 end
 
 function AnimatFactory:createWithLayer(filename, layerName)
-    local file = "/data/" .. filename .. ".json"
+    local file = resources:LoadAnim(filename)
 
-    if love.filesystem.getInfo(file) then
-        local frameData = json.decode(love.filesystem.read(file))
-
-        if frameData == nil then
-            print("Load Error: Frame Data is null")
-            return nil
-        end
-
+    if file ~= nil then
         local animats = { }
         local currentFrames = { }
-        local frames = frameData["frames"]
-        local tags = frameData["meta"]["frameTags"]
-        local image = love.graphics.newImage("/data/" .. filename .. ".png")
+        local frames = file["frames"]
+        local tags = file["meta"]["frameTags"]
+        local image = resources:LoadImage(filename)
 
         -- Loop through all available frames
         for i=1, #frames, 1 do
@@ -118,7 +97,7 @@ function AnimatFactory:createWithLayer(filename, layerName)
         end
 
         local colliders = { }
-        local slices = frameData["meta"]["slices"]
+        local slices = file["meta"]["slices"]
         for i=1, #slices, 1 do
             colliders[#colliders+1] = { [slices[i]["name"]] = slices[i]["keys"][1]["bounds"] }
         end

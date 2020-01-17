@@ -20,8 +20,8 @@ function ControlsMenu:initialize()
     self.type = States.ControlsMenu
     self.startHeight = screenHeight - 30
     self.quad = isGameshell and gameshell or pc
+    self.image = resources:LoadImage("controls")
     self.clearColor = { r = 1, g = 1, b = 1, a = 0.5 }
-    self.image = love.graphics.newImage("/data/controls.png")
     self.options = { love.graphics.newText(menuFont, "Back") }
 end
 

@@ -1,6 +1,7 @@
 
 require "src/input"
 require "src/require"
+require "resources"
 require "src/animatFactory"
 require "src/states/stateMachine"
 
@@ -9,10 +10,11 @@ currTime = 0
 screenWidth = 320
 screenHeight = 240
 input = Input:new()
+resources = Resources:new()
 stateMachine = StateMachine:new()
 animatFactory = AnimatFactory:new()
-menuFont = love.graphics.newFont("/data/KarmaFuture.ttf", 20)
-titleFont = love.graphics.newFont("/data/KarmaFuture.ttf", 50)
+menuFont = resources:LoadFont("KarmaFuture", 20)
+titleFont = resources:LoadFont("KarmaFuture", 50)
 playableArea = { x = 0, y = 110, width = screenWidth/2, height = screenHeight }
 
 function love.load()

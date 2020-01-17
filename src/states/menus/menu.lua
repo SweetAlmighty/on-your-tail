@@ -10,8 +10,8 @@ function Menu:initialize()
     self.startWidth = 0
     self.startHeight = 0
     self.titlePos = { x = 0, y = 0}
+    self.pointer = resources:LoadImage("pointer")
     self.clearColor = { r = 1, g = 1, b = 1, a = 1 }
-    self.pointer = love.graphics.newImage("/data/pointer.png")
 end
 
 function Menu:draw()
