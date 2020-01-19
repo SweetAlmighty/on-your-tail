@@ -37,12 +37,7 @@ function EntityController:CheckCollision(colOne, colTwo)
     local w1, h1 = entities[colOne].collider.w, entities[colOne].collider.h
     local x2, y2 = entities[colTwo].collider.x, entities[colTwo].collider.y
     local w2, h2 = entities[colTwo].collider.w, entities[colTwo].collider.h
-
-    return
-    x1 < x2+w2 and
-    x2 < x1+w1 and
-    y1 < y2+h2 and
-    y2 < y1+h1
+    return x1 < x2+w2 and x2 < x1+w1 and y1 < y2+h2 and y2 < y1+h1
 end
 
 function EntityController:CheckCurrentCollisions(entity, collision)
@@ -53,16 +48,6 @@ function EntityController:CheckCurrentCollisions(entity, collision)
     end
 
     return false
-end
-
-function EntityController:clear()
-    for _=1, #entities, 1 do
-        entities[#entities] = nil
-    end
-end
-
-function EntityController:addEntity(entity)
-    entities[#entities+1] = entity
 end
 
 function EntityController:removeEntity(entity)
@@ -77,4 +62,6 @@ end
 
 function EntityController:initialize() end
 function EntityController:count() return #entities end
+function EntityController:addEntity(entity) entities[#entities+1] = entity end
 function EntityController:reset() for i=1, #entities, 1 do entities[i]:reset() end end
+function EntityController:clear() for _=1, #entities, 1 do entities[#entities] = nil end end

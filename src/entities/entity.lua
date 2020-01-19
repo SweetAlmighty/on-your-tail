@@ -40,13 +40,11 @@ DirectionsIndices = {
     Directions.NW,
 }
 
---[[
 local showCollider = function(entity)
     love.graphics.rectangle("line", entity.collider.x, entity.collider.y, entity.collider.w, entity.collider.h)
 end
 local showPosition = function(entity) love.graphics.points(entity.x, entity.y) end
 local showDebugInfo = function(entity) showCollider(entity) showPosition(entity) end
-]]
 
 function Entity:initialize(type, speed)
     self.type = type
@@ -140,9 +138,8 @@ function Entity:draw()
     -- produces too large an offset
     offset = (self.type ~= Types.PLAYER) and (rot == -1 and 20 or offset) or offset
 
-    love.graphics.draw(self.currentAnim.img, self.quad, self.x,-- - self.offsetX,
-        self.y, 0, rot, 1, offset, 0)
-     --showDebugInfo(self)
+    love.graphics.draw(self.currentAnim.img, self.quad, self.x, self.y, 0, rot, 1, offset, 0)
+    showDebugInfo(self)
 end
 
 function Entity:update(dt)

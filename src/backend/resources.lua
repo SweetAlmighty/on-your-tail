@@ -16,30 +16,22 @@ local image = function(name) return (imagePath .. name .. imageType) end
 function Resources:initialize() end
 
 function Resources:LoadFont(name, size)
-    local file = love.graphics.newFont(font(name), size)
-    if file == nil then
-        print("Font Error: Font could not be created.")
-        return nil
-    end
-    return file
-end
-
-function Resources:LoadAnim(name)
-    if love.filesystem.getInfo(anim(name)) then
-        local file = json.decode(love.filesystem.read(anim(name)))
-        if file == nil then
-            print("Load Error: File could not be loaded.")
-            return nil
-        end
-        return file
-    end
+    local path = font(name)
+    if love.filesystem.getInfo(path) then return love.graphics.newFont(path, size) end
+    print("Font Error: Font at " .. path .. " could not be found.")
+    return nil
 end
 
 function Resources:LoadImage(name)
-    local file = love.graphics.newImage(image(name))
-    if file == nil then
-        print("Image Error: Image could not be created.")
-        return nil
-    end
-    return file
+    local path = image(name)
+    if love.filesystem.getInfo(path) then return love.graphics.newImage(path) end
+    print("Image Error: Image at " .. path .. " could not be found.")
+    return nil
+end
+
+function Resources:LoadAnim(name)
+    local path = anim(name)
+    if love.filesystem.getInfo(path) then return json.decode(love.filesystem.read(path)) end
+    print("Anim Error: Animation at " .. path .. " could not be found.")
+    return nil
 end

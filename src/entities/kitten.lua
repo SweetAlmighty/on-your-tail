@@ -18,7 +18,3 @@ function Kitten:initialize()
     self.stressReduction = 15
     self.button = InteractButton:new()
 end
-
-function Kitten:update(dt)
-    Entity.update(self, dt)
-end
