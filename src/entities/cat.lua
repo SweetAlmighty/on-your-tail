@@ -122,9 +122,7 @@ function Cat:update(dt)
             self:finishInteraction()
             self.interactable = false
         end
-    else
-        processMovement(self) 
-    end
+    else processMovement(self) end
 
     processAnims(dt, self)
 
