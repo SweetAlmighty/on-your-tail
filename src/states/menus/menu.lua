@@ -47,13 +47,21 @@ function Menu:setTitle(title)
 end
 
 function Menu:up()
-    self.index = (self.index - 1 < 1) and 1 or self.index - 1
-    if #self.options ~= 1 then self.moveSFX:play() end
+    local x = self.index - 1
+    if x < 1 then x = 1 else
+        x = self.index - 1
+        self.moveSFX:play()
+    end
+    self.index = x
 end
 
 function Menu:down()
-    self.index = (self.index+1>#self.options) and #self.options or self.index+1
-    if #self.options ~= 1 then self.moveSFX:play() end
+    local x = self.index + 1
+    if x > #self.options then x = #self.options else
+        x = self.index + 1
+        self.moveSFX:play()
+    end
+    self.index = x
 end
 
 function Menu:left() self.moveSFX:play() end
