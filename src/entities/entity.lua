@@ -15,7 +15,8 @@ e_States = {
 Types = {
     PLAYER = 0,
     CAT    = 1,
-    KITTEN = 2
+    KITTEN = 2,
+    COP    = 3
 }
 
 Directions = {
@@ -40,11 +41,13 @@ DirectionsIndices = {
     Directions.NW,
 }
 
+--[[
+local showPosition = function(entity) love.graphics.points(entity.x, entity.y) end
+local showDebugInfo = function(entity) showCollider(entity) showPosition(entity) end
 local showCollider = function(entity)
     love.graphics.rectangle("line", entity.collider.x, entity.collider.y, entity.collider.w, entity.collider.h)
 end
-local showPosition = function(entity) love.graphics.points(entity.x, entity.y) end
-local showDebugInfo = function(entity) showCollider(entity) showPosition(entity) end
+]]
 
 function Entity:initialize(type, speed)
     self.type = type
@@ -88,6 +91,11 @@ function Entity:resetAnim(state)
     Entity.setCollider(self)
 end
 
+function Entity:randomPosition(entity)
+    return { love.math.random(screenWidth - entity.spriteWidth, screenWidth * 2),
+        love.math.random(playableArea.y - entity.spriteHeight, playableArea.height) }
+end
+
 function Entity:setCollider()
     local _, _, w, h = self.quad:getViewport()
 
@@ -96,7 +104,7 @@ function Entity:setCollider()
 
     if self.state == e_States.IDLE or self.state == e_States.MOVING then
         index = 1
-        type  = (self.type == Types.PLAYER) and "idle" or "Walk"
+        type  = (self.type == Types.PLAYER or self.type == Types.COP) and "idle" or "Walk"
     elseif self.state == e_States.INTERACT then
         index = 2
         type  = (self.type == Types.PLAYER) and "petting" or "Idle"
@@ -139,7 +147,7 @@ function Entity:draw()
     offset = (self.type ~= Types.PLAYER) and (rot == -1 and 20 or offset) or offset
 
     love.graphics.draw(self.currentAnim.img, self.quad, self.x, self.y, 0, rot, 1, offset, 0)
-    showDebugInfo(self)
+    --showDebugInfo(self)
 end
 
 function Entity:update(dt)
@@ -184,9 +192,11 @@ function Entity:handleCollisions(cols)
         local index = lume.find(self.collisions, cols[i])
         if index == nil then
             -- Enter
-            if cols[i].limit >= catLimit then
-                self:collisionEnter(cols[i])
-                cols[i]:collisionEnter(self)
+            if cols[i].type == Types.CAT then
+                if cols[i].limit >= catLimit then
+                    self:collisionEnter(cols[i])
+                    cols[i]:collisionEnter(self)
+                end
             end
         end
     end

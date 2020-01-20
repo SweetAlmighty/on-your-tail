@@ -80,18 +80,13 @@ local processAnims = function(dt, cat)
     end
 end
 
-function randomPosition(cat)
-    return { love.math.random(screenWidth - cat.spriteWidth, screenWidth * 2),
-        love.math.random(playableArea.y - cat.spriteHeight, playableArea.height) }
-end
-
 function Cat:initialize()
     Entity.initialize(self, Types.CAT, 1)
 
     Entity.setState(self, e_States.IDLE)
     Entity.setDirection(self, Directions.E)
     Entity.setImageDefaults(self, 126, 120, 20, 20)
-    Entity.setPosition(self, randomPosition(self))
+    Entity.setPosition(self, Entity.randomPosition(self))
 
     local animats = animatFactory:createWithLayer("cat", lume.randomchoice(catType))
     Entity.setAnims(self, { animats[2], animats[1], animats[2], animats[3] })
@@ -110,7 +105,7 @@ end
 
 function Cat:reset()
     self.limit = catLimit
-    Entity.reset(self, randomPosition(self))
+    Entity.reset(self, Entity.randomPosition(self))
 end
 
 function Cat:update(dt)
