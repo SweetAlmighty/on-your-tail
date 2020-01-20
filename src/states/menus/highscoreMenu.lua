@@ -34,5 +34,3 @@ function HighscoreMenu:accept()
     Menu.accept(self)
     stateMachine:pop()
 end
-
-function HighscoreMenu:cleanup() end

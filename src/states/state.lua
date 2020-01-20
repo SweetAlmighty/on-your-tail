@@ -4,5 +4,6 @@ State = class("State")
 
 function State:exit() end
 function State:enter() end
-function State:cleanup() end
+function State:pause() end
+function State:unpause() end
 function State:initialize() self.type = nil end

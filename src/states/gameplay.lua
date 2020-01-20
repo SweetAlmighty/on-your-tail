@@ -106,9 +106,14 @@ function Gameplay:update(dt)
     entityController:update(dt)
 end
 
-function Gameplay:exit() self.bgMusic:stop() end
+function Gameplay:exit()
+    self.bgMusic:stop()
+    entityController:clear()
+end
+
 function Gameplay:enter() self.bgMusic:play() end
-function Gameplay:cleanup() entityController:clear() end
+function Gameplay:pause() self.bgMusic:pause() end
+function Gameplay:unpause() self.bgMusic:play() end
 function Gameplay:drawEntities() entityController:draw() end
 function Gameplay:drawBackground() love.graphics.draw(self.batch) end
 function Gameplay:removeKitten(kitten) entityController:removeEntity(kitten) end

@@ -30,7 +30,7 @@ function Menu:draw()
         self.startWidth = math.floor(halfWidth - (self.options[i]:getWidth()/2))
         love.graphics.draw(self.options[i], self.startWidth, self.startHeight + ((i-1) * 40))
     end
-
+    
     -- Draw pointer
     love.graphics.setColor(1, 1, 1, 1)
     local yPos = self.startHeight + 5 + ((self.index-1) * 40)

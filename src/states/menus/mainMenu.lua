@@ -26,5 +26,4 @@ function MainMenu:accept()
     else love.event.quit() end
 end
 
-function MainMenu:cleanup() end
 function MainMenu:draw() Menu.draw(self) end

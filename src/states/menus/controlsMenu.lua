@@ -41,5 +41,3 @@ function ControlsMenu:draw()
     love.graphics.draw(love.graphics.newText(menuFont, "Accept"), accept.x, accept.y)
     love.graphics.setColor(1, 1, 1, 1)
 end
-
-function ControlsMenu:cleanup() end

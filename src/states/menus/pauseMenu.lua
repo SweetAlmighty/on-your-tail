@@ -22,5 +22,4 @@ function PauseMenu:accept()
     elseif self.index == 2 then stateMachine:clear() end
 end
 
-function PauseMenu:cleanup() end
 function PauseMenu:draw() Menu.draw(self) end

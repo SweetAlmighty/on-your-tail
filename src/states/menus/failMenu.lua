@@ -51,28 +51,52 @@ function FailMenu:up()
     if self.index == 1 then
         self.currY = (self.currY - 1 < 1) and 26 or self.currY - 1
         updateName(self)
-    else self.index = (self.index - 1 < 1) and 1 or self.index - 1 end
-    if #self.options ~= 1 then self.moveSFX:play() end
+        self.moveSFX:play()
+    else
+        local x = self.index - 1
+        if x < 2 then x = 2 else
+            x = self.index - 1
+            self.moveSFX:play() 
+        end
+        self.index = x
+    end
 end
 
 function FailMenu:down()
     if self.index == 1 then
         self.currY = (self.currY + 1 > 26) and 1 or self.currY + 1
         updateName(self)
-    else self.index = (self.index + 1 > #self.options) and #self.options or self.index + 1 end
-    if #self.options ~= 1 then self.moveSFX:play() end
+        self.moveSFX:play()
+    else 
+        local x = self.index + 1
+        if x > #self.options then x = #self.options else
+            x = self.index + 1
+            self.moveSFX:play()
+        end
+        self.index = x
+    end
 end
 
 function FailMenu:left()
     if self.index == 1 then
-        self.currX = (self.currX - 1 < 1) and 1 or self.currX - 1
+        local x = self.currX - 1
+        if x < 1 then x = 1 else
+            x = self.currX - 1
+            self.moveSFX:play() 
+        end
+        self.currX = x
         self.currY = getLetterIndex(self.name[self.currX])
     end
 end
 
 function FailMenu:right()
     if self.index == 1 then
-        self.currX = (self.currX + 1 > 3) and 3 or self.currX + 1
+        local x = self.currX + 1
+        if x > 3 then x = 3 else
+            x = self.currX + 1
+            self.moveSFX:play() 
+        end
+        self.currX = x
         self.currY = getLetterIndex(self.name[self.currX])
     end
 end
@@ -85,5 +109,3 @@ function FailMenu:accept()
     elseif self.index == 2 then stateMachine:pop()
     else stateMachine:clear() end
 end
-
-function FailMenu:cleanup() end
