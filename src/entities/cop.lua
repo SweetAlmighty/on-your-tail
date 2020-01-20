@@ -48,6 +48,11 @@ local processAnims = function(dt, cop)
     end
 end
 
+function randomPosition(entity)
+    return { love.math.random(screenWidth - entity.spriteWidth, screenWidth * 2),
+        love.math.random(playableArea.y - entity.spriteHeight, playableArea.height) }
+end
+
 function Cop:initialize()
     Entity.initialize(self, Types.COP, 1)
     Entity.setState(self, e_States.IDLE)
@@ -70,8 +75,4 @@ end
 
 function Cop:draw() Entity.draw(self) end
 function Cop:startInteraction() self.interacting = true end
-function Cop:reset()
-    print(self)
-    local pos = self:randomPosition()--Entity.randomPosition(self)
-    Entity.reset(self, pos)
-end
+function Cop:reset() Entity.reset(self, randomPosition(self)) end

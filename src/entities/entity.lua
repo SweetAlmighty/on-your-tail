@@ -91,11 +91,6 @@ function Entity:resetAnim(state)
     Entity.setCollider(self)
 end
 
-function Entity:randomPosition(entity)
-    return { love.math.random(screenWidth - entity.spriteWidth, screenWidth * 2),
-        love.math.random(playableArea.y - entity.spriteHeight, playableArea.height) }
-end
-
 function Entity:setCollider()
     local _, _, w, h = self.quad:getViewport()
 
