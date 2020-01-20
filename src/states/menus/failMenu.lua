@@ -56,7 +56,7 @@ function FailMenu:up()
         local x = self.index - 1
         if x < 2 then x = 2 else
             x = self.index - 1
-            self.moveSFX:play() 
+            self.moveSFX:play()
         end
         self.index = x
     end
@@ -67,7 +67,7 @@ function FailMenu:down()
         self.currY = (self.currY + 1 > 26) and 1 or self.currY + 1
         updateName(self)
         self.moveSFX:play()
-    else 
+    else
         local x = self.index + 1
         if x > #self.options then x = #self.options else
             x = self.index + 1
@@ -82,7 +82,7 @@ function FailMenu:left()
         local x = self.currX - 1
         if x < 1 then x = 1 else
             x = self.currX - 1
-            self.moveSFX:play() 
+            self.moveSFX:play()
         end
         self.currX = x
         self.currY = getLetterIndex(self.name[self.currX])
@@ -94,7 +94,7 @@ function FailMenu:right()
         local x = self.currX + 1
         if x > 3 then x = 3 else
             x = self.currX + 1
-            self.moveSFX:play() 
+            self.moveSFX:play()
         end
         self.currX = x
         self.currY = getLetterIndex(self.name[self.currX])
