@@ -26,11 +26,11 @@ function ControlsMenu:initialize()
 end
 
 function ControlsMenu:accept()
+    if self.index <= 2 then Menu.accept(self) end
     if self.index == 1 then stateMachine:pop()
     elseif self.index == 2 then stateMachine:clear() end
 end
 
-function ControlsMenu:cleanup() end
 function ControlsMenu:draw()
     Menu.draw(self)
     love.graphics.draw(self.image, self.quad, startPos.x, startPos.y)
@@ -41,3 +41,5 @@ function ControlsMenu:draw()
     love.graphics.draw(love.graphics.newText(menuFont, "Accept"), accept.x, accept.y)
     love.graphics.setColor(1, 1, 1, 1)
 end
+
+function ControlsMenu:cleanup() end

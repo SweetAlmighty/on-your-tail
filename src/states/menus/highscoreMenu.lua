@@ -8,8 +8,8 @@ function HighscoreMenu:initialize()
     self.currentTime = ""
     love.graphics.setFont(menuFont)
     self.type = States.HighscoreMenu
-    self.startHeight = screenHeight - 40
     Menu.setTitle(self, "High Scores")
+    self.startHeight = screenHeight - 40
     self.clearColor = { r = 1, g = 1, b = 1, a = 1 }
     self.options = { love.graphics.newText(menuFont, "Back") }
 
@@ -30,5 +30,9 @@ function HighscoreMenu:draw()
     love.graphics.print(self.currentTime, (screenWidth/2) - 110, (screenHeight/2) - 25)
 end
 
+function HighscoreMenu:accept()
+    Menu.accept(self)
+    stateMachine:pop()
+end
+
 function HighscoreMenu:cleanup() end
-function HighscoreMenu:accept() stateMachine:pop() end

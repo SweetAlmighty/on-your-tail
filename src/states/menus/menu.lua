@@ -10,7 +10,10 @@ function Menu:initialize()
     self.startWidth = 0
     self.startHeight = 0
     self.titlePos = { x = 0, y = 0}
+    self.moveSFX = resources:LoadSFX("move")
+    self.acceptSFX = resources:LoadSFX("accept")
     self.pointer = resources:LoadImage("pointer")
+    self.declineSFX = resources:LoadSFX("decline")
     self.clearColor = { r = 1, g = 1, b = 1, a = 1 }
 end
 
@@ -43,8 +46,17 @@ function Menu:setTitle(title)
     }
 end
 
-function Menu:left() end
-function Menu:right() end
-function Menu:accept() end
-function Menu:up() self.index = (self.index - 1 < 1) and 1 or self.index - 1 end
-function Menu:down() self.index = (self.index+1>#self.options) and #self.options or self.index+1 end
+function Menu:up()
+    self.index = (self.index - 1 < 1) and 1 or self.index - 1
+    if #self.options ~= 1 then self.moveSFX:play() end
+end
+
+function Menu:down()
+    self.index = (self.index+1>#self.options) and #self.options or self.index+1
+    if #self.options ~= 1 then self.moveSFX:play() end
+end
+
+function Menu:left() self.moveSFX:play() end
+function Menu:right() self.moveSFX:play() end
+function Menu:accept() self.acceptSFX:play() end
+function Menu:decline() self.declineSFX:play() end

@@ -52,6 +52,7 @@ function FailMenu:up()
         self.currY = (self.currY - 1 < 1) and 26 or self.currY - 1
         updateName(self)
     else self.index = (self.index - 1 < 1) and 1 or self.index - 1 end
+    if #self.options ~= 1 then self.moveSFX:play() end
 end
 
 function FailMenu:down()
@@ -59,6 +60,7 @@ function FailMenu:down()
         self.currY = (self.currY + 1 > 26) and 1 or self.currY + 1
         updateName(self)
     else self.index = (self.index + 1 > #self.options) and #self.options or self.index + 1 end
+    if #self.options ~= 1 then self.moveSFX:play() end
 end
 
 function FailMenu:left()
@@ -76,6 +78,7 @@ function FailMenu:right()
 end
 
 function FailMenu:accept()
+    if self.index <= 2 then Menu.accept(self) end
     if self.index == 1 then
         self.index = self.index + 1
         setTime({table.concat(self.name), currTime})

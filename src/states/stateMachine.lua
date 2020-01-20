@@ -22,19 +22,7 @@ local stack = { }
 function StateMachine:pop()
     stack[#stack]:cleanup()
     stack[#stack] = nil
-end
-
-function StateMachine:push(type)
-    local state = nil
-
-    if type == States.MainMenu then state = MainMenu:new()
-    elseif type == States.Gameplay then state = Gameplay:new()
-    elseif type == States.PauseMenu then state = PauseMenu:new()
-    elseif type == States.HighscoreMenu then state = HighscoreMenu:new()
-    elseif type == States.ControlsMenu then state = ControlsMenu:new()
-    elseif type == States.FailState then state = FailMenu:new() end
-
-    if state ~= nil then table.insert(stack, state) end
+    stack[#stack]:enter()
 end
 
 function StateMachine:clear()
@@ -42,6 +30,20 @@ function StateMachine:clear()
     while(count ~= 0) do
         if stack[count].type ~= 0 then self:pop() end
         count = count - 1
+    end
+end
+
+function StateMachine:push(type)
+    local state = nil
+    if type == States.MainMenu then state = MainMenu:new()
+    elseif type == States.Gameplay then state = Gameplay:new()
+    elseif type == States.PauseMenu then state = PauseMenu:new()
+    elseif type == States.HighscoreMenu then state = HighscoreMenu:new()
+    elseif type == States.ControlsMenu then state = ControlsMenu:new()
+    elseif type == States.FailState then state = FailMenu:new() end
+    if state ~= nil then
+        if #stack >= 1 then stack[#stack]:exit() end
+        table.insert(stack, state)
     end
 end
 

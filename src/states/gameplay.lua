@@ -33,35 +33,31 @@ function Gameplay:initialize()
     self.one.id = self.batch:add(self.quad, self.one.x, self.one.y)
     self.two.id = self.batch:add(self.quad, self.two.x, self.two.y)
 
+    self.bgMusic = resources:LoadMusic("PP_Silly_Goose_FULL_Loop")
+    self.bgMusic:setLooping(true)
+    self.bgMusic:play()
+
     Gameplay.createEntities(self)
     love.graphics.setFont(menuFont)
-end
-
-function Gameplay:removeKitten(kitten)
-    entityController:removeEntity(kitten)
-end
-
-function Gameplay:update(dt)
-    self:checkForReset(dt)
-    self.time = { string.format("%.2f", self.elapsedTime), "s" }
-
-    local integral, _ = math.modf(mod)
-    if integral == factor then
-        mod = 0
-        if entityController:count() - 1 == self.totalCats then
-            factor = love.math.random(5, 15)
-            entityController:addEntity(Kitten:new())
-        end
-    end
-
-    if moveCamera then self:updateBackground(dt) end
-    entityController:update(dt)
 end
 
 function Gameplay:draw()
     self:drawBackground()
     self:drawEntities()
     self:drawUI()
+end
+
+function Gameplay:createEntities()
+    player = Player:new()
+    entityController:addEntity(player)
+    for _=1, self.totalCats, 1 do entityController:addEntity(Cat:new()) end
+end
+
+function Gameplay:reset()
+    currTime = self.elapsedTime
+    self.elapsedTime = 0
+    self.bgMusic:stop()
+    entityController:reset()
 end
 
 function Gameplay:drawUI()
@@ -93,18 +89,26 @@ function Gameplay:checkForReset(dt)
     end
 end
 
-function Gameplay:createEntities()
-    player = Player:new()
-    entityController:addEntity(player)
-    for _=1, self.totalCats, 1 do entityController:addEntity(Cat:new()) end
+function Gameplay:update(dt)
+    self:checkForReset(dt)
+    self.time = { string.format("%.2f", self.elapsedTime), "s" }
+
+    local integral, _ = math.modf(mod)
+    if integral == factor then
+        mod = 0
+        if entityController:count() - 1 == self.totalCats then
+            factor = love.math.random(5, 15)
+            entityController:addEntity(Kitten:new())
+        end
+    end
+
+    if moveCamera then self:updateBackground(dt) end
+    entityController:update(dt)
 end
 
-function Gameplay:reset()
-    currTime = self.elapsedTime
-    self.elapsedTime = 0
-    entityController:reset()
-end
-
+function Gameplay:exit() self.bgMusic:stop() end
+function Gameplay:enter() self.bgMusic:play() end
 function Gameplay:cleanup() entityController:clear() end
 function Gameplay:drawEntities() entityController:draw() end
 function Gameplay:drawBackground() love.graphics.draw(self.batch) end
+function Gameplay:removeKitten(kitten) entityController:removeEntity(kitten) end

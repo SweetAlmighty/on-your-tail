@@ -17,6 +17,7 @@ function PauseMenu:initialize()
 end
 
 function PauseMenu:accept()
+    if self.index <= 2 then Menu.accept(self) end
     if self.index == 1 then stateMachine:pop()
     elseif self.index == 2 then stateMachine:clear() end
 end
