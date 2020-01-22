@@ -24,7 +24,6 @@ end
 function Player:initialize()
     Entity.initialize(self, e_Types.PLAYER, e_States.IDLE, 120)
     Entity.setPosition(self, {50, 150})
-    Entity.setDirection(self, Directions.E)
     Entity.setImageDefaults(self, 120, 146, 40, 73)
     Entity.setAnims(self, animatFactory:create("player"))
 

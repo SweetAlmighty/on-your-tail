@@ -87,7 +87,6 @@ end
 
 function Cat:initialize()
     Entity.initialize(self, e_Types.CAT, e_States.IDLE, 1)
-    Entity.setDirection(self, Directions.E)
     Entity.setImageDefaults(self, 126, 120, 20, 20)
     Entity.setPosition(self, randomPosition(self))
 

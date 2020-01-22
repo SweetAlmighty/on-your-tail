@@ -56,6 +56,7 @@ function Entity:initialize(type, state, speed)
     self.interacting = false
     self.interactable = false
     self.currentCollider = { }
+    self.direction = Directions.E
 end
 
 function Entity:setImageDefaults(imageWidth, imageHeight, spriteWidth, spriteHeight)
@@ -121,10 +122,6 @@ function Entity:updateCollider()
         w = self.currentCollider.w,
         h = self.currentCollider.h
     }
-end
-
-function Entity:setDirection(direction)
-    self.direction = direction
 end
 
 function Entity:setPosition(position)
@@ -235,4 +232,3 @@ end
 
 function Entity:startInteraction() end
 function Entity:finishInteraction() end
-function Entity:getY() return self.y + self.height end

@@ -7,7 +7,7 @@ local entities = {}
 -- Sorts the entities by their Y to mock draw order
 local sortDrawOrder = function()
     local newTable = {}
-    for i=1, #entities, 1 do newTable[#newTable + 1] = { entities[i]:getY(), entities[i] } end
+    for i=1, #entities, 1 do newTable[#newTable + 1] = { entities[i].y + entities[i].height, entities[i] } end
     table.sort(newTable, function(a,b) return a[1] < b[1] end)
     entities = {}
     for i=1, #newTable, 1 do entities[#entities+1] = newTable[i][2] end
