@@ -41,12 +41,7 @@ function EntityController:CheckCollision(colOne, colTwo)
 end
 
 function EntityController:CheckCurrentCollisions(entity, collision)
-    for i=1, #entity.collisions, 1 do
-        if entity.collisions[i] == collision then
-            return true
-        end
-    end
-
+    for i=1, #entity.collisions, 1 do if entity.collisions[i] == collision then return true end end
     return false
 end
 

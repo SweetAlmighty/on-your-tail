@@ -71,12 +71,9 @@ function Gameplay:drawUI()
 end
 
 function Gameplay:updateBackground(dt)
-    local x1 = self.one.x - speed
-    self.one.x = (x1 < self.threshold) and (self.width) or (x1)
+    self.one.x = ((self.one.x - speed) < self.threshold) and (self.width) or (self.one.x - speed)
     self.batch:set(self.one.id, self.quad, self.one.x, self.one.y)
-
-    x1 = self.two.x - speed
-    self.two.x = (x1 < self.threshold) and (self.width) or (x1)
+    self.two.x = ((self.two.x - speed) < self.threshold) and (self.width) or (self.two.x - speed)
     self.batch:set(self.two.id, self.quad, self.two.x, self.two.y)
 end
 

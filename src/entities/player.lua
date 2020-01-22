@@ -6,7 +6,7 @@ moveCamera = false
 local setState = function(player, state)
     if player.state ~= state then
         player.state = state
-        Entity.setState(player, player.state)
+        --Entity.setState(player, player.state)
     end
 end
 
@@ -22,9 +22,7 @@ local processAnims = function(dt, player)
 end
 
 function Player:initialize()
-    Entity.initialize(self, Types.PLAYER, 120)
-
-    Entity.setState(self, e_States.IDLE)
+    Entity.initialize(self, e_Types.PLAYER, e_States.IDLE, 120)
     Entity.setPosition(self, {50, 150})
     Entity.setDirection(self, Directions.E)
     Entity.setImageDefaults(self, 120, 146, 40, 73)

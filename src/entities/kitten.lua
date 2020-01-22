@@ -9,9 +9,7 @@ function randomPosition(entity)
 end
 
 function Kitten:initialize()
-    Entity.initialize(self, Types.KITTEN, 1)
-
-    Entity.setState(self, e_States.IDLE)
+    Entity.initialize(self, e_Types.KITTEN, e_States.IDLE, 1)
     Entity.setDirection(self, Directions.E)
     Entity.setImageDefaults(self, 102, 90, 17, 15)
     Entity.setPosition(self, randomPosition(self))

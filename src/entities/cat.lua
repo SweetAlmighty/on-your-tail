@@ -37,7 +37,7 @@ local processMovement = function(cat)
 
     Entity.move(cat, _x, _y)
     if cat.x < (-cat.width) then
-        if cat.type == Types.KITTEN then
+        if cat.type == e_Types.KITTEN then
             StateMachine:current():removeKitten(cat)
         else
             cat:reset()
@@ -86,9 +86,7 @@ function randomPosition(entity)
 end
 
 function Cat:initialize()
-    Entity.initialize(self, Types.CAT, 1)
-
-    Entity.setState(self, e_States.IDLE)
+    Entity.initialize(self, e_Types.CAT, e_States.IDLE, 1)
     Entity.setDirection(self, Directions.E)
     Entity.setImageDefaults(self, 126, 120, 20, 20)
     Entity.setPosition(self, randomPosition(self))

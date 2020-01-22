@@ -12,7 +12,7 @@ e_States = {
     INTERACT = 2
 }
 
-Types = {
+e_Types = {
     PLAYER = 0,
     CAT    = 1,
     KITTEN = 2,
@@ -41,17 +41,14 @@ DirectionsIndices = {
     Directions.NW,
 }
 
---[[
 local showPosition = function(entity) love.graphics.points(entity.x, entity.y) end
-local showDebugInfo = function(entity) showCollider(entity) showPosition(entity) end
-local showCollider = function(entity)
-    love.graphics.rectangle("line", entity.collider.x, entity.collider.y, entity.collider.w, entity.collider.h)
-end
-]]
+local showCollider = function(col) love.graphics.rectangle("line", col.x, col.y, col.w, col.h) end
+local showDebugInfo = function(entity) showCollider(entity.collider) showPosition(entity) end
 
-function Entity:initialize(type, speed)
+function Entity:initialize(type, state, speed)
     self.type = type
     self.speed = speed
+    self.state = state
     self.collider = { }
     self.collisions = { }
     self.interacting = false
@@ -73,7 +70,7 @@ function Entity:setAnims(anims)
     self.moveAnim = anims[2]
     self.interactAnim = anims[3]
     self.colliders = anims[#anims]
-    Entity.resetAnim(self, e_States.IDLE)
+    self:resetAnim(e_States.IDLE)
 end
 
 function Entity:resetAnim(state)
@@ -88,7 +85,7 @@ function Entity:resetAnim(state)
     self.currentAnim:reset()
     self.quad = self.currentAnim.currentFrame
 
-    Entity.setCollider(self)
+    self:setCollider()
 end
 
 function Entity:setCollider()
@@ -99,10 +96,10 @@ function Entity:setCollider()
 
     if self.state == e_States.IDLE or self.state == e_States.MOVING then
         index = 1
-        type  = (self.type == Types.PLAYER or self.type == Types.COP) and "idle" or "Walk"
+        type  = (self.type == e_Types.PLAYER or self.type == e_Types.COP) and "idle" or "Walk"
     elseif self.state == e_States.INTERACT then
         index = 2
-        type  = (self.type == Types.PLAYER) and "petting" or "Idle"
+        type  = (self.type == e_Types.PLAYER) and "petting" or "Idle"
     end
 
     self.currentCollider = {
@@ -112,6 +109,10 @@ function Entity:setCollider()
         h = (index == 0) and h or self.colliders[index][type]["h"]
     }
 
+    self:updateCollider()
+end
+
+function Entity:updateCollider()
     self.collider = {
         x = self.currentCollider.x + self.x,
         y = self.currentCollider.y + self.y,
@@ -129,33 +130,27 @@ function Entity:setPosition(position)
     self.y = position[2]
 end
 
-function Entity:setState(state)
-    self.state = state
-end
-
 function Entity:draw()
     local rot = (self.direction.x == -1) and -1 or 1
     local offset = (rot == -1) and self.width or 0
 
     -- HACK: "(rot == -1 and 20 or offset)" because offset retrieved from file
     -- produces too large an offset
-    offset = (self.type ~= Types.PLAYER) and (rot == -1 and 20 or offset) or offset
+    if not (self.type == e_Types.PLAYER or self.type == e_Types.COP) then
+        offset = (rot == -1 and 20 or offset)
+    end
+    --offset = (self.type ~= e_Types.PLAYER) and (rot == -1 and 20 or offset) or offset
 
     love.graphics.draw(self.currentAnim.img, self.quad, self.x, self.y, 0, rot, 1, offset, 0)
-    --showDebugInfo(self)
+    showDebugInfo(self)
 end
 
 function Entity:update(dt)
-    self.collider = {
-        x = self.currentCollider.x + self.x,
-        y = self.currentCollider.y + self.y,
-        w = self.currentCollider.w,
-        h = self.currentCollider.h
-    }
+    self:updateCollider()
 end
 
 function Entity:reset(_position)
-    Entity.setPosition(self, _position)
+    self:setPosition(_position)
 end
 
 function Entity:move(x, y)
@@ -169,10 +164,10 @@ end
 
 function Entity:collisionExit(other)
     local index = lume.find(self.collisions, other)
-    if index ~= nil then
+    if index ~= nil and not other.interacting then
         self.interactable = false
         table.remove(self.collisions, index)
-        if self.type == Types.PLAYER and self.interacting then
+        if self.type == e_Types.PLAYER and self.interacting then
             player:finishInteraction()
         end
     end
@@ -180,14 +175,14 @@ end
 
 function Entity:handleCollisions(cols)
     -- Only process player collisions, for the time being.
-    if self.type ~= Types.PLAYER then return end
+    if self.type ~= e_Types.PLAYER then return end
 
     -- Process new collisions
     for i = 1, #cols, 1 do
         local index = lume.find(self.collisions, cols[i])
         if index == nil then
             -- Enter
-            if cols[i].type == Types.CAT then
+            if cols[i].type == e_Types.CAT or cols[i].type == e_Types.KITTEN then
                 if cols[i].limit >= catLimit then
                     self:collisionEnter(cols[i])
                     cols[i]:collisionEnter(self)
@@ -214,8 +209,8 @@ function Entity:handleCollisions(cols)
 end
 
 function Entity:clampToPlayBounds(x, y)
-    self.x = (self.type == Types.PLAYER) and Entity.clampEntityToXBounds(self, x) or x
-    self.y = Entity.clampEntityToYBounds(self, y)
+    self.x = (self.type == e_Types.PLAYER) and self:clampEntityToXBounds(x) or x
+    self.y = self:clampEntityToYBounds(y)
 end
 
 function Entity:clampEntityToXBounds(x)
@@ -224,8 +219,7 @@ function Entity:clampEntityToXBounds(x)
         _x = playableArea.x
     elseif _x > playableArea.width - width then
         _x = playableArea.width - width
-    end
-    return _x
+    end return _x
 end
 
 function Entity:clampEntityToYBounds(y)
@@ -234,8 +228,7 @@ function Entity:clampEntityToYBounds(y)
         _y = playableArea.y - height/2
     elseif _y > playableArea.height - height then
         _y = playableArea.height - height
-    end
-    return _y
+    end return _y
 end
 
 function Entity:startInteraction() end
