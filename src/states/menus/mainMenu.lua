@@ -19,7 +19,7 @@ function MainMenu:initialize()
 end
 
 function MainMenu:accept()
-    if self.index <= 3 then Menu.accept(self) end
+    self.acceptSFX:play()
     if self.index == 1 then stateMachine:push(States.Gameplay)
     elseif self.index == 2 then stateMachine:push(States.HighscoreMenu)
     elseif self.index == 3 then stateMachine:push(States.ControlsMenu)

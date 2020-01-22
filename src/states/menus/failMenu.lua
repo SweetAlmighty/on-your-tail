@@ -102,7 +102,7 @@ function FailMenu:right()
 end
 
 function FailMenu:accept()
-    if self.index <= 2 then Menu.accept(self) end
+    self.acceptSFX:play()
     if self.index == 1 then
         self.index = self.index + 1
         setTime({table.concat(self.name), currTime})
