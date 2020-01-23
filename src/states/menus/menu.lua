@@ -64,7 +64,16 @@ function Menu:down()
     self.index = x
 end
 
-function Menu:left() self.moveSFX:play() end
-function Menu:right() self.moveSFX:play() end
+function Menu:left()
+    if self.type == States.FailState then
+        self.moveSFX:play()
+    end
+end
+
+function Menu:right()
+    if self.type == States.FailState then
+        self.moveSFX:play()
+    end
+end
 function Menu:accept() self.acceptSFX:play() end
 function Menu:decline() self.declineSFX:play() end
