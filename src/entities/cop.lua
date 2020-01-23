@@ -26,7 +26,7 @@ local processMovement = function(cop)
 end
 
 local processAnims = function(dt, cop)
-    if not cop.interacting then
+    if not cop.alerted then
         time = time + dt
 
         if time > 1 then
@@ -42,10 +42,17 @@ local processAnims = function(dt, cop)
             Entity.resetAnim(cop, cop.state)
             shouldUpdate = false
         end
-
-        cop.currentAnim:play(dt)
-        cop.quad = cop.currentAnim.currentFrame
+    else
+        local _x, _y = (player.x - cop.x), (player.y - cop.y)
+        local denominator = math.sqrt((_x * _x) + (_y * _y))
+        cop.direction = {
+            x = _x/denominator,
+            y = _y/denominator
+        }
     end
+        
+    cop.currentAnim:play(dt)
+    cop.quad = cop.currentAnim.currentFrame
 end
 
 function randomPosition(entity)
@@ -58,12 +65,26 @@ function Cop:initialize()
     Entity.setPosition(self, {50, 150})
     Entity.setImageDefaults(self, 120, 146, 40, 73)
     Entity.setAnims(self, animatFactory:create("cop"))
+
+    self.alerted = false
 end
 
 function Cop:update(dt)
     if not self.interacting then processMovement(self) end
     processAnims(dt, self)
     Entity.update(self, dt)
+
+    if not self.alerted then
+        if self.direction.x == -1 and player.x < self.x then
+            self.alerted = true
+            self.state = e_States.MOVING
+            Entity.resetAnim(self, self.state)
+        elseif self.direction.x == 1 and player.x > self.x then
+            self.alerted = true
+            self.state = e_States.MOVING
+            Entity.resetAnim(self, self.state)
+        end
+    end
 end
 
 function Cop:finishInteraction()
@@ -71,6 +92,10 @@ function Cop:finishInteraction()
     self.interactable = false
 end
 
+function Cop:reset()
+    self.alerted = false
+    Entity.reset(self, randomPosition(self))
+end
+
 function Cop:draw() Entity.draw(self) end
 function Cop:startInteraction() self.interacting = true end
-function Cop:reset() Entity.reset(self, randomPosition(self)) end

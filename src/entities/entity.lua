@@ -41,11 +41,9 @@ DirectionsIndices = {
     Directions.NW,
 }
 
---[[
 local showPosition  = function(entity) love.graphics.points(entity.x, entity.y) end
 local showCollider  = function(col) love.graphics.rectangle("line", col.x, col.y, col.w, col.h) end
 local showDebugInfo = function(entity) showCollider(entity.collider) showPosition(entity) end
-]]
 
 function Entity:initialize(type, state, speed)
     self.type = type
@@ -138,7 +136,7 @@ function Entity:draw()
     if not human then offset = (rot == -1 and 20 or offset) end
 
     love.graphics.draw(self.currentAnim.img, self.quad, self.x, self.y, 0, rot, 1, offset, 0)
-    --showDebugInfo(self)
+    showDebugInfo(self)
 end
 
 function Entity:update(dt)

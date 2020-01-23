@@ -51,7 +51,7 @@ end
 function Gameplay:createEntities()
     player = Player:new()
     entityController:addEntity(player)
-    for _=1, self.totalCats, 1 do entityController:addEntity(Cat:new()) end
+    for _=1, self.totalCats, 1 do entityController:addEntity(Cop:new()) end
 end
 
 function Gameplay:reset()
@@ -81,10 +81,10 @@ function Gameplay:checkForReset(dt)
     mod = mod + dt
     self.elapsedTime = self.elapsedTime + dt
 
-    if player.stress >= 120 then
-        self:reset()
-        StateMachine:push(States.FailState)
-    end
+    --if player.stress >= 120 then
+    --    self:reset()
+    --    StateMachine:push(States.FailState)
+    --end
 end
 
 function Gameplay:update(dt)
