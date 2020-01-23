@@ -19,6 +19,8 @@ playableArea = { x = 0, y = 110, width = screenWidth/2, height = screenHeight }
 
 function love.load()
     stateMachine:push(States.MainMenu)
+
+    love.audio.setVolume(0.1)
     love.math.setRandomSeed(os.time())
     love.window.setTitle("On Your Tail")
     love.window.setMode(screenWidth, screenHeight)

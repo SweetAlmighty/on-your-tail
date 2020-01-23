@@ -37,7 +37,7 @@ function Player:update(dt)
 
     speed = (self.interacting) and 0 or 2
     self.speed = (self.interacting) and 0 or 120
-    moveCamera = (((self.x + self.width / 2) == playableArea.width) and allowCameraMove)
+    moveCamera = ((self.x == playableArea.width - self.collider.w) and allowCameraMove)
 
     processAnims(dt, self)
 

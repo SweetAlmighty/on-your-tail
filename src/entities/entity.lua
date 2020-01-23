@@ -42,8 +42,8 @@ DirectionsIndices = {
 }
 
 --[[
-local showPosition = function(entity) love.graphics.points(entity.x, entity.y) end
-local showCollider = function(col) love.graphics.rectangle("line", col.x, col.y, col.w, col.h) end
+local showPosition  = function(entity) love.graphics.points(entity.x, entity.y) end
+local showCollider  = function(col) love.graphics.rectangle("line", col.x, col.y, col.w, col.h) end
 local showDebugInfo = function(entity) showCollider(entity.collider) showPosition(entity) end
 ]]
 
@@ -132,13 +132,10 @@ end
 function Entity:draw()
     local rot = (self.direction.x == -1) and -1 or 1
     local offset = (rot == -1) and self.width or 0
+    local human = self.type == e_Types.PLAYER or self.type == e_Types.COP
 
-    -- HACK: "(rot == -1 and 20 or offset)" because offset retrieved from file
-    -- produces too large an offset
-    if not (self.type == e_Types.PLAYER or self.type == e_Types.COP) then
-        offset = (rot == -1 and 20 or offset)
-    end
-    --offset = (self.type ~= e_Types.PLAYER) and (rot == -1 and 20 or offset) or offset
+    -- HACK: Because offset retrieved from file produces too large an offset
+    if not human then offset = (rot == -1 and 20 or offset) end
 
     love.graphics.draw(self.currentAnim.img, self.quad, self.x, self.y, 0, rot, 1, offset, 0)
     --showDebugInfo(self)
@@ -213,20 +210,20 @@ function Entity:clampToPlayBounds(x, y)
 end
 
 function Entity:clampEntityToXBounds(x)
-    local _x, width = x, self.width/2
-    if _x < playableArea.x then
-        _x = playableArea.x
-    elseif _x > playableArea.width - width then
-        _x = playableArea.width - width
+    local _x = x
+    if _x < playableArea.x - self.currentCollider.x then
+        _x = playableArea.x - self.currentCollider.x
+    elseif _x > playableArea.width - self.collider.w then
+        _x = playableArea.width - self.collider.w
     end return _x
 end
 
 function Entity:clampEntityToYBounds(y)
-    local _y, height = y, self.height
-    if _y < playableArea.y - height/2 then
-        _y = playableArea.y - height/2
-    elseif _y > playableArea.height - height then
-        _y = playableArea.height - height
+    local _y, height = y, (self.currentCollider.y + (self.collider.h/2))
+    if _y < playableArea.y - height then
+        _y = playableArea.y - height
+    elseif _y > playableArea.height - self.height then
+        _y = playableArea.height - self.height
     end return _y
 end
 
