@@ -6,7 +6,6 @@ moveCamera = false
 local setState = function(player, state)
     if player.state ~= state then
         player.state = state
-        --Entity.setState(player, player.state)
     end
 end
 
