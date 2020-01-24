@@ -1,7 +1,7 @@
 { "frames": [
    {
     "filename": "player #Idle 0.aseprite",
-    "frame": { "x": 0, "y": 0, "w": 40, "h": 73 },
+    "frame": { "x": 0, "y": 0, "w": 42, "h": 75 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 40, "h": 73 },
@@ -10,7 +10,7 @@
    },
    {
     "filename": "player #Idle 1.aseprite",
-    "frame": { "x": 0, "y": 0, "w": 40, "h": 73 },
+    "frame": { "x": 0, "y": 0, "w": 42, "h": 75 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 40, "h": 73 },
@@ -19,7 +19,7 @@
    },
    {
     "filename": "player #Walk 0.aseprite",
-    "frame": { "x": 0, "y": 0, "w": 40, "h": 73 },
+    "frame": { "x": 0, "y": 0, "w": 42, "h": 75 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 40, "h": 73 },
@@ -28,7 +28,7 @@
    },
    {
     "filename": "player #Walk 1.aseprite",
-    "frame": { "x": 40, "y": 0, "w": 40, "h": 73 },
+    "frame": { "x": 43, "y": 0, "w": 42, "h": 75 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 40, "h": 73 },
@@ -37,7 +37,7 @@
    },
    {
     "filename": "player #Walk 2.aseprite",
-    "frame": { "x": 0, "y": 0, "w": 40, "h": 73 },
+    "frame": { "x": 0, "y": 0, "w": 42, "h": 75 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 40, "h": 73 },
@@ -46,7 +46,7 @@
    },
    {
     "filename": "player #Walk 3.aseprite",
-    "frame": { "x": 80, "y": 0, "w": 40, "h": 73 },
+    "frame": { "x": 86, "y": 0, "w": 42, "h": 75 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 40, "h": 73 },
@@ -55,7 +55,7 @@
    },
    {
     "filename": "player #Pet 0.aseprite",
-    "frame": { "x": 0, "y": 73, "w": 40, "h": 73 },
+    "frame": { "x": 0, "y": 76, "w": 42, "h": 75 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 40, "h": 73 },
@@ -64,7 +64,7 @@
    },
    {
     "filename": "player #Pet 1.aseprite",
-    "frame": { "x": 40, "y": 73, "w": 40, "h": 73 },
+    "frame": { "x": 43, "y": 76, "w": 42, "h": 75 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 40, "h": 73 },
@@ -73,7 +73,7 @@
    },
    {
     "filename": "player #Pet 2.aseprite",
-    "frame": { "x": 0, "y": 73, "w": 40, "h": 73 },
+    "frame": { "x": 0, "y": 76, "w": 42, "h": 75 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 40, "h": 73 },
@@ -82,7 +82,7 @@
    },
    {
     "filename": "player #Pet 3.aseprite",
-    "frame": { "x": 40, "y": 73, "w": 40, "h": 73 },
+    "frame": { "x": 43, "y": 76, "w": 42, "h": 75 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 40, "h": 73 },
@@ -95,7 +95,7 @@
   "version": "1.2.16.3-x64",
   "image": "player.png",
   "format": "RGBA8888",
-  "size": { "w": 120, "h": 146 },
+  "size": { "w": 128, "h": 151 },
   "scale": "1",
   "frameTags": [
    { "name": "Idle", "from": 0, "to": 1, "direction": "forward" },
