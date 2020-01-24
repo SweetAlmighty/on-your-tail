@@ -63,7 +63,7 @@ end
 function Cop:initialize()
     Entity.initialize(self, e_Types.COP, e_States.IDLE, 1)
     Entity.setPosition(self, {50, 150})
-    Entity.setImageDefaults(self, 120, 146, 40, 73)
+    Entity.setImageDefaults(self, 85, 151, 40, 73)
     Entity.setAnims(self, animatFactory:create("cop"))
 
     self.alerted = false

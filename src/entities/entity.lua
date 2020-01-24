@@ -90,7 +90,7 @@ function Entity:resetAnim(state)
 end
 
 function Entity:setCollider()
-    local _, _, w, h = self.quad:getViewport()
+    local _, _, _w, _h = self.quad:getViewport()
 
     local type = ""
     local index = 0
@@ -104,10 +104,10 @@ function Entity:setCollider()
     end
 
     self.currentCollider = {
-        x = (index == 0) and 0 or self.colliders[index][type]["x"],
-        y = (index == 0) and 0 or self.colliders[index][type]["y"],
-        w = (index == 0) and w or self.colliders[index][type]["w"],
-        h = (index == 0) and h or self.colliders[index][type]["h"]
+        x = (index == 0) and 0  or self.colliders[index][type]["x"],
+        y = (index == 0) and 0  or self.colliders[index][type]["y"],
+        w = (index == 0) and _w or self.colliders[index][type]["w"],
+        h = (index == 0) and _h or self.colliders[index][type]["h"]
     }
 
     self:updateCollider()
@@ -128,7 +128,7 @@ function Entity:setPosition(position)
 end
 
 function Entity:draw()
-    local rot = (self.direction.x == -1) and -1 or 1
+    local rot = (self.direction.x < 0) and -1 or 1
     local offset = (rot == -1) and self.width or 0
     local human = self.type == e_Types.PLAYER or self.type == e_Types.COP
 

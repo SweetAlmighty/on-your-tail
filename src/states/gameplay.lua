@@ -51,7 +51,7 @@ end
 function Gameplay:createEntities()
     player = Player:new()
     entityController:addEntity(player)
-    for _=1, self.totalCats, 1 do entityController:addEntity(Cop:new()) end
+    for _=1, self.totalCats, 1 do entityController:addEntity(Cat:new()) end
 end
 
 function Gameplay:reset()
