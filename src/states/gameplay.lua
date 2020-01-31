@@ -28,8 +28,8 @@ function Gameplay:initialize()
     self.two = { x = self.width, y = 0, id = 0 }
     self.image = resources:LoadImage("background")
     self.batch = love.graphics.newSpriteBatch(self.image, 2)
-    self.bar = love.graphics.newQuad(0, 0, 120, 20, 120, 40)
-    self.barbg = love.graphics.newQuad(0, 20, 120, 20, 120, 40)
+    self.bar = love.graphics.newQuad(0, 0, 122, 20, 122, 42)
+    self.barbg = love.graphics.newQuad(0, 21, 122, 20, 122, 42)
     self.quad = love.graphics.newQuad(0, 0, self.width, self.height, self.width, self.height)
     self.one.id = self.batch:add(self.quad, self.one.x, self.one.y)
     self.two.id = self.batch:add(self.quad, self.two.x, self.two.y)
@@ -66,8 +66,8 @@ function Gameplay:drawUI()
     love.graphics.print(table.concat(self.time), self.width - 75, 5)
 
     love.graphics.setColor(1, 1, 1)
-    love.graphics.draw(self.hud, self.barbg, 10, 10, nil, nil, nil, nil, nil)
     love.graphics.draw(self.hud, self.bar, 11, 10, nil, player.stress/121, 1, nil, nil)
+    love.graphics.draw(self.hud, self.barbg, 10, 10, nil, nil, nil, nil, nil)
 end
 
 function Gameplay:updateBackground(dt)
