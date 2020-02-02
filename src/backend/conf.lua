@@ -1,1 +1,1 @@
-function love.conf(t) t.version = "11.2" end
+function love.conf(t) t.version = "11.3" end
