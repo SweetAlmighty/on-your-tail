@@ -8,14 +8,39 @@ require "src/entities/entityController"
 
 Gameplay = class("Gameplay", Gameplay)
 
-local mod = 0
-local factor = love.math.random(5, 15)
+local copMod = 0
+local kittenMod = 0
+local copFactor = love.math.random(1, 5)
+local kittenFactor = love.math.random(5, 15)
 local entityController = EntityController:new()
+
+local checkForKittenSpawn = function(scene)
+    local integral, _ = math.modf(kittenMod)
+    if integral == kittenFactor then
+        kittenMod = 0
+        if entityController:count() - 1 == scene.totalCats then
+            kittenFactor = love.math.random(5, 15)
+            entityController:addEntity(Kitten:new())
+        end
+    end
+end
+
+local checkForCopSpawn = function(scene)
+    local integral, _ = math.modf(copMod)
+    if integral == copFactor then
+        copMod = 0
+        if entityController:count() - 1 == scene.totalCats then
+            copFactor = love.math.random(1, 5)
+            entityController:addEntity(Cop:new())
+        end
+    end
+end
+
 
 function Gameplay:initialize()
     self.time = {}
     self.speed = 2
-    self.totalCats = 8
+    self.totalCats = 1
     self.entities = { }
     self.elapsedTime = 0
     self.width = screenWidth
@@ -78,27 +103,23 @@ function Gameplay:updateBackground(dt)
 end
 
 function Gameplay:checkForReset(dt)
-    mod = mod + dt
+    copMod = copMod + dt
+    kittenMod = kittenMod + dt
+
     self.elapsedTime = self.elapsedTime + dt
 
-    --if player.stress >= 120 then
-    --    self:reset()
-    --    StateMachine:push(States.FailState)
-    --end
+    if player.stress >= 120 then
+        self:reset()
+        StateMachine:push(States.FailState)
+    end
 end
 
 function Gameplay:update(dt)
     self:checkForReset(dt)
     self.time = { string.format("%.2f", self.elapsedTime), "s" }
-
-    local integral, _ = math.modf(mod)
-    if integral == factor then
-        mod = 0
-        if entityController:count() - 1 == self.totalCats then
-            factor = love.math.random(5, 15)
-            entityController:addEntity(Kitten:new())
-        end
-    end
+    
+    --checkForCopSpawn(self)
+    checkForKittenSpawn(self)
 
     if moveCamera then self:updateBackground(dt) end
     entityController:update(dt)

@@ -50,19 +50,19 @@ local processAnims = function(dt, cop)
             y = _y/denominator
         }
     end
-        
+
     cop.currentAnim:play(dt)
     cop.quad = cop.currentAnim.currentFrame
 end
 
 function randomPosition(entity)
-    return { love.math.random(screenWidth - entity.spriteWidth, screenWidth * 2),
+    return { love.math.random(screenWidth + entity.spriteWidth, screenWidth * 2),
         love.math.random(playableArea.y - entity.spriteHeight, playableArea.height) }
 end
 
 function Cop:initialize()
     Entity.initialize(self, e_Types.COP, e_States.IDLE, 1)
-    Entity.setPosition(self, {50, 150})
+    Entity.setPosition(self, {screenWidth * 2, playableArea.y/2})
     Entity.setImageDefaults(self, 85, 151, 40, 73)
     Entity.setAnims(self, animatFactory:create("cop"))
 
@@ -70,8 +70,16 @@ function Cop:initialize()
 end
 
 function Cop:update(dt)
-    if not self.interacting then processMovement(self) end
-    processAnims(dt, self)
+    if not self.interacting then
+        processMovement(self)
+
+        if lume.distance(player.x, player.y, self.x, self.y) < 20 then
+            self.direction = { x = 0,  y = 0 }
+        else
+            processAnims(dt, self)
+        end
+    end
+
     Entity.update(self, dt)
 
     if not self.alerted then
