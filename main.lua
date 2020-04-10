@@ -4,6 +4,7 @@ require "src/backend/require"
 require "src/backend/resources"
 require "src/states/stateMachine"
 require "src/backend/animatFactory"
+local lovesize = require("src/lib/lovesize")
 
 speed = 2
 currTime = 0
@@ -18,18 +19,28 @@ titleFont = resources:LoadFont("KarmaFuture", 50)
 playableArea = { x = 0, y = 110, width = screenWidth/2, height = screenHeight }
 
 function love.load()
+    lovesize.set(screenWidth, screenHeight)
+
     stateMachine:push(States.MainMenu)
+
+    local flags = {}
+    flags.resizable = true
 
     love.audio.setVolume(0.1)
     love.math.setRandomSeed(os.time())
     love.window.setTitle("On Your Tail")
-    love.window.setMode(screenWidth, screenHeight)
+    love.window.setMode(lovesize.getWidth(), lovesize.getHeight(), flags)
+    lovesize.resize(lovesize.getWidth(), lovesize.getHeight())
 
     if love.filesystem.getInfo("highscores.txt") == nil then
         local index, tbl = 1, {}
         for i=1, 3, 1 do table.insert(tbl, i, ((i==index) and time or {"AAA", 0.00})) end
         love.filesystem.write("highscores.txt", lume.serialize(tbl))
     end
+end
+
+function love.resize(width, height)
+    lovesize.resize(width, height)
 end
 
 function love.update(dt)
@@ -55,4 +66,9 @@ function setTime(time)
     end
 end
 
-function love.draw() stateMachine:current():draw() end
+function love.draw()
+    love.graphics.clear(0, 0, 0)
+    lovesize.begin()
+        stateMachine:current():draw()
+    lovesize.finish()
+end
