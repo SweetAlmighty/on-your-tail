@@ -7,16 +7,16 @@ catLimit = 30
 pettingReduction = 15
 
 e_States = {
-    IDLE     = 0,
-    MOVING   = 1,
-    INTERACT = 2
+    IDLE     = 1,
+    MOVING   = 2,
+    INTERACT = 3
 }
 
 e_Types = {
-    PLAYER = 0,
-    CAT    = 1,
-    KITTEN = 2,
-    COP    = 3
+    PLAYER = 1,
+    CAT    = 2,
+    KITTEN = 3,
+    COP    = 4
 }
 
 Directions = {
@@ -48,6 +48,8 @@ local showDebugInfo = function(entity) showCollider(entity.collider) showPositio
 ]]
 
 function Entity:initialize(type, state, speed)
+    self.width = 0
+    self.height = 0
     self.type = type
     self.speed = speed
     self.state = state
@@ -55,17 +57,7 @@ function Entity:initialize(type, state, speed)
     self.collisions = { }
     self.interacting = false
     self.interactable = false
-    self.currentCollider = { }
     self.direction = Directions.E
-end
-
-function Entity:setImageDefaults(imageWidth, imageHeight, spriteWidth, spriteHeight)
-    self.width = spriteWidth
-    self.height = spriteHeight
-    self.imageWidth = imageWidth
-    self.imageHeight = imageHeight
-    self.spriteWidth = spriteWidth
-    self.spriteHeight = spriteHeight
 end
 
 function Entity:setAnims(anims)
@@ -88,39 +80,15 @@ function Entity:resetAnim(state)
     self.currentAnim:reset()
     self.quad = self.currentAnim.currentFrame
 
-    self:setCollider()
-end
-
-function Entity:setCollider()
-    local _, _, w, h = self.quad:getViewport()
-
-    local type = ""
-    local index = 0
-
-    if self.state == e_States.IDLE or self.state == e_States.MOVING then
-        index = 1
-        type  = (self.type == e_Types.PLAYER or self.type == e_Types.COP) and "idle" or "Walk"
-    elseif self.state == e_States.INTERACT then
-        index = 2
-        type  = (self.type == e_Types.PLAYER) and "petting" or "Idle"
-    end
-
-    self.currentCollider = {
-        x = (index == 0) and 0 or self.colliders[index][type]["x"],
-        y = (index == 0) and 0 or self.colliders[index][type]["y"],
-        w = (index == 0) and w or self.colliders[index][type]["w"],
-        h = (index == 0) and h or self.colliders[index][type]["h"]
-    }
-
     self:updateCollider()
 end
 
 function Entity:updateCollider()
     self.collider = {
-        x = self.currentCollider.x + self.x,
-        y = self.currentCollider.y + self.y,
-        w = self.currentCollider.w,
-        h = self.currentCollider.h
+        x = self.colliders[self.state]["x"] + self.x,
+        y = self.colliders[self.state]["y"] + self.y,
+        w = self.colliders[self.state]["w"],
+        h = self.colliders[self.state]["h"]
     }
 end
 
@@ -132,16 +100,14 @@ end
 function Entity:draw()
     local rot = (self.direction.x == -1) and -1 or 1
     local offset = (rot == -1) and self.width or 0
-    local human = self.type == e_Types.PLAYER or self.type == e_Types.COP
-
-    -- HACK: Because offset retrieved from file produces too large an offset
-    if not human then offset = (rot == -1 and 20 or offset) end
 
     love.graphics.draw(self.currentAnim.img, self.quad, self.x, self.y, 0, rot, 1, offset, 0)
+
     --showDebugInfo(self)
 end
 
 function Entity:update(dt)
+    _, _, self.width, self.height = self.quad:getViewport()
     self:updateCollider()
 end
 
@@ -211,16 +177,17 @@ end
 
 function Entity:clampEntityToXBounds(x)
     local _x = x
-    if _x < playableArea.x - self.currentCollider.x then
-        _x = playableArea.x - self.currentCollider.x
+    if _x < playableArea.x - self.collider.x then
+        _x = playableArea.x - self.collider.x
     elseif _x > playableArea.width - self.collider.w then
         _x = playableArea.width - self.collider.w
     end return _x
 end
 
 function Entity:clampEntityToYBounds(y)
-    local _y, height = y, (self.currentCollider.y + (self.collider.h/2))
-    if _y < playableArea.y - height then
+    local _y = y
+    local height = self.height - (self.collider.h/2)
+    if (_y + height) < playableArea.y then
         _y = playableArea.y - height
     elseif _y > playableArea.height - self.height then
         _y = playableArea.height - self.height
