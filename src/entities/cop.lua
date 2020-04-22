@@ -56,7 +56,19 @@ end
 function Cop:initialize()
     Entity.initialize(self, e_Types.COP, e_States.IDLE, 1)
     Entity.setPosition(self, {50, 150})
-    Entity.setAnims(self, animatFactory:create("cop"))
+
+    local type = lume.randomchoice(catType)
+    local info = animatFactory:CreateWithCollisions("cop")
+    local animats = info[type].Animations
+
+    Entity.setAnims(self, {
+        animats[1],
+        animats[2],
+        animats[3],
+        info[type].Colliders
+    })
+
+    --Entity.setAnims(self, animatFactory:create("cop"))
 end
 
 function Cop:update(dt)
