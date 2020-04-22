@@ -55,18 +55,25 @@ local processAnims = function(dt, cop)
     cop.quad = cop.currentAnim.currentFrame
 end
 
-function randomPosition(entity)
-    return { love.math.random(screenWidth + entity.spriteWidth, screenWidth * 2),
-        love.math.random(playableArea.y - entity.spriteHeight, playableArea.height) }
+function randomPosition()
+    return { love.math.random(screenWidth, screenWidth * 2),
+        love.math.random(playableArea.y, playableArea.height) }
 end
 
 function Cop:initialize()
     Entity.initialize(self, e_Types.COP, e_States.IDLE, 1)
-    Entity.setPosition(self, {screenWidth * 2, playableArea.y/2})
-    Entity.setImageDefaults(self, 85, 151, 40, 73)
-    Entity.setAnims(self, animatFactory:create("cop"))
+    Entity.setPosition(self, {50, 150})
 
-    self.alerted = false
+    local type = lume.randomchoice(catType)
+    local info = animatFactory:CreateWithCollisions("cop")
+    local animats = info[type].Animations
+
+    Entity.setAnims(self, {
+        animats[1],
+        animats[2],
+        animats[3],
+        info[type].Colliders
+    })
 end
 
 function Cop:update(dt)
@@ -107,3 +114,4 @@ end
 
 function Cop:draw() Entity.draw(self) end
 function Cop:startInteraction() self.interacting = true end
+function Cop:reset() Entity.reset(self, randomPosition()) end

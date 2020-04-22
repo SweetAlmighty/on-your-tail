@@ -1,0 +1,163 @@
+{
+    "ImagePath": "c:/Users/brian/Documents/Repos/LOVE Projects/on-your-tail/data/sprites/images/character.png",
+    "Types": [{
+        "Name": "Player",
+        "Animations": [{
+            "Name": "Idle",
+            "Frames": [{
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "y": 58,
+                        "x": 5,
+                        "h": 29,
+                        "w": 17
+                    }
+                }],
+                "Duration": 100,
+                "Name": "Frame 1",
+                "Dimensions": {
+                    "y": 11,
+                    "x": 12,
+                    "h": 87,
+                    "w": 27
+                }
+            }]
+        }, {
+            "Name": "Walking",
+            "Frames": [{
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "y": 59,
+                        "x": 6,
+                        "h": 28,
+                        "w": 11
+                    }
+                }],
+                "Duration": 100,
+                "Name": "Frame 1",
+                "Dimensions": {
+                    "y": 11,
+                    "x": 56,
+                    "h": 87,
+                    "w": 23
+                }
+            }, {
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "y": 58,
+                        "x": 3,
+                        "h": 27,
+                        "w": 27
+                    }
+                }],
+                "Duration": 100,
+                "Name": "Frame 2",
+                "Dimensions": {
+                    "y": 13,
+                    "x": 96,
+                    "h": 85,
+                    "w": 30
+                }
+            }, {
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "y": 59,
+                        "x": 6,
+                        "h": 28,
+                        "w": 11
+                    }
+                }],
+                "Duration": 100,
+                "Name": "Frame 3",
+                "Dimensions": {
+                    "y": 11,
+                    "x": 56,
+                    "h": 87,
+                    "w": 23
+                }
+            }, {
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "y": 59,
+                        "x": 3,
+                        "h": 26,
+                        "w": 27
+                    }
+                }],
+                "Duration": 100,
+                "Name": "Frame 4",
+                "Dimensions": {
+                    "y": 13,
+                    "x": 183,
+                    "h": 85,
+                    "w": 30
+                }
+            }]
+        }, {
+            "Name": "Petting",
+            "Frames": [{
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "y": 48,
+                        "x": 18,
+                        "h": 27,
+                        "w": 34
+                    }
+                }],
+                "Duration": 100,
+                "Name": "Frame 1",
+                "Dimensions": {
+                    "y": 127,
+                    "x": 12,
+                    "h": 75,
+                    "w": 52
+                }
+            }, {
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "y": 45,
+                        "x": 18,
+                        "h": 30,
+                        "w": 37
+                    }
+                }],
+                "Duration": 100,
+                "Name": "Frame 2",
+                "Dimensions": {
+                    "y": 127,
+                    "x": 71,
+                    "h": 75,
+                    "w": 55
+                }
+            }]
+        }, {
+            "Name": "Fail",
+            "Frames": [{
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "y": 0,
+                        "x": 0,
+                        "h": 60,
+                        "w": 34
+                    }
+                }],
+                "Duration": 100,
+                "Name": "Frame 1",
+                "Dimensions": {
+                    "y": 231,
+                    "x": 12,
+                    "h": 60,
+                    "w": 35
+                }
+            }]
+        }]
+    }]
+}

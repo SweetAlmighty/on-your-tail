@@ -7,16 +7,7 @@ Cat = class("Cat", Entity)
 local time = 0
 local shouldUpdate = false
 
-catType = {
-    "Winston",
-    "Snowflake",
-    "Phoenix",
-    "Arya",
-    "Gadget",
-    "Savannah",
-    "Tux",
-    "Layer 8"
-}
+catType = { 1, 2, 3, 4, 5, 6, 7, 8 }
 
 local processMovement = function(cat)
     local _x = (cat.x + (cat.speed * cat.direction.x))
@@ -80,18 +71,25 @@ local processAnims = function(dt, cat)
     end
 end
 
-function randomPosition(entity)
-    return { love.math.random(screenWidth - entity.spriteWidth, screenWidth * 2),
-        love.math.random(playableArea.y - entity.spriteHeight, playableArea.height) }
+function randomPosition()
+    return { love.math.random(screenWidth, screenWidth * 2),
+        love.math.random(playableArea.y, playableArea.height) }
 end
 
 function Cat:initialize()
     Entity.initialize(self, e_Types.CAT, e_States.IDLE, 1)
-    Entity.setImageDefaults(self, 126, 120, 20, 20)
-    Entity.setPosition(self, randomPosition(self))
+    Entity.setPosition(self, randomPosition())
 
-    local animats = animatFactory:createWithLayer("cat", lume.randomchoice(catType))
-    Entity.setAnims(self, { animats[2], animats[1], animats[2], animats[3] })
+    local type = lume.randomchoice(catType)
+    local info = animatFactory:CreateWithCollisions("cats")
+    local animats = info[type].Animations
+
+    Entity.setAnims(self, {
+        animats[1],
+        animats[2],
+        animats[3],
+        info[type].Colliders
+    })
 
     self.limit = catLimit
     self.stressReduction = 8
@@ -107,7 +105,7 @@ end
 
 function Cat:reset()
     self.limit = catLimit
-    Entity.reset(self, randomPosition(self))
+    Entity.reset(self, randomPosition())
 end
 
 function Cat:update(dt)

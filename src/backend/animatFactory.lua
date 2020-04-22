@@ -5,6 +5,52 @@ AnimatFactory = class('AnimatFactory')
 
 function AnimatFactory:initialize() end
 
+function AnimatFactory:CreateWithCollisions(filename)
+    local file = resources:LoadAnim(filename)
+    if file ~= nil then
+        local types = { }
+        local image = resources:LoadImage(filename)
+
+        for i = 1, #file.Types do
+            local animats = { }
+            local colliders = { }
+
+            for j = 1, #file.Types[i].Animations do
+                local anim = animat.newAnimat(10)
+                anim:addSheet(image)
+
+                -- Used to keep colliders to one per animation
+                local hasColldier = false
+                for k = 1, #file.Types[i].Animations[j].Frames do
+                    local dimension = file.Types[i].Animations[j].Frames[k].Dimensions
+                    anim:addFrame(dimension["x"], dimension["y"], dimension["w"], dimension["h"])
+
+                    for l = 1, #file.Types[i].Animations[j].Frames[k].Properties do
+                        local property = file.Types[i].Animations[j].Frames[k].Properties[l]
+                        if property.Name == "Collider" and not hasColldier then
+                            hasColldier = true
+                            colliders[#colliders + 1] = property.Value
+                        end
+                    end
+                end
+
+                animats[#animats + 1] = anim 
+            end
+
+            types[#types + 1] = {
+                Animations = animats,
+                Colliders = colliders
+            }
+        end
+
+        return types
+    end
+
+    return nil
+end
+
+
+
 function AnimatFactory:create(filename)
     local file = resources:LoadAnim(filename)
 

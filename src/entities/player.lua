@@ -23,8 +23,16 @@ end
 function Player:initialize()
     Entity.initialize(self, e_Types.PLAYER, e_States.IDLE, 120)
     Entity.setPosition(self, {50, 150})
-    Entity.setImageDefaults(self, 128, 151, 40, 73)
-    Entity.setAnims(self, animatFactory:create("player"))
+
+    local info = animatFactory:CreateWithCollisions("character")
+    local animats = info[1].Animations
+
+    Entity.setAnims(self, {
+        animats[1],
+        animats[2],
+        animats[3],
+        info[1].Colliders
+    })
 
     self.stress = 0
     self.delta = { x = 0, y = 0 }

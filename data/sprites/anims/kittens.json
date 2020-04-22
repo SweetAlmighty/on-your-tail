@@ -1,0 +1,688 @@
+{
+    "ImagePath": "C:/Users/brian/Documents/Repos/LOVE Projects/on-your-tail/data/sprites/images/kittens.png",
+    "Types": [{
+        "Name": "White",
+        "Animations": [{
+            "Name": "Idle",
+            "Frames": [{
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "y": 8,
+                        "x": 2,
+                        "h": 14,
+                        "w": 21
+                    }
+                }],
+                "Duration": 100,
+                "Name": "Frame 1",
+                "Dimensions": {
+                    "y": 4,
+                    "x": 75,
+                    "h": 22,
+                    "w": 25
+                }
+            }]
+        }, {
+            "Name": "Walking",
+            "Frames": [{
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "y": 8,
+                        "x": 2,
+                        "h": 14,
+                        "w": 21
+                    }
+                }],
+                "Duration": 100,
+                "Name": "Frame 1",
+                "Dimensions": {
+                    "y": 4,
+                    "x": 42,
+                    "h": 22,
+                    "w": 25
+                }
+            }, {
+                "Properties": [],
+                "Duration": 100,
+                "Name": "Frame 2",
+                "Dimensions": {
+                    "y": 4,
+                    "x": 8,
+                    "h": 22,
+                    "w": 25
+                }
+            }]
+        }, {
+            "Name": "Sitting",
+            "Frames": [{
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "y": 3,
+                        "x": 9,
+                        "h": 21,
+                        "w": 15
+                    }
+                }],
+                "Duration": 100,
+                "Name": "Frame 1",
+                "Dimensions": {
+                    "y": 153,
+                    "x": 142,
+                    "h": 24,
+                    "w": 25
+                }
+            }]
+        }]
+    }, {
+        "Name": "Black",
+        "Animations": [{
+            "Name": "Idle",
+            "Frames": [{
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "y": 6,
+                        "x": 3,
+                        "h": 14,
+                        "w": 21
+                    }
+                }],
+                "Duration": 100,
+                "Name": "Frame 1",
+                "Dimensions": {
+                    "y": 32,
+                    "x": 74,
+                    "h": 20,
+                    "w": 26
+                }
+            }]
+        }, {
+            "Name": "Walking",
+            "Frames": [{
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "y": 6,
+                        "x": 3,
+                        "h": 14,
+                        "w": 21
+                    }
+                }],
+                "Duration": 100,
+                "Name": "Frame 1",
+                "Dimensions": {
+                    "y": 32,
+                    "x": 41,
+                    "h": 20,
+                    "w": 26
+                }
+            }, {
+                "Properties": [],
+                "Duration": 100,
+                "Name": "Frame 2",
+                "Dimensions": {
+                    "y": 32,
+                    "x": 7,
+                    "h": 20,
+                    "w": 26
+                }
+            }]
+        }, {
+            "Name": "Sitting",
+            "Frames": [{
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "y": 3,
+                        "x": 9,
+                        "h": 21,
+                        "w": 15
+                    }
+                }],
+                "Duration": 100,
+                "Name": "Frame 1",
+                "Dimensions": {
+                    "y": 153,
+                    "x": 74,
+                    "h": 24,
+                    "w": 25
+                }
+            }]
+        }]
+    }, {
+        "Name": "Bobtail",
+        "Animations": [{
+            "Name": "Idle",
+            "Frames": [{
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "y": 3,
+                        "x": 2,
+                        "h": 14,
+                        "w": 21
+                    }
+                }],
+                "Duration": 100,
+                "Name": "Frame 1",
+                "Dimensions": {
+                    "y": 67,
+                    "x": 75,
+                    "h": 17,
+                    "w": 25
+                }
+            }]
+        }, {
+            "Name": "Walking",
+            "Frames": [{
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "y": 3,
+                        "x": 2,
+                        "h": 14,
+                        "w": 21
+                    }
+                }],
+                "Duration": 100,
+                "Name": "Frame 1",
+                "Dimensions": {
+                    "y": 67,
+                    "x": 42,
+                    "h": 17,
+                    "w": 25
+                }
+            }, {
+                "Properties": [],
+                "Duration": 100,
+                "Name": "Frame 2",
+                "Dimensions": {
+                    "y": 67,
+                    "x": 8,
+                    "h": 17,
+                    "w": 25
+                }
+            }]
+        }, {
+            "Name": "Sitting",
+            "Frames": [{
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "y": 3,
+                        "x": 3,
+                        "h": 21,
+                        "w": 15
+                    }
+                }],
+                "Duration": 100,
+                "Name": "Frame 1",
+                "Dimensions": {
+                    "y": 153,
+                    "x": 14,
+                    "h": 24,
+                    "w": 19
+                }
+            }]
+        }]
+    }, {
+        "Name": "Calico",
+        "Animations": [{
+            "Name": "Idle",
+            "Frames": [{
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "y": 6,
+                        "x": 3,
+                        "h": 14,
+                        "w": 21
+                    }
+                }],
+                "Duration": 100,
+                "Name": "Frame 1",
+                "Dimensions": {
+                    "y": 95,
+                    "x": 74,
+                    "h": 20,
+                    "w": 26
+                }
+            }]
+        }, {
+            "Name": "Walking",
+            "Frames": [{
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "y": 6,
+                        "x": 3,
+                        "h": 14,
+                        "w": 21
+                    }
+                }],
+                "Duration": 100,
+                "Name": "Frame 1",
+                "Dimensions": {
+                    "y": 95,
+                    "x": 41,
+                    "h": 20,
+                    "w": 26
+                }
+            }, {
+                "Properties": [],
+                "Duration": 100,
+                "Name": "Frame 2",
+                "Dimensions": {
+                    "y": 95,
+                    "x": 7,
+                    "h": 20,
+                    "w": 26
+                }
+            }]
+        }, {
+            "Name": "Sitting",
+            "Frames": [{
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "y": 3,
+                        "x": 9,
+                        "h": 21,
+                        "w": 15
+                    }
+                }],
+                "Duration": 100,
+                "Name": "Frame 1",
+                "Dimensions": {
+                    "y": 184,
+                    "x": 142,
+                    "h": 24,
+                    "w": 25
+                }
+            }]
+        }]
+    }, {
+        "Name": "Siamese",
+        "Animations": [{
+            "Name": "Idle",
+            "Frames": [{
+                "Properties": [{
+                    "Name": "Property 1",
+                    "Value": {
+                        "y": 6,
+                        "x": 2,
+                        "h": 14,
+                        "w": 21
+                    }
+                }],
+                "Duration": 100,
+                "Name": "Frame 1",
+                "Dimensions": {
+                    "y": 6,
+                    "x": 175,
+                    "h": 20,
+                    "w": 25
+                }
+            }]
+        }, {
+            "Name": "Walking",
+            "Frames": [{
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "y": 6,
+                        "x": 2,
+                        "h": 14,
+                        "w": 21
+                    }
+                }],
+                "Duration": 100,
+                "Name": "Frame 1",
+                "Dimensions": {
+                    "y": 6,
+                    "x": 142,
+                    "h": 20,
+                    "w": 25
+                }
+            }, {
+                "Properties": [],
+                "Duration": 100,
+                "Name": "Frame 2",
+                "Dimensions": {
+                    "y": 6,
+                    "x": 108,
+                    "h": 20,
+                    "w": 25
+                }
+            }]
+        }, {
+            "Name": "Sitting",
+            "Frames": [{
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "y": 3,
+                        "x": 6,
+                        "h": 21,
+                        "w": 15
+                    }
+                }],
+                "Duration": 100,
+                "Name": "Frame 1",
+                "Dimensions": {
+                    "y": 153,
+                    "x": 178,
+                    "h": 24,
+                    "w": 22
+                }
+            }]
+        }]
+    }, {
+        "Name": "Tabby",
+        "Animations": [{
+            "Name": "Idle",
+            "Frames": [{
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "y": 6,
+                        "x": 2,
+                        "h": 14,
+                        "w": 21
+                    }
+                }],
+                "Duration": 100,
+                "Name": "Frame 1",
+                "Dimensions": {
+                    "y": 33,
+                    "x": 175,
+                    "h": 20,
+                    "w": 25
+                }
+            }]
+        }, {
+            "Name": "Walking",
+            "Frames": [{
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "y": 6,
+                        "x": 2,
+                        "h": 14,
+                        "w": 21
+                    }
+                }],
+                "Duration": 100,
+                "Name": "Frame 1",
+                "Dimensions": {
+                    "y": 33,
+                    "x": 142,
+                    "h": 20,
+                    "w": 25
+                }
+            }, {
+                "Properties": [],
+                "Duration": 100,
+                "Name": "Frame 2",
+                "Dimensions": {
+                    "y": 33,
+                    "x": 108,
+                    "h": 20,
+                    "w": 25
+                }
+            }]
+        }, {
+            "Name": "Sitting",
+            "Frames": [{
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "y": 3,
+                        "x": 6,
+                        "h": 21,
+                        "w": 15
+                    }
+                }],
+                "Duration": 100,
+                "Name": "Frame 1",
+                "Dimensions": {
+                    "y": 153,
+                    "x": 111,
+                    "h": 24,
+                    "w": 22
+                }
+            }]
+        }]
+    }, {
+        "Name": "Gray",
+        "Animations": [{
+            "Name": "Idle",
+            "Frames": [{
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "y": 8,
+                        "x": 2,
+                        "h": 14,
+                        "w": 21
+                    }
+                }],
+                "Duration": 100,
+                "Name": "Frame 1",
+                "Dimensions": {
+                    "y": 62,
+                    "x": 175,
+                    "h": 22,
+                    "w": 25
+                }
+            }]
+        }, {
+            "Name": "Walking",
+            "Frames": [{
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "y": 8,
+                        "x": 2,
+                        "h": 14,
+                        "w": 21
+                    }
+                }],
+                "Duration": 100,
+                "Name": "Frame 1",
+                "Dimensions": {
+                    "y": 62,
+                    "x": 142,
+                    "h": 22,
+                    "w": 25
+                }
+            }, {
+                "Properties": [],
+                "Duration": 100,
+                "Name": "Frame 2",
+                "Dimensions": {
+                    "y": 62,
+                    "x": 108,
+                    "h": 22,
+                    "w": 25
+                }
+            }]
+        }, {
+            "Name": "Sitting",
+            "Frames": [{
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "y": 3,
+                        "x": 9,
+                        "h": 21,
+                        "w": 15
+                    }
+                }],
+                "Duration": 100,
+                "Name": "Frame 1",
+                "Dimensions": {
+                    "y": 153,
+                    "x": 42,
+                    "h": 24,
+                    "w": 25
+                }
+            }]
+        }]
+    }, {
+        "Name": "Tuxedo",
+        "Animations": [{
+            "Name": "Idle",
+            "Frames": [{
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "y": 8,
+                        "x": 2,
+                        "h": 14,
+                        "w": 21
+                    }
+                }],
+                "Duration": 100,
+                "Name": "Frame 1",
+                "Dimensions": {
+                    "y": 93,
+                    "x": 175,
+                    "h": 22,
+                    "w": 25
+                }
+            }]
+        }, {
+            "Name": "Walking",
+            "Frames": [{
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "y": 8,
+                        "x": 2,
+                        "h": 14,
+                        "w": 21
+                    }
+                }],
+                "Duration": 100,
+                "Name": "Frame 1",
+                "Dimensions": {
+                    "y": 93,
+                    "x": 142,
+                    "h": 22,
+                    "w": 25
+                }
+            }, {
+                "Properties": [],
+                "Duration": 100,
+                "Name": "Frame 2",
+                "Dimensions": {
+                    "y": 93,
+                    "x": 108,
+                    "h": 22,
+                    "w": 25
+                }
+            }]
+        }, {
+            "Name": "Sitting",
+            "Frames": [{
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "y": 3,
+                        "x": 9,
+                        "h": 21,
+                        "w": 15
+                    }
+                }],
+                "Duration": 100,
+                "Name": "Frame 1",
+                "Dimensions": {
+                    "y": 184,
+                    "x": 175,
+                    "h": 24,
+                    "w": 25
+                }
+            }]
+        }]
+    }, {
+        "Name": "Winston",
+        "Animations": [{
+            "Name": "Idle",
+            "Frames": [{
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "y": 6,
+                        "x": 2,
+                        "h": 14,
+                        "w": 21
+                    }
+                }],
+                "Duration": 100,
+                "Name": "Frame 1",
+                "Dimensions": {
+                    "y": 126,
+                    "x": 175,
+                    "h": 20,
+                    "w": 25
+                }
+            }]
+        }, {
+            "Name": "Walking",
+            "Frames": [{
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "y": 6,
+                        "x": 2,
+                        "h": 14,
+                        "w": 21
+                    }
+                }],
+                "Duration": 100,
+                "Name": "Frame 1",
+                "Dimensions": {
+                    "y": 126,
+                    "x": 142,
+                    "h": 20,
+                    "w": 25
+                }
+            }, {
+                "Properties": [],
+                "Duration": 100,
+                "Name": "Frame 2",
+                "Dimensions": {
+                    "y": 126,
+                    "x": 108,
+                    "h": 20,
+                    "w": 25
+                }
+            }]
+        }, {
+            "Name": "Sitting",
+            "Frames": [{
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "y": 3,
+                        "x": 6,
+                        "h": 21,
+                        "w": 15
+                    }
+                }],
+                "Duration": 100,
+                "Name": "Frame 1",
+                "Dimensions": {
+                    "y": 184,
+                    "x": 111,
+                    "h": 24,
+                    "w": 22
+                }
+            }]
+        }]
+    }]
+}
