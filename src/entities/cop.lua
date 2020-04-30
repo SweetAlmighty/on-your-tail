@@ -3,6 +3,8 @@ require "src/entities/entity"
 
 Cop = class("Cop", Entity)
 
+copType = { 1, 2 }
+
 local time = 0
 local processMovement = function(cop)
     local _x = (cop.x + (cop.speed * cop.direction.x))
@@ -39,10 +41,11 @@ local processAnims = function(dt, cop)
         end
 
         if shouldUpdate then
+            cop.state = e_States.INTERACT
             Entity.resetAnim(cop, cop.state)
             shouldUpdate = false
         end
-    else
+    elseif not cop.interacting then
         local _x, _y = (player.x - cop.x), (player.y - cop.y)
         local denominator = math.sqrt((_x * _x) + (_y * _y))
         cop.direction = {
@@ -50,9 +53,6 @@ local processAnims = function(dt, cop)
             y = _y/denominator
         }
     end
-
-    cop.currentAnim:play(dt)
-    cop.quad = cop.currentAnim.currentFrame
 end
 
 function randomPosition()
@@ -64,30 +64,54 @@ function Cop:initialize()
     Entity.initialize(self, e_Types.COP, e_States.IDLE, 1)
     Entity.setPosition(self, {50, 150})
 
-    local type = lume.randomchoice(catType)
-    local info = animatFactory:CreateWithCollisions("cop")
-    local animats = info[type].Animations
+    local type = lume.randomchoice(copType)
+    local info = animateFactory:CreateAnimationSet("cop")
+    local animats = info[type]
+
+    local col = {
+        x = 0,
+        y = 0,
+        w = 0,
+        h = 0
+    }
+
+    local cols = {col, col, col, col}
 
     Entity.setAnims(self, {
         animats[1],
         animats[2],
         animats[3],
-        info[type].Colliders
+        cols
     })
 end
 
-function Cop:update(dt)
-    if not self.interacting then
-        processMovement(self)
+function Cop:startInteraction()
+    self.interacting = true
+    self.state = e_States.INTERACT
+    Entity.resetAnim(self, self.state)
+end
 
-        if lume.distance(player.x, player.y, self.x, self.y) < 20 then
-            self.direction = { x = 0,  y = 0 }
-        else
-            processAnims(dt, self)
-        end
+function Cop:endInteraction()
+    self.interacting = false
+    self.state = e_States.MOVING
+    Entity.resetAnim(self, self.state)
+end
+
+function Cop:update(dt)
+    Entity.update(self, dt)
+
+    local inRange = lume.distance(player.x, player.y, self.x, self.y) < 35
+
+    if inRange and not self.interacting then
+        self.direction = { x = 0,  y = 0 }
+        Cop.startInteraction(self)
+    elseif not inRange and self.interacting then
+        Cop.endInteraction(self)
+    elseif not inRange then
+        processMovement(self)
     end
 
-    Entity.update(self, dt)
+    processAnims(dt, self)
 
     if not self.alerted then
         if self.direction.x == -1 and player.x < self.x then
@@ -107,11 +131,10 @@ function Cop:finishInteraction()
     self.interactable = false
 end
 
-function Cop:reset()
+function Cop:resetSelf()
     self.alerted = false
     Entity.reset(self, randomPosition(self))
 end
 
 function Cop:draw() Entity.draw(self) end
-function Cop:startInteraction() self.interacting = true end
 function Cop:reset() Entity.reset(self, randomPosition()) end

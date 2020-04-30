@@ -41,11 +41,9 @@ DirectionsIndices = {
     Directions.NW,
 }
 
-
 local showPosition  = function(entity) love.graphics.points(entity.x, entity.y) end
 local showCollider  = function(col) love.graphics.rectangle("line", col.x, col.y, col.w, col.h) end
 local showDebugInfo = function(entity) showCollider(entity.collider) showPosition(entity) end
-
 
 function Entity:initialize(type, state, speed)
     self.width = 0
@@ -77,18 +75,17 @@ function Entity:resetAnim(state)
         self.currentAnim = self.interactAnim
     end
 
-    self.currentAnim:reset()
-    self.quad = self.currentAnim.currentFrame
-
-    self:updateCollider()
+    self.currentAnim.Reset()
+    self.collider = self.currentAnim.CurrentFrame().collider
 end
 
 function Entity:updateCollider()
+    local col = self.currentAnim.CurrentFrame().collider
     self.collider = {
-        x = self.colliders[self.state]["x"] + self.x,
-        y = self.colliders[self.state]["y"] + self.y,
-        w = self.colliders[self.state]["w"],
-        h = self.colliders[self.state]["h"]
+        x = col.x + self.x,
+        y = col.y + self.y,
+        w = col.w,
+        h = col.h
     }
 end
 
@@ -98,16 +95,17 @@ function Entity:setPosition(position)
 end
 
 function Entity:draw()
-    local rot = (self.direction.x < 0) and -1 or 1
-    local offset = (rot == -1) and self.width or 0
-
-    love.graphics.draw(self.currentAnim.img, self.quad, self.x, self.y, 0, rot, 1, offset, 0)
+    self.currentAnim.Draw(self.x, self.y, self.direction.x < 0)
     showDebugInfo(self)
 end
 
 function Entity:update(dt)
-    _, _, self.width, self.height = self.quad:getViewport()
+    self.currentAnim.Update(dt)
     self:updateCollider()
+
+    local dim = self.currentAnim.CurrentFrame().dimension
+    self.width = dim.w
+    self.height = dim.h
 end
 
 function Entity:reset(_position)
@@ -170,27 +168,26 @@ function Entity:handleCollisions(cols)
 end
 
 function Entity:clampToPlayBounds(x, y)
-    self.x = (self.type == e_Types.PLAYER) and self:clampEntityToXBounds(x) or x
-    self.y = self:clampEntityToYBounds(y)
-end
+    if self.type == e_Types.PLAYER then
+        if x < playableArea.x then
+            self.x = playableArea.x
+        elseif x > playableArea.width then
+            self.x = playableArea.width
+        else
+            self.x = x
+        end
+    else
+        self.x = x
+    end
 
-function Entity:clampEntityToXBounds(x)
-    local _x = x
-    if _x < playableArea.x - self.collider.x then
-        _x = playableArea.x - self.collider.x
-    elseif _x > playableArea.width - self.collider.w then
-        _x = playableArea.width - self.collider.w
-    end return _x
-end
-
-function Entity:clampEntityToYBounds(y)
-    local _y = y
-    local height = self.height - (self.collider.h/2)
-    if (_y + height) < playableArea.y then
-        _y = playableArea.y - height
-    elseif _y > playableArea.height - self.height then
-        _y = playableArea.height - self.height
-    end return _y
+    local _y = y + self.height
+    if _y < playableArea.y then
+        self.y = playableArea.y - self.height
+    elseif y > playableArea.height - self.height then
+        self.y = playableArea.height - self.height
+    else
+        self.y = y
+    end
 end
 
 function Entity:startInteraction() end

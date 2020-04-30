@@ -15,17 +15,16 @@ local processAnims = function(dt, player)
         Entity.resetAnim(player, player.state)
         previousState = player.state
     end
-
-    player.currentAnim:play(dt)
-    player.quad = player.currentAnim.currentFrame
 end
 
 function Player:initialize()
     Entity.initialize(self, e_Types.PLAYER, e_States.IDLE, 120)
     Entity.setPosition(self, {50, 150})
 
-    local info = animatFactory:CreateWithCollisions("character")
-    local animats = info[1].Animations
+    local info = animateFactory:CreateAnimationSet("character")
+    local animats = info[1]
+
+    self.failState = animats[4]
 
     Entity.setAnims(self, {
         animats[1],
@@ -44,7 +43,7 @@ function Player:update(dt)
 
     speed = (self.interacting) and 0 or 2
     self.speed = (self.interacting) and 0 or 120
-    moveCamera = ((self.x == playableArea.width - self.collider.w) and allowCameraMove)
+    moveCamera = ((self.x == playableArea.width) and allowCameraMove)
 
     processAnims(dt, self)
 

@@ -5,6 +5,11 @@
         "Animations": [{
             "Name": "Idle",
             "Frames": [{
+                "Offset": {
+                    "y": 87,
+                    "x": 13
+                },
+                "Duration": 100,
                 "Properties": [{
                     "Name": "Collider",
                     "Value": {
@@ -14,7 +19,6 @@
                         "w": 17
                     }
                 }],
-                "Duration": 100,
                 "Name": "Frame 1",
                 "Dimensions": {
                     "y": 11,
@@ -26,6 +30,11 @@
         }, {
             "Name": "Walking",
             "Frames": [{
+                "Offset": {
+                    "y": 87,
+                    "x": 11
+                },
+                "Duration": 100,
                 "Properties": [{
                     "Name": "Collider",
                     "Value": {
@@ -35,7 +44,6 @@
                         "w": 11
                     }
                 }],
-                "Duration": 100,
                 "Name": "Frame 1",
                 "Dimensions": {
                     "y": 11,
@@ -44,6 +52,11 @@
                     "w": 23
                 }
             }, {
+                "Offset": {
+                    "y": 85,
+                    "x": 15
+                },
+                "Duration": 100,
                 "Properties": [{
                     "Name": "Collider",
                     "Value": {
@@ -53,7 +66,6 @@
                         "w": 27
                     }
                 }],
-                "Duration": 100,
                 "Name": "Frame 2",
                 "Dimensions": {
                     "y": 13,
@@ -62,6 +74,11 @@
                     "w": 30
                 }
             }, {
+                "Offset": {
+                    "y": 87,
+                    "x": 11
+                },
+                "Duration": 100,
                 "Properties": [{
                     "Name": "Collider",
                     "Value": {
@@ -71,7 +88,6 @@
                         "w": 11
                     }
                 }],
-                "Duration": 100,
                 "Name": "Frame 3",
                 "Dimensions": {
                     "y": 11,
@@ -80,6 +96,11 @@
                     "w": 23
                 }
             }, {
+                "Offset": {
+                    "y": 85,
+                    "x": 15
+                },
+                "Duration": 100,
                 "Properties": [{
                     "Name": "Collider",
                     "Value": {
@@ -89,7 +110,6 @@
                         "w": 27
                     }
                 }],
-                "Duration": 100,
                 "Name": "Frame 4",
                 "Dimensions": {
                     "y": 13,
@@ -101,6 +121,11 @@
         }, {
             "Name": "Petting",
             "Frames": [{
+                "Offset": {
+                    "y": 75,
+                    "x": 26
+                },
+                "Duration": 100,
                 "Properties": [{
                     "Name": "Collider",
                     "Value": {
@@ -110,7 +135,6 @@
                         "w": 34
                     }
                 }],
-                "Duration": 100,
                 "Name": "Frame 1",
                 "Dimensions": {
                     "y": 127,
@@ -119,6 +143,11 @@
                     "w": 52
                 }
             }, {
+                "Offset": {
+                    "y": 75,
+                    "x": 27
+                },
+                "Duration": 100,
                 "Properties": [{
                     "Name": "Collider",
                     "Value": {
@@ -128,7 +157,6 @@
                         "w": 37
                     }
                 }],
-                "Duration": 100,
                 "Name": "Frame 2",
                 "Dimensions": {
                     "y": 127,
@@ -140,6 +168,11 @@
         }, {
             "Name": "Fail",
             "Frames": [{
+                "Offset": {
+                    "y": 60,
+                    "x": 17
+                },
+                "Duration": 100,
                 "Properties": [{
                     "Name": "Collider",
                     "Value": {
@@ -149,7 +182,6 @@
                         "w": 34
                     }
                 }],
-                "Duration": 100,
                 "Name": "Frame 1",
                 "Dimensions": {
                     "y": 231,

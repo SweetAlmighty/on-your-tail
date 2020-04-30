@@ -65,9 +65,6 @@ local processAnims = function(dt, cat)
             Entity.resetAnim(cat, cat.state)
             shouldUpdate = false
         end
-
-        cat.currentAnim:play(dt)
-        cat.quad = cat.currentAnim.currentFrame
     end
 end
 
@@ -81,8 +78,8 @@ function Cat:initialize()
     Entity.setPosition(self, randomPosition())
 
     local type = lume.randomchoice(catType)
-    local info = animatFactory:CreateWithCollisions("cats")
-    local animats = info[type].Animations
+    local info = animateFactory:CreateAnimationSet("cats")
+    local animats = info[type]
 
     Entity.setAnims(self, {
         animats[1],

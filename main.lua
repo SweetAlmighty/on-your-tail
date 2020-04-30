@@ -3,7 +3,6 @@ require "src/backend/input"
 require "src/backend/require"
 require "src/backend/resources"
 require "src/states/stateMachine"
-require "src/backend/animatFactory"
 
 speed = 2
 currTime = 0
@@ -12,7 +11,7 @@ screenHeight = 240
 input = Input:new()
 resources = Resources:new()
 stateMachine = StateMachine:new()
-animatFactory = AnimatFactory:new()
+animateFactory = AnimateFactory:new()
 menuFont = resources:LoadFont("KarmaFuture", 20)
 titleFont = resources:LoadFont("KarmaFuture", 50)
 playableArea = { x = 0, y = 110, width = screenWidth/2, height = screenHeight }

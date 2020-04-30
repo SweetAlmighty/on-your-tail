@@ -40,7 +40,7 @@ end
 function Gameplay:initialize()
     self.time = {}
     self.speed = 2
-    self.totalCats = 1
+    self.totalCats = 8
     self.entities = { }
     self.elapsedTime = 0
     self.width = screenWidth
@@ -118,7 +118,7 @@ function Gameplay:update(dt)
     self:checkForReset(dt)
     self.time = { string.format("%.2f", self.elapsedTime), "s" }
     
-    --checkForCopSpawn(self)
+    checkForCopSpawn(self)
     checkForKittenSpawn(self)
 
     if moveCamera then self:updateBackground(dt) end
