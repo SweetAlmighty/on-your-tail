@@ -11,7 +11,7 @@ local processMovement = function(cop)
     local _y = (cop.y + (cop.speed * cop.direction.y))
 
     if cop.state == e_States.IDLE then
-        -- Maintain sitting position
+        -- Maintain Idle position
         _x = moveCamera and (cop.x - speed) or (cop.x)
         _y = cop.y
     else
@@ -22,7 +22,7 @@ local processMovement = function(cop)
             _x = _x + deltaX
         end
     end
-
+    
     Entity.move(cop, _x, _y)
     if cop.x < (-cop.width) then cop:reset() end
 end
@@ -68,20 +68,11 @@ function Cop:initialize()
     local info = animateFactory:CreateAnimationSet("cop")
     local animats = info[type]
 
-    local col = {
-        x = 0,
-        y = 0,
-        w = 0,
-        h = 0
-    }
-
-    local cols = {col, col, col, col}
-
     Entity.setAnims(self, {
         animats[1],
         animats[2],
         animats[3],
-        cols
+        info[1].Colliders
     })
 end
 
@@ -101,8 +92,8 @@ function Cop:update(dt)
     Entity.update(self, dt)
 
     local inRange = lume.distance(player.x, player.y, self.x, self.y) < 35
-
     if inRange and not self.interacting then
+        -- TODO: Change direction to look at player
         self.direction = { x = 0,  y = 0 }
         Cop.startInteraction(self)
     elseif not inRange and self.interacting then

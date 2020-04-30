@@ -1,1 +1,349 @@
-{"ImagePath":"c:/Users/brian/Documents/Repos/LOVE Projects/on-your-tail/data/sprites/images/cop.png","Types":[{"Name":"Donut","Animations":[{"Name":"Idle","Frames":[{"Offset":{"y":95,"x":10},"Duration":100,"Dimensions":{"y":11,"x":12,"h":95,"w":29},"Name":"Frame 1","Properties":[{"Name":"Collider","Value":{"x":5,"w":17,"y":58,"h":29,"isCollider":true}}]}]},{"Name":"Walking","Frames":[{"Offset":{"y":95,"x":15},"Duration":100,"Dimensions":{"y":11,"x":62,"h":95,"w":30},"Name":"Frame 1","Properties":[{"Name":"Collider","Value":{"x":6,"w":11,"y":59,"h":28,"isCollider":true}}]},{"Offset":{"y":93,"x":10},"Duration":100,"Dimensions":{"y":13,"x":115,"h":93,"w":33},"Name":"Frame 2","Properties":[{"Name":"Collider","Value":{"x":3,"w":27,"y":58,"h":27,"isCollider":true}}]},{"Offset":{"y":95,"x":15},"Duration":100,"Properties":[{"Name":"Collider","Value":{"x":6,"w":11,"y":59,"h":28,"isCollider":true}}],"Name":"Frame 3","Dimensions":{"y":11,"x":62,"h":95,"w":30}},{"Offset":{"y":93,"x":10},"Duration":100,"Dimensions":{"y":13,"x":226,"h":93,"w":34},"Name":"Frame 4","Properties":[{"Name":"Collider","Value":{"y":59,"x":3,"h":26,"w":27}}]}]},{"Name":"Attack","Frames":[{"Duration":100,"Dimensions":{"y":123,"x":4,"h":1,"w":1},"Name":"Frame 1","Properties":[{"Name":"Collider","Value":{"y":48,"x":18,"h":27,"w":34}}]},{"Offset":{"y":95,"x":11},"Duration":100,"Properties":[{"Name":"Collider","Value":{"x":18,"w":34,"y":48,"h":27,"isCollider":true}}],"Name":"Frame 2","Dimensions":{"y":134,"x":61,"h":95,"w":35}},{"Offset":{"y":94,"x":7},"Duration":100,"Dimensions":{"y":135,"x":120,"h":94,"w":45},"Name":"Frame 3","Properties":[{"Name":"Collider","Value":{"x":0,"w":45,"y":0,"h":94,"isCollider":true}}]}]}]},{"Name":"Nightstick","Animations":[{"Name":"Idle","Frames":[{"Offset":{"y":95,"x":11},"Duration":100,"Properties":[{"Name":"Collider","Value":{"x":0,"w":29,"y":0,"h":95,"isCollider":true}}],"Name":"Frame 1","Dimensions":{"y":258,"x":12,"h":95,"w":29}}]},{"Name":"Walking","Frames":[{"Offset":{"y":95,"x":15},"Duration":100,"Properties":[{"Name":"Collider","Value":{"x":6,"w":11,"y":59,"h":28,"isCollider":true}}],"Name":"Frame 1","Dimensions":{"y":258,"x":62,"h":95,"w":31}},{"Offset":{"y":93,"x":8},"Duration":100,"Dimensions":{"y":260,"x":115,"h":93,"w":48},"Name":"Frame 2","Properties":[{"Name":"Collider","Value":{"x":3,"w":27,"y":58,"h":27,"isCollider":true}}]},{"Offset":{"y":95,"x":15},"Duration":100,"Dimensions":{"y":258,"x":62,"h":95,"w":31},"Name":"Frame 3","Properties":[{"Name":"Collider","Value":{"x":6,"w":11,"y":59,"h":28,"isCollider":true}}]},{"Offset":{"y":93,"x":10},"Duration":100,"Dimensions":{"y":260,"x":225,"h":93,"w":36},"Name":"Frame 4","Properties":[{"Name":"Collider","Value":{"x":3,"w":27,"y":58,"h":27,"isCollider":true}}]}]},{"Name":"Attack","Frames":[{"Offset":{"y":95,"x":18},"Duration":100,"Dimensions":{"y":381,"x":58,"h":95,"w":41},"Name":"Frame 1","Properties":[{"Name":"Collider","Value":{"x":18,"w":34,"y":48,"h":27,"isCollider":true}}]},{"Offset":{"y":94,"x":7},"Duration":100,"Dimensions":{"y":382,"x":120,"h":94,"w":57},"Name":"Frame 2","Properties":[{"Name":"Collider","Value":{"x":18,"w":34,"y":48,"h":27,"isCollider":true}}]}]}]}]}
+{
+    "ImagePath": "c:/Users/brian/Documents/Repos/LOVE Projects/on-your-tail/data/sprites/images/cop.png",
+    "Types": [{
+        "Name": "Donut",
+        "Animations": [{
+            "Name": "Idle",
+            "Frames": [{
+                "Offset": {
+                    "y": 95,
+                    "x": 14
+                },
+                "Duration": 100,
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "x": 0,
+                        "w": 29,
+                        "y": 0,
+                        "h": 95,
+                        "isCollider": true
+                    }
+                }],
+                "Name": "Frame 1",
+                "Dimensions": {
+                    "y": 11,
+                    "x": 12,
+                    "h": 95,
+                    "w": 29
+                }
+            }]
+        }, {
+            "Name": "Walking",
+            "Frames": [{
+                "Offset": {
+                    "y": 95,
+                    "x": 15
+                },
+                "Duration": 100,
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "x": 6,
+                        "w": 11,
+                        "y": 59,
+                        "h": 28,
+                        "isCollider": true
+                    }
+                }],
+                "Name": "Frame 1",
+                "Dimensions": {
+                    "y": 11,
+                    "x": 62,
+                    "h": 95,
+                    "w": 30
+                }
+            }, {
+                "Offset": {
+                    "y": 93,
+                    "x": 16
+                },
+                "Duration": 100,
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "x": 0,
+                        "w": 33,
+                        "y": 0,
+                        "h": 93,
+                        "isCollider": true
+                    }
+                }],
+                "Name": "Frame 2",
+                "Dimensions": {
+                    "y": 13,
+                    "x": 115,
+                    "h": 93,
+                    "w": 33
+                }
+            }, {
+                "Offset": {
+                    "y": 95,
+                    "x": 15
+                },
+                "Duration": 100,
+                "Dimensions": {
+                    "y": 11,
+                    "x": 62,
+                    "h": 95,
+                    "w": 30
+                },
+                "Name": "Frame 3",
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "x": 0,
+                        "w": 30,
+                        "y": 0,
+                        "h": 95,
+                        "isCollider": true
+                    }
+                }]
+            }, {
+                "Offset": {
+                    "y": 93,
+                    "x": 17
+                },
+                "Duration": 100,
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "x": 0,
+                        "w": 34,
+                        "y": 0,
+                        "h": 93,
+                        "isCollider": true
+                    }
+                }],
+                "Name": "Frame 4",
+                "Dimensions": {
+                    "y": 13,
+                    "x": 226,
+                    "h": 93,
+                    "w": 34
+                }
+            }]
+        }, {
+            "Name": "Attack",
+            "Frames": [{
+                "Offset": {
+                    "y": 95,
+                    "x": 17
+                },
+                "Duration": 100,
+                "Dimensions": {
+                    "y": 134,
+                    "x": 61,
+                    "h": 95,
+                    "w": 35
+                },
+                "Name": "Frame 2",
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "x": 0,
+                        "w": 35,
+                        "y": 0,
+                        "h": 95,
+                        "isCollider": true
+                    }
+                }]
+            }, {
+                "Offset": {
+                    "y": 94,
+                    "x": 10
+                },
+                "Duration": 100,
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "x": 0,
+                        "w": 45,
+                        "y": 0,
+                        "h": 94,
+                        "isCollider": true
+                    }
+                }],
+                "Name": "Frame 3",
+                "Dimensions": {
+                    "y": 135,
+                    "x": 120,
+                    "h": 94,
+                    "w": 45
+                }
+            }]
+        }]
+    }, {
+        "Name": "Nightstick",
+        "Animations": [{
+            "Name": "Idle",
+            "Frames": [{
+                "Offset": {
+                    "y": 95,
+                    "x": 14
+                },
+                "Duration": 100,
+                "Dimensions": {
+                    "y": 258,
+                    "x": 12,
+                    "h": 95,
+                    "w": 29
+                },
+                "Name": "Frame 1",
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "x": 0,
+                        "w": 29,
+                        "y": 0,
+                        "h": 95,
+                        "isCollider": true
+                    }
+                }]
+            }]
+        }, {
+            "Name": "Walking",
+            "Frames": [{
+                "Offset": {
+                    "y": 95,
+                    "x": 15
+                },
+                "Duration": 100,
+                "Dimensions": {
+                    "y": 258,
+                    "x": 62,
+                    "h": 95,
+                    "w": 31
+                },
+                "Name": "Frame 1",
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "x": 0,
+                        "w": 31,
+                        "y": 0,
+                        "h": 95,
+                        "isCollider": true
+                    }
+                }]
+            }, {
+                "Offset": {
+                    "y": 93,
+                    "x": 24
+                },
+                "Duration": 100,
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "y": 0,
+                        "x": 0,
+                        "h": 93,
+                        "w": 48
+                    }
+                }],
+                "Name": "Frame 2",
+                "Dimensions": {
+                    "y": 260,
+                    "x": 115,
+                    "h": 93,
+                    "w": 48
+                }
+            }, {
+                "Offset": {
+                    "y": 95,
+                    "x": 15
+                },
+                "Duration": 100,
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "x": 0,
+                        "w": 31,
+                        "y": 0,
+                        "h": 95,
+                        "isCollider": true
+                    }
+                }],
+                "Name": "Frame 3",
+                "Dimensions": {
+                    "y": 258,
+                    "x": 62,
+                    "h": 95,
+                    "w": 31
+                }
+            }, {
+                "Offset": {
+                    "y": 93,
+                    "x": 18
+                },
+                "Duration": 100,
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "x": 0,
+                        "w": 36,
+                        "y": 0,
+                        "h": 93,
+                        "isCollider": true
+                    }
+                }],
+                "Name": "Frame 4",
+                "Dimensions": {
+                    "y": 260,
+                    "x": 225,
+                    "h": 93,
+                    "w": 36
+                }
+            }]
+        }, {
+            "Name": "Attack",
+            "Frames": [{
+                "Offset": {
+                    "y": 95,
+                    "x": 20
+                },
+                "Duration": 100,
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "x": 0,
+                        "w": 41,
+                        "y": 0,
+                        "h": 95,
+                        "isCollider": true
+                    }
+                }],
+                "Name": "Frame 1",
+                "Dimensions": {
+                    "y": 381,
+                    "x": 58,
+                    "h": 95,
+                    "w": 41
+                }
+            }, {
+                "Offset": {
+                    "y": 94,
+                    "x": 27
+                },
+                "Duration": 100,
+                "Properties": [{
+                    "Name": "Collider",
+                    "Value": {
+                        "x": 0,
+                        "w": 57,
+                        "y": 0,
+                        "h": 94,
+                        "isCollider": true
+                    }
+                }],
+                "Name": "Frame 2",
+                "Dimensions": {
+                    "y": 382,
+                    "x": 120,
+                    "h": 94,
+                    "w": 57
+                }
+            }]
+        }]
+    }]
+}
