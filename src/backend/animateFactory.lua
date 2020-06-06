@@ -13,7 +13,7 @@ local createAnimation = function (image)
         AddFrame = function(x, y, w, h)
             totalFrames = totalFrames + 1
             frames[totalFrames] = {
-                duration = data.Duration,
+                --duration = data.Duration,
                 quad = love.graphics.newQuad(x, y, w, h, image:getDimensions())
             }
         end,
@@ -61,15 +61,19 @@ local createAnimation = function (image)
         end,
 
         Draw = function(x, y, mirror)
+            local frame = frames[frameCount]
             local offset = { x = 0, y = 0 }
+            --    x = frame.dimension.w / 2,
+            --    y = frame.dimension.h 
+            --}
 
-            if frames[frameCount].origin ~= nil then
-                offset = frames[frameCount].origin
-            end
+            --if frames[frameCount].origin ~= nil then
+            --    offset = frames[frameCount].origin
+            --end
 
             if mirror then
                 local _, _, w, _ = frames[frameCount].quad:getViewport()
-                offset.x = w - offset.x
+                offset.x = w -- - offset.x
             end
 
             local xScale = mirror and -1 or 1
@@ -79,6 +83,40 @@ local createAnimation = function (image)
         Reset = function()
             frameCount = 1
         end
+    }
+end
+
+local createSheet = function (image)
+    local frames = { }
+    local totalFrames = 0
+    local dimensions = { }
+    
+    return {
+        AddFrame = function(x, y, w, h)
+            totalFrames = totalFrames + 1
+            frames[totalFrames] = {
+                quad = love.graphics.newQuad(x, y, w, h, image:getDimensions())
+            }
+        end,
+
+        GetFrameDimensions = function(frame)
+            return frames[frame].quad:getViewport()
+        end,
+
+        SetImageWrap = function(horizontal, vertical)
+            image:setWrap(horizontal, vertical)
+        end,
+
+        Draw = function(frame, x, y)
+            local offset = { x = 0, y = 0 }
+            love.graphics.draw(image, frames[frame].quad, x, y, 0, 1, 1, offset.x, offset.y)
+        end,
+
+        DrawScroll = function(frame, x, y, pos)
+            local _x, _y, _w, _h = frames[frame].quad:getViewport()
+            frames[frame].quad = love.graphics.newQuad(-pos, _y, _w, _h, image:getDimensions())
+            love.graphics.draw(image, frames[frame].quad, x, y, 0)
+        end,
     }
 end
 
@@ -103,6 +141,23 @@ function AnimateFactory:CreateAnimationSet(filename)
         end
 
         return types
+    end
+
+    return nil
+end
+
+function AnimateFactory:CreateTileSet(filename)
+    local file = resources:LoadSheet(filename)
+    if file ~= nil then
+        local image = resources:LoadImage(filename)
+        local anim = createSheet(image)
+        
+        for i = 1, #file.Frames do
+            local dims = file.Frames[i].Dimensions
+            anim.AddFrame(dims.x, dims.y, dims.w, dims.h)
+        end
+
+        return anim
     end
 
     return nil

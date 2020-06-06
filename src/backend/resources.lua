@@ -12,6 +12,11 @@ local animType = ".json"
 local animPath = "/data/sprites/anims/"
 local anim = function(name) return (animPath .. name .. animType) end
 
+local sheets = { }
+local sheetType = ".json"
+local sheetPath = "/data/sprites/sheet/"
+local sheet = function(name) return (sheetPath .. name .. sheetType) end
+
 local images = { }
 local imageType = ".png"
 local imagePath = "/data/sprites/images/"
@@ -45,6 +50,17 @@ function Resources:LoadFont(name, size)
         return fonts[name]
     end
     print("Font Error: Font at " .. path .. " could not be found.")
+    return nil
+end
+
+function Resources:LoadSheet(name)
+    if lume.find(sheets, name) then return sheets[name] end
+    local path = sheet(name)
+    if love.filesystem.getInfo(path) then
+        sheets[name] = json.decode(love.filesystem.read(path))
+        return sheets[name]
+    end
+    print("Sheet Error: Sheet at " .. path .. " could not be found.")
     return nil
 end
 

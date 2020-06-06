@@ -179,6 +179,8 @@ function Entity:clampToPlayBounds(x, y)
     else
         self.x = x
     end
+    
+    self.x = math.floor(self.x + 0.5)
 
     local _y = y + self.height
     if _y < playableArea.y then
@@ -188,6 +190,8 @@ function Entity:clampToPlayBounds(x, y)
     else
         self.y = y
     end
+
+    self.y = math.floor(self.y + 0.5)
 end
 
 function Entity:startInteraction() end

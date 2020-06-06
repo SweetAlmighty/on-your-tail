@@ -93,8 +93,6 @@ function Cop:update(dt)
 
     local inRange = lume.distance(player.x, player.y, self.x, self.y) < 35
     if inRange and not self.interacting then
-        -- TODO: Change direction to look at player
-        self.direction = { x = 0,  y = 0 }
         Cop.startInteraction(self)
     elseif not inRange and self.interacting then
         Cop.endInteraction(self)

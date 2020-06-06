@@ -1,4 +1,4 @@
-
+require "src/backend/require"
 require "src/states/state"
 require "src/entities/cat"
 require "src/entities/cop"
@@ -50,25 +50,45 @@ function Gameplay:initialize()
     self.threshold = -(self.width - 1)
     self.one = { x = 0, y = 0, id = 0 }
     self.hud = resources:LoadImage("stressbar")
-    self.two = { x = self.width, y = 0, id = 0 }
-    self.image = resources:LoadImage("background")
-    self.batch = love.graphics.newSpriteBatch(self.image, 2)
+
+    self.street = animateFactory:CreateTileSet("Street")
+    self.street.SetImageWrap('repeat', 'clampzero')
+
     self.bar = love.graphics.newQuad(0, 0, 122, 20, 122, 42)
     self.barbg = love.graphics.newQuad(0, 21, 122, 20, 122, 42)
-    self.quad = love.graphics.newQuad(0, 0, self.width, self.height, self.width, self.height)
-    self.one.id = self.batch:add(self.quad, self.one.x, self.one.y)
-    self.two.id = self.batch:add(self.quad, self.two.x, self.two.y)
 
     self.bgMusic = resources:LoadMusic("PP_Silly_Goose_FULL_Loop")
     self.bgMusic:setLooping(true)
     self.bgMusic:play()
 
     Gameplay.createEntities(self)
+    Gameplay.createBuildings(self)
     love.graphics.setFont(menuFont)
 end
 
+function Gameplay:createBuildings()
+    self.two = { one = 0, two = 0, three = 0, four = 0 }
+    self.buildings = animateFactory:CreateTileSet("Buildings")
+
+    for i=1, 3, 1 do
+        local _, _, w, _ = self.buildings.GetFrameDimensions(i)
+        if i == 1 then
+            self.two.two = w
+        elseif i == 2 then
+            self.two.three = self.two.two + w
+        elseif i == 3 then
+            self.two.four = self.two.three + w
+        end
+    end
+end
+
 function Gameplay:draw()
-    self:drawBackground()
+    self.street.DrawScroll(1, 0, 126, self.one.x)
+    
+    for i=1, 4, 1 do
+        self.buildings.Draw(i, self:getBuildingPosition(i), 0)
+    end
+
     self:drawEntities()
     self:drawUI()
 end
@@ -95,11 +115,28 @@ function Gameplay:drawUI()
     love.graphics.draw(self.hud, self.barbg, 10, 10, nil, nil, nil, nil, nil)
 end
 
+function Gameplay:getBuildingPosition(index)
+    if index == 1 then
+        return self.two.one
+    elseif index == 2 then
+        return self.two.two
+    elseif index == 3 then
+        return self.two.three
+    elseif index == 4 then
+        return self.two.four
+    end
+end
+
 function Gameplay:updateBackground(dt)
-    self.one.x = ((self.one.x - speed) < self.threshold) and (self.width) or (self.one.x - speed)
-    self.batch:set(self.one.id, self.quad, self.one.x, self.one.y)
-    self.two.x = ((self.two.x - speed) < self.threshold) and (self.width) or (self.two.x - speed)
-    self.batch:set(self.two.id, self.quad, self.two.x, self.two.y)
+    self:updateBuildings()
+    self.one.x = self.one.x - self.speed
+end
+
+function Gameplay:updateBuildings()
+    self.two.one = ((self.two.one - speed) < self.threshold) and (self.width) or (self.two.one - speed)
+    self.two.two = ((self.two.two - speed) < self.threshold) and (self.width) or (self.two.two - speed)
+    self.two.three = ((self.two.three - speed) < self.threshold) and (self.width) or (self.two.three - speed)
+    self.two.four = ((self.two.four - speed) < self.threshold) and (self.width) or (self.two.four - speed)
 end
 
 function Gameplay:checkForReset(dt)
