@@ -3,7 +3,7 @@ require "src/backend/input"
 require "src/backend/require"
 require "src/backend/resources"
 require "src/states/stateMachine"
-require "src/backend/animatFactory"
+require "src/backend/animateFactory"
 local lovesize = require("src/lib/lovesize")
 
 speed = 2
