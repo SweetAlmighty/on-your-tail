@@ -6,5 +6,6 @@
 - Lume (https://github.com/rxi/lume/)
 - middleclass (https://github.com/kikito/middleclass)
 - animat (https://github.com/darkfire613/animat)
+- lovesize (https://github.com/RicardoBusta/lovesize)
 - json.lua (https://github.com/rxi/json.lua)
 - Karma Future font (http://www.typodermicfonts.com)
