@@ -72,6 +72,7 @@ end
 
 function Player:reset()
     self.stress = 0
+    setState(self, e_States.IDLE)
     Entity.reset(self, { 50, 150 })
 end
 

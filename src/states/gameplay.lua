@@ -1,9 +1,9 @@
-require "src/backend/require"
 require "src/states/state"
 require "src/entities/cat"
 require "src/entities/cop"
 require "src/entities/kitten"
 require "src/entities/player"
+require "src/backend/require"
 require "src/entities/entityController"
 
 Gameplay = class("Gameplay", Gameplay)
@@ -36,19 +36,17 @@ local checkForCopSpawn = function(scene)
     end
 end
 
-
 function Gameplay:initialize()
-    self.time = {}
+    self.time = { }
     self.speed = 2
     self.totalCats = 8
     self.entities = { }
     self.elapsedTime = 0
+    self.streetPosition = 0
     self.width = screenWidth
     self.height = screenHeight
     self.type = States.Gameplay
-    self.coords = { x = 0, y = 0, }
     self.threshold = -(self.width - 1)
-    self.one = { x = 0, y = 0, id = 0 }
     self.hud = resources:LoadImage("stressbar")
 
     self.street = animateFactory:CreateTileSet("Street")
@@ -66,28 +64,10 @@ function Gameplay:initialize()
     love.graphics.setFont(menuFont)
 end
 
-function Gameplay:createBuildings()
-    self.two = { one = 0, two = 0, three = 0, four = 0 }
-    self.buildings = animateFactory:CreateTileSet("Buildings")
-
-    for i=1, 3, 1 do
-        local _, _, w, _ = self.buildings.GetFrameDimensions(i)
-        if i == 1 then
-            self.two.two = w
-        elseif i == 2 then
-            self.two.three = self.two.two + w
-        elseif i == 3 then
-            self.two.four = self.two.three + w
-        end
-    end
-end
-
 function Gameplay:draw()
-    self.street.DrawScroll(1, 0, 126, self.one.x)
+    self.street.DrawScroll(1, 0, 126, self.streetPosition)
     
-    for i=1, 4, 1 do
-        self.buildings.Draw(i, self:getBuildingPosition(i), 0)
-    end
+    for i=1, 4, 1 do self.buildings.Draw(i, self.buildingPositions[i], 0) end
 
     self:drawEntities()
     self:drawUI()
@@ -103,6 +83,8 @@ function Gameplay:reset()
     currTime = self.elapsedTime
     self.elapsedTime = 0
     self.bgMusic:stop()
+
+    player:reset()
     entityController:reset()
 end
 
@@ -111,32 +93,31 @@ function Gameplay:drawUI()
     love.graphics.print(table.concat(self.time), self.width - 75, 5)
 
     love.graphics.setColor(1, 1, 1)
-    love.graphics.draw(self.hud, self.bar, 11, 10, nil, player.stress/121, 1, nil, nil)
-    love.graphics.draw(self.hud, self.barbg, 10, 10, nil, nil, nil, nil, nil)
-end
-
-function Gameplay:getBuildingPosition(index)
-    if index == 1 then
-        return self.two.one
-    elseif index == 2 then
-        return self.two.two
-    elseif index == 3 then
-        return self.two.three
-    elseif index == 4 then
-        return self.two.four
-    end
+    love.graphics.draw(self.hud, self.bar, 11, 10, nil, player.stress/121, 1)
+    love.graphics.draw(self.hud, self.barbg, 10, 10)
 end
 
 function Gameplay:updateBackground(dt)
     self:updateBuildings()
-    self.one.x = self.one.x - self.speed
+    self.streetPosition = self.streetPosition - self.speed
 end
 
 function Gameplay:updateBuildings()
-    self.two.one = ((self.two.one - speed) < self.threshold) and (self.width) or (self.two.one - speed)
-    self.two.two = ((self.two.two - speed) < self.threshold) and (self.width) or (self.two.two - speed)
-    self.two.three = ((self.two.three - speed) < self.threshold) and (self.width) or (self.two.three - speed)
-    self.two.four = ((self.two.four - speed) < self.threshold) and (self.width) or (self.two.four - speed)
+    for i=1, 4, 1 do
+        local newX = self.buildingPositions[i] - speed
+        local offscreen = newX < self.threshold
+        self.buildingPositions[i] = (offscreen and self.width or newX)
+    end
+end
+
+function Gameplay:createBuildings()
+    self.buildingPositions = {0, 0, 0, 0}
+    self.buildings = animateFactory:CreateTileSet("Buildings")
+
+    for i=1, 3, 1 do
+        local _, _, w, _ = self.buildings.GetFrameDimensions(i)
+        self.buildingPositions[i+1] = self.buildingPositions[i] + w
+    end
 end
 
 function Gameplay:checkForReset(dt)
