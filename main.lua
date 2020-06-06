@@ -14,7 +14,7 @@ stateMachine = StateMachine:new()
 animateFactory = AnimateFactory:new()
 menuFont = resources:LoadFont("KarmaFuture", 20)
 titleFont = resources:LoadFont("KarmaFuture", 50)
-playableArea = { x = 0, y = 110, width = screenWidth/2, height = screenHeight }
+playableArea = { x = 0, y = 150, width = screenWidth/2, height = screenHeight }
 
 function love.load()
     stateMachine:push(States.MainMenu)
