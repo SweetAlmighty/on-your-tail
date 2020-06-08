@@ -2,6 +2,7 @@ PropHandler = class('PropHandler')
 
 local props = { }
 local propCount = 8
+local totalProps = 10
 local currentProps = { }
 
 local getNextPosition = function(index)
@@ -11,8 +12,8 @@ end
 
 function PropHandler:initialize()
     self.propTiles = animateFactory:CreateTileSet("Props")
-    
-    for i=1, 10, 1 do
+
+    for i=1, totalProps, 1 do
         local _, _, w, _ = self.propTiles.GetFrameDimensions(i)
         props[#props+1] = {
             pos = 0,
@@ -49,7 +50,7 @@ function PropHandler:update()
         local newX = currentProps[i].pos - 2
         local threshold = (currentProps[i].width + 1)
         local offscreen = newX < -threshold
-        
+
         if offscreen then
             -- Change Prop
             local index = love.math.random(1, 10)

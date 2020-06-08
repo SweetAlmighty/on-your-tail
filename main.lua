@@ -67,7 +67,7 @@ function setTime(time)
 end
 
 function love.draw()
-    love.graphics.clear(0, 0, 0)
+    love.graphics.clear(50/255, 50/255, 50/255)
     lovesize.begin()
         stateMachine:current():draw()
     lovesize.finish()

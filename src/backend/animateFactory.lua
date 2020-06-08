@@ -87,13 +87,19 @@ local createSheet = function (image)
     local frames = { }
     local totalFrames = 0
     local dimensions = { }
-    
+
     return {
-        AddFrame = function(x, y, w, h)
+        AddFrame = function(frame)
+            local dims = frame.Dimensions
             totalFrames = totalFrames + 1
             frames[totalFrames] = {
-                quad = love.graphics.newQuad(x, y, w, h, image:getDimensions())
+                properties = frame.Properties,
+                quad = love.graphics.newQuad(dims.x, dims.y, dims.w, dims.h, image:getDimensions())
             }
+        end,
+
+        GetProperty = function(frame)--, property)
+            return frames[frame].properties[1].Value
         end,
 
         GetFrameDimensions = function(frame)
@@ -131,7 +137,7 @@ function AnimateFactory:CreateAnimationSet(filename)
                 for k = 1, #file.Types[i].Animations[j].Frames do
                     anim.AddFrameWithData(file.Types[i].Animations[j].Frames[k])
                 end
-                animats[#animats + 1] = anim 
+                animats[#animats + 1] = anim
             end
 
             types[#types + 1] = animats
@@ -148,10 +154,9 @@ function AnimateFactory:CreateTileSet(filename)
     if file ~= nil then
         local image = resources:LoadImage(filename)
         local anim = createSheet(image)
-        
+
         for i = 1, #file.Frames do
-            local dims = file.Frames[i].Dimensions
-            anim.AddFrame(dims.x, dims.y, dims.w, dims.h)
+            anim.AddFrame(file.Frames[i])
         end
 
         return anim

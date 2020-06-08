@@ -2,6 +2,7 @@ BuildingHandler = class('BuildingHandler')
 
 local buildings = { }
 local buildingCount = 4
+local totalBuildings = 11
 local currentBuildings = { }
 
 local getNextPosition = function(index)
@@ -11,9 +12,10 @@ end
 
 function BuildingHandler:initialize()
     self.buildingTiles = animateFactory:CreateTileSet("Buildings")
-    
-    for i=1, 11, 1 do
+
+    for i=1, totalBuildings, 1 do
         local _, _, w, _ = self.buildingTiles.GetFrameDimensions(i)
+
         buildings[#buildings+1] = {
             pos = 0,
             type = i,
@@ -49,7 +51,7 @@ function BuildingHandler:update()
         local newX = currentBuildings[i].pos - 2
         local threshold = (currentBuildings[i].width + 1)
         local offscreen = newX < -threshold
-        
+
         if offscreen then
             -- Change Building
             local index = love.math.random(1, 11)

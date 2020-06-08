@@ -71,7 +71,7 @@ end
 function Gameplay:draw()
     self.street.DrawScroll(1, 0, 126, self.streetPosition)
     self.buildingHandler:draw()
-    self.propHandler:draw()
+    --self.propHandler:draw()
     self:drawEntities()
     self:drawUI()
 end
@@ -123,7 +123,7 @@ end
 function Gameplay:update(dt)
     self:checkForReset(dt)
     self.time = { string.format("%.2f", self.elapsedTime), "s" }
-    
+
     checkForCopSpawn(self)
     checkForKittenSpawn(self)
 
