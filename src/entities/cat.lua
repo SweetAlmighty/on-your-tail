@@ -95,8 +95,11 @@ end
 
 function Cat:draw()
     Entity.draw(self)
+    local currFrame = self.currentAnim.CurrentFrame()
+    local dim = currFrame.dimension
+    local offset = currFrame.origin == nil and { x=0, y=0 } or currFrame.origin
     if self.interactable and self.limit > 0 then
-        self.button:draw(self.x + 20, self.y)
+        self.button:draw(self.x - offset.x, self.y - dim.h)
     end
 end
 

@@ -63,17 +63,14 @@ local createAnimation = function (image)
         Draw = function(x, y, mirror)
             local frame = frames[frameCount]
             local offset = { x = 0, y = 0 }
-            --    x = frame.dimension.w / 2,
-            --    y = frame.dimension.h 
-            --}
 
-            --if frames[frameCount].origin ~= nil then
-            --    offset = frames[frameCount].origin
-            --end
+            if frames[frameCount].origin ~= nil then
+                offset = frames[frameCount].origin
+            end
 
             if mirror then
                 local _, _, w, _ = frames[frameCount].quad:getViewport()
-                offset.x = w -- - offset.x
+                offset.x = w - offset.x
             end
 
             local xScale = mirror and -1 or 1

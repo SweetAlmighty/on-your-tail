@@ -76,7 +76,7 @@ function Entity:resetAnim(state)
     end
 
     self.currentAnim.Reset()
-    self.collider = self.currentAnim.CurrentFrame().collider
+    self.collider = { x = 0,  y = 0, w = 0,  h = 0 }
 end
 
 function Entity:updateCollider()

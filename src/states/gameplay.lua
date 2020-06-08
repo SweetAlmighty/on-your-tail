@@ -4,6 +4,8 @@ require "src/entities/cop"
 require "src/entities/kitten"
 require "src/entities/player"
 require "src/backend/require"
+require "src/backend/propHandler"
+require "src/backend/buildingHandler"
 require "src/entities/entityController"
 
 Gameplay = class("Gameplay", Gameplay)
@@ -59,16 +61,17 @@ function Gameplay:initialize()
     self.bgMusic:setLooping(true)
     self.bgMusic:play()
 
+    self.propHandler = PropHandler:new()
+    self.buildingHandler = BuildingHandler:new()
+
     Gameplay.createEntities(self)
-    Gameplay.createBuildings(self)
     love.graphics.setFont(menuFont)
 end
 
 function Gameplay:draw()
     self.street.DrawScroll(1, 0, 126, self.streetPosition)
-    
-    for i=1, 4, 1 do self.buildings.Draw(i, self.buildingPositions[i], 0) end
-
+    self.buildingHandler:draw()
+    self.propHandler:draw()
     self:drawEntities()
     self:drawUI()
 end
@@ -86,6 +89,8 @@ function Gameplay:reset()
 
     player:reset()
     entityController:reset()
+    self.propHandler:reset()
+    self.buildingHandler:reset()
 end
 
 function Gameplay:drawUI()
@@ -98,26 +103,9 @@ function Gameplay:drawUI()
 end
 
 function Gameplay:updateBackground(dt)
-    self:updateBuildings()
+    self.propHandler:update()
+    self.buildingHandler:update()
     self.streetPosition = self.streetPosition - self.speed
-end
-
-function Gameplay:updateBuildings()
-    for i=1, 4, 1 do
-        local newX = self.buildingPositions[i] - speed
-        local offscreen = newX < self.threshold
-        self.buildingPositions[i] = (offscreen and self.width or newX)
-    end
-end
-
-function Gameplay:createBuildings()
-    self.buildingPositions = {0, 0, 0, 0}
-    self.buildings = animateFactory:CreateTileSet("Buildings")
-
-    for i=1, 3, 1 do
-        local _, _, w, _ = self.buildings.GetFrameDimensions(i)
-        self.buildingPositions[i+1] = self.buildingPositions[i] + w
-    end
 end
 
 function Gameplay:checkForReset(dt)
