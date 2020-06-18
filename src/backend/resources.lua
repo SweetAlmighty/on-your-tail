@@ -36,6 +36,7 @@ function Resources:LoadImage(name)
     local path = image(name)
     if love.filesystem.getInfo(path) then
         images[name] = love.graphics.newImage(path)
+        images[name]:setFilter("nearest", "nearest")
         return images[name]
     end
     print("Image Error: Image at " .. path .. " could not be found.")

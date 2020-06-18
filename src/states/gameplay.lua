@@ -4,8 +4,7 @@ require "src/entities/cop"
 require "src/entities/kitten"
 require "src/entities/player"
 require "src/backend/require"
-require "src/backend/propHandler"
-require "src/backend/buildingHandler"
+require "src/backend/backgroundHandler"
 require "src/entities/entityController"
 
 Gameplay = class("Gameplay", Gameplay)
@@ -61,8 +60,7 @@ function Gameplay:initialize()
     self.bgMusic:setLooping(true)
     self.bgMusic:play()
 
-    self.propHandler = PropHandler:new()
-    self.buildingHandler = BuildingHandler:new()
+    self.backgroundHandler = BackgroundHandler:new()
 
     Gameplay.createEntities(self)
     love.graphics.setFont(menuFont)
@@ -70,8 +68,7 @@ end
 
 function Gameplay:draw()
     self.street.DrawScroll(1, 0, 126, self.streetPosition)
-    self.buildingHandler:draw()
-    --self.propHandler:draw()
+    self.backgroundHandler:draw()
     self:drawEntities()
     self:drawUI()
 end
@@ -89,8 +86,7 @@ function Gameplay:reset()
 
     player:reset()
     entityController:reset()
-    self.propHandler:reset()
-    self.buildingHandler:reset()
+    self.backgroundHandler:reset()
 end
 
 function Gameplay:drawUI()
@@ -103,8 +99,7 @@ function Gameplay:drawUI()
 end
 
 function Gameplay:updateBackground(dt)
-    self.propHandler:update()
-    self.buildingHandler:update()
+    self.backgroundHandler:update()
     self.streetPosition = self.streetPosition - self.speed
 end
 

@@ -90,24 +90,37 @@ local createSheet = function (image)
 
     return {
         AddFrame = function(frame)
-            local dims = frame.Dimensions
             totalFrames = totalFrames + 1
             frames[totalFrames] = {
                 properties = frame.Properties,
-                quad = love.graphics.newQuad(dims.x, dims.y, dims.w, dims.h, image:getDimensions())
+                dimensions = frame.Dimensions,
+                quad = love.graphics.newQuad(
+                    frame.Dimensions.x,
+                    frame.Dimensions.y,
+                    frame.Dimensions.w,
+                    frame.Dimensions.h,
+                    image:getDimensions())
             }
         end,
 
-        GetProperty = function(frame)--, property)
+        GetFrame = function(frame)
+            return frames[frame]
+        end,
+
+        GetProperty = function(frame)
             return frames[frame].properties[1].Value
         end,
 
+        GetProperties = function(frame)
+            return frames[frame].properties
+        end,
+
         GetFrameDimensions = function(frame)
-            return frames[frame].quad:getViewport()
+            return frames[frame].dimensions
         end,
 
         SetImageWrap = function(horizontal, vertical)
-            image:setWrap(horizontal, vertical)
+            image:setWrap(horizontal, vertical) 
         end,
 
         Draw = function(frame, x, y)
@@ -116,8 +129,8 @@ local createSheet = function (image)
         end,
 
         DrawScroll = function(frame, x, y, pos)
-            local _x, _y, _w, _h = frames[frame].quad:getViewport()
-            frames[frame].quad = love.graphics.newQuad(-pos, _y, _w, _h, image:getDimensions())
+            local dims = frames[frame].dimensions
+            frames[frame].quad = love.graphics.newQuad(-pos, dims.y, dims.w, dims.h, image:getDimensions())
             love.graphics.draw(image, frames[frame].quad, x, y, 0)
         end,
     }
