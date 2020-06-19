@@ -9,7 +9,8 @@ pettingReduction = 15
 e_States = {
     IDLE     = 1,
     MOVING   = 2,
-    INTERACT = 3
+    INTERACT = 3,
+    FAIL     = 4
 }
 
 e_Types = {
@@ -62,6 +63,7 @@ function Entity:setAnims(anims)
     self.idleAnim = anims[1]
     self.moveAnim = anims[2]
     self.interactAnim = anims[3]
+    self.failAnim = anims[4]
     self.colliders = anims[#anims]
     self:resetAnim(e_States.IDLE)
 end
@@ -73,6 +75,8 @@ function Entity:resetAnim(state)
         self.currentAnim = self.moveAnim
     elseif state == e_States.INTERACT then
         self.currentAnim = self.interactAnim
+    elseif state == e_States.FAIL then
+        self.currentAnim = self.failAnim
     end
 
     self.currentAnim.Reset()
@@ -80,12 +84,12 @@ function Entity:resetAnim(state)
 end
 
 function Entity:updateCollider()
-    local col = self.currentAnim.CurrentFrame().collider
+    local frame = self.currentAnim.CurrentFrame()
     self.collider = {
-        x = col.x + self.x,
-        y = col.y + self.y,
-        w = col.w,
-        h = col.h
+        x = frame.collider.x + (self.x - frame.offset.x),
+        y = frame.collider.y + (self.y - frame.offset.y),
+        w = frame.collider.w,
+        h = frame.collider.h
     }
 end
 
@@ -103,7 +107,7 @@ function Entity:update(dt)
     self.currentAnim.Update(dt)
     self:updateCollider()
 
-    local dim = self.currentAnim.CurrentFrame().dimension
+    local dim = self.currentAnim.CurrentFrame().dimensions
     self.width = dim.w
     self.height = dim.h
 end
@@ -183,10 +187,10 @@ function Entity:clampToPlayBounds(x, y)
     self.x = math.floor(self.x + 0.5)
 
     local _y = y + self.height
-    if _y < playableArea.y then
-        self.y = playableArea.y - self.height
-    elseif y > playableArea.height - self.height then
-        self.y = playableArea.height - self.height
+    if _y < playableArea.y + self.height then
+        self.y = playableArea.y
+    elseif y > playableArea.height then
+        self.y = playableArea.height
     else
         self.y = y
     end

@@ -19,7 +19,7 @@ local createAnimation = function (image)
         end,
 
         AddFrameWithData = function(data)
-            local origin = nil
+            local offset = data.Offset
             local collider = nil
 
             for i = 1, #data.Properties do
@@ -27,16 +27,14 @@ local createAnimation = function (image)
 
                 if property.Name == "Collider" and collider == nil then
                     collider = property.Value
-                elseif property.Name == "Origin" and origin == nil then
-                    origin = property.Value
                 end
             end
 
             local dim = data.Dimensions
             totalFrames = totalFrames + 1
             frames[totalFrames] = {
-                origin = origin,
-                dimension = dim,
+                offset = offset,
+                dimensions = dim,
                 collider = collider,
                 duration = data.Duration,
                 quad = love.graphics.newQuad(dim.x, dim.y, dim.w, dim.h, image:getDimensions())
@@ -64,16 +62,12 @@ local createAnimation = function (image)
             local frame = frames[frameCount]
             local offset = { x = 0, y = 0 }
 
-            if frames[frameCount].origin ~= nil then
-                offset = frames[frameCount].origin
-            end
-
-            if mirror then
-                local _, _, w, _ = frames[frameCount].quad:getViewport()
-                offset.x = w - offset.x
+            if frames[frameCount].offset ~= nil then
+                offset = frames[frameCount].offset
             end
 
             local xScale = mirror and -1 or 1
+            local w = frames[frameCount].dimensions.w
             love.graphics.draw(image, frames[frameCount].quad, x, y, 0, xScale, 1, offset.x, offset.y)
         end,
 

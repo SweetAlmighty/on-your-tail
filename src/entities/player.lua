@@ -30,6 +30,7 @@ function Player:initialize()
         animats[1],
         animats[2],
         animats[3],
+        animats[4],
         info[1].Colliders
     })
 
@@ -88,6 +89,10 @@ function Player:petCats(dt)
         self.stress = self.stress - stressReduction
         if self.stress < 0 then self.stress = 0 end
     end
+end
+
+function Player:setFailState()
+    setState(self, e_States.FAIL)
 end
 
 function Player:startInteraction()
