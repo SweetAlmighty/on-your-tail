@@ -4,6 +4,8 @@ require "src/states/stateMachine"
 Input = class('Input')
 
 local delta = 0
+local playerX = 0
+local playerY = 0
 local state = nil
 local inputMap =
 {
@@ -45,6 +47,7 @@ function Input:process(dt)
     if keyDown(inputMap.lk3) then onLK3() end
     if keyDown(inputMap.lk4) then onLK4() end
     if keyDown(inputMap.lk5) then onLK5() end
+    player:move(playerX, playerY)
 end
 
 -- Face Buttons --
@@ -55,10 +58,10 @@ function onY() if state.type == States.Gameplay then player:finishInteraction() 
 -- Face Buttons --
 
 -- Movement --
-function onUp() if state.type == States.Gameplay then player:moveY(-delta) else state:up() end end
-function onDown() if state.type == States.Gameplay then player:moveY(delta) else state:down() end end
-function onLeft() if state.type == States.Gameplay then player:moveX(-delta) else state:left() end end
-function onRight() if state.type == States.Gameplay then player:moveX(delta) else state:right() end end
+function onUp() if state.type == States.Gameplay then playerY = -delta else state:up() end end
+function onDown() if state.type == States.Gameplay then playerY = delta else state:down() end end
+function onLeft() if state.type == States.Gameplay then playerX = -delta else state:left() end end
+function onRight() if state.type == States.Gameplay then playerX = delta else state:right() end end
 -- Movement --
 
 -- Light Keys --
@@ -90,11 +93,7 @@ end
 function love.keyreleased(k)
     state = stateMachine:current()
     if state.type == States.Gameplay then
-        if k == inputMap.left or k == inputMap.right then
-            player:moveX(0)
-        end
-        if k == inputMap.up or k == inputMap.down then
-            player:moveY(0)
-        end
+        if k == inputMap.up or k == inputMap.down then playerY = 0 end
+        if k == inputMap.left or k == inputMap.right then playerX = 0 end
     end
 end

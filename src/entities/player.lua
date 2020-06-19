@@ -38,7 +38,6 @@ function Player:initialize()
 end
 
 function Player:update(dt)
-    Entity.move(self, self.x, self.y)
     if not self.interacting then self.stress = self.stress + (dt * 5) end
 
     speed = (self.interacting) and 0 or 2
@@ -50,24 +49,22 @@ function Player:update(dt)
     Entity.update(self, dt)
 end
 
-function Player:moveX(x)
-    if self.interacting then allowCameraMove = false return end
-
+function Player:move(x, y)
+    if self.interacting then
+        allowCameraMove = false
+        return
+    end
+    
     allowCameraMove = (x ~= 0)
-    setState(self, allowCameraMove and e_States.MOVING or e_States.IDLE)
-
     if x ~= 0 then self.direction = (x < 0) and Directions.W or Directions.E end
 
+    local moving = x ~= 0 or y ~= 0
+    setState(self, moving and e_States.MOVING or e_States.IDLE)
+
     self.delta.x = self.speed * x
-    Entity.move(self, (self.x + self.delta.x), self.y)
-end
-
-function Player:moveY(y)
-    if self.interacting then return end
-
-    setState(self, (y ~= 0) and e_States.MOVING or e_States.IDLE)
     self.delta.y = self.speed * y
-    Entity.move(self, self.x, (self.y + self.delta.y))
+    
+    if moving then Entity.move(self, self.x + self.delta.x, self.y + self.delta.y) end
 end
 
 function Player:reset()
