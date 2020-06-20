@@ -39,7 +39,11 @@ function Player:initialize()
 end
 
 function Player:update(dt)
-    if not self.interacting then self.stress = self.stress + (dt * 5) end
+    --if self.state == e_States.FAIL then return end
+
+    if not self.interacting and self.state ~= e_States.FAIL then
+        self.stress = self.stress + (dt * 5)
+    end
 
     speed = (self.interacting) and 0 or 2
     self.speed = (self.interacting) and 0 or 120
@@ -51,6 +55,8 @@ function Player:update(dt)
 end
 
 function Player:move(x, y)
+    if self.state == e_States.FAIL then return end
+
     if self.interacting then
         allowCameraMove = false
         return
@@ -92,6 +98,7 @@ function Player:petCats(dt)
 end
 
 function Player:setFailState()
+    allowCameraMove = false
     setState(self, e_States.FAIL)
 end
 

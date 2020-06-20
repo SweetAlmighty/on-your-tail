@@ -11,6 +11,9 @@ Gameplay = class("Gameplay", Gameplay)
 
 local copMod = 0
 local kittenMod = 0
+local pause = false
+local pauseTime = 0
+local unpause = false
 local copFactor = love.math.random(1, 5)
 local kittenFactor = love.math.random(5, 15)
 local entityController = EntityController:new()
@@ -79,11 +82,10 @@ function Gameplay:createEntities()
     for _=1, self.totalCats, 1 do entityController:addEntity(Cat:new()) end
 end
 
-function Gameplay:reset()
-    currTime = self.elapsedTime
-    self.elapsedTime = 0
-    self.bgMusic:stop()
 
+function Gameplay:reset()
+    pause = false
+    unpause = false
     player:reset()
     entityController:reset()
     self.backgroundHandler:reset()
@@ -110,19 +112,40 @@ function Gameplay:checkForReset(dt)
     self.elapsedTime = self.elapsedTime + dt
 
     if player.stress >= 120 then
-        self:reset()
-        StateMachine:push(States.FailState)
+        pause = true
+        player:setFailState()
+    end
+end
+
+function Gameplay:checkPauseState(dt)
+    if pause and unpause then self:reset() end
+
+    if pause then
+        pauseTime = pauseTime + dt
+        if pauseTime > 1.5 then
+            unpause = true
+            pauseTime = 0
+
+            currTime = self.elapsedTime
+            self.elapsedTime = 0
+
+            self.bgMusic:stop()
+            StateMachine:push(States.FailMenu)
+        end
     end
 end
 
 function Gameplay:update(dt)
+    self:checkPauseState(dt)
     self:checkForReset(dt)
+    
     self.time = { string.format("%.2f", self.elapsedTime), "s" }
 
     checkForCopSpawn(self)
     checkForKittenSpawn(self)
 
     if moveCamera then self:updateBackground(dt) end
+
     entityController:update(dt)
 end
 

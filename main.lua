@@ -69,6 +69,6 @@ end
 function love.draw()
     love.graphics.clear(50/255, 50/255, 50/255)
     lovesize.begin()
-        stateMachine:current():draw()
+        stateMachine:draw()
     lovesize.finish()
 end

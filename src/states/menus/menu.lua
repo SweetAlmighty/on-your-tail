@@ -19,7 +19,9 @@ end
 
 function Menu:draw()
     local halfWidth = screenWidth/2
-    love.graphics.clear(self.clearColor.r, self.clearColor.g, self.clearColor.b, self.clearColor.a)
+
+    love.graphics.setColor(self.clearColor.r, self.clearColor.g, self.clearColor.b, self.clearColor.a)
+    love.graphics.rectangle("fill", 0, 0, 320, 240)
 
     -- Draw title
     love.graphics.setColor(0, 0, 0, 1)
