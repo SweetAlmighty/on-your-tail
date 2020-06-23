@@ -21,14 +21,13 @@ function ControlsMenu:initialize()
     self.startHeight = screenHeight - 30
     self.quad = isGameshell and gameshell or pc
     self.image = resources:LoadImage("controls")
-    self.clearColor = { r = 1, g = 1, b = 1, a = 0.5 }
+    self.clearColor = { r = 1, g = 1, b = 1, a = 1 }
     self.options = { love.graphics.newText(menuFont, "Back") }
 end
 
 function ControlsMenu:accept()
-    if self.index <= 2 then Menu.accept(self) end
-    if self.index == 1 then stateMachine:pop()
-    elseif self.index == 2 then stateMachine:clear() end
+    Menu.accept(self)
+    stateMachine:pop()
 end
 
 function ControlsMenu:draw()

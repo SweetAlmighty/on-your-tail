@@ -48,6 +48,7 @@ function Resources:LoadFont(name, size)
     local path = font(name)
     if love.filesystem.getInfo(path) then
         fonts[name] = love.graphics.newFont(path, size)
+        fonts[name]:setFilter("nearest", "nearest")
         return fonts[name]
     end
     print("Font Error: Font at " .. path .. " could not be found.")

@@ -12,8 +12,8 @@ function MainMenu:initialize()
     self.clearColor = { r = 1, g = 1, b = 1, a = 1}
     self.options = {
         love.graphics.newText(menuFont, "Play"),
-        love.graphics.newText(menuFont, "Scores"),
-        love.graphics.newText(menuFont, "Controls"),
+        love.graphics.newText(menuFont, "Extras"),
+        love.graphics.newText(menuFont, "Credits"),
         love.graphics.newText(menuFont, "Quit")
     }
 end
@@ -21,8 +21,8 @@ end
 function MainMenu:accept()
     self.acceptSFX:play()
     if self.index == 1 then stateMachine:push(States.Gameplay)
-    elseif self.index == 2 then stateMachine:push(States.HighscoreMenu)
-    elseif self.index == 3 then stateMachine:push(States.ControlsMenu)
+    elseif self.index == 2 then stateMachine:push(States.ExtrasMenu)
+    elseif self.index == 3 then stateMachine:push(States.CreditsMenu)
     else love.event.quit() end
 end
 

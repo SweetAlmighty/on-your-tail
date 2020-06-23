@@ -48,7 +48,7 @@ function FailMenu:accept()
     if self.index == 1 then
         stateMachine:pop()
     elseif self.index == 2 then
-        stateMachine:push(States.RestartMenu)
+        stateMachine:push(States.SetScoreMenu)
     else
         stateMachine:clear()
     end

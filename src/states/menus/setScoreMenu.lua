@@ -1,7 +1,7 @@
 
 require "src/states/menus/menu"
 
-RestartMenu = class("RestartMenu", Menu)
+SetScoreMenu = class("SetScoreMenu", Menu)
 
 local name = ""
 local letters = {}
@@ -19,11 +19,11 @@ local updateName = function(menu)
     menu.options[1] = love.graphics.newText(menuFont, name)
 end
 
-function RestartMenu:initialize()
+function SetScoreMenu:initialize()
     Menu.initialize(self)
     Menu.setTitle(self, "Enter Score")
 
-    self.type = States.RestartMenu
+    self.type = States.SetScoreMenu
     self.currX, self.currY = 1, 1
     self.name = { "A", "A", "A" }
     self.startHeight = screenHeight/2.5
@@ -41,13 +41,13 @@ function RestartMenu:initialize()
     for i=65, 90, 1 do table.insert(letters, string.char(i)) end
 end
 
-function RestartMenu:draw()
+function SetScoreMenu:draw()
     Menu.draw(self)
     love.graphics.setColor(0, 0, 0)
     love.graphics.print("_", (screenWidth / 2) - (127 - (12 * self.currX)), (screenHeight / 2.5) + 8)
 end
 
-function RestartMenu:up()
+function SetScoreMenu:up()
     if self.index == 1 then
         self.currY = (self.currY - 1 < 1) and 26 or self.currY - 1
         updateName(self)
@@ -62,7 +62,7 @@ function RestartMenu:up()
     end
 end
 
-function RestartMenu:down()
+function SetScoreMenu:down()
     if self.index == 1 then
         self.currY = (self.currY + 1 > 26) and 1 or self.currY + 1
         updateName(self)
@@ -77,7 +77,7 @@ function RestartMenu:down()
     end
 end
 
-function RestartMenu:left()
+function SetScoreMenu:left()
     if self.index == 1 then
         local x = self.currX - 1
         if x < 1 then x = 1 else
@@ -89,7 +89,7 @@ function RestartMenu:left()
     end
 end
 
-function RestartMenu:right()
+function SetScoreMenu:right()
     if self.index == 1 then
         local x = self.currX + 1
         if x > 3 then x = 3 else
@@ -101,7 +101,7 @@ function RestartMenu:right()
     end
 end
 
-function RestartMenu:accept()
+function SetScoreMenu:accept()
     self.acceptSFX:play()
     if self.index == 1 then
         self.index = self.index + 1

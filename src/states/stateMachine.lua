@@ -1,9 +1,11 @@
-
 require "src/states/gameplay"
 require "src/states/menus/mainMenu"
 require "src/states/menus/failMenu"
 require "src/states/menus/pauseMenu"
-require "src/states/menus/restartMenu"
+require "src/states/menus/extrasMenu"
+require "src/states/menus/creditsMenu"
+require "src/states/menus/optionsMenu"
+require "src/states/menus/setScoreMenu"
 require "src/states/menus/controlsMenu"
 require "src/states/menus/highscoreMenu"
 
@@ -16,21 +18,26 @@ States = {
     HighscoreMenu = 4,
     ControlsMenu = 5,
     FailMenu = 6,
-    RestartMenu = 7,
+    SetScoreMenu = 7,
+    ExtrasMenu = 8,
+    CreditsMenu = 9,
+    OptionsMenu = 10
 }
 
 local stack = { }
 
 function StateMachine:push(type)
-    print(type)
     local state = nil
     if type == States.MainMenu then state = MainMenu:new()
+    elseif type == States.FailMenu then state = FailMenu:new()
     elseif type == States.Gameplay then state = Gameplay:new()
     elseif type == States.PauseMenu then state = PauseMenu:new()
-    elseif type == States.HighscoreMenu then state = HighscoreMenu:new()
+    elseif type == States.ExtrasMenu then state = ExtrasMenu:new()
+    elseif type == States.CreditsMenu then state = CreditsMenu:new()
+    elseif type == States.OptionsMenu then state = OptionsMenu:new()
+    elseif type == States.SetScoreMenu then state = SetScoreMenu:new()
     elseif type == States.ControlsMenu then state = ControlsMenu:new()
-    elseif type == States.RestartMenu then state = RestartMenu:new() 
-    elseif type == States.FailMenu then state = FailMenu:new() end
+    elseif type == States.HighscoreMenu then state = HighscoreMenu:new() end
     if state ~= nil then
         if #stack >= 1 then stack[#stack]:pause() end
         table.insert(stack, state)

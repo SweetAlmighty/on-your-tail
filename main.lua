@@ -4,7 +4,8 @@ require "src/backend/require"
 require "src/backend/resources"
 require "src/states/stateMachine"
 require "src/backend/animateFactory"
-local lovesize = require("src/lib/lovesize")
+
+lovesize = require("src/lib/lovesize")
 
 speed = 2
 currTime = 0
@@ -23,13 +24,10 @@ function love.load()
 
     stateMachine:push(States.MainMenu)
 
-    local flags = {}
-    flags.resizable = true
-
     love.audio.setVolume(0.1)
     love.math.setRandomSeed(os.time())
     love.window.setTitle("On Your Tail")
-    love.window.setMode(lovesize.getWidth(), lovesize.getHeight(), flags)
+    love.window.setMode(lovesize.getWidth(), lovesize.getHeight())
     lovesize.resize(lovesize.getWidth(), lovesize.getHeight())
 
     if love.filesystem.getInfo("highscores.txt") == nil then
