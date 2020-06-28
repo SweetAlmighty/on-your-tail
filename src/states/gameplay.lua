@@ -141,7 +141,7 @@ function Gameplay:update(dt)
     
     self.time = { string.format("%.2f", self.elapsedTime), "s" }
 
-    checkForCopSpawn(self)
+    --checkForCopSpawn(self)
     checkForKittenSpawn(self)
 
     if moveCamera then self:updateBackground(dt) end

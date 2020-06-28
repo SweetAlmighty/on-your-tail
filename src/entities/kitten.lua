@@ -14,7 +14,7 @@ function Kitten:initialize()
 
     local type = lume.randomchoice(catType)
     local info = animateFactory:CreateAnimationSet("kittens")
-    local animats = info[type].Animations
+    local animats = info[type]
 
     Entity.setAnims(self, {
         animats[1],

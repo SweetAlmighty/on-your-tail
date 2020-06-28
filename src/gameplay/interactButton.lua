@@ -10,4 +10,4 @@ end
 
 function InteractButton:reset() self.animation.Reset() end
 function InteractButton:update(dt) self.animation.Update(dt) end
-function InteractButton:draw(x, y) self.animation.Draw(x, y) end
+function InteractButton:draw(x, y) self.animation.Draw(x + 10, y - 10) end
