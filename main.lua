@@ -24,7 +24,6 @@ function love.load()
 
     stateMachine:push(States.MainMenu)
 
-    love.audio.setVolume(0.1)
     love.math.setRandomSeed(os.time())
     love.window.setTitle("On Your Tail")
     love.window.setMode(lovesize.getWidth(), lovesize.getHeight())

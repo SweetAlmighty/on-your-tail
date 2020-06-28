@@ -34,6 +34,10 @@ end
 local initializeBuildings = function()
     local buildingTiles = animateFactory:CreateTileSet("Buildings")
 
+    buildingProps = { }
+    buildingFrames = { }
+    currentBuildings = { }
+
     for i=1, totalBuildings, 1 do
         buildingFrames[#buildingFrames+1] = buildingTiles.GetFrame(i)
         if i <= buildingCount then
@@ -47,6 +51,8 @@ end
 
 local initializeProps = function()
     local propTiles = animateFactory:CreateTileSet("Props")
+
+    currentProps = { }
 
     for i=1, totalProps, 1 do
         props[#props+1] = propTiles.GetFrame(i)
