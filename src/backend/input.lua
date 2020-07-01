@@ -7,12 +7,13 @@ local delta = 0
 local playerX = 0
 local playerY = 0
 local state = nil
+local isGameshell = love.system.getOS() == "Linux"
 local inputMap =
 {
     x = 'u',
     y = 'i',
-    a = 'j',
-    b = 'k',
+    a = isGameshell and 'j' or 'z',
+    b = isGameshell and 'k' or 'x',
     lk1 = "home",
     lk2 = "pageup",
     lk3 = "lshift",
