@@ -2,17 +2,8 @@ require "src/states/menus/menu"
 
 OptionsMenu = class("OptionsMenu", Menu)
 
-local volume = 10
-local resolutionIndex = 1
-local isFullscreen = false
+local settings = { }
 
-local resolutions = {
-    { w = 320, h = 240 },
-    { w = 640, h = 480 },
-    { w = 800, h = 600 },
-    { w = 1024, h = 768 },
-    { w = 1280, h = 960 }
-}
 
 local volumePosition = { x = 225, y = 80 }
 local resolutionPosition = { x = 225, y = 120 }
@@ -20,29 +11,26 @@ local fullscreenPosition = { x = 225, y = 160 }
 
 local volumeFont, resolutionFont, fullscreenFont
 
-local setVolume = function(value)
-    volume = volume + value
-    love.audio.setVolume(volume / 10)
-    volumeFont = love.graphics.newText(menuFont, volume)
+local setVolumeSetting = function(value)
+    setVolume(value)
+    volumeFont = love.graphics.newText(menuFont, settings.volume)
 end
 
-local setResolution = function(value)
-    if value ~= 0 then
-        resolutionIndex = resolutionIndex + value
-        local res = resolutions[resolutionIndex];
-        love.window.setMode(res.w, res.h, { fullscreen = isFullscreen })
-        lovesize.resize(res.w, res.h)
-    end
-    resolutionFont = love.graphics.newText(menuFont, resolutions[resolutionIndex].w)
-    fullscreenFont = love.graphics.newText(menuFont, isFullscreen and "[X]" or "[ ]")
+local setResolutionSetting = function(value)
+    setResolution(value, settings.fullscreen)
+    resolutionFont = love.graphics.newText(menuFont, settings.resolution)
+    fullscreenFont = love.graphics.newText(menuFont, settings.fullscreen and "[X]" or "[ ]")
 end
 
 function OptionsMenu:initialize()
     Menu.initialize(self)
     Menu.setTitle(self, "Extras")
     
-    setVolume(0)
-    setResolution(0)
+    settings = getSettings()
+
+    volumeFont = love.graphics.newText(menuFont, settings.volume)
+    resolutionFont = love.graphics.newText(menuFont, settings.resolution)
+    fullscreenFont = love.graphics.newText(menuFont, settings.fullscreen and "[X]" or "[ ]")
 
     self.type = States.OptionsMenu
     self.startHeight = screenHeight/3
@@ -57,26 +45,27 @@ end
 
 function OptionsMenu:left()
     if self.index == 1 then
-        if volume > 0 then setVolume(-1) end
+        setVolumeSetting(-1)
     elseif self.index == 2 then
-        if resolutionIndex > 1 then setResolution(-1) end
+        setResolutionSetting(-1)
     end
 end
 
 function OptionsMenu:right()
     if self.index == 1 then
-        if volume < 10 then setVolume(1) end
+        setVolumeSetting(1)
     elseif self.index == 2 then
-        if resolutionIndex < #resolutions then setResolution(1) end
+        setResolutionSetting(1)
     end
 end
 
 function OptionsMenu:accept()
     if self.index == 3 then
-        isFullscreen = not isFullscreen
-        setResolution(0);
+        settings.fullscreen = not settings.fullscreen
+        setResolutionSetting(0);
     elseif self.index == 4 then
         Menu.accept(self)
+        setSettings(settings)
         stateMachine:pop()
     end 
 end

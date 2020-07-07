@@ -13,14 +13,10 @@ function HighscoreMenu:initialize()
     self.clearColor = { r = 1, g = 1, b = 1, a = 1 }
     self.options = { love.graphics.newText(menuFont, "Back") }
 
-    if love.filesystem.getInfo("highscores.txt") then
-        local time = lume.deserialize(love.filesystem.read("highscores.txt"))
-        if type(time) == "table" then
-            for i=1, #time, 1 do
-                local t = time[i][1] .. " ----------- " .. string.format("%.2f", time[i][2]) .. "\n"
-                self.currentTime = self.currentTime .. t
-            end
-        end
+    local scores = getScores()
+    for i=1, #scores, 1 do
+        local t = scores[i][1] .. " ----------- " .. string.format("%.2f", scores[i][2]) .. "\n"
+        self.currentTime = self.currentTime .. t
     end
 end
 

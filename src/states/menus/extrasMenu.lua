@@ -14,6 +14,7 @@ function ExtrasMenu:initialize()
     self.options = {
         love.graphics.newText(menuFont, "Options"),
         love.graphics.newText(menuFont, "Controls"),
+        love.graphics.newText(menuFont, "Scores"),
         love.graphics.newText(menuFont, "Back")
     }
 
@@ -26,11 +27,13 @@ function ExtrasMenu:accept()
     if self.index <= #self.options then Menu.accept(self) end
     if isGameshell then
         if self.index == 1 then stateMachine:push(States.ControlsMenu)
-        elseif self.index == 2 then stateMachine:pop() end
+        elseif self.index == 2 then stateMachine:push(States.HighscoreMenu)
+        elseif self.index == 3 then stateMachine:pop() end
     else
         if self.index == 1 then stateMachine:push(States.OptionsMenu)
         elseif self.index == 2 then stateMachine:push(States.ControlsMenu)
-        elseif self.index == 3 then stateMachine:pop() end
+        elseif self.index == 3 then stateMachine:push(States.HighscoreMenu)
+        elseif self.index == 4 then stateMachine:pop() end
     end
 end
 

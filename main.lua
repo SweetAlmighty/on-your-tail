@@ -19,6 +19,26 @@ menuFont = resources:LoadFont("KarmaFuture", 20)
 titleFont = resources:LoadFont("KarmaFuture", 50)
 playableArea = { x = 0, y = 150, width = screenWidth/2, height = screenHeight }
 
+local game = nil
+local color = 50/255
+local filename = "highscores.txt"
+local defaultScore = {
+    "AAA", 0
+}
+local defaultSettings = {
+    volume = 5,
+    resolution = 1,
+    fullscreen = false
+}
+
+local resolutions = {
+    { w = 320, h = 240 },
+    { w = 640, h = 480 },
+    { w = 800, h = 600 },
+    { w = 1024, h = 768 },
+    { w = 1280, h = 960 }
+}
+
 function love.load()
     lovesize.set(screenWidth, screenHeight)
 
@@ -26,14 +46,17 @@ function love.load()
 
     love.math.setRandomSeed(os.time())
     love.window.setTitle("On Your Tail")
-    love.window.setMode(lovesize.getWidth(), lovesize.getHeight())
-    lovesize.resize(lovesize.getWidth(), lovesize.getHeight())
 
-    if love.filesystem.getInfo("highscores.txt") == nil then
-        local index, tbl = 1, {}
-        for i=1, 3, 1 do table.insert(tbl, i, ((i==index) and time or {"AAA", 0.00})) end
-        love.filesystem.write("highscores.txt", lume.serialize(tbl))
+    if love.filesystem.getInfo(filename) then
+        loadSettings()
+    else
+        game = { settings = defaultSettings, scores = { } }
+        for i=1, 3, 1 do table.insert(game.scores, i, ((i==index) and time or defaultScore)) end
+        love.filesystem.write(filename, lume.serialize(game))
     end
+
+    setVolume(game.settings.volume)
+    setResolution(game.settings.resolution, game.settings.fullscreen)
 end
 
 function love.resize(width, height)
@@ -48,23 +71,90 @@ function love.update(dt)
      end
 end
 
+function love.quit()
+    setVolume(game.settings.volume)
+    setResolution(game.settings.resolution, game.settings.fullscreen)
+end
+
+function setResolution(index, fullscreen)
+    local value = game.settings.resolution + index
+
+    if value < 1 then
+        value = 1
+    elseif value > #resolutions then
+        value = #resolutions
+    end
+
+    local update = false
+
+    if value ~= game.settings.resolution then
+        update = true
+        game.settings.resolution = value
+    end
+    
+    if fullscreen ~= game.settings.resolution then
+        update = true
+        game.settings.fullscreen = fullscreen
+    end
+
+
+    if update then
+        local resolution = resolutions[game.settings.resolution]
+        love.window.setMode(resolution.w, resolution.h, {fullscreen = game.settings.fullscreen})
+        lovesize.resize(resolution.w, resolution.h)
+    end
+end
+
+function setVolume(volume)
+    local value = game.settings.volume + volume
+
+    if value < 0 then
+        value = 0
+    elseif value > 10 then
+        value = 10
+    end
+
+    if value ~= game.settings.volume then
+        love.audio.setVolume(value / 10)
+        game.settings.volume = value
+    end
+end
+
 function setTime(time)
-    if love.filesystem.getInfo("highscores.txt") then
-        local result, message = lume.deserialize(love.filesystem.read("highscores.txt"))
+    game.scores[#game.scores+1] = time
+    table.sort(game.scores, function(a, b) return a[2] > b[2] end)
+    table.remove(game.scores, #game.scores)
+
+    local _, error = love.filesystem.write(filename, lume.serialize(game))
+    if error ~= nil then print("Save Error: " .. error) end
+end
+
+function setSettings(settings)
+    game.settings = settings
+
+    local _, error = love.filesystem.write(filename, lume.serialize(game))
+    if error ~= nil then print("Save Error: " .. error) end
+end
+
+function loadSettings()
+    if love.filesystem.getInfo(filename) then
+        local info, message = lume.deserialize(love.filesystem.read(filename))
         if message == nil then
-            if type(result) == "table" then
-                result[#result+1] = time
-                table.sort(result, function(a, b) return a[2] > b[2] end)
-                table.remove(result, #result)
-                local _, error = love.filesystem.write("highscores.txt", lume.serialize(result))
-                if error ~= nil then print("Save Error: " .. error) end
-            end
+            game = info
         else print("Load Error: " .. message) end
     end
 end
 
+function getScores()
+    return game.scores
+end
+
+function getSettings()
+    return game.settings
+end
+
 function love.draw()
-    love.graphics.clear(50/255, 50/255, 50/255)
+    love.graphics.clear(color, color, color)
     lovesize.begin()
         stateMachine:draw()
     lovesize.finish()
