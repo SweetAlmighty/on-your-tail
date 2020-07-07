@@ -4,7 +4,6 @@ OptionsMenu = class("OptionsMenu", Menu)
 
 local settings = { }
 
-
 local volumePosition = { x = 225, y = 80 }
 local resolutionPosition = { x = 225, y = 120 }
 local fullscreenPosition = { x = 225, y = 160 }
@@ -49,6 +48,10 @@ function OptionsMenu:left()
     elseif self.index == 2 then
         setResolutionSetting(-1)
     end
+    
+    if self.index ~= 3 then
+        Menu.left(self)
+    end
 end
 
 function OptionsMenu:right()
@@ -56,6 +59,10 @@ function OptionsMenu:right()
         setVolumeSetting(1)
     elseif self.index == 2 then
         setResolutionSetting(1)
+    end
+
+    if self.index ~= 3 then
+        Menu.right(self)
     end
 end
 

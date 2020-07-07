@@ -55,8 +55,11 @@ function love.load()
         love.filesystem.write(filename, lume.serialize(game))
     end
 
-    setVolume(game.settings.volume)
-    setResolution(game.settings.resolution, game.settings.fullscreen)
+    love.audio.setVolume(game.settings.volume / 10)
+
+    local resolution = resolutions[game.settings.resolution]
+    love.window.setMode(resolution.w, resolution.h, {fullscreen = game.settings.fullscreen})
+    lovesize.resize(resolution.w, resolution.h)
 end
 
 function love.resize(width, height)
@@ -72,8 +75,8 @@ function love.update(dt)
 end
 
 function love.quit()
-    setVolume(game.settings.volume)
-    setResolution(game.settings.resolution, game.settings.fullscreen)
+    local _, error = love.filesystem.write(filename, lume.serialize(game))
+    if error ~= nil then print("Save Error: " .. error) end
 end
 
 function setResolution(index, fullscreen)
