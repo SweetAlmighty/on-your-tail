@@ -3,7 +3,7 @@ AnimateFactory = class('AnimateFactory')
 function AnimateFactory:initialize() end
 
 local createAnimation = function (image)
-    local frames = {}
+    local frames = { }
     local duration = 10
     local frameTime = 0
     local frameCount = 1

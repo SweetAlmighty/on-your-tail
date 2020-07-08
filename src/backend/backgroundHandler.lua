@@ -14,7 +14,7 @@ local currentBuildings = { }
 
 local getNextPosition = function(index)
     local prev = index - 1 < 1 and buildingCount or index - 1
-    return currentBuildings[prev].pos + currentBuildings[prev].width
+    return currentBuildings[prev].pos + (currentBuildings[prev].width - 20)
 end
 
 local getPropPositionOnBuilding = function(building, prop)
