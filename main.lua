@@ -22,9 +22,7 @@ playableArea = { x = 0, y = 150, width = screenWidth/2, height = screenHeight }
 local game = nil
 local color = 50/255
 local filename = "highscores.txt"
-local defaultScore = {
-    "AAA", 0
-}
+local defaultScore = { "AAA", 0 }
 local defaultSettings = {
     volume = 5,
     resolution = 1,
@@ -38,46 +36,6 @@ local resolutions = {
     { w = 1024, h = 768 },
     { w = 1280, h = 960 }
 }
-
-function love.load()
-    lovesize.set(screenWidth, screenHeight)
-
-    stateMachine:push(States.MainMenu)
-
-    love.math.setRandomSeed(os.time())
-    love.window.setTitle("On Your Tail")
-
-    if love.filesystem.getInfo(filename) then
-        loadSettings()
-    else
-        game = { settings = defaultSettings, scores = { } }
-        for i=1, 3, 1 do table.insert(game.scores, i, ((i==index) and time or defaultScore)) end
-        love.filesystem.write(filename, lume.serialize(game))
-    end
-
-    love.audio.setVolume(game.settings.volume / 10)
-
-    local resolution = resolutions[game.settings.resolution]
-    love.window.setMode(resolution.w, resolution.h, {fullscreen = game.settings.fullscreen})
-    lovesize.resize(resolution.w, resolution.h)
-end
-
-function love.resize(width, height)
-    lovesize.resize(width, height)
-end
-
-function love.update(dt)
-    local state = stateMachine:current()
-    if state.type == States.Gameplay then
-        state:update(dt)
-        input:process(dt)
-     end
-end
-
-function love.quit()
-    local _, error = love.filesystem.write(filename, lume.serialize(game))
-    if error ~= nil then print("Save Error: " .. error) end
-end
 
 function setResolution(index, fullscreen)
     local value = game.settings.resolution + index
@@ -144,6 +102,46 @@ end
 
 function getSettings()
     return game.settings
+end
+
+function love.load()
+    lovesize.set(screenWidth, screenHeight)
+
+    stateMachine:push(States.MainMenu)
+
+    love.math.setRandomSeed(os.time())
+    love.window.setTitle("On Your Tail")
+
+    if love.filesystem.getInfo(filename) then
+        loadSettings()
+    else
+        game = { settings = defaultSettings, scores = { } }
+        for i=1, 3, 1 do table.insert(game.scores, i, ((i==index) and time or defaultScore)) end
+        love.filesystem.write(filename, lume.serialize(game))
+    end
+
+    love.audio.setVolume(game.settings.volume / 10)
+
+    local resolution = resolutions[game.settings.resolution]
+    love.window.setMode(resolution.w, resolution.h, {fullscreen = game.settings.fullscreen})
+    lovesize.resize(resolution.w, resolution.h)
+end
+
+function love.resize(width, height)
+    lovesize.resize(width, height)
+end
+
+function love.update(dt)
+    local state = stateMachine:current()
+    if state.type == States.Gameplay then
+        state:update(dt)
+        input:process(dt)
+     end
+end
+
+function love.quit()
+    local _, error = love.filesystem.write(filename, lume.serialize(game))
+    if error ~= nil then print("Save Error: " .. error) end
 end
 
 function love.draw()
