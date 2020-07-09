@@ -3,7 +3,7 @@ require "src/states/menus/menu"
 OptionsMenu = class("OptionsMenu", Menu)
 
 local settings = { }
-
+local playSound = false
 local volumePosition = { x = 225, y = 80 }
 local resolutionPosition = { x = 225, y = 120 }
 local fullscreenPosition = { x = 225, y = 160 }
@@ -11,14 +11,24 @@ local fullscreenPosition = { x = 225, y = 160 }
 local volumeFont, resolutionFont, fullscreenFont
 
 local setVolumeSetting = function(value)
+    local volume = settings.volume
+
     setVolume(value)
     volumeFont = love.graphics.newText(menuFont, settings.volume)
+    
+    settings = getSettings()
+    playSound = volume ~= settings.volume
 end
 
 local setResolutionSetting = function(value)
+    local resolution = settings.resolution
+
     setResolution(value, settings.fullscreen)
     resolutionFont = love.graphics.newText(menuFont, settings.resolution)
     fullscreenFont = love.graphics.newText(menuFont, settings.fullscreen and "[X]" or "[ ]")
+    
+    settings = getSettings()
+    playSound = resolution ~= settings.resolution
 end
 
 function OptionsMenu:initialize()
@@ -49,8 +59,9 @@ function OptionsMenu:left()
         setResolutionSetting(-1)
     end
     
-    if self.index ~= 3 then
+    if self.index ~= 3 and playSound then
         Menu.left(self)
+        playSound = false
     end
 end
 
@@ -61,8 +72,9 @@ function OptionsMenu:right()
         setResolutionSetting(1)
     end
 
-    if self.index ~= 3 then
+    if self.index ~= 3 and playSound then
         Menu.right(self)
+        playSound = false
     end
 end
 
