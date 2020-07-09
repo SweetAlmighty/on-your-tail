@@ -88,20 +88,10 @@ function setResolution(index, fullscreen)
         value = #resolutions
     end
 
-    local update = false
-
-    if value ~= game.settings.resolution then
-        update = true
+    if value ~= game.settings.resolution or fullscreen ~= game.settings.fullscreen then
         game.settings.resolution = value
-    end
-    
-    if fullscreen ~= game.settings.resolution then
-        update = true
         game.settings.fullscreen = fullscreen
-    end
 
-
-    if update then
         local resolution = resolutions[game.settings.resolution]
         love.window.setMode(resolution.w, resolution.h, {fullscreen = game.settings.fullscreen})
         lovesize.resize(resolution.w, resolution.h)
