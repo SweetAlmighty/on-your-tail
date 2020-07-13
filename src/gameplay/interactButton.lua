@@ -7,7 +7,7 @@ local isGameshell = love.system.getOS() == "Linux"
 
 function InteractButton:initialize()
     self.animations = animateFactory:CreateAnimationSet("buttons")
-    self.currentAnimation = isGameshell and self.animations[1][2] or self.animations[1][1]
+    self.currentAnimation = isGameshell and self.animations[2][1] or self.animations[1][1]
 end
 
 function InteractButton:reset() self.currentAnimation.Reset() end
