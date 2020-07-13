@@ -39,10 +39,8 @@ function Player:initialize()
 end
 
 function Player:update(dt)
-    --if self.state == e_States.FAIL then return end
-
     if not self.interacting and self.state ~= e_States.FAIL then
-        self.stress = self.stress + (dt * 5)
+        self.stress = self.stress + (dt * 7)
     end
 
     speed = (self.interacting) and 0 or 2
@@ -52,7 +50,7 @@ function Player:update(dt)
     processAnims(dt, self)
 
     Entity.update(self, dt)
-end
+end 
 
 function Player:move(x, y)
     if self.state == e_States.FAIL then return end
