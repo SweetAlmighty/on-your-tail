@@ -2,15 +2,26 @@ lume = require("src/lib/lume")
 
 EntityController = class('EntityController')
 
-local entities = {}
+local entities = { }
+
+-- Logic for the sort function for draw order sorting
+local sortFunction = function(a, b)
+    if a.entity.y == b.entity.y then
+        if a.entity.type == e_Types.PLAYER or b.entity.type == e_Types.PLAYER then
+            return a.entity.type == e_Types.PLAYER
+        else
+            return a.index < b.index
+        end
+    else return a.entity.y < b.entity.y end
+end
 
 -- Sorts the entities by their Y to mock draw order
 local sortDrawOrder = function()
-    local newTable = {}
-    for i=1, #entities, 1 do newTable[#newTable + 1] = { entities[i].y, entities[i] } end
-    table.sort(newTable, function(a,b) return a[1] < b[1] end)
-    entities = {}
-    for i=1, #newTable, 1 do entities[#entities+1] = newTable[i][2] end
+    local newTable = { }
+    for i=1, #entities, 1 do newTable[#newTable + 1] = { index = i, entity = entities[i] } end
+    table.sort(newTable, sortFunction)
+    entities = { }
+    for i=1, #newTable, 1 do entities[#entities+1] = newTable[i].entity end
 end
 
 function EntityController:draw()
