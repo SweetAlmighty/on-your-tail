@@ -13,7 +13,7 @@ local processMovement = function(cat)
     local _x = (cat.x + (cat.speed * cat.direction.x))
     local _y = (cat.y + (cat.speed * cat.direction.y))
 
-    if cat.state == e_States.INTERACT then
+    if cat.state == EntityStates.INTERACT then
         -- Maintain sitting position
         _x = moveCamera and (cat.x - speed) or (cat.x)
         _y = cat.y
@@ -28,7 +28,7 @@ local processMovement = function(cat)
 
     Entity.move(cat, _x, _y)
     if cat.x < (-cat.width) then
-        if cat.type == e_Types.KITTEN then
+        if cat.type == EntityTypes.KITTEN then
             StateMachine:current():removeKitten(cat)
         else
             cat:reset()
@@ -38,13 +38,13 @@ end
 
 local beginOffscreenTransition = function (cat)
     cat.limit = -1
-    cat.state = e_States.MOVING
+    cat.state = EntityStates.MOVING
     Entity.resetAnim(cat, cat.state)
     cat.direction = Directions.W
 end
 
 local beingPettingTransition = function (cat)
-    cat.state = e_States.INTERACT
+    cat.state = EntityStates.INTERACT
     Entity.resetAnim(cat, cat.state)
 end
 
@@ -54,8 +54,8 @@ local processAnims = function(dt, cat)
 
         if time > 1 and cat.limit > 0 then
             time = 0
-            cat.state = lume.randomchoice({e_States.INTERACT, e_States.MOVING})
-            if cat.state == e_States.MOVING then
+            cat.state = lume.randomchoice({EntityStates.INTERACT, EntityStates.MOVING})
+            if cat.state == EntityStates.MOVING then
                 cat.direction = lume.randomchoice(DirectionsIndices)
             end
             shouldUpdate = true
@@ -74,7 +74,7 @@ function randomPosition()
 end
 
 function Cat:initialize()
-    Entity.initialize(self, e_Types.CAT, e_States.IDLE, 1)
+    Entity.initialize(self, EntityTypes.CAT, EntityStates.IDLE, 1)
     Entity.setPosition(self, randomPosition())
 
     local type = lume.randomchoice(catType)
@@ -89,7 +89,6 @@ function Cat:initialize()
     })
 
     self.limit = catLimit
-    self.stressReduction = 8
     self.button = InteractButton:new()
 end
 
@@ -115,6 +114,7 @@ function Cat:update(dt)
             self.limit = 0
             self:finishInteraction()
             self.interactable = false
+            self.skipCollisions = true
         end
     else processMovement(self) end
 

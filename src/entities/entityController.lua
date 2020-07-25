@@ -7,8 +7,8 @@ local entities = { }
 -- Logic for the sort function for draw order sorting
 local sortFunction = function(a, b)
     if a.entity.y == b.entity.y then
-        if a.entity.type == e_Types.PLAYER or b.entity.type == e_Types.PLAYER then
-            return a.entity.type == e_Types.PLAYER
+        if a.entity.type == EntityTypes.PLAYER or b.entity.type == EntityTypes.PLAYER then
+            return a.entity.type == EntityTypes.PLAYER
         else
             return a.index < b.index
         end
@@ -33,7 +33,7 @@ function EntityController:update(dt)
     for i=1, #entities, 1 do
         local cols = { }
         for j=1, #entities, 1 do
-            if i ~= j then
+            if i ~= j and not entities[i].skipCollisions then
                 if EntityController:CheckCollision(i, j) then cols[#cols+1] = entities[j] end
             end
         end

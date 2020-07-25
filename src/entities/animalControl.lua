@@ -10,7 +10,7 @@ local processMovement = function(animalControl)
     local _x = (animalControl.x + (animalControl.speed * animalControl.direction.x))
     local _y = (animalControl.y + (animalControl.speed * animalControl.direction.y))
 
-    if animalControl.state == e_States.IDLE then
+    if animalControl.state == EntityStates.IDLE then
         -- Maintain Idle position
         _x = moveCamera and (animalControl.x - speed) or (animalControl.x)
         _y = animalControl.y
@@ -33,15 +33,15 @@ local processAnims = function(dt, animalControl)
 
         if time > 1 then
             time = 0
-            animalControl.state = lume.randomchoice({e_States.IDLE, e_States.MOVING})
-            if animalControl.state == e_States.MOVING then
+            animalControl.state = lume.randomchoice({EntityStates.IDLE, EntityStates.MOVING})
+            if animalControl.state == EntityStates.MOVING then
                 animalControl.direction = lume.randomchoice(DirectionsIndices)
             end
             shouldUpdate = true
         end
 
         if shouldUpdate then
-            animalControl.state = e_States.INTERACT
+            animalControl.state = EntityStates.INTERACT
             Entity.resetAnim(animalControl, animalControl.state)
             shouldUpdate = false
         end
@@ -61,7 +61,7 @@ function randomPosition()
 end
 
 function AnimalControl:initialize()
-    Entity.initialize(self, e_Types.ANIMALCONTROL, e_States.IDLE, 1)
+    Entity.initialize(self, EntityTypes.ANIMALCONTROL, EntityStates.IDLE, 1)
     Entity.setPosition(self, {50, 150})
 
     local type = lume.randomchoice(animalControlType)
@@ -78,13 +78,13 @@ end
 
 function AnimalControl:startInteraction()
     self.interacting = true
-    self.state = e_States.INTERACT
+    self.state = EntityStates.INTERACT
     Entity.resetAnim(self, self.state)
 end
 
 function AnimalControl:endInteraction()
     self.interacting = false
-    self.state = e_States.MOVING
+    self.state = EntityStates.MOVING
     Entity.resetAnim(self, self.state)
 end
 
@@ -105,11 +105,11 @@ function AnimalControl:update(dt)
     if not self.alerted then
         if self.direction.x == -1 and player.x < self.x then
             self.alerted = true
-            self.state = e_States.MOVING
+            self.state = EntityStates.MOVING
             Entity.resetAnim(self, self.state)
         elseif self.direction.x == 1 and player.x > self.x then
             self.alerted = true
-            self.state = e_States.MOVING
+            self.state = EntityStates.MOVING
             Entity.resetAnim(self, self.state)
         end
     end

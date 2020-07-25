@@ -51,7 +51,6 @@ function Gameplay:initialize()
     self.height = screenHeight
     self.type = States.Gameplay
     self.threshold = -(self.width - 1)
-    self.hud = resources:LoadImage("stressbar")
 
     self.street = animateFactory:CreateTileSet("Street")
     self.street.SetImageWrap('repeat', 'clampzero')
@@ -82,7 +81,6 @@ function Gameplay:createEntities()
     for _=1, self.totalCats, 1 do entityController:addEntity(Cat:new()) end
 end
 
-
 function Gameplay:reset()
     pause = false
     unpause = false
@@ -94,10 +92,7 @@ end
 function Gameplay:drawUI()
     love.graphics.setColor(0, 0, 0)
     love.graphics.print(table.concat(self.time), self.width - 75, 5)
-
     love.graphics.setColor(1, 1, 1)
-    love.graphics.draw(self.hud, self.bar, 11, 10, nil, player.stress/121, 1)
-    love.graphics.draw(self.hud, self.barbg, 10, 10)
 end
 
 function Gameplay:updateBackground(dt)
@@ -106,15 +101,13 @@ function Gameplay:updateBackground(dt)
 end
 
 function Gameplay:checkForReset(dt)
-    animalControlMod = animalControlMod + dt
     kittenMod = kittenMod + dt
-
+    animalControlMod = animalControlMod + dt
     self.elapsedTime = self.elapsedTime + dt
+end
 
-    if player.stress >= 120 then
-        pause = true
-        player:setFailState()
-    end
+function Gameplay:Fail()
+    pause = true
 end
 
 function Gameplay:checkPauseState(dt)

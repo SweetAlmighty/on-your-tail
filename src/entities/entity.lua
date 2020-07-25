@@ -6,14 +6,14 @@ Entity = class('Entity')
 catLimit = 30
 pettingReduction = 15
 
-e_States = {
+EntityStates = {
     IDLE     = 1,
     MOVING   = 2,
     INTERACT = 3,
     FAIL     = 4
 }
 
-e_Types = {
+EntityTypes = {
     PLAYER        = 1,
     CAT           = 2,
     KITTEN        = 3,
@@ -56,6 +56,7 @@ function Entity:initialize(type, state, speed)
     self.collisions = { }
     self.interacting = false
     self.interactable = false
+    self.skipCollisions = false
     self.direction = Directions.E
 end
 
@@ -65,17 +66,17 @@ function Entity:setAnims(anims)
     self.interactAnim = anims[3]
     self.failAnim = anims[4]
     self.colliders = anims[#anims]
-    self:resetAnim(e_States.IDLE)
+    self:resetAnim(EntityStates.IDLE)
 end
 
 function Entity:resetAnim(state)
-    if state == e_States.IDLE then
+    if state == EntityStates.IDLE then
         self.currentAnim = self.idleAnim
-    elseif state == e_States.MOVING then
+    elseif state == EntityStates.MOVING then
         self.currentAnim = self.moveAnim
-    elseif state == e_States.INTERACT then
+    elseif state == EntityStates.INTERACT then
         self.currentAnim = self.interactAnim
-    elseif state == e_States.FAIL then
+    elseif state == EntityStates.FAIL then
         self.currentAnim = self.failAnim
     end
 
@@ -100,7 +101,7 @@ end
 
 function Entity:draw()
     self.currentAnim.Draw(self.x, self.y, self.direction.x < 0)
-    --showDebugInfo(self)
+    showDebugInfo(self)
 end
 
 function Entity:update(dt)
@@ -113,6 +114,7 @@ function Entity:update(dt)
 end
 
 function Entity:reset(_position)
+    self.skipCollisions = false
     self:setPosition(_position)
 end
 
@@ -130,7 +132,7 @@ function Entity:collisionExit(other)
     if index ~= nil and not other.interacting then
         self.interactable = false
         table.remove(self.collisions, index)
-        if self.type == e_Types.PLAYER and self.interacting then
+        if self.type == EntityTypes.PLAYER and self.interacting then
             player:finishInteraction()
         end
     end
@@ -138,19 +140,14 @@ end
 
 function Entity:handleCollisions(cols)
     -- Only process player collisions, for the time being.
-    if self.type ~= e_Types.PLAYER then return end
+    if self.type ~= EntityTypes.PLAYER then return end
 
     -- Process new collisions
     for i = 1, #cols, 1 do
         local index = lume.find(self.collisions, cols[i])
         if index == nil then
-            -- Enter
-            if cols[i].type == e_Types.CAT or cols[i].type == e_Types.KITTEN then
-                if cols[i].limit >= catLimit then
-                    self:collisionEnter(cols[i])
-                    cols[i]:collisionEnter(self)
-                end
-            end
+            self:collisionEnter(cols[i])
+            cols[i]:collisionEnter(self)
         end
     end
 
@@ -158,7 +155,7 @@ function Entity:handleCollisions(cols)
     local remove = {}
     for i = 1, #self.collisions, 1 do
         local index = lume.find(cols, self.collisions[i])
-        if index == nil or self.collisions[i].limit < 0 then
+        if index == nil then
             remove[#remove + 1] = self.collisions[i]
         end
     end
@@ -172,7 +169,7 @@ function Entity:handleCollisions(cols)
 end
 
 function Entity:clampToPlayBounds(x, y)
-    if self.type == e_Types.PLAYER then
+    if self.type == EntityTypes.PLAYER then
         if x < playableArea.x then
             self.x = playableArea.x
         elseif x > playableArea.width then

@@ -9,7 +9,7 @@ function randomPosition()
 end
 
 function Kitten:initialize()
-    Entity.initialize(self, e_Types.KITTEN, e_States.IDLE, 1)
+    Entity.initialize(self, EntityTypes.KITTEN, EntityStates.IDLE, 1)
     Entity.setPosition(self, randomPosition(self))
 
     local type = lume.randomchoice(catType)
@@ -24,6 +24,5 @@ function Kitten:initialize()
     })
 
     self.limit = catLimit
-    self.stressReduction = 15
     self.button = InteractButton:new()
 end
