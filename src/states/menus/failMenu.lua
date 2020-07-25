@@ -5,7 +5,7 @@ FailMenu = class("FailMenu", Menu)
 
 function FailMenu:initialize()
     Menu.initialize(self)
-    Menu.setTitle(self, "Uh oh...")
+    Menu.setTitle(self, "GAME OVER")
 
     self.type = States.FailMenu
     self.currX, self.currY = 1, 1
