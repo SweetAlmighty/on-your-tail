@@ -1,6 +1,6 @@
 require "src/states/state"
 require "src/entities/cat"
-require "src/entities/cop"
+require "src/entities/animalControl"
 require "src/entities/kitten"
 require "src/entities/player"
 require "src/backend/require"
@@ -9,12 +9,12 @@ require "src/entities/entityController"
 
 Gameplay = class("Gameplay", Gameplay)
 
-local copMod = 0
+local animalControlMod = 0
 local kittenMod = 0
 local pause = false
 local pauseTime = 0
 local unpause = false
-local copFactor = love.math.random(1, 5)
+local animalControlFactor = love.math.random(1, 5)
 local kittenFactor = love.math.random(5, 15)
 local entityController = EntityController:new()
 
@@ -29,13 +29,13 @@ local checkForKittenSpawn = function(scene)
     end
 end
 
-local checkForCopSpawn = function(scene)
-    local integral, _ = math.modf(copMod)
-    if integral == copFactor then
-        copMod = 0
+local checkForAnimalControlSpawn = function(scene)
+    local integral, _ = math.modf(animalControlMod)
+    if integral == animalControlFactor then
+        animalControlMod = 0
         if entityController:count() - 1 == scene.totalCats then
-            copFactor = love.math.random(1, 5)
-            entityController:addEntity(Cop:new())
+            animalControlFactor = love.math.random(1, 5)
+            entityController:addEntity(AnimalControl:new())
         end
     end
 end
@@ -106,7 +106,7 @@ function Gameplay:updateBackground(dt)
 end
 
 function Gameplay:checkForReset(dt)
-    copMod = copMod + dt
+    animalControlMod = animalControlMod + dt
     kittenMod = kittenMod + dt
 
     self.elapsedTime = self.elapsedTime + dt
@@ -141,7 +141,7 @@ function Gameplay:update(dt)
     
     self.time = { string.format("%.2f", self.elapsedTime), "s" }
 
-    --checkForCopSpawn(self)
+    checkForAnimalControlSpawn(self)
     checkForKittenSpawn(self)
 
     if moveCamera then self:updateBackground(dt) end

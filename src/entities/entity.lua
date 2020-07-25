@@ -14,10 +14,10 @@ e_States = {
 }
 
 e_Types = {
-    PLAYER = 1,
-    CAT    = 2,
-    KITTEN = 3,
-    COP    = 4
+    PLAYER        = 1,
+    CAT           = 2,
+    KITTEN        = 3,
+    ANIMALCONTROL = 4
 }
 
 Directions = {

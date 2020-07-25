@@ -21,6 +21,7 @@ playableArea = { x = 0, y = 150, width = screenWidth/2, height = screenHeight }
 
 local game = nil
 local color = 50/255
+local newFilename = "data.txt"
 local filename = "highscores.txt"
 local defaultScore = { "AAA", 0 }
 local defaultSettings = {
@@ -76,20 +77,20 @@ function setTime(time)
     table.sort(game.scores, function(a, b) return a[2] > b[2] end)
     table.remove(game.scores, #game.scores)
 
-    local _, error = love.filesystem.write(filename, lume.serialize(game))
+    local _, error = love.filesystem.write(newFilename, lume.serialize(game))
     if error ~= nil then print("Save Error: " .. error) end
 end
 
 function setSettings(settings)
     game.settings = settings
 
-    local _, error = love.filesystem.write(filename, lume.serialize(game))
+    local _, error = love.filesystem.write(newFilename, lume.serialize(game))
     if error ~= nil then print("Save Error: " .. error) end
 end
 
 function loadSettings()
-    if love.filesystem.getInfo(filename) then
-        local info, message = lume.deserialize(love.filesystem.read(filename))
+    if love.filesystem.getInfo(newFilename) then
+        local info, message = lume.deserialize(love.filesystem.read(newFilename))
         if message == nil then
             game = info
         else print("Load Error: " .. message) end
@@ -113,11 +114,15 @@ function love.load()
     love.window.setTitle("On Your Tail")
 
     if love.filesystem.getInfo(filename) then
+        love.filesystem.remove(filename)
+    end
+
+    if love.filesystem.getInfo(newFilename) then
         loadSettings()
     else
         game = { settings = defaultSettings, scores = { } }
         for i=1, 3, 1 do table.insert(game.scores, i, ((i==index) and time or defaultScore)) end
-        love.filesystem.write(filename, lume.serialize(game))
+        love.filesystem.write(newFilename, lume.serialize(game))
     end
 
     love.audio.setVolume(game.settings.volume / 10)
@@ -140,7 +145,7 @@ function love.update(dt)
 end
 
 function love.quit()
-    local _, error = love.filesystem.write(filename, lume.serialize(game))
+    local _, error = love.filesystem.write(newFilename, lume.serialize(game))
     if error ~= nil then print("Save Error: " .. error) end
 end
 
