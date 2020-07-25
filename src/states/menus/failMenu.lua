@@ -12,9 +12,9 @@ function FailMenu:initialize()
     self.startHeight = screenHeight/2.5
     self.clearColor = { r = 1, g = 1, b = 1, a = 0.8 }
     self.options = {
-        love.graphics.newText(menuFont, "Play again"),
-        love.graphics.newText(menuFont, "Add score"),
-        love.graphics.newText(menuFont, "Main menu")
+        love.graphics.newText(menuFont, "PLAY AGAIN"),
+        love.graphics.newText(menuFont, "ADD SCORE"),
+        love.graphics.newText(menuFont, "MAIN MENU")
     }
 end
 

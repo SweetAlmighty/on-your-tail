@@ -91,12 +91,7 @@ end
 function AnimalControl:update(dt)
     Entity.update(self, dt)
 
-    local inRange = lume.distance(player.x, player.y, self.x, self.y) < 35
-    if inRange and not self.interacting then
-        AnimalControl.startInteraction(self)
-    elseif not inRange and self.interacting then
-        AnimalControl.endInteraction(self)
-    elseif not inRange then
+    if not self.interacting then
         processMovement(self)
     end
 
@@ -125,5 +120,15 @@ function AnimalControl:resetSelf()
     Entity.reset(self, randomPosition(self))
 end
 
+function AnimalControl:collisionEnter(other)
+    Entity.collisionEnter(self, other)
+    if other.type == EntityTypes.PLAYER then
+        AnimalControl.startInteraction(self)
+    end
+end
+
 function AnimalControl:draw() Entity.draw(self) end
-function AnimalControl:reset() Entity.reset(self, randomPosition()) end
+function AnimalControl:reset()
+    Entity.reset(self, randomPosition())
+    AnimalControl.endInteraction(self)
+end

@@ -6,16 +6,16 @@ local isGameshell = love.system.getOS() == "Linux"
 
 function ExtrasMenu:initialize()
     Menu.initialize(self)
-    Menu.setTitle(self, "Extras")
+    Menu.setTitle(self, "EXTRAS")
 
     self.type = States.ExtrasMenu
     self.startHeight = screenHeight/3
     self.clearColor = { r = 1, g = 1, b = 1, a = 1 }
     self.options = {
-        love.graphics.newText(menuFont, "Options"),
-        love.graphics.newText(menuFont, "Controls"),
-        love.graphics.newText(menuFont, "Scores"),
-        love.graphics.newText(menuFont, "Back")
+        love.graphics.newText(menuFont, "OPTIONS"),
+        love.graphics.newText(menuFont, "CONTROLS"),
+        love.graphics.newText(menuFont, "SCORES"),
+        love.graphics.newText(menuFont, "BACK")
     }
 
     if isGameshell then

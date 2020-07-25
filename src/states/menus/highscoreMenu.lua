@@ -8,10 +8,10 @@ function HighscoreMenu:initialize()
     self.currentTime = ""
     love.graphics.setFont(menuFont)
     self.type = States.HighscoreMenu
-    Menu.setTitle(self, "High Scores")
+    Menu.setTitle(self, "HIGH SCORES")
     self.startHeight = screenHeight - 40
     self.clearColor = { r = 1, g = 1, b = 1, a = 1 }
-    self.options = { love.graphics.newText(menuFont, "Back") }
+    self.options = { love.graphics.newText(menuFont, "BACK") }
 
     local scores = getScores()
     for i=1, #scores, 1 do

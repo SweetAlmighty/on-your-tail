@@ -5,16 +5,16 @@ MainMenu = class("MainMenu", Menu)
 
 function MainMenu:initialize()
     Menu.initialize(self)
-    Menu.setTitle(self, "On Your Tail")
+    Menu.setTitle(self, "ON YOUR TAIL")
 
     self.type = States.MainMenu
     self.startHeight = screenHeight/3
     self.clearColor = { r = 1, g = 1, b = 1, a = 1}
     self.options = {
-        love.graphics.newText(menuFont, "Play"),
-        love.graphics.newText(menuFont, "Extras"),
-        love.graphics.newText(menuFont, "Credits"),
-        love.graphics.newText(menuFont, "Quit")
+        love.graphics.newText(menuFont, "PLAY"),
+        love.graphics.newText(menuFont, "EXTRAS"),
+        love.graphics.newText(menuFont, "CREDITS"),
+        love.graphics.newText(menuFont, "QUIT")
     }
 end
 

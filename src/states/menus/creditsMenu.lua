@@ -10,14 +10,14 @@ local creditsFont
 
 function CreditsMenu:initialize()
     Menu.initialize(self)
-    Menu.setTitle(self, "Credits")
+    Menu.setTitle(self, "CREDITS")
 
     creditsFont = love.graphics.newText(menuFont, "\tProgrammer:\tBrian Sweet\n\tArtist:\t\t\t\tShelby Merrill\n\tMade With:\t\t LÖVE\n\tUtilizing:  middleclass, lume\n\t\t\t\t\t\t  lovesize, json.lua")
 
     self.type = States.CreditsMenu
     self.startHeight = screenHeight - 30
     self.clearColor = { r = 1, g = 1, b = 1, a = 1 }
-    self.options = { love.graphics.newText(menuFont, "Back") }
+    self.options = { love.graphics.newText(menuFont, "BACK") }
 end
 
 function CreditsMenu:accept()

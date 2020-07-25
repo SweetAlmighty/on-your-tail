@@ -33,7 +33,7 @@ end
 
 function OptionsMenu:initialize()
     Menu.initialize(self)
-    Menu.setTitle(self, "Extras")
+    Menu.setTitle(self, "EXTRAS")
     
     settings = getSettings()
 
@@ -45,10 +45,10 @@ function OptionsMenu:initialize()
     self.startHeight = screenHeight/3
     self.clearColor = { r = 1, g = 1, b = 1, a = 1 }
     self.options = {
-        love.graphics.newText(menuFont, "Volume: "),
-        love.graphics.newText(menuFont, "Resolution: "),
-        love.graphics.newText(menuFont, "Fullscreen: "),
-        love.graphics.newText(menuFont, "Back")
+        love.graphics.newText(menuFont, "VOLUME: "),
+        love.graphics.newText(menuFont, "RESOLUTION: "),
+        love.graphics.newText(menuFont, "FULLSCREEN: "),
+        love.graphics.newText(menuFont, "BACK")
     }
 end
 

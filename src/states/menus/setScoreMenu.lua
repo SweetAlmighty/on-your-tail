@@ -21,7 +21,7 @@ end
 
 function SetScoreMenu:initialize()
     Menu.initialize(self)
-    Menu.setTitle(self, "Enter Score")
+    Menu.setTitle(self, "ENTER SCORE")
 
     self.type = States.SetScoreMenu
     self.currX, self.currY = 1, 1
@@ -34,8 +34,8 @@ function SetScoreMenu:initialize()
 
     self.options = {
         love.graphics.newText(menuFont, name),
-        love.graphics.newText(menuFont, "Play again"),
-        love.graphics.newText(menuFont, "Main menu")
+        love.graphics.newText(menuFont, "PLAY AGAIN"),
+        love.graphics.newText(menuFont, "MAIN MENU")
     }
 
     for i=65, 90, 1 do table.insert(letters, string.char(i)) end
