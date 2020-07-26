@@ -12,20 +12,20 @@ local inputMap =
 {
     x = 'u',
     y = 'i',
-    a = isGameshell and 'j' or 'z',
-    b = isGameshell and 'k' or 'x',
-    lk1 = "home",
-    lk2 = "pageup",
-    lk3 = "lshift",
-    lk4 = "pagedown",
-    lk5 = "end",
     up = "up",
+    lk5 = "end",
+    lk1 = "home",
     left = "left",
     down = "down",
+    lk2 = "pageup",
+    lk3 = "lshift",
     right = "right",
     menu = "escape",
     select = "space",
-    start = "kpenter"
+    lk4 = "pagedown",
+    start = "kpenter",
+    a = isGameshell and 'j' or 'z',
+    b = isGameshell and 'k' or 'x',
 }
 
 local keyDown = lume.fn(love.keyboard.isDown)
@@ -34,20 +34,21 @@ function Input:process(dt)
     delta = dt
     state = stateMachine:current()
     if keyDown(inputMap.a) then onA() end
+    if keyDown(inputMap.b) then onB() end
     if keyDown(inputMap.x) then onX() end
     if keyDown(inputMap.y) then onY() end
     if keyDown(inputMap.up) then onUp() end
-    if keyDown(inputMap.left) then onLeft() end
-    if keyDown(inputMap.down) then onDown() end
-    if keyDown(inputMap.right) then onRight() end
-    if keyDown(inputMap.menu) then onMenu() end
-    if keyDown(inputMap.start) then onStart() end
-    if keyDown(inputMap.select) then onSelect() end
     if keyDown(inputMap.lk1) then onLK1() end
     if keyDown(inputMap.lk2) then onLK2() end
     if keyDown(inputMap.lk3) then onLK3() end
     if keyDown(inputMap.lk4) then onLK4() end
     if keyDown(inputMap.lk5) then onLK5() end
+    if keyDown(inputMap.left) then onLeft() end
+    if keyDown(inputMap.down) then onDown() end
+    if keyDown(inputMap.menu) then onMenu() end
+    if keyDown(inputMap.start) then onStart() end
+    if keyDown(inputMap.right) then onRight() end
+    if keyDown(inputMap.select) then onSelect() end
     player:move(playerX, playerY)
 end
 
@@ -87,13 +88,13 @@ function love.keypressed(k)
     elseif k == inputMap.left then onLeft()
     elseif k == inputMap.right then onRight()
     elseif k == inputMap.a then onA()
-    elseif k == inputMap.b then onB()
     end
 end
 
 function love.keyreleased(k)
     state = stateMachine:current()
     if state.type == States.Gameplay then
+        if k == inputMap.b then player:stopPettingCats() end
         if k == inputMap.up or k == inputMap.down then playerY = 0 end
         if k == inputMap.left or k == inputMap.right then playerX = 0 end
     end

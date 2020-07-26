@@ -73,10 +73,23 @@ function Player:reset()
 end
 
 function Player:petCats(dt)
+    if self.state == EntityStates.FAIL then return end
+
     if #self.collisions ~= 0 then
         self:startInteraction();
         for i=1, #self.collisions, 1 do
             self.collisions[i]:startInteraction()
+        end
+    end
+end
+
+function Player:stopPettingCats(dt)
+    if self.state == EntityStates.FAIL then return end
+    
+    if #self.collisions ~= 0 then
+        self:finishInteraction();
+        for i=1, #self.collisions, 1 do
+            self.collisions[i]:finishInteraction()
         end
     end
 end
