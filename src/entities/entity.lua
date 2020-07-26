@@ -101,7 +101,7 @@ end
 
 function Entity:draw()
     self.currentAnim.Draw(self.x, self.y, self.direction.x < 0)
-    showDebugInfo(self)
+    --showDebugInfo(self)
 end
 
 function Entity:update(dt)
