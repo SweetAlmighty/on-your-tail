@@ -42,7 +42,7 @@ function OptionsMenu:initialize()
     fullscreenFont = love.graphics.newText(menuFont, settings.fullscreen and "[X]" or "[ ]")
 
     self.type = States.OptionsMenu
-    self.startHeight = screenHeight/3
+    self.startHeight = screenHeight/1.75
     self.clearColor = { r = 1, g = 1, b = 1, a = 1 }
     self.options = {
         love.graphics.newText(menuFont, "VOLUME: "),

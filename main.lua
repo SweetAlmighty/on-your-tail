@@ -15,8 +15,8 @@ input = Input:new()
 resources = Resources:new()
 stateMachine = StateMachine:new()
 animateFactory = AnimateFactory:new()
-menuFont = resources:LoadFont("KarmaFuture", 20)
 titleFont = resources:LoadFont("KarmaFuture", 50)
+menuFont = resources:LoadFont("8bitOperatorPlusSC-Bold", 10)
 playableArea = { x = 0, y = 150, width = screenWidth/2, height = screenHeight }
 
 local game = nil
@@ -138,8 +138,9 @@ end
 
 function love.update(dt)
     local state = stateMachine:current()
+    state:update(dt)
+    
     if state.type == States.Gameplay then
-        state:update(dt)
         input:process(dt)
      end
 end

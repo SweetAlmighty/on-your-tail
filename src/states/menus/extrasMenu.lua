@@ -9,7 +9,7 @@ function ExtrasMenu:initialize()
     Menu.setTitle(self, "EXTRAS")
 
     self.type = States.ExtrasMenu
-    self.startHeight = screenHeight/3
+    self.startHeight = screenHeight/1.75
     self.clearColor = { r = 1, g = 1, b = 1, a = 1 }
     self.options = {
         love.graphics.newText(menuFont, "OPTIONS"),

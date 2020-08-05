@@ -7,7 +7,6 @@ local delta = 0
 local playerX = 0
 local playerY = 0
 local state = nil
-local isGameshell = love.system.getOS() == "Linux"
 local inputMap =
 {
     x = 'u',
@@ -24,8 +23,8 @@ local inputMap =
     select = "space",
     lk4 = "pagedown",
     start = "kpenter",
-    a = isGameshell and 'j' or 'z',
-    b = isGameshell and 'k' or 'x',
+    a = love.system.getOS() == "Linux" and 'j' or 'z',
+    b = love.system.getOS() == "Linux" and 'k' or 'x',
 }
 
 local keyDown = lume.fn(love.keyboard.isDown)
@@ -77,25 +76,27 @@ function onLK5() print("5") end
 -- Function Buttons --
 function onStart() print("START") end
 function onSelect() print("SELECT") end
-function onMenu() if state.type == States.Gameplay then stateMachine:push(States.PauseMenu) end end
+function onMenu()if state.type == States.Gameplay then stateMachine:push(States.PauseMenu) end end
 -- Function Buttons --
 
 -- Handles single key presses
 function love.keypressed(k)
     state = stateMachine:current()
-    if k == inputMap.up then onUp()
+    if k == inputMap.a then onA()
+    elseif k == inputMap.b then onB()
+    elseif k == inputMap.up then onUp()
     elseif k == inputMap.down then onDown()
     elseif k == inputMap.left then onLeft()
     elseif k == inputMap.right then onRight()
-    elseif k == inputMap.a then onA()
     end
 end
 
 function love.keyreleased(k)
     state = stateMachine:current()
     if state.type == States.Gameplay then
-        if k == inputMap.b then player:stopPettingCats() end
-        if k == inputMap.up or k == inputMap.down then playerY = 0 end
-        if k == inputMap.left or k == inputMap.right then playerX = 0 end
+        if k == inputMap.b then player:stopPettingCats()
+        elseif k == inputMap.up or k == inputMap.down then playerY = 0
+        elseif k == inputMap.left or k == inputMap.right then playerX = 0
+        end
     end
 end
