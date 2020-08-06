@@ -32,11 +32,7 @@ function SetScoreMenu:initialize()
     love.graphics.setFont(menuFont)
     name = table.concat(self.name) .. " ----------- " .. string.format("%.2f", currTime) .. "\n"
 
-    self.options = {
-        love.graphics.newText(menuFont, name),
-        love.graphics.newText(menuFont, "PLAY AGAIN"),
-        love.graphics.newText(menuFont, "MAIN MENU")
-    }
+    Menu.setOptions(self, { name, "PLAY AGAIN", "MAIN MENU" })
 
     for i=65, 90, 1 do table.insert(letters, string.char(i)) end
 end

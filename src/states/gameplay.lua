@@ -47,6 +47,7 @@ function Gameplay:initialize()
     self.entities = { }
     self.elapsedTime = 0
     self.streetPosition = 0
+    self.backgroundPosition = 0
     self.width = screenWidth
     self.height = screenHeight
     self.type = States.Gameplay
@@ -54,6 +55,9 @@ function Gameplay:initialize()
 
     self.street = animateFactory:CreateTileSet("Street")
     self.street.SetImageWrap('repeat', 'clampzero')
+
+    self.background = animateFactory:CreateTileSet('Background')
+    self.background.SetImageWrap('repeat', 'clampzero')
 
     self.bar = love.graphics.newQuad(0, 0, 122, 20, 122, 42)
     self.barbg = love.graphics.newQuad(0, 21, 122, 20, 122, 42)
@@ -69,6 +73,7 @@ function Gameplay:initialize()
 end
 
 function Gameplay:draw()
+    self.background.DrawScroll(1, 0, 0, self.backgroundPosition)
     self.street.DrawScroll(1, 0, 126, self.streetPosition)
     self.backgroundHandler:draw()
     self:drawEntities()
@@ -98,6 +103,7 @@ end
 function Gameplay:updateBackground(dt)
     self.backgroundHandler:update()
     self.streetPosition = self.streetPosition - self.speed
+    self.backgroundPosition = self.backgroundPosition - 1
 end
 
 function Gameplay:checkForReset(dt)

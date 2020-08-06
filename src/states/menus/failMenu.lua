@@ -8,14 +8,9 @@ function FailMenu:initialize()
     Menu.setTitle(self, "GAME OVER")
 
     self.type = States.FailMenu
-    self.currX, self.currY = 1, 1
     self.startHeight = screenHeight/2.5
     self.clearColor = { r = 1, g = 1, b = 1, a = 0.8 }
-    self.options = {
-        love.graphics.newText(menuFont, "PLAY AGAIN"),
-        love.graphics.newText(menuFont, "ADD SCORE"),
-        love.graphics.newText(menuFont, "MAIN MENU")
-    }
+    Menu.setOptions(self, { "PLAY AGAIN", "ADD SCORE", "MAIN MENU" })
 end
 
 function FailMenu:draw()

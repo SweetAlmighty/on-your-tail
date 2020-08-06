@@ -10,12 +10,7 @@ function MainMenu:initialize()
     self.type = States.MainMenu
     self.startHeight = screenHeight/1.75
     self.clearColor = { r = 1, g = 1, b = 1, a = 1}
-    self.options = {
-        love.graphics.newText(menuFont, "PLAY"),
-        love.graphics.newText(menuFont, "EXTRAS"),
-        love.graphics.newText(menuFont, "CREDITS"),
-        love.graphics.newText(menuFont, "QUIT")
-    }
+    Menu.setOptions(self, { "PLAY", "EXTRAS", "CREDITS", "QUIT" })
 end
 
 function MainMenu:accept()

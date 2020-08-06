@@ -44,12 +44,7 @@ function OptionsMenu:initialize()
     self.type = States.OptionsMenu
     self.startHeight = screenHeight/1.75
     self.clearColor = { r = 1, g = 1, b = 1, a = 1 }
-    self.options = {
-        love.graphics.newText(menuFont, "VOLUME: "),
-        love.graphics.newText(menuFont, "RESOLUTION: "),
-        love.graphics.newText(menuFont, "FULLSCREEN: "),
-        love.graphics.newText(menuFont, "BACK")
-    }
+    Menu.setOptions(self, { "VOLUME: ", "RESOLUTION: ", "FULLSCREEN: ", "BACK" })
 end
 
 function OptionsMenu:left()

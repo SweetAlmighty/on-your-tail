@@ -16,7 +16,7 @@ resources = Resources:new()
 stateMachine = StateMachine:new()
 animateFactory = AnimateFactory:new()
 titleFont = resources:LoadFont("KarmaFuture", 50)
-menuFont = resources:LoadFont("8bitOperatorPlusSC-Bold", 10)
+menuFont = resources:LoadFont("8bitOperatorPlusSC-Bold", 15)
 playableArea = { x = 0, y = 150, width = screenWidth/2, height = screenHeight }
 
 local game = nil

@@ -10,10 +10,7 @@ function PauseMenu:initialize()
     self.type = States.PauseMenu
     self.startHeight = screenHeight/2
     self.clearColor = { r = 1, g = 1, b = 1, a = 0.8 }
-    self.options = {
-        love.graphics.newText(menuFont, "RESUME"),
-        love.graphics.newText(menuFont, "MAIN MENU")
-    }
+    Menu.setOptions(self, { "RESUME", "MAIN MENU" })
 end
 
 function PauseMenu:accept()

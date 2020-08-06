@@ -11,12 +11,7 @@ function ExtrasMenu:initialize()
     self.type = States.ExtrasMenu
     self.startHeight = screenHeight/1.75
     self.clearColor = { r = 1, g = 1, b = 1, a = 1 }
-    self.options = {
-        love.graphics.newText(menuFont, "OPTIONS"),
-        love.graphics.newText(menuFont, "CONTROLS"),
-        love.graphics.newText(menuFont, "SCORES"),
-        love.graphics.newText(menuFont, "BACK")
-    }
+    Menu.setOptions(self, { "OPTIONS", "CONTROLS", "SCORES", "BACK" })
 
     if isGameshell then
         table.remove(self.options, 1)

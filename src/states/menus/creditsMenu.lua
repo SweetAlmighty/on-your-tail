@@ -17,7 +17,7 @@ function CreditsMenu:initialize()
     self.type = States.CreditsMenu
     self.startHeight = screenHeight - 30
     self.clearColor = { r = 1, g = 1, b = 1, a = 1 }
-    self.options = { love.graphics.newText(menuFont, "BACK") }
+    Menu.setOptions(self, { "BACK" })
 end
 
 function CreditsMenu:accept()

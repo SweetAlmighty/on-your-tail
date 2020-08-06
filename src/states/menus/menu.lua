@@ -6,7 +6,7 @@ Menu = class('Menu', State)
 function Menu:initialize()
     self.index = 1
     self.type = nil
-    self.options = {}
+    self.options = { }
     self.startWidth = 0
     self.startHeight = 0
     self.titlePos = { x = 0, y = 0 }
@@ -37,15 +37,10 @@ function Menu:draw()
 
     -- Draw menu options
     for i=1, #self.options, 1 do
-        self.startWidth = math.floor(halfWidth - (self.options[i]:getWidth()/2))
-        love.graphics.draw(self.options[i], self.startWidth, self:optionHeight(i));
+        local option = self.index == i and self.options[i].normal or self.options[i].selected
+        self.startWidth = math.floor(halfWidth - (option:getWidth()/2))
+        love.graphics.draw(option, self.startWidth, self:optionHeight(i));
     end
-
-    -- Draw pointer
-    love.graphics.setColor(1, 1, 1, 1)
-    local yPos = 5 + self:optionHeight(self.index)
-    local xPos = halfWidth - ((self.options[self.index]:getWidth() / 2) + self.pointer:getWidth())
-    love.graphics.draw(self.pointer, xPos, yPos, 0, 0.5)
 end
 
 function Menu:setTitle(title)
@@ -54,6 +49,15 @@ function Menu:setTitle(title)
         x = (screenWidth/2) - self.title:getWidth()/2,
         y = (screenHeight/2) - ((self.title:getHeight()*2) - 10)
     }
+end
+
+function Menu:setOptions(options)
+    for i=1, #options, 1 do
+        self.options[#self.options + 1] = {
+            normal   = love.graphics.newText(menuFont, "-" .. options[i] .. "-"),
+            selected = love.graphics.newText(menuFont, " " .. options[i] .. " ")
+        }
+    end
 end
 
 function Menu:up()
