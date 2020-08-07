@@ -62,13 +62,12 @@ local createAnimation = function (image)
             local frame = frames[frameCount]
             local offset = { x = 0, y = 0 }
 
-            if frames[frameCount].offset ~= nil then
-                offset = frames[frameCount].offset
+            if frame.offset ~= nil then
+                offset = frame.offset
             end
 
             local xScale = mirror and -1 or 1
-            local w = frames[frameCount].dimensions.w
-            love.graphics.draw(image, frames[frameCount].quad, x, y, 0, xScale, 1, offset.x, offset.y)
+            love.graphics.draw(image, frame.quad, x, y, 0, xScale, 1, offset.x, offset.y)
         end,
 
         Reset = function()
@@ -89,10 +88,8 @@ local createSheet = function (image)
                 properties = frame.Properties,
                 dimensions = frame.Dimensions,
                 quad = love.graphics.newQuad(
-                    frame.Dimensions.x,
-                    frame.Dimensions.y,
-                    frame.Dimensions.w,
-                    frame.Dimensions.h,
+                    dimensions.x, dimensions.y,
+                    dimensions.w, dimensions.h,
                     image:getDimensions())
             }
         end,
@@ -114,7 +111,7 @@ local createSheet = function (image)
         end,
 
         SetImageWrap = function(horizontal, vertical)
-            image:setWrap(horizontal, vertical) 
+            image:setWrap(horizontal, vertical)
         end,
 
         Draw = function(frame, x, y)

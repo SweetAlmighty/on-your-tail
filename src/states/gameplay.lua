@@ -137,7 +137,7 @@ end
 function Gameplay:update(dt)
     self:checkPauseState(dt)
     self:checkForReset(dt)
-    
+
     self.time = { string.format("%.2f", self.elapsedTime), "s" }
 
     checkForAnimalControlSpawn(self)

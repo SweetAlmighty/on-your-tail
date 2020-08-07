@@ -1,8 +1,9 @@
 .vscode/**
-build/**
 *.love
 *.exe
-*.luacheckrc
 *.bat
 *.txt
-Release/**
+*.ini
+*.luacheckrc
+release/**
+Boon.toml

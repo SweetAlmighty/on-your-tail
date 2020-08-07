@@ -139,7 +139,6 @@ end
 function love.update(dt)
     local state = stateMachine:current()
     state:update(dt)
-    
     if state.type == States.Gameplay then
         input:process(dt)
      end

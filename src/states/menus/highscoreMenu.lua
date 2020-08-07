@@ -6,7 +6,7 @@ HighscoreMenu = class("HighscoreMenu", Menu)
 function HighscoreMenu:initialize()
     Menu.initialize(self)
     self.currentTime = ""
-    
+
     --love.graphics.setFont(menuFont)
     self.type = States.HighscoreMenu
     Menu.setTitle(self, "HIGH SCORES")

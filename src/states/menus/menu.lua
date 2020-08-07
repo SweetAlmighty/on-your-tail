@@ -78,7 +78,7 @@ function Menu:down()
     self.index = x
 end
 
-function Menu:left() 
+function Menu:left()
     if self.type == States.SetScoreMenu or self.type == States.OptionsMenu then
         self.moveSFX:play()
     end

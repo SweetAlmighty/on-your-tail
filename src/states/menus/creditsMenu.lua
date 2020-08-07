@@ -2,17 +2,19 @@ require "src/states/menus/menu"
 
 CreditsMenu = class("CreditsMenu", Menu)
 
-local programmerPosition = { x = 10, y = 80 }
-local artistPosition     = { x = 10, y = 120 }
-local frameworkPosition  = { x = 10, y = 160 }
-
 local creditsFont
 
 function CreditsMenu:initialize()
     Menu.initialize(self)
     Menu.setTitle(self, "CREDITS")
 
-    creditsFont = love.graphics.newText(menuFont, "\tProgrammer:\tBrian Sweet\n\tArtist:\t\t\t\tShelby Merrill\n\tMade With:\t\t LÖVE\n\tUtilizing:  middleclass, lume\n\t\t\t\t\t\t  lovesize, json.lua")
+    creditsFont = love.graphics.newText(menuFont, [[
+        Programmer:     Brian Sweet
+        Artist:         Shelby Merrill
+        Made With:      LÖVE
+        Utilizing:      middleclass, lume
+                        lovesize, json.lua
+    ]])
 
     self.type = States.CreditsMenu
     self.startHeight = screenHeight - 30

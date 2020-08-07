@@ -45,7 +45,7 @@ function Player:update(dt)
     processAnims(dt, self)
 
     Entity.update(self, dt)
-end 
+end
 
 function Player:move(x, y)
     if self.state == EntityStates.FAIL then return end
@@ -54,7 +54,7 @@ function Player:move(x, y)
         allowCameraMove = false
         return
     end
-    
+
     allowCameraMove = (x ~= 0)
     if x ~= 0 then self.direction = (x < 0) and Directions.W or Directions.E end
 
@@ -63,7 +63,7 @@ function Player:move(x, y)
 
     self.delta.x = self.speed * x
     self.delta.y = self.speed * y
-    
+
     if moving then Entity.move(self, self.x + self.delta.x, self.y + self.delta.y) end
 end
 
@@ -85,7 +85,7 @@ end
 
 function Player:stopPettingCats(dt)
     if self.state == EntityStates.FAIL then return end
-    
+
     if #self.collisions ~= 0 then
         self:finishInteraction();
         for i=1, #self.collisions, 1 do

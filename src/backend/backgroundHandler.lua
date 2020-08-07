@@ -136,7 +136,7 @@ local resetBuildings = function()
             width = building.dimensions.w,
             pos = i == 1 and 0 or getNextPosition(i)
         }
-        
+
         -- Change Building Prop
         index = love.math.random(2, 8)
         local prop = props[index]
@@ -177,7 +177,7 @@ function BackgroundHandler:draw()
     for i=1, #currentBuildings, 1 do
         self.buildingTiles.Draw(currentBuildings[i].type, currentBuildings[i].pos, 0)
     end
-    
+
     for i=1, #buildingProps, 1 do
         if buildingProps[i] ~= nil then
             self.propTiles.Draw(buildingProps[i].type, buildingProps[i].pos, 85)

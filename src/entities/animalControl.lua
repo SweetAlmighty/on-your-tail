@@ -22,7 +22,7 @@ local processMovement = function(animalControl)
             _x = _x + deltaX
         end
     end
-    
+
     Entity.move(animalControl, _x, _y)
     if animalControl.x < (-animalControl.width) then animalControl:reset() end
 end

@@ -1,8 +1,0 @@
-debhelper-build-stamp
-files
-mrrescue.debhelper.log
-mrrescue.postinst.debhelper
-mrrescue.postrm.debhelper
-mrrescue.substvars
-mrrescue/
-

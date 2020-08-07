@@ -42,9 +42,11 @@ DirectionsIndices = {
     Directions.NW,
 }
 
+--[[
 local showPosition  = function(entity) love.graphics.points(entity.x, entity.y) end
 local showCollider  = function(col) love.graphics.rectangle("line", col.x, col.y, col.w, col.h) end
 local showDebugInfo = function(entity) showCollider(entity.collider) showPosition(entity) end
+--]]
 
 function Entity:initialize(type, state, speed)
     self.width = 0
@@ -180,7 +182,7 @@ function Entity:clampToPlayBounds(x, y)
     else
         self.x = x
     end
-    
+
     self.x = math.floor(self.x + 0.5)
 
     local _y = y + self.height

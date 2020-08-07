@@ -12,21 +12,17 @@ local volumeFont, resolutionFont, fullscreenFont
 
 local setVolumeSetting = function(value)
     local volume = settings.volume
-
     setVolume(value)
     volumeFont = love.graphics.newText(menuFont, settings.volume)
-    
     settings = getSettings()
     playSound = volume ~= settings.volume
 end
 
 local setResolutionSetting = function(value)
     local resolution = settings.resolution
-
     setResolution(value, settings.fullscreen)
     resolutionFont = love.graphics.newText(menuFont, settings.resolution)
     fullscreenFont = love.graphics.newText(menuFont, settings.fullscreen and "[X]" or "[ ]")
-    
     settings = getSettings()
     playSound = resolution ~= settings.resolution
 end
@@ -34,7 +30,6 @@ end
 function OptionsMenu:initialize()
     Menu.initialize(self)
     Menu.setTitle(self, "EXTRAS")
-    
     settings = getSettings()
 
     volumeFont = love.graphics.newText(menuFont, settings.volume)
@@ -53,7 +48,7 @@ function OptionsMenu:left()
     elseif self.index == 2 then
         setResolutionSetting(-1)
     end
-    
+
     if self.index ~= 3 and playSound then
         Menu.left(self)
         playSound = false
@@ -81,7 +76,7 @@ function OptionsMenu:accept()
         Menu.accept(self)
         setSettings(settings)
         stateMachine:pop()
-    end 
+    end
 end
 
 function OptionsMenu:draw()
