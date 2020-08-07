@@ -1,9 +1,9 @@
 require "src/states/state"
 require "src/entities/cat"
-require "src/entities/animalControl"
 require "src/entities/kitten"
 require "src/entities/player"
 require "src/backend/require"
+require "src/entities/animalControl"
 require "src/backend/backgroundHandler"
 require "src/entities/entityController"
 

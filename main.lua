@@ -111,7 +111,6 @@ function love.load()
     stateMachine:push(States.MainMenu)
 
     love.math.setRandomSeed(os.time())
-    love.window.setTitle("On Your Tail")
 
     if love.filesystem.getInfo(filename) then
         love.filesystem.remove(filename)

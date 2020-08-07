@@ -12,7 +12,6 @@ function Menu:initialize()
     self.titlePos = { x = 0, y = 0 }
     self.moveSFX = resources:LoadSFX("move")
     self.acceptSFX = resources:LoadSFX("accept")
-    self.pointer = resources:LoadImage("pointer")
     self.declineSFX = resources:LoadSFX("decline")
     self.background = resources:LoadImage("TitleScreen")
     self.titleAnim = animateFactory:CreateAnimationSet("title")[1][1]

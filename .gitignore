@@ -1,9 +1,11 @@
+# Directories
 .vscode/**
-*.love
+release/**
+
+# Extensions
 *.exe
 *.bat
 *.txt
-*.ini
+*.toml
+*.love
 *.luacheckrc
-release/**
-Boon.toml

@@ -88,8 +88,10 @@ local createSheet = function (image)
                 properties = frame.Properties,
                 dimensions = frame.Dimensions,
                 quad = love.graphics.newQuad(
-                    dimensions.x, dimensions.y,
-                    dimensions.w, dimensions.h,
+                    frame.Dimensions.x,
+                    frame.Dimensions.y,
+                    frame.Dimensions.w,
+                    frame.Dimensions.h,
                     image:getDimensions())
             }
         end,
