@@ -13,7 +13,7 @@ function Menu:initialize()
     self.moveSFX = resources:LoadSFX("move")
     self.acceptSFX = resources:LoadSFX("accept")
     self.declineSFX = resources:LoadSFX("decline")
-    self.background = resources:LoadImage("TitleScreen")
+    self.background = resources:LoadImage("titleScreen")
     self.titleAnim = animateFactory:CreateAnimationSet("title")[1][1]
     self.clearColor = { r = 1, g = 1, b = 1, a = 1 }
 end
