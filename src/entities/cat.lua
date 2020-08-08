@@ -1,4 +1,3 @@
-
 require "src/entities/entity"
 require "src/gameplay/interactButton"
 

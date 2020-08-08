@@ -1,4 +1,3 @@
-
 require "src/states/menus/menu"
 
 FailMenu = class("FailMenu", Menu)
@@ -9,7 +8,7 @@ function FailMenu:initialize()
 
     self.type = States.FailMenu
     self.startHeight = screenHeight/2.5
-    self.clearColor = { r = 1, g = 1, b = 1, a = 0.8 }
+    self.clearColor = { r = 0.1, g = 0.1, b = 0.1, a = 0.8 }
     Menu.setOptions(self, { "PLAY AGAIN", "ADD SCORE", "MAIN MENU" })
 end
 

@@ -38,7 +38,7 @@ function OptionsMenu:initialize()
 
     self.type = States.OptionsMenu
     self.startHeight = screenHeight/1.75
-    self.clearColor = { r = 1, g = 1, b = 1, a = 1 }
+    self.clearColor = { r = 0.1, g = 0.1, b = 0.1, a = 0.8 }
     Menu.setOptions(self, { "VOLUME: ", "RESOLUTION: ", "FULLSCREEN: ", "BACK" })
 end
 
@@ -81,9 +81,7 @@ end
 
 function OptionsMenu:draw()
     Menu.draw(self)
-    love.graphics.setColor(0, 0, 0, 1)
     love.graphics.draw(volumeFont, volumePosition.x, volumePosition.y)
     love.graphics.draw(resolutionFont, resolutionPosition.x, resolutionPosition.y)
     love.graphics.draw(fullscreenFont, fullscreenPosition.x, fullscreenPosition.y)
-    love.graphics.setColor(1, 1, 1, 1)
 end

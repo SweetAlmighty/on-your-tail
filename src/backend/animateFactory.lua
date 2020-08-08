@@ -79,7 +79,6 @@ end
 local createSheet = function (image)
     local frames = { }
     local totalFrames = 0
-    local dimensions = { }
 
     return {
         AddFrame = function(frame)

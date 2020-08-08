@@ -1,4 +1,3 @@
-
 require "src/states/menus/menu"
 
 SetScoreMenu = class("SetScoreMenu", Menu)

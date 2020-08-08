@@ -1,4 +1,3 @@
-
 require "src/states/state"
 
 Menu = class('Menu', State)
@@ -24,20 +23,27 @@ end
 
 function Menu:draw()
     love.graphics.setColor(self.clearColor.r, self.clearColor.g, self.clearColor.b, self.clearColor.a)
+    love.graphics.rectangle("fill", 0, 0, 320, 240)
 
-    if self.type == States.PauseMenu or self.type == States.ControlsMenu or self.type == States.FailMenu then
-        love.graphics.rectangle("fill", 0, 0, 320, 240)
+    if self.type == States.PauseMenu or
+       self.type == States.ControlsMenu or
+       self.type == States.CreditsMenu or
+       self.type == States.OptionsMenu or
+       self.type == States.HighscoreMenu or
+       self.type == States.FailMenu then
+        -- Draw title
+        love.graphics.setColor(1, 1, 1, 1)
+        love.graphics.draw(self.title, self.titlePos.x, self.titlePos.y)
     else
         love.graphics.draw(self.background, 0, 0)
         self.titleAnim.Draw(34, 0)
     end
 
-    local halfWidth = screenWidth/2
-
     -- Draw menu options
+    love.graphics.setColor(1, 1, 1, 1)
     for i=1, #self.options, 1 do
         local option = self.index == i and self.options[i].normal or self.options[i].selected
-        self.startWidth = math.floor(halfWidth - (option:getWidth()/2))
+        self.startWidth = math.floor((screenWidth/2) - (option:getWidth()/2))
         love.graphics.draw(option, self.startWidth, self:optionHeight(i));
     end
 end

@@ -1,4 +1,3 @@
-
 require "src/states/menus/menu"
 
 PauseMenu = class("PauseMenu", Menu)
@@ -9,7 +8,7 @@ function PauseMenu:initialize()
 
     self.type = States.PauseMenu
     self.startHeight = screenHeight/2
-    self.clearColor = { r = 1, g = 1, b = 1, a = 0.8 }
+    self.clearColor = { r = 0.1, g = 0.1, b = 0.1, a = 0.8 }
     Menu.setOptions(self, { "RESUME", "MAIN MENU" })
 end
 

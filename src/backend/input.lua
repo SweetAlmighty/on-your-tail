@@ -1,4 +1,3 @@
-
 require "src/states/stateMachine"
 
 Input = class('Input')

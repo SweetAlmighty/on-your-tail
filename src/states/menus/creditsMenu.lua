@@ -9,16 +9,16 @@ function CreditsMenu:initialize()
     Menu.setTitle(self, "CREDITS")
 
     creditsFont = love.graphics.newText(menuFont, [[
-        Programmer:     Brian Sweet
-        Artist:         Shelby Merrill
-        Made With:      LÖVE
-        Utilizing:      middleclass, lume
-                        lovesize, json.lua
+        Programmer: Brian Sweet
+        Artist:          Shelby Merrill
+        Made With:     LÖVE
+        Utilizing:     middleclass, lume
+                               lovesize, json.lua
     ]])
 
     self.type = States.CreditsMenu
     self.startHeight = screenHeight - 30
-    self.clearColor = { r = 1, g = 1, b = 1, a = 1 }
+    self.clearColor = { r = 0.1, g = 0.1, b = 0.1, a = 0.8 }
     Menu.setOptions(self, { "BACK" })
 end
 
@@ -30,7 +30,5 @@ end
 
 function CreditsMenu:draw()
     Menu.draw(self)
-    love.graphics.setColor(0, 0, 0, 1)
     love.graphics.draw(creditsFont, 0, screenHeight/3.5)
-    love.graphics.setColor(1, 1, 1, 1)
 end

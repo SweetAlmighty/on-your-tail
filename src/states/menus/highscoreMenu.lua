@@ -1,4 +1,3 @@
-
 require "src/states/menus/menu"
 
 HighscoreMenu = class("HighscoreMenu", Menu)
@@ -7,12 +6,12 @@ function HighscoreMenu:initialize()
     Menu.initialize(self)
     self.currentTime = ""
 
-    --love.graphics.setFont(menuFont)
+    love.graphics.setFont(menuFont)
     self.type = States.HighscoreMenu
-    Menu.setTitle(self, "HIGH SCORES")
+    Menu.setTitle(self, "SCORES")
 
     self.startHeight = screenHeight - 40
-    self.clearColor = { r = 1, g = 1, b = 1, a = 1 }
+    self.clearColor = { r = 0.1, g = 0.1, b = 0.1, a = 0.8 }
     Menu.setOptions(self, { "BACK" })
 
     local scores = getScores()
@@ -24,7 +23,6 @@ end
 
 function HighscoreMenu:draw()
     Menu.draw(self)
-    love.graphics.setColor(0, 0, 0)
     love.graphics.print(self.currentTime, (screenWidth/2) - 110, (screenHeight/2) - 25)
 end
 

@@ -1,4 +1,3 @@
-
 require "src/states/menus/menu"
 
 MainMenu = class("MainMenu", Menu)

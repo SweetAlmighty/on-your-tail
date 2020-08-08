@@ -1,4 +1,3 @@
-
 require "src/entities/cat"
 
 Kitten = class("Kitten", Cat)

@@ -1,4 +1,3 @@
-
 require "src/entities/entity"
 
 AnimalControl = class("AnimalControl", Entity)

@@ -1,4 +1,3 @@
-
 require "src/states/menus/menu"
 
 ControlsMenu = class("ControlsMenu", Menu)
@@ -21,8 +20,9 @@ function ControlsMenu:initialize()
     self.startHeight = screenHeight - 30
     self.quad = isGameshell and gameshell or pc
     self.image = resources:LoadImage("controls")
-    self.clearColor = { r = 1, g = 1, b = 1, a = 1 }
-    self.options = { love.graphics.newText(menuFont, "BACK") }
+    self.clearColor = { r = 0.1, g = 0.1, b = 0.1, a = 0.8 }
+
+    Menu.setOptions(self, { "BACK" })
 end
 
 function ControlsMenu:accept()
@@ -33,10 +33,8 @@ end
 function ControlsMenu:draw()
     Menu.draw(self)
     love.graphics.draw(self.image, self.quad, startPos.x, startPos.y)
-    love.graphics.setColor(0, 0, 0, 1)
     love.graphics.draw(love.graphics.newText(menuFont, "PAUSE"), pause.x, pause.y)
     love.graphics.draw(love.graphics.newText(menuFont, "MOVE"), move.x, move.y)
     love.graphics.draw(love.graphics.newText(menuFont, "PET"), pet.x, pet.y)
     love.graphics.draw(love.graphics.newText(menuFont, "ACCEPT"), accept.x, accept.y)
-    love.graphics.setColor(1, 1, 1, 1)
 end

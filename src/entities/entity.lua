@@ -1,4 +1,3 @@
-
 require "src/backend/require"
 
 Entity = class('Entity')
