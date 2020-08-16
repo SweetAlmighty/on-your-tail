@@ -29,7 +29,7 @@ end
 
 function OptionsMenu:initialize()
     Menu.initialize(self)
-    Menu.setTitle(self, "EXTRAS")
+    Menu.setTitle(self, "OPTIONS")
     settings = getSettings()
 
     volumeFont = love.graphics.newText(menuFont, settings.volume)
@@ -39,7 +39,7 @@ function OptionsMenu:initialize()
     self.type = States.OptionsMenu
     self.startHeight = screenHeight/1.75
     self.clearColor = { r = 0.1, g = 0.1, b = 0.1, a = 0.8 }
-    Menu.setOptions(self, { "VOLUME: ", "RESOLUTION: ", "FULLSCREEN: ", "BACK" })
+    Menu.setOptions(self, { "VOLUME:", "RESOLUTION:", "FULLSCREEN:", "BACK" })
 end
 
 function OptionsMenu:left()
@@ -71,6 +71,7 @@ end
 function OptionsMenu:accept()
     if self.index == 3 then
         settings.fullscreen = not settings.fullscreen
+        print(settings.fullscreen)
         setResolutionSetting(0);
     elseif self.index == 4 then
         Menu.accept(self)
@@ -81,7 +82,7 @@ end
 
 function OptionsMenu:draw()
     Menu.draw(self)
-    love.graphics.draw(volumeFont, volumePosition.x, volumePosition.y)
-    love.graphics.draw(resolutionFont, resolutionPosition.x, resolutionPosition.y)
-    love.graphics.draw(fullscreenFont, fullscreenPosition.x, fullscreenPosition.y)
+    love.graphics.draw(volumeFont, volumePosition.x, self:optionHeight(1))
+    love.graphics.draw(resolutionFont, resolutionPosition.x, self:optionHeight(2))
+    love.graphics.draw(fullscreenFont, fullscreenPosition.x, self:optionHeight(3))
 end

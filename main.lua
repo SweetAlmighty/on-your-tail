@@ -57,13 +57,7 @@ function setResolution(index, fullscreen)
 end
 
 function setVolume(volume)
-    local value = game.settings.volume + volume
-
-    if value < 0 then
-        value = 0
-    elseif value > 10 then
-        value = 10
-    end
+    local value = math.max(0, math.min(game.settings.volume + volume, 10))
 
     if value ~= game.settings.volume then
         love.audio.setVolume(value / 10)
@@ -103,7 +97,7 @@ end
 function getSettings()
     return game.settings
 end
-
+    
 function love.load()
     lovesize.set(screenWidth, screenHeight)
 
