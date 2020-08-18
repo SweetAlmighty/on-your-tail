@@ -2,39 +2,33 @@ require "src/states/menus/menu"
 
 OptionsMenu = class("OptionsMenu", Menu)
 
-local settings = { }
 local playSound = false
-local volumePosition = { x = 225, y = 80 }
-local resolutionPosition = { x = 225, y = 120 }
-local fullscreenPosition = { x = 225, y = 160 }
-
+local fullscreen = false
 local volumeFont, resolutionFont, fullscreenFont
 
-local setVolumeSetting = function(value)
-    local volume = settings.volume
-    setVolume(value)
+local setText = function()
+    local settings = getSettings()
+    fullscreen = settings.fullscreen
     volumeFont = love.graphics.newText(menuFont, settings.volume)
-    settings = getSettings()
-    playSound = volume ~= settings.volume
+    resolutionFont = love.graphics.newText(menuFont, settings.resolution)
+    fullscreenFont = love.graphics.newText(menuFont, settings.fullscreen and "[X]" or "[ ]")
+end
+
+local setVolumeSetting = function(value)
+    playSound = setVolume(value)
+    setText()
 end
 
 local setResolutionSetting = function(value)
-    local resolution = settings.resolution
-    setResolution(value, settings.fullscreen)
-    resolutionFont = love.graphics.newText(menuFont, settings.resolution)
-    fullscreenFont = love.graphics.newText(menuFont, settings.fullscreen and "[X]" or "[ ]")
-    settings = getSettings()
-    playSound = resolution ~= settings.resolution
+    playSound = setResolution(value, fullscreen)
+    setText()
 end
 
 function OptionsMenu:initialize()
     Menu.initialize(self)
     Menu.setTitle(self, "OPTIONS")
-    settings = getSettings()
 
-    volumeFont = love.graphics.newText(menuFont, settings.volume)
-    resolutionFont = love.graphics.newText(menuFont, settings.resolution)
-    fullscreenFont = love.graphics.newText(menuFont, settings.fullscreen and "[X]" or "[ ]")
+    setText()
 
     self.type = States.OptionsMenu
     self.startHeight = screenHeight/1.75
@@ -70,19 +64,18 @@ end
 
 function OptionsMenu:accept()
     if self.index == 3 then
-        settings.fullscreen = not settings.fullscreen
-        print(settings.fullscreen)
+        fullscreen = not fullscreen
         setResolutionSetting(0);
     elseif self.index == 4 then
         Menu.accept(self)
-        setSettings(settings)
+        saveData()
         stateMachine:pop()
     end
 end
 
 function OptionsMenu:draw()
     Menu.draw(self)
-    love.graphics.draw(volumeFont, volumePosition.x, self:optionHeight(1))
-    love.graphics.draw(resolutionFont, resolutionPosition.x, self:optionHeight(2))
-    love.graphics.draw(fullscreenFont, fullscreenPosition.x, self:optionHeight(3))
+    love.graphics.draw(volumeFont, 225, self:optionHeight(1))
+    love.graphics.draw(resolutionFont, 225, self:optionHeight(2))
+    love.graphics.draw(fullscreenFont, 225, self:optionHeight(3))
 end
