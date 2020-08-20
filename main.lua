@@ -1,51 +1,19 @@
-require "src/backend/input"
-require "src/backend/require"
-require "src/backend/saveData"
-require "src/backend/resources"
-require "src/states/stateMachine"
-require "src/backend/animateFactory"
+require("src/entity/entity")
+require("src/backend/utility")
+require("src/backend/collisions")
 
-lovesize = require("src/lib/lovesize")
+local catCount = 20
 
-speed = 2
-currTime = 0
-screenWidth = 320
-screenHeight = 240
-local color = 50/255
-local input = Input:new()
-resources = Resources:new()
-stateMachine = StateMachine:new()
-animateFactory = AnimateFactory:new()
-menuFont = resources:LoadFont("8bitOperatorPlusSC-Bold", 15)
-titleFont = resources:LoadFont("8bitOperatorPlusSC-Bold", 50)
-playableArea = { x = 0, y = 150, width = screenWidth/2, height = screenHeight }
+function love.load(arg)
+    --if arg[#arg] == "-debug" then require("mobdebug").start() end
+  
+    love.window.setMode(320, 240)
+    love.window.setTitle("On Your Tail")
 
-function love.load()
-    lovesize.set(screenWidth, screenHeight)
-    stateMachine:push(States.MainMenu)
-    love.math.setRandomSeed(os.time())
-    initializeData()
+    loadImages()
+    math.randomseed(os.time())
+    for i=1, catCount, 1 do createEntity(e_Types.CAT) end
 end
 
-function love.resize(width, height)
-    lovesize.resize(width, height)
-end
-
-function love.update(dt)
-    local state = stateMachine:current()
-    state:update(dt)
-    if state.type == States.Gameplay then
-        input:process(dt)
-     end
-end
-
-function love.quit()
-    saveData()
-end
-
-function love.draw()
-    love.graphics.clear(color, color, color)
-    lovesize.begin()
-        stateMachine:draw()
-    lovesize.finish()
-end
+function love.draw() drawEntities() end
+function love.update(dt) moveEntities(dt) end

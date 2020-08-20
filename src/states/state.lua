@@ -1,10 +1,12 @@
-require("src/backend/require")
+state = {
+    type = nil,
+    exit = function() end,
+    enter = function() end,
+    pause = function() end,
+    unpause = function() end,
+    initialize = function() end
+}
 
-State = class("State")
-
-function State:exit() end
-function State:enter() end
-function State:pause() end
-function State:unpause() end
-function State:update(dt) end
-function State:initialize() self.type = nil end
+state.initialize = function() 
+    state.type = nil 
+end
