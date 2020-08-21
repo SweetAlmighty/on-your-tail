@@ -55,7 +55,7 @@ Resources = {
             sheets[name] = json.decode(love.filesystem.read(path))
             return sheets[name]
         end
-        print('Sheet Error: Sheet at " .. path .. " could not be found.')
+        print('Sheet Error: Sheet at ' .. path .. ' could not be found.')
         return nil
     end,
 

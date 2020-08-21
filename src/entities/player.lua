@@ -23,8 +23,8 @@ local newMesh = function()
 		table.insert(vertices, {x, y, u, v})
 	end
 
-	-- The "fan" draw mode is perfect for our circle.
-    return love.graphics.newMesh(vertices, "fan")
+	-- The 'fan' draw mode is perfect for our circle.
+    return love.graphics.newMesh(vertices, 'fan')
 end
 
 return {

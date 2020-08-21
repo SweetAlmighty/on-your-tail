@@ -1,7 +1,3 @@
-AnimateFactory = class('AnimateFactory')
-
-function AnimateFactory:initialize() end
-
 local createAnimation = function (image)
     local frames = { }
     local duration = 10
@@ -25,7 +21,7 @@ local createAnimation = function (image)
             for i = 1, #data.Properties do
                 local property = data.Properties[i]
 
-                if property.Name == "Collider" and collider == nil then
+                if property.Name == 'Collider' and collider == nil then
                     collider = property.Value
                 end
             end

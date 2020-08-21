@@ -1,3 +1,6 @@
+local MainMenu = require 'src/states/mainMenu'
+local Gameplay = require 'src/states/gameplay'
+
 local stack = { }
 
 GameStates = {
@@ -16,8 +19,8 @@ GameStates = {
 StateMachine = {
     Push = function(type)
         local state = nil
-        if type == GameStates.MainMenu then state = require('src/states/mainMenu').new()
-        elseif type == GameStates.Gameplay then state = require('src/states/gameplay').new() end
+        if type == GameStates.MainMenu then state = MainMenu.new()
+        elseif type == GameStates.Gameplay then state = Gameplay.new() end
         if state ~= nil then
             table.insert(stack, state)
             stack[#stack].Enter()

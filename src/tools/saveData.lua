@@ -1,8 +1,8 @@
 local data = { }
 local defaultScores = {
-    { "AAA", 0 },
-    { "AAA", 0 },
-    { "AAA", 0 }
+    { 'AAA', 0 },
+    { 'AAA', 0 },
+    { 'AAA', 0 }
 }
 local defaultSettings = {
     volume = 5,
@@ -16,8 +16,8 @@ local resolutions = {
     { w = 1024, h = 768 },
     { w = 1280, h = 960 }
 }
-local newFilename = "data.txt"
-local filename = "highscores.txt"
+local newFilename = 'data.txt'
+local filename = 'highscores.txt'
 
 Data = {
     Initialize = function()
@@ -29,7 +29,7 @@ Data = {
             local info = json.decode(love.filesystem.read(newFilename))
             if info ~= nil then
                 data = info
-            else print("Load Error: " .. message) end
+            else print('Load Error: ' .. message) end
         else
             data = { settings = defaultSettings, scores = defaultScores }
             love.filesystem.write(newFilename, json.encode(data))
@@ -44,7 +44,7 @@ Data = {
 
     Save = function()
         local _, error = love.filesystem.write(newFilename, json.encode(data))
-        if error ~= nil then print("Save Error: " .. error) end
+        if error ~= nil then print('Save Error: ' .. error) end
     end,
 
     AddScore = function(score)
