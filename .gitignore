@@ -1,0 +1,10 @@
+# Directories
+.vscode/**
+release/**
+
+# Extensions
+*.exe
+*.bat
+*.txt
+*.toml
+*.love
