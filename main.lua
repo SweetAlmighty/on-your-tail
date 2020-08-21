@@ -1,5 +1,5 @@
-Menu = require 'src/menu'
-require 'src/stateMachine'
+Menu = require 'src/states/menu'
+require 'src/states/stateMachine'
 
 local tick = require 'src/lib/tick'
 local lovesize = require 'src/lib/lovesize'
