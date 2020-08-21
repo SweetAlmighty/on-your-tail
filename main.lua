@@ -27,7 +27,6 @@ function love.update(dt)
 end
 
 function love.keypressed(key)
-    print(key)
     StateMachine.Input(key)
 end
 

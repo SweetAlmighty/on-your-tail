@@ -1,12 +1,6 @@
 function findIndex(table, entry)
     for i=1, #table, 1 do
-        if table[i] == entry then
-            return i
-        end
+        if table[i] == entry then return i end
     end
     return nil
-end
-
-function isDown(key)
-    return love.keyboard.isDown(key)
 end
