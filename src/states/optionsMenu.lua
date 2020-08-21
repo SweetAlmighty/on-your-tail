@@ -1,100 +1,73 @@
---[[
-require 'src/states/menus/menu'
-
-OptionsMenu = class('OptionsMenu', Menu)
-
+local index = 1
+local menu = nil
 local playSound = false
 local fullscreen = false
-local volumeFont, resolutionFont, fullscreenFont
+local volumeText, resolutionText, fullscreenText
 
 local setText = function()
-    local settings = getSettings()
+    local settings = Data.GetSettings()
+    volumeText = settings.volume
     fullscreen = settings.fullscreen
-    volumeFont = love.graphics.newText(menuFont, settings.volume)
-    resolutionFont = love.graphics.newText(menuFont, settings.resolution)
-    fullscreenFont = love.graphics.newText(menuFont, settings.fullscreen and '[X]' or '[ ]')
+    resolutionText = settings.resolution
+    fullscreenText = settings.fullscreen and '[X]' or '[ ]'
+end
+
+local setFullscreen = function()
+    fullscreen = not fullscreen
+    setResolutionSetting(0)
 end
 
 local setVolumeSetting = function(value)
-    playSound = setVolume(value)
+    playSound = Data.SetVolume(value)
     setText()
 end
 
 local setResolutionSetting = function(value)
-    playSound = setResolution(value, fullscreen)
+    playSound = Data.SetResolution(value, fullscreen)
     setText()
 end
 
-function OptionsMenu:initialize()
-    Menu.initialize(self)
-    Menu.setTitle(self, 'OPTIONS')
+local optionHeight = function(i) return ((i-1) * 20) end
 
-    setText()
-
-    self.type = States.OptionsMenu
-    self.startHeight = screenHeight/1.75
-    self.clearColor = { r = 0.1, g = 0.1, b = 0.1, a = 0.8 }
-    Menu.setOptions(self, { 'VOLUME:', 'RESOLUTION:', 'FULLSCREEN:', 'BACK' })
+local left = function()
+    if index == 1 then setVolumeSetting(-1)
+    elseif index == 2 then setResolutionSetting(-1) end
+    if index ~= 3 and playSound then playSound = false end
 end
 
-function OptionsMenu:left()
-    if self.index == 1 then
-        setVolumeSetting(-1)
-    elseif self.index == 2 then
-        setResolutionSetting(-1)
-    end
-
-    if self.index ~= 3 and playSound then
-        Menu.left(self)
-        playSound = false
-    end
+local right = function()
+    if index == 1 then setVolumeSetting(1)
+    elseif index == 2 then setResolutionSetting(1) end
+    if index ~= 3 and playSound then playSound = false end
 end
 
-function OptionsMenu:right()
-    if self.index == 1 then
-        setVolumeSetting(1)
-    elseif self.index == 2 then
-        setResolutionSetting(1)
-    end
-
-    if self.index ~= 3 and playSound then
-        Menu.right(self)
-        playSound = false
-    end
-end
-
-function OptionsMenu:accept()
-    if self.index == 3 then
-        fullscreen = not fullscreen
-        setResolutionSetting(0);
-    elseif self.index == 4 then
-        Menu.accept(self)
-        saveData()
-        stateMachine:pop()
-    end
-end
-
-function OptionsMenu:draw()
-    Menu.draw(self)
-    love.graphics.draw(volumeFont, 225, self:optionHeight(1))
-    love.graphics.draw(resolutionFont, 225, self:optionHeight(2))
-    love.graphics.draw(fullscreenFont, 225, self:optionHeight(3))
-end
-]]
-local menu = nil
 return {
     new = function()
 		return {
             Enter = function()
+                setText()
                 menu = Menu.new()
                 menu:addItem{ name = 'Volume:', action = function() end }
                 menu:addItem{ name = 'Resolution:', action = function() end }
-                menu:addItem{ name = 'Fullscreen:', action = function() end }
+                menu:addItem{ name = 'Fullscreen:', action = function() setFullscreen() end }
                 menu:addItem{ name = 'Back', action = function() StateMachine.Pop() end }
             end,
             Update = function(dt) menu:update(dt) end,
-            Draw = function() menu:draw(0, 0) end,
-            Input = function(key) menu:keypressed(key) end,
+            Draw = function()
+                menu:draw(0, 0)
+                love.graphics.print(volumeText, 225, optionHeight(1))
+                love.graphics.print(resolutionText, 225, optionHeight(2))
+                love.graphics.print(fullscreenText, 225, optionHeight(3))
+            end,
+            Input = function(key)
+                if key == InputMap.up then index = math.min(4, math.max(1, index-1))
+                elseif key == InputMap.down then index = math.min(4, math.max(1, index+1)) end
+                if index <= 3 then
+                    if key == InputMap.left then left()
+                    elseif key == InputMap.right then right() end
+                end
+                menu:keypressed(key)
+            end,
             Exit = function() end
         }
     end
