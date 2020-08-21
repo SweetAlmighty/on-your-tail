@@ -1,7 +1,7 @@
 --[[
-require "src/entities/cat"
+require 'src/entities/cat'
 
-Kitten = class("Kitten", Cat)
+Kitten = class('Kitten', Cat)
 
 function randomPosition()
     return { love.math.random(screenWidth, screenWidth * 2),
@@ -13,7 +13,7 @@ function Kitten:initialize()
     Entity.setPosition(self, randomPosition(self))
 
     local type = lume.randomchoice(catType)
-    local info = animateFactory:CreateAnimationSet("kittens")
+    local info = animateFactory:CreateAnimationSet('kittens')
     local animats = info[type]
 
     Entity.setAnims(self, {

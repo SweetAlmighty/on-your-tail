@@ -38,6 +38,9 @@ return {
                 love.graphics.draw(mesh, transform)
             end,
 
+            -- Return x, y, w, h
+            Collider = function() return 0, 0, 0, 0 end,
+
             Update = function(dt)
                 local dx, dy = 0, 0
                 if love.keyboard.isDown(InputMap.down) then dy = speed end
@@ -47,37 +50,14 @@ return {
                 if dx ~= 0 or dy ~= 0 then transform = transform:translate(dx, dy) end
             end,
 
-            CollisionEnter = function()
+            Collisions = function()
+                return collisions
             end,
 
-            CollisionExit = function()
+            CollisionEnter = function(entity)
             end,
 
-            HandleCollisions = function(cols)
-                -- Process new collisions
-                for i = 1, #cols, 1 do
-                    local index = findIndex(collisions, cols[i])
-                    if index == nil then
-                        CollisionEnter(cols[i])
-                        --cols[i].CollisionEnter(self)
-                    end
-                end
-
-                -- Find collisions to remove
-                local remove = {}
-                for i = 1, #collisions, 1 do
-                    local index = findIndex(cols, collisions[i])
-                    if index == nil then
-                        remove[#remove + 1] = collisions[i]
-                    end
-                end
-
-                -- Process collisions that are no longer valid
-                for i = 1, #remove, 1 do
-                    -- Exit
-                    --remove[i]:CollisionExit(self)
-                    CollisionExit(remove[i])
-                end
+            CollisionExit = function(entity)
             end
         }
     end

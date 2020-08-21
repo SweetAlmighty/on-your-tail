@@ -1,8 +1,8 @@
 --[[
-require "src/entities/entity"
-require "src/gameplay/interactButton"
+require 'src/entities/entity'
+require 'src/gameplay/interactButton'
 
-Cat = class("Cat", Entity)
+Cat = class('Cat', Entity)
 
 local time = 0
 local shouldUpdate = false
@@ -78,7 +78,7 @@ function Cat:initialize()
     Entity.setPosition(self, randomPosition())
 
     local type = lume.randomchoice(catType)
-    local info = animateFactory:CreateAnimationSet("cats")
+    local info = animateFactory:CreateAnimationSet('cats')
     local animats = info[type]
 
     Entity.setAnims(self, {

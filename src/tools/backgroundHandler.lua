@@ -33,7 +33,7 @@ local getPropPositionOnBuilding = function(building, prop)
 end
 
 local initializeBuildings = function()
-    local buildingTiles = animateFactory:CreateTileSet("Buildings")
+    local buildingTiles = animateFactory:CreateTileSet('Buildings')
 
     buildingProps = { }
     buildingFrames = { }
@@ -51,7 +51,7 @@ local initializeBuildings = function()
 end
 
 local initializeProps = function()
-    local propTiles = animateFactory:CreateTileSet("Props")
+    local propTiles = animateFactory:CreateTileSet('Props')
 
     currentProps = { }
 

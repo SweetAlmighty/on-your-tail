@@ -7,7 +7,7 @@ Recommended: hump.gamestate
 
 Public Domain - feel free to hack and redistribute this as much as you want.
 ]]--
-return {
+Menu = {
 	new = function()
 		return {
 			items = {},

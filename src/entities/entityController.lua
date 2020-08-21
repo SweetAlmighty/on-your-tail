@@ -36,6 +36,58 @@ local sortDrawOrder = function()
     for i=1, #newTable, 1 do entities[#entities+1] = newTable[i].entity end
 end
 
+local checkCollision = function(one, two)
+    local x1, y1, w1, h1 = entities[one].Collider()
+    local x2, y2, w2, h2 = entities[two].Collider()
+    return x1 < x2+w2 and x2 < x1+w1 and y1 < y2+h2 and y2 < y1+h1
+end
+
+--[[
+local handleCollisions = function(entity, collisions)
+    local entityCollisions = entity.Collision()
+
+    -- Process new collisions
+    for i=1, #collisions, 1 do
+        local index = findIndex(entityCollisions, collisions[i])
+        if index == nil then
+            -- Enter
+            collisions[i].CollisionEnter(entity)
+            entity.CollisionEnter(collisions[i])
+        end
+    end
+
+    -- Find collisions to remove
+    local remove = {}
+    for i=1, #entityCollisions, 1 do
+        local index = findIndex(collisions, entityCollisions[i])
+        if index == nil then
+            remove[#remove + 1] = entityCollisions[i]
+        end
+    end
+
+    -- Process collisions that are no longer valid
+    for i=1, #remove, 1 do
+        -- Exit
+        remove[i].CollisionExit(entity)
+        entity.CollisionExit(remove[i])
+    end
+end
+]]
+
+local checkCollisions = function()
+    for i=1, #entities, 1 do
+        local collisions = { }
+        for j=1, #entities, 1 do
+            if i ~= j then
+                if checkCollision(entities[i], entities[j]) then
+                    collisions[#collisions+1] = entities[j]
+                end
+            end
+        end
+        --handleCollisions(entities[i], collisions)
+    end
+end
+
 EntityController = {
     Draw = function()
         sortDrawOrder()
@@ -43,25 +95,8 @@ EntityController = {
     end,
 
     Update = function(dt)
-        for i=1, #entities, 1 do
-            local cols = { }
-            for j=1, #entities, 1 do
-                if i ~= j then --and not entities[i].skipCollisions then
-                    if EntityController.CheckCollision(i, j) then cols[#cols+1] = entities[j] end
-                end
-            end
-            entities[i].HandleCollisions(cols)
-        end
-
+        checkCollisions()
         for i=1, #entities, 1 do if entities[i] ~= nil then entities[i].Update(dt) end end
-    end,
-
-    CheckCollision = function(one, two)
-        local x1, y1 = entities[one].collider.x, entities[one].collider.y
-        local w1, h1 = entities[one].collider.w, entities[one].collider.h
-        local x2, y2 = entities[two].collider.x, entities[two].collider.y
-        local w2, h2 = entities[two].collider.w, entities[two].collider.h
-        return x1 < x2+w2 and x2 < x1+w1 and y1 < y2+h2 and y2 < y1+h1
     end,
 
     AddEntity = function(type)

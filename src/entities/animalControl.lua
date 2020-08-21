@@ -1,7 +1,7 @@
 --[[
-require "src/entities/entity"
+require 'src/entities/entity'
 
-AnimalControl = class("AnimalControl", Entity)
+AnimalControl = class('AnimalControl', Entity)
 
 animalControlType = { 1, 2 }
 
@@ -65,7 +65,7 @@ function AnimalControl:initialize()
     Entity.setPosition(self, {50, 150})
 
     local type = lume.randomchoice(animalControlType)
-    local info = animateFactory:CreateAnimationSet("animalControl")
+    local info = animateFactory:CreateAnimationSet('animalControl')
     local animats = info[type]
 
     Entity.setAnims(self, {

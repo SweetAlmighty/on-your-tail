@@ -1,4 +1,3 @@
-local data = { }
 local defaultScores = {
     { 'AAA', 0 },
     { 'AAA', 0 },
@@ -18,6 +17,11 @@ local resolutions = {
 }
 local newFilename = 'data.txt'
 local filename = 'highscores.txt'
+
+local data = {
+    settings = defaultSettings,
+    scores = defaultScores
+}
 
 Data = {
     Initialize = function()

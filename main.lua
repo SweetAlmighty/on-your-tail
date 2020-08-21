@@ -1,15 +1,21 @@
-Menu = require 'src/states/menu'
+require 'src/states/menu'
+require 'src/tools/utility'
+require 'src/tools/saveData'
+require 'src/tools/resources'
 require 'src/states/stateMachine'
 
 local tick = require 'src/lib/tick'
 local lovesize = require 'src/lib/lovesize'
 
+screenWidth = 320
+screenHeight = 240
 local color = 50/255
-local screenWidth = 320
-local screenHeight = 240
+
+local menuFont = Resources.LoadFont("8bitOperatorPlusSC-Bold", 15)
 
 function love.load(arg)
     tick.framerate = 60
+    love.graphics.setFont(menuFont)
     lovesize.set(screenWidth, screenHeight)
     StateMachine.Push(GameStates.MainMenu)
     love.math.setRandomSeed(os.time())
