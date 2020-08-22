@@ -10,16 +10,16 @@ Public Domain - feel free to hack and redistribute this as much as you want.
 Menu = {
 	new = function()
 		return {
-			items = {},
+			items = { },
 			selected = 1,
 			animOffset = 0,
-			addItem = function(self, item)
+			AddItem = function(self, item)
 				table.insert(self.items, item)
 			end,
-			update = function(self, dt)
+			Update = function(self, dt)
 				self.animOffset = self.animOffset / (1 + dt*10)
 			end,
-			draw = function(self, x, y)
+			Draw = function(self, x, y)
 				local height = 20
 				local width = 300
 
@@ -35,7 +35,7 @@ Menu = {
 					love.graphics.print(item.name, x + 5, y + height*(i-1) + 5)
 				end
 			end,
-			keypressed = function(self, key)
+			Input = function(self, key)
 				if key == 'up' then
 					if self.selected > 1 then
 						self.selected = self.selected - 1

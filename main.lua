@@ -3,7 +3,9 @@ require 'src/tools/utility'
 require 'src/tools/saveData'
 require 'src/tools/resources'
 require 'src/states/stateMachine'
+require 'src/tools/animationFactory'
 
+json = require 'src/lib/json'
 local tick = require 'src/lib/tick'
 lovesize = require 'src/lib/lovesize'
 
@@ -17,7 +19,7 @@ function love.load(arg)
     tick.framerate = 60
     love.graphics.setFont(menuFont)
     lovesize.set(screenWidth, screenHeight)
-    StateMachine.Push(GameStates.MainMenu)
+    StateMachine.Push(GameStates.SplashMenu)
     love.math.setRandomSeed(os.time())
 end
 
@@ -39,5 +41,3 @@ end
 function love.resize(width, height)
     lovesize.resize(width, height)
 end
-
-function love.quit() end

@@ -16,18 +16,18 @@ return {
             Enter = function()
                 menu = Menu.new()
                 quad = isGameshell and gameshell or pc
-                menu:addItem{ name = 'Back', action = function() StateMachine.Pop() end }
+                menu:AddItem{ name = 'Back', action = function() StateMachine.Pop() end }
             end,
-            Update = function(dt) menu:update(dt) end,
+            Update = function(dt) menu:Update(dt) end,
             Draw = function()
-                menu:draw(screenWidth / 2, screenHeight - 30)
+                menu:Draw(screenWidth / 2, screenHeight - 30)
                 love.graphics.draw(image, quad, startPos.x, startPos.y)
                 love.graphics.print('Pause', pause.x, pause.y)
                 love.graphics.print('Move', move.x, move.y)
                 love.graphics.print('Pet', pet.x, pet.y)
                 love.graphics.print('Accept', accept.x, accept.y)
             end,
-            Input = function(key) menu:keypressed(key) end,
+            Input = function(key) menu:Input(key) end,
             Exit = function() end
         }
     end

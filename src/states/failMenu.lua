@@ -4,13 +4,13 @@ return {
 		return {
             Enter = function()
                 menu = Menu.new()
-                menu:addItem{ name = 'Play Again', action = function() StateMachine.Pop() end }
-                menu:addItem{ name = 'Add Score', action = function() StateMachine.Push(GameStates.SetScoreMenu) end }
-                menu:addItem{ name = 'Main Menu', action = function() StateMachine.Clear() end }
+                menu:AddItem{ name = 'Play Again', action = function() StateMachine.Pop() end }
+                menu:AddItem{ name = 'Add Score', action = function() StateMachine.Push(GameStates.SetScoreMenu) end }
+                menu:AddItem{ name = 'Main Menu', action = function() StateMachine.Clear() end }
             end,
-            Update = function(dt) menu:update(dt) end,
-            Draw = function() menu:draw(0, 0) end,
-            Input = function(key) menu:keypressed(key) end,
+            Update = function(dt) menu:Update(dt) end,
+            Draw = function() menu:Draw(0, 0) end,
+            Input = function(key) menu:Input(key) end,
             Exit = function() end
         }
     end

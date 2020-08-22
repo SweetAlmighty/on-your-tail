@@ -7,15 +7,15 @@ return {
             Enter = function()
                 menu = Menu.new()
                 if not isGameshell then
-                    menu:addItem{ name = 'Options', action = function() StateMachine.Push(GameStates.OptionsMenu) end }
+                    menu:AddItem{ name = 'Options', action = function() StateMachine.Push(GameStates.OptionsMenu) end }
                 end
-                menu:addItem{ name = 'Controls', action = function() StateMachine.Push(GameStates.ControlsMenu) end }
-                menu:addItem{ name = 'Scores', action = function() StateMachine.Push(GameStates.HighscoreMenu) end }
-                menu:addItem{ name = 'Back', action = function() StateMachine.Pop() end }
+                menu:AddItem{ name = 'Controls', action = function() StateMachine.Push(GameStates.ControlsMenu) end }
+                menu:AddItem{ name = 'Scores', action = function() StateMachine.Push(GameStates.HighscoreMenu) end }
+                menu:AddItem{ name = 'Back', action = function() StateMachine.Pop() end }
             end,
-            Update = function(dt) menu:update(dt) end,
-            Draw = function() menu:draw(0, 0) end,
-            Input = function(key) menu:keypressed(key) end,
+            Update = function(dt) menu:Update(dt) end,
+            Draw = function() menu:Draw(0, 0) end,
+            Input = function(key) menu:Input(key) end,
             Exit = function() end
         }
     end

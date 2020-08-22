@@ -2,6 +2,7 @@ local MainMenu = require 'src/states/mainMenu'
 local Gameplay = require 'src/states/gameplay'
 local FailMenu = require 'src/states/failMenu'
 local PauseMenu = require 'src/states/pauseMenu'
+local SplashMenu = require 'src/states/splashMenu'
 local ExtrasMenu = require 'src/states/extrasMenu'
 local CreditsMenu = require 'src/states/creditsMenu'
 local OptionsMenu = require 'src/states/optionsMenu'
@@ -21,7 +22,8 @@ GameStates = {
     SetScoreMenu = 7,
     ExtrasMenu = 8,
     CreditsMenu = 9,
-    OptionsMenu = 10
+    OptionsMenu = 10,
+    SplashMenu = 11
 }
 
 StateMachine = {
@@ -31,6 +33,7 @@ StateMachine = {
         elseif type == GameStates.FailMenu then state = FailMenu.new()
         elseif type == GameStates.Gameplay then state = Gameplay.new()
         elseif type == GameStates.PauseMenu then state = PauseMenu.new()
+        elseif type == GameStates.SplashMenu then state = SplashMenu.new()
         elseif type == GameStates.ExtrasMenu then state = ExtrasMenu.new()
         elseif type == GameStates.CreditsMenu then state = CreditsMenu.new()
         elseif type == GameStates.OptionsMenu then state = OptionsMenu.new()

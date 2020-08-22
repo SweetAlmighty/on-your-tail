@@ -5,7 +5,7 @@ return {
 		return {
             Enter = function()
                 menu = Menu.new()
-                menu:addItem{ name = 'Back', action = function() StateMachine.Pop() end }
+                menu:AddItem{ name = 'Back', action = function() StateMachine.Pop() end }
                 credits = [[
                     Programmer: Brian Sweet
                     Artist:          Shelby Merrill
@@ -13,12 +13,12 @@ return {
                     Utilizing:     tick, lovesize, json.lua
                 ]]
             end,
-            Update = function(dt) menu:update(dt) end,
+            Update = function(dt) menu:Update(dt) end,
             Draw = function()
-                menu:draw(screenWidth / 2, screenHeight - 30)
+                menu:Draw(screenWidth / 2, screenHeight - 30)
                 love.graphics.print(credits, 0, screenHeight/3.5)
             end,
-            Input = function(key) menu:keypressed(key) end,
+            Input = function(key) menu:Input(key) end,
             Exit = function() end
         }
     end

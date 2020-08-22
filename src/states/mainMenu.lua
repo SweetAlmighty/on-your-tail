@@ -4,14 +4,14 @@ return {
 		return {
             Enter = function()
                 menu = Menu.new()
-                menu:addItem{ name = 'Start Game', action = function() StateMachine.Push(GameStates.Gameplay) end }
-                menu:addItem{ name = 'Extras', action = function() StateMachine.Push(GameStates.ExtrasMenu) end }
-                menu:addItem{ name = 'Credits', action = function() StateMachine.Push(GameStates.CreditsMenu) end }
-                menu:addItem{ name = 'Quit', action = function() love.event.quit() end }
+                menu:AddItem{ name = 'Start Game', action = function() StateMachine.Push(GameStates.Gameplay) end }
+                menu:AddItem{ name = 'Extras', action = function() StateMachine.Push(GameStates.ExtrasMenu) end }
+                menu:AddItem{ name = 'Credits', action = function() StateMachine.Push(GameStates.CreditsMenu) end }
+                menu:AddItem{ name = 'Quit', action = function() love.event.quit() end }
             end,
-            Update = function(dt) menu:update(dt) end,
-            Draw = function() menu:draw(0, 0) end,
-            Input = function(key) menu:keypressed(key) end,
+            Update = function(dt) menu:Update(dt) end,
+            Draw = function() menu:Draw(0, 0) end,
+            Input = function(key) menu:Input(key) end,
             Exit = function() end
         }
     end
