@@ -1,3 +1,4 @@
+local Cat = require 'src/entities/cat'
 local Player = require 'src/entities/player'
 
 EntityStates = {
@@ -37,14 +38,16 @@ local sortDrawOrder = function()
 end
 
 local checkCollision = function(one, two)
-    local x1, y1, w1, h1 = entities[one].Collider()
-    local x2, y2, w2, h2 = entities[two].Collider()
-    return x1 < x2+w2 and x2 < x1+w1 and y1 < y2+h2 and y2 < y1+h1
+    local colOne = entities[one].Collider()
+    local colTwo = entities[two].Collider()
+    return colOne.x < colTwo.x + colTwo.w and
+           colTwo.x < colOne.x + colOne.w and
+           colOne.y < colTwo.y + colTwo.h and
+           colTwo.y < colOne.y + colOne.h
 end
 
---[[
 local handleCollisions = function(entity, collisions)
-    local entityCollisions = entity.Collision()
+    local entityCollisions = entity.Collisions()
 
     -- Process new collisions
     for i=1, #collisions, 1 do
@@ -72,19 +75,18 @@ local handleCollisions = function(entity, collisions)
         entity.CollisionExit(remove[i])
     end
 end
-]]
 
 local checkCollisions = function()
     for i=1, #entities, 1 do
         local collisions = { }
         for j=1, #entities, 1 do
             if i ~= j then
-                if checkCollision(entities[i], entities[j]) then
+                if checkCollision(i, j) then
                     collisions[#collisions+1] = entities[j]
                 end
             end
         end
-        --handleCollisions(entities[i], collisions)
+        handleCollisions(entities[i], collisions)
     end
 end
 
@@ -92,6 +94,7 @@ EntityController = {
     Draw = function()
         sortDrawOrder()
         for i=1, #entities, 1 do entities[i].Draw() end
+        --drawDebugInfo(entities[1])
     end,
 
     Update = function(dt)
@@ -101,7 +104,8 @@ EntityController = {
 
     AddEntity = function(type)
         local entity = nil
-        if type == EntityTypes.Player then entity = Player.new() end
+        if type == EntityTypes.Player then entity = Player.new()
+        elseif type == EntityTypes.Cat then entity = Cat.new() end
         entities[#entities+1] = entity
     end,
 

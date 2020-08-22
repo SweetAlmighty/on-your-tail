@@ -3,7 +3,7 @@ return {
     new = function()
 		return {
             Enter = function()
-                menu = Menu.new()
+                menu = Menu.new('center')
                 menu:AddItem{ name = 'Start Game', action = function() StateMachine.Push(GameStates.Gameplay) end }
                 menu:AddItem{ name = 'Extras', action = function() StateMachine.Push(GameStates.ExtrasMenu) end }
                 menu:AddItem{ name = 'Credits', action = function() StateMachine.Push(GameStates.CreditsMenu) end }

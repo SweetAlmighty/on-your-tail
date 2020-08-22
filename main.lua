@@ -13,7 +13,7 @@ screenWidth = 320
 screenHeight = 240
 local color = 50/255
 
-local menuFont = Resources.LoadFont('8bitOperatorPlusSC-Bold', 15)
+menuFont = Resources.LoadFont('8bitOperatorPlusSC-Bold', 15)
 
 function love.load(arg)
     Data.Initialize()

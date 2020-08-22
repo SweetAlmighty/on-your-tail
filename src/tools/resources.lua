@@ -31,6 +31,7 @@ Resources = {
         local path = image(name)
         if love.filesystem.getInfo(path) then
             images[name] = love.graphics.newImage(path)
+            images[name]:setFilter('nearest', 'nearest')
             return images[name]
         end
         print('Image Error: Image at ' .. path .. ' could not be found.')
@@ -42,6 +43,8 @@ Resources = {
         local path = font(name)
         if love.filesystem.getInfo(path) then
             fonts[name] = love.graphics.newFont(path, size)
+            fonts[name] = love.graphics.newFont(path, size)
+            fonts[name]:setFilter('nearest', 'nearest')
             return fonts[name]
         end
         print('Font Error: Font at ' .. path .. ' could not be found.')

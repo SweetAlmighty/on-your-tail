@@ -46,7 +46,7 @@ return {
 		return {
             Enter = function()
                 setText()
-                menu = Menu.new()
+                menu = Menu.new('center')
                 menu:AddItem{ name = 'Volume:', action = function() end }
                 menu:AddItem{ name = 'Resolution:', action = function() end }
                 menu:AddItem{ name = 'Fullscreen:', action = function() setFullscreen() end }
@@ -65,7 +65,7 @@ return {
             Input = function(key)
                 if key == InputMap.up then index = math.min(4, math.max(1, index-1))
                 elseif key == InputMap.down then index = math.min(4, math.max(1, index+1)) end
-                if index <= 3 then
+                if index < 3 then
                     if key == InputMap.left then left()
                     elseif key == InputMap.right then right() end
                 end

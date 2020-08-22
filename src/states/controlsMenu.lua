@@ -14,7 +14,7 @@ return {
     new = function()
 		return {
             Enter = function()
-                menu = Menu.new()
+                menu = Menu.new('center')
                 quad = isGameshell and gameshell or pc
                 menu:AddItem{ name = 'Back', action = function() StateMachine.Pop() end }
             end,

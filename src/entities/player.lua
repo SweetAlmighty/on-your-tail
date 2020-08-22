@@ -1,63 +1,90 @@
 require 'src/tools/input'
 
-local newMesh = function()
-    segments = segments or 40
-	local vertices = {}
-
-	-- The first vertex is at the center, and has a red tint. We're centering the circle around the origin (0, 0).
-	table.insert(vertices, {0, 0, 0.5, 0.5, 1, 0, 0})
-
-	-- Create the vertices at the edge of the circle.
-	for i=0, segments do
-		local angle = (i / segments) * math.pi * 2
-
-		-- Unit-circle.
-		local x = math.cos(angle) * 10
-		local y = math.sin(angle) * 10
-
-		-- Our position is in the range of [-1, 1] but we want the texture coordinate to be in the range of [0, 1].
-		local u = (x + 1) * 0.5
-		local v = (y + 1) * 0.5
-
-		-- The per-vertex color defaults to white.
-		table.insert(vertices, {x, y, u, v})
-	end
-
-	-- The 'fan' draw mode is perfect for our circle.
-    return love.graphics.newMesh(vertices, 'fan')
-end
-
 return {
     new = function()
         local speed = 2
-        local mesh = newMesh()
+        local x, y = 0, 0
         local collisions = { }
         local transform = love.math.newTransform(0, 0)
+
+        local info = AnimationFactory.CreateAnimationSet('character')
+        local animations = {
+            idle = info[1][1],
+            move = info[1][2],
+            fail = info[1][4],
+            action = info[1][3],
+        }
+
+        local currentAnimation = animations.idle
+
+        local dir = 1
+
+        local setState = function(state)
+            if currentAnimation ~= state then
+                currentAnimation.Reset()
+                currentAnimation = state
+            end
+        end
+
         return {
             Draw = function()
-                love.graphics.draw(mesh, transform)
+                currentAnimation.Draw(transform, di == -1)
             end,
 
-            -- Return x, y, w, h
-            Collider = function() return 0, 0, 0, 0 end,
+            Collider = function()
+                local frame = currentAnimation.CurrentFrame()
+                return {
+                    x = frame.collider.x + x,
+                    y = frame.collider.y + y,
+                    w = frame.collider.w,
+                    h = frame.collider.h
+                }
+            end,
 
             Update = function(dt)
                 local dx, dy = 0, 0
                 if love.keyboard.isDown(InputMap.down) then dy = speed end
-                if love.keyboard.isDown(InputMap.right) then dx = speed end
+                if love.keyboard.isDown(InputMap.right) then
+                    dx = speed
+                    if dir ~= 1 then
+                        transform = transform:scale(-1, 1)
+                        dir = 1
+                    end
+
+                end
                 if love.keyboard.isDown(InputMap.up) then dy = (-speed) end
-                if love.keyboard.isDown(InputMap.left) then dx = (-speed) end
-                if dx ~= 0 or dy ~= 0 then transform = transform:translate(dx, dy) end
+                if love.keyboard.isDown(InputMap.left) then
+                    dx = speed
+                    if dir ~= -1 then
+                        transform = transform:scale(-1, 1)
+                        dir = -1
+                    end
+                end
+                if dx ~= 0 or dy ~= 0 then
+                    transform = transform:translate(dx, dy)
+                    _, _, _, x, _, _, _, y = transform:getMatrix()
+                    setState(animations.move)
+                else
+                    setState(animations.idle)
+                end
+
+                currentAnimation.Update(dt)
             end,
 
-            Collisions = function()
-                return collisions
-            end,
+            Collisions = function() return collisions end,
 
             CollisionEnter = function(entity)
+                local index = findIndex(collisions, entity)
+                if index == nil then
+                    table.insert(collisions, index)
+                end
             end,
 
             CollisionExit = function(entity)
+                local index = findIndex(collisions, entity)
+                if index ~= nil then
+                    table.remove(collisions, index)
+                end
             end
         }
     end

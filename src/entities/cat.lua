@@ -135,3 +135,65 @@ function Cat:finishInteraction()
     beginOffscreenTransition(self)
 end
 ]]
+require 'src/tools/input'
+
+return {
+    new = function()
+        --local speed = 2
+        local x, y = 0, 0
+        local collisions = { }
+        local transform = love.math.newTransform(100, 100)
+
+        local info = AnimationFactory.CreateAnimationSet('cats')
+        local animations = {
+            idle = info[1][1],
+            move = info[1][2],
+            action = info[1][3],
+        }
+
+        local currentAnimation = animations.idle
+
+        --local setState = function(state)
+        --    if currentAnimation ~= state then
+        --        currentAnimation.Reset()
+        --        currentAnimation = state
+        --    end
+        --end
+
+        return {
+            Draw = function()
+                currentAnimation.Draw(transform, false)
+            end,
+
+            Collider = function()
+                local frame = currentAnimation.CurrentFrame()
+                return {
+                    x = frame.collider.x + x,
+                    y = frame.collider.y + y,
+                    w = frame.collider.w,
+                    h = frame.collider.h
+                }
+            end,
+
+            Update = function(dt)
+                currentAnimation.Update(dt)
+            end,
+
+            Collisions = function() return collisions end,
+
+            CollisionEnter = function(entity)
+                local index = findIndex(collisions, entity)
+                if index == nil then
+                    table.insert(collisions, index)
+                end
+            end,
+
+            CollisionExit = function(entity)
+                local index = findIndex(collisions, entity)
+                if index ~= nil then
+                    table.remove(collisions, index)
+                end
+            end
+        }
+    end
+}

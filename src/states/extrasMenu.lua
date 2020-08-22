@@ -5,7 +5,7 @@ return {
     new = function()
 		return {
             Enter = function()
-                menu = Menu.new()
+                menu = Menu.new('center')
                 if not isGameshell then
                     menu:AddItem{ name = 'Options', action = function() StateMachine.Push(GameStates.OptionsMenu) end }
                 end

@@ -4,7 +4,7 @@ return {
     new = function()
 		return {
             Enter = function()
-                menu = Menu.new()
+                menu = Menu.new('center')
                 menu:AddItem{ name = 'Back', action = function() StateMachine.Pop() end }
 
                 local scores = Data.GetScores()

@@ -6,11 +6,11 @@ return {
     new = function()
 		return {
             Enter = function()
-                menu = Menu.new()
+                menu = Menu.new('center')
                 menu:AddItem{ name = 'Press Start', action = function() StateMachine.Push(GameStates.MainMenu) end }
 
-                background = Resources.LoadImage("titleScreen")
-                title = AnimationFactory.CreateAnimationSet("title")[1][1]
+                background = Resources.LoadImage('titleScreen')
+                title = AnimationFactory.CreateAnimationSet('title')[1][1]
             end,
             Draw = function()
                 love.graphics.draw(background, 0, 0)

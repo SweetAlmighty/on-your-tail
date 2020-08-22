@@ -60,23 +60,9 @@ return {
                 name = table.concat(name)..' ----------- '..string.format('%.2f', currTime)..'\n'
                 for i=65, 90, 1 do table.insert(letters, string.char(i)) end
 
-                menu = Menu.new()
-                menu:AddItem{
-                    name = 'Play Again',
-                    action = function()
-                        if index == 2 then
-                            StateMachine.Pop()
-                        end
-                    end
-                }
-                menu:AddItem{
-                    name = 'Main Menu',
-                    action = function()
-                        if index == 2 then
-                            StateMachine.Clear()
-                        end
-                    end
-                }
+                menu = Menu.new('center')
+                menu:AddItem{ name = 'Play Again', action = function() if index == 2 then StateMachine.Pop() end end }
+                menu:AddItem{ name = 'Main Menu', action = function() if index == 2 then StateMachine.Clear() end end }
             end,
             Update = function(dt) menu:Update(dt) end,
             Draw = function()

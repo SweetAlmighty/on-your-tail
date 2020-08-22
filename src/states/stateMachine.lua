@@ -54,7 +54,7 @@ StateMachine = {
 
     Clear = function()
         local count = #stack
-        while(count > 1) do
+        while(count > 2) do
             StateMachine.Pop()
             count = count - 1
         end
