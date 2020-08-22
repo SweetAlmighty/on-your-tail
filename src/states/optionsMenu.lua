@@ -12,6 +12,11 @@ local setText = function()
     fullscreenText = settings.fullscreen and '[X]' or '[ ]'
 end
 
+local setResolutionSetting = function(value)
+    playSound = Data.SetResolution(value, fullscreen)
+    setText()
+end
+
 local setFullscreen = function()
     fullscreen = not fullscreen
     setResolutionSetting(0)
@@ -19,11 +24,6 @@ end
 
 local setVolumeSetting = function(value)
     playSound = Data.SetVolume(value)
-    setText()
-end
-
-local setResolutionSetting = function(value)
-    playSound = Data.SetResolution(value, fullscreen)
     setText()
 end
 
@@ -50,7 +50,10 @@ return {
                 menu:AddItem{ name = 'Volume:', action = function() end }
                 menu:AddItem{ name = 'Resolution:', action = function() end }
                 menu:AddItem{ name = 'Fullscreen:', action = function() setFullscreen() end }
-                menu:AddItem{ name = 'Back', action = function() StateMachine.Pop() end }
+                menu:AddItem{ name = 'Back', action = function()
+                    Data.Save()
+                    StateMachine.Pop()
+                end }
             end,
             Update = function(dt) menu:Update(dt) end,
             Draw = function()

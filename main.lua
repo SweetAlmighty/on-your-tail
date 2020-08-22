@@ -16,6 +16,7 @@ local color = 50/255
 local menuFont = Resources.LoadFont('8bitOperatorPlusSC-Bold', 15)
 
 function love.load(arg)
+    Data.Initialize()
     tick.framerate = 60
     love.graphics.setFont(menuFont)
     lovesize.set(screenWidth, screenHeight)
@@ -28,6 +29,10 @@ function love.draw()
     lovesize.begin()
         StateMachine.Draw()
     lovesize.finish()
+end
+
+function love.quit()
+    Data.Save()
 end
 
 function love.update(dt)
