@@ -141,7 +141,10 @@ return {
     new = function()
         --local speed = 2
         local x, y = 0, 0
+        local distance = nil
+        local destination = nil
         local collisions = { }
+        local traveling = false
         local transform = love.math.newTransform(100, 100)
 
         local info = AnimationFactory.CreateAnimationSet('cats')
@@ -150,6 +153,8 @@ return {
             move = info[1][2],
             action = info[1][3],
         }
+
+        local timeStep = 0
 
         local currentAnimation = animations.idle
 
@@ -162,6 +167,7 @@ return {
 
         return {
             Draw = function()
+                love.graphics.line(x, y, destination.x, destination.y)
                 currentAnimation.Draw(transform, false)
             end,
 
@@ -176,6 +182,29 @@ return {
             end,
 
             Update = function(dt)
+                if not traveling then
+                    traveling = true
+                    destination = { x = love.math.random(0, 320), y = love.math.random(0, 240) }
+                    _, _, _, x, _, _, _, y = transform:getMatrix()
+                    --distance = dist(x, y, destination.x, destination.y)
+                    --print(distance, destination.x, destination.y)
+                else
+                    local dx, dy = lerp(x, destination.x, timeStep), lerp(y, destination.y, timeStep)
+                    timeStep = timeStep + 0.01
+
+                    transform = transform:translate(dx, dy)
+                    --_, _, _, x, _, _, _, y = transform:getMatrix()
+
+                    if timeStep >= 1 then
+                        timeStep = 0
+                        traveling = false
+                    end
+                    --if distance > 0 then
+                    --    print(dx, dy)
+                    --else
+                    --    traveling = false
+                    --end
+                end
                 currentAnimation.Update(dt)
             end,
 
