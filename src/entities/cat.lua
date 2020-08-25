@@ -1,228 +1,42 @@
---[[
-require 'src/entities/entity'
-require 'src/gameplay/interactButton'
-
-Cat = class('Cat', Entity)
-
-local time = 0
-local shouldUpdate = false
-
-catType = { 1, 2, 3, 4, 5, 6, 7, 8 }
-
-local processMovement = function(cat)
-    local _x = (cat.x + (cat.speed * cat.direction.x))
-    local _y = (cat.y + (cat.speed * cat.direction.y))
-
-    if cat.state == EntityStates.INTERACT then
-        -- Maintain sitting position
-        _x = moveCamera and (cat.x - speed) or (cat.x)
-        _y = cat.y
-    else
-        -- Move relative to the player, if the camera is moving
-        if moveCamera then
-            local deltaX = (cat.direction.x * player.delta.x)
-            if cat.direction.x ~= -1 then deltaX = -player.delta.x end
-            _x = _x + deltaX
-        end
-    end
-
-    Entity.move(cat, _x, _y)
-    if cat.x < (-cat.width) then
-        if cat.type == EntityTypes.KITTEN then
-            StateMachine:current():removeKitten(cat)
-        else
-            cat:reset()
-        end
-    end
-end
-
-local beginOffscreenTransition = function (cat)
-    cat.limit = -1
-    cat.state = EntityStates.MOVING
-    Entity.resetAnim(cat, cat.state)
-    cat.direction = Directions.W
-end
-
-local beingPettingTransition = function (cat)
-    cat.state = EntityStates.INTERACT
-    Entity.resetAnim(cat, cat.state)
-end
-
-local processAnims = function(dt, cat)
-    if not cat.interacting then
-        time = time + dt
-
-        if time > 1 and cat.limit > 0 then
-            time = 0
-            cat.state = lume.randomchoice({EntityStates.INTERACT, EntityStates.MOVING})
-            if cat.state == EntityStates.MOVING then
-                cat.direction = lume.randomchoice(DirectionsIndices)
-            end
-            shouldUpdate = true
-        end
-
-        if shouldUpdate then
-            Entity.resetAnim(cat, cat.state)
-            shouldUpdate = false
-        end
-    end
-end
-
-function randomPosition()
-    return { love.math.random(screenWidth, screenWidth * 2),
-        love.math.random(playableArea.y, playableArea.height) }
-end
-
-function Cat:initialize()
-    Entity.initialize(self, EntityTypes.CAT, EntityStates.IDLE, 1)
-    Entity.setPosition(self, randomPosition())
-
-    local type = lume.randomchoice(catType)
-    local info = animateFactory:CreateAnimationSet('cats')
-    local animats = info[type]
-
-    Entity.setAnims(self, {
-        animats[1],
-        animats[2],
-        animats[3],
-        info[type].Colliders
-    })
-
-    self.limit = catLimit
-    self.button = InteractButton:new()
-end
-
-function Cat:draw()
-    Entity.draw(self)
-    local currFrame = self.currentAnim.CurrentFrame()
-    local offset = currFrame.offset == nil and { x=0, y=0 } or currFrame.offset
-    if self.interactable and self.limit > 0 then
-        self.button:draw(self.x - offset.x, self.y - offset.y)
-    end
-end
-
-function Cat:reset()
-    self.limit = catLimit
-    Entity.reset(self, randomPosition())
-end
-
-function Cat:update(dt)
-    if self.interacting then
-        self.button:update(dt)
-        self.limit = self.limit - (dt * 10)
-        if self.limit < 0 and self.interacting then
-            self.limit = 0
-            self:finishInteraction()
-            self.interactable = false
-            self.skipCollisions = true
-        end
-    else processMovement(self) end
-
-    processAnims(dt, self)
-
-    Entity.update(self, dt)
-end
-
-function Cat:startInteraction()
-    self.interacting = true
-    beingPettingTransition(self)
-end
-
-function Cat:finishInteraction()
-    self.button:reset()
-    self.interacting = false
-    self.interactable = false
-    beginOffscreenTransition(self)
-end
-]]
 require 'src/tools/input'
+local Entity = require 'src/entities/entity'
 
 return {
     new = function()
-        --local speed = 2
         local x, y = 0, 0
-        local distance = nil
-        local destination = nil
-        local collisions = { }
-        local traveling = false
-        local transform = love.math.newTransform(100, 100)
-
-        local info = AnimationFactory.CreateAnimationSet('cats')
-        local animations = {
-            idle = info[1][1],
-            move = info[1][2],
-            action = info[1][3],
-        }
-
         local timeStep = 0
-
-        local currentAnimation = animations.idle
-
-        --local setState = function(state)
-        --    if currentAnimation ~= state then
-        --        currentAnimation.Reset()
-        --        currentAnimation = state
-        --    end
-        --end
+        local destination = nil
+        local traveling = false
+        local startX, startY = 0, 0
+        local entity = Entity.new(2)
+        local speed = love.math.random(0.01, 0.09)
 
         return {
-            Draw = function()
-                love.graphics.line(x, y, destination.x, destination.y)
-                currentAnimation.Draw(transform, false)
-            end,
-
-            Collider = function()
-                local frame = currentAnimation.CurrentFrame()
-                return {
-                    x = frame.collider.x + x,
-                    y = frame.collider.y + y,
-                    w = frame.collider.w,
-                    h = frame.collider.h
-                }
-            end,
-
             Update = function(dt)
+                x, y = entity.Position()
+
                 if not traveling then
                     traveling = true
+                    startX, startY =  x, y
                     destination = { x = love.math.random(0, 320), y = love.math.random(0, 240) }
-                    _, _, _, x, _, _, _, y = transform:getMatrix()
-                    --distance = dist(x, y, destination.x, destination.y)
-                    --print(distance, destination.x, destination.y)
                 else
-                    local dx, dy = lerp(x, destination.x, timeStep), lerp(y, destination.y, timeStep)
-                    timeStep = timeStep + 0.01
-
-                    transform = transform:translate(dx, dy)
-                    --_, _, _, x, _, _, _, y = transform:getMatrix()
-
                     if timeStep >= 1 then
                         timeStep = 0
                         traveling = false
+                    else
+                        entity.Move(lerp(startX, destination.x, timeStep)-x, lerp(startY, destination.y, timeStep)-y)
                     end
-                    --if distance > 0 then
-                    --    print(dx, dy)
-                    --else
-                    --    traveling = false
-                    --end
+
+                    timeStep = timeStep + speed
                 end
-                currentAnimation.Update(dt)
+
+                entity.Update(dt)
             end,
-
-            Collisions = function() return collisions end,
-
-            CollisionEnter = function(entity)
-                local index = findIndex(collisions, entity)
-                if index == nil then
-                    table.insert(collisions, index)
-                end
-            end,
-
-            CollisionExit = function(entity)
-                local index = findIndex(collisions, entity)
-                if index ~= nil then
-                    table.remove(collisions, index)
-                end
-            end
+            Draw = function() entity.Draw() end,
+            Collider = function() return entity.Collider() end,
+            Collisions = function() return entity.Collisions() end,
+            CollisionExit = function(other) entity.CollisionExit(other) end,
+            CollisionEnter = function(other) entity.CollisionEnter(other) end,
         }
     end
 }

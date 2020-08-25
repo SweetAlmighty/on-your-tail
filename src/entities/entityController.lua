@@ -31,7 +31,7 @@ end
 -- Sorts the entities by their Y to mock draw order
 local sortDrawOrder = function()
     local newTable = { }
-    for i=1, #entities, 1 do newTable[#newTable + 1] = { index = i, entity = entities[i] } end
+    for i=1, #entities, 1 do newTable[#newTable+1] = { index = i, entity = entities[i] } end
     table.sort(newTable, sortFunction)
     entities = { }
     for i=1, #newTable, 1 do entities[#entities+1] = newTable[i].entity end
@@ -64,7 +64,7 @@ local handleCollisions = function(entity, collisions)
     for i=1, #entityCollisions, 1 do
         local index = findIndex(collisions, entityCollisions[i])
         if index == nil then
-            remove[#remove + 1] = entityCollisions[i]
+            remove[#remove+1] = entityCollisions[i]
         end
     end
 
@@ -113,7 +113,7 @@ EntityController = {
         local newEntities = {}
         for i=1, #entities, 1 do
             if entities[i] ~= entity then
-                newEntities[#newEntities + 1] = entities[i]
+                newEntities[#newEntities+1] = entities[i]
             end
         end
         entities = newEntities

@@ -4,6 +4,10 @@ local isGameshell = love.system.getOS() == 'Linux'
 return {
     new = function()
 		return {
+            Exit = function() end,
+            Draw = function() menu:Draw(0, 0) end,
+            Update = function(dt) menu:Update(dt) end,
+            Input = function(key) menu:Input(key) end,
             Enter = function()
                 menu = Menu.new('center')
                 if not isGameshell then
@@ -13,10 +17,6 @@ return {
                 menu:AddItem{ name = 'Scores', action = function() StateMachine.Push(GameStates.HighscoreMenu) end }
                 menu:AddItem{ name = 'Back', action = function() StateMachine.Pop() end }
             end,
-            Update = function(dt) menu:Update(dt) end,
-            Draw = function() menu:Draw(0, 0) end,
-            Input = function(key) menu:Input(key) end,
-            Exit = function() end
         }
     end
 }

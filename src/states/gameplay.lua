@@ -6,6 +6,7 @@ return {
             Enter = function()
                 EntityController.AddEntity(EntityTypes.Player)
                 EntityController.AddEntity(EntityTypes.Cat)
+                EntityController.AddEntity(EntityTypes.Cat)
             end,
             Update = function(dt) EntityController.Update(dt) end,
             Draw = function() EntityController.Draw() end,
