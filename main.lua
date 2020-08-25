@@ -13,12 +13,12 @@ screenWidth = 320
 screenHeight = 240
 local color = 50/255
 
-menuFont = Resources.LoadFont('8bitOperatorPlusSC-Bold', 15)
+--menuFont = Resources.LoadFont('8bitOperatorPlusSC-Bold', 15)
 
 function love.load(arg)
     Data.Initialize()
     tick.framerate = 60
-    love.graphics.setFont(menuFont)
+    --love.graphics.setFont(menuFont)
     lovesize.set(screenWidth, screenHeight)
     StateMachine.Push(GameStates.SplashMenu)
     love.math.setRandomSeed(os.time())
@@ -31,18 +31,7 @@ function love.draw()
     lovesize.finish()
 end
 
-function love.quit()
-    Data.Save()
-end
-
-function love.update(dt)
-    StateMachine.Update(dt)
-end
-
-function love.keypressed(key)
-    StateMachine.Input(key)
-end
-
-function love.resize(width, height)
-    lovesize.resize(width, height)
-end
+function love.quit() Data.Save() end
+function love.update(dt) StateMachine.Update(dt) end
+function love.keypressed(key) StateMachine.Input(key) end
+function love.resize(width, height) lovesize.resize(width, height) end

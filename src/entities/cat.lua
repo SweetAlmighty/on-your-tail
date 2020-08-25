@@ -1,4 +1,3 @@
-require 'src/tools/input'
 local Entity = require 'src/entities/entity'
 
 return {
@@ -8,35 +7,33 @@ return {
         local destination = nil
         local traveling = false
         local startX, startY = 0, 0
-        local entity = Entity.new(2)
+        local entity = Entity.new(EntityTypes.Cat)
         local speed = love.math.random(0.01, 0.09)
 
-        return {
-            Update = function(dt)
-                x, y = entity.Position()
+        entity.Type = function() return EntityTypes.Cat end
 
-                if not traveling then
-                    traveling = true
-                    startX, startY =  x, y
-                    destination = { x = love.math.random(0, 320), y = love.math.random(0, 240) }
+        entity.Update = function(dt)
+            x, y = entity.Position()
+
+            if not traveling then
+                traveling = true
+                startX, startY =  x, y
+                destination = { x = love.math.random(0, 320), y = love.math.random(0, 240) }
+            else
+                if timeStep >= 1 then
+                    timeStep = 0
+                    traveling = false
                 else
-                    if timeStep >= 1 then
-                        timeStep = 0
-                        traveling = false
-                    else
-                        entity.Move(lerp(startX, destination.x, timeStep)-x, lerp(startY, destination.y, timeStep)-y)
-                    end
-
-                    timeStep = timeStep + speed
+                    local dx, dy = lerp(startX, destination.x, timeStep)-x, lerp(startY, destination.y, timeStep)-y
+                    entity.Move(dx, dy)
                 end
 
-                entity.Update(dt)
-            end,
-            Draw = function() entity.Draw() end,
-            Collider = function() return entity.Collider() end,
-            Collisions = function() return entity.Collisions() end,
-            CollisionExit = function(other) entity.CollisionExit(other) end,
-            CollisionEnter = function(other) entity.CollisionEnter(other) end,
-        }
+                timeStep = timeStep + speed
+            end
+
+            entity.InternalUpdate(dt)
+        end
+
+        return entity
     end
 }

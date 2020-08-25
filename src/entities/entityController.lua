@@ -1,31 +1,21 @@
+require 'src/entities/entity'
 local Cat = require 'src/entities/cat'
 local Player = require 'src/entities/player'
-
-EntityStates = {
-    Idle     = 1,
-    Moving   = 2,
-    Interact = 3,
-    Fail     = 4
-}
-
-EntityTypes = {
-    Player = 1,
-    Cat    = 2,
-    Kitten = 3,
-    Enemy  = 4
-}
 
 local entities = { }
 
 -- Logic for the sort function for draw order sorting
 local sortFunction = function(a, b)
-    if a.entity.y == b.entity.y then
-        if a.entity.type == EntityTypes.Player or b.entity.type == EntityTypes.Player then
-            return a.entity.type == EntityTypes.Player
+    local _, ay = a.entity.Position()
+    local _, by = b.entity.Position()
+
+    if ay == by then
+        if a.entity.Type() == EntityTypes.Player or b.entity.Type() == EntityTypes.Player then
+            return a.entity.Type() == EntityTypes.Player
         else
             return a.index < b.index
         end
-    else return a.entity.y < b.entity.y end
+    else return ay < by end
 end
 
 -- Sorts the entities by their Y to mock draw order

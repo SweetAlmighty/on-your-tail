@@ -10,6 +10,9 @@ Public Domain - feel free to hack and redistribute this as much as you want.
 
 Menu = {
 	new = function(align)
+		local menuFont = Resources.LoadFont('8bitOperatorPlusSC-Bold', 15)
+		love.graphics.setFont(menuFont)
+
 		return {
 			width = 0,
 			items = { },
