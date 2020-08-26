@@ -3,32 +3,42 @@ local Entity = require 'src/entities/entity'
 return {
     new = function()
         local x, y = 0, 0
-        local timeStep = 0
+        local deltaTime = 0
         local destination = nil
-        local traveling = false
         local startX, startY = 0, 0
+        local state = EntityStates.Action
+        local moveTime = lume.random(0.5, 1)
+        local idleTime = lume.random(0.5, 1)
+        local speed = lume.random(0.001, 0.01)
         local entity = Entity.new(EntityTypes.Cat)
-        local speed = love.math.random(0.01, 0.09)
 
         entity.Type = function() return EntityTypes.Cat end
 
         entity.Update = function(dt)
             x, y = entity.Position()
 
-            if not traveling then
-                traveling = true
-                startX, startY =  x, y
-                destination = { x = love.math.random(0, 320), y = love.math.random(0, 240) }
-            else
-                if timeStep >= 1 then
-                    timeStep = 0
-                    traveling = false
+            if state == EntityStates.Moving then
+                deltaTime = deltaTime + speed
+
+                if deltaTime >= moveTime then
+                    deltaTime = 0
+                    entity.SetState('action')
+                    state = EntityStates.Action
                 else
-                    local dx, dy = lerp(startX, destination.x, timeStep)-x, lerp(startY, destination.y, timeStep)-y
+                    local dx = lume.lerp(startX, destination.x, deltaTime)-x
+                    local dy = lume.lerp(startY, destination.y, deltaTime)-y
                     entity.Move(dx, dy)
                 end
+            elseif state == EntityStates.Action then
+                deltaTime = deltaTime + dt
+                if deltaTime >= idleTime then
+                    deltaTime = 0
+                    entity.SetState('move')
+                    state = EntityStates.Moving
 
-                timeStep = timeStep + speed
+                    startX, startY =  x, y
+                    destination = { x = lume.random(0, 320), y = lume.random(0, 240) }
+                end
             end
 
             entity.InternalUpdate(dt)

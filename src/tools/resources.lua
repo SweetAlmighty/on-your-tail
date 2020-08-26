@@ -1,3 +1,5 @@
+local json = require 'src/lib/json'
+
 local fonts = { }
 local fontType = '.ttf'
 local fontPath = '/data/fonts/'

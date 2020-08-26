@@ -1,3 +1,4 @@
+local data = { }
 local defaultScores = {
     { 'AAA', 0 },
     { 'AAA', 0 },
@@ -18,25 +19,18 @@ local resolutions = {
 local newFilename = 'data.txt'
 local filename = 'highscores.txt'
 
-local data = {
-    settings = defaultSettings,
-    scores = defaultScores
-}
-
 Data = {
     Initialize = function()
-        if love.filesystem.getInfo(filename) then
-            love.filesystem.remove(filename)
-        end
+        if love.filesystem.getInfo(filename) then love.filesystem.remove(filename) end
 
         if love.filesystem.getInfo(newFilename) then
-            local info = json.decode(love.filesystem.read(newFilename))
-            if info ~= nil then
+            local info, message = lume.deserialize(love.filesystem.read(newFilename))
+            if message == nil then
                 data = info
             else print('Load Error: ' .. message) end
         else
             data = { settings = defaultSettings, scores = defaultScores }
-            love.filesystem.write(newFilename, json.encode(data))
+            love.filesystem.write(newFilename, lume.serialize(data))
         end
 
         love.audio.setVolume(data.settings.volume / 10)
@@ -47,7 +41,7 @@ Data = {
     end,
 
     Save = function()
-        local _, error = love.filesystem.write(newFilename, json.encode(data))
+        local _, error = love.filesystem.write(newFilename, lume.serialize(data))
         if error ~= nil then print('Save Error: ' .. error) end
     end,
 

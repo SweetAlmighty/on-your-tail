@@ -1,4 +1,3 @@
-
 EntityTypes = {
     Player = 1,
     Cat    = 2,
@@ -7,10 +6,10 @@ EntityTypes = {
 }
 
 EntityStates = {
-    Idle     = 1,
-    Moving   = 2,
-    Interact = 3,
-    Fail     = 4
+    Idle   = 1,
+    Moving = 2,
+    Action = 3,
+    Fail   = 4
 }
 
 return {
@@ -19,7 +18,6 @@ return {
         local direction = 1
         local collisions = { }
         local animations = { }
-        local transform = love.math.newTransform(0, 0)
 
         if type == EntityTypes.Player then
             local info = AnimationFactory.CreateAnimationSet('character')[1]
@@ -32,35 +30,19 @@ return {
         local currentAnimation = animations.idle
 
         return {
-            SetDirection = function(dir)
-                if direction ~= dir then
-                    direction = dir
-                    transform = transform:scale(-1, 1)
-                end
-            end,
-
             Collider = function()
                 local col = currentAnimation.CurrentFrame().collider
                 return { x = col.x + x, y = col.y + y, w = col.w, h = col.h }
             end,
 
-            InternalUpdate = function(dt)
-                _, _, _, x, _, _, _, y = transform:getMatrix()
-                currentAnimation.Update(dt)
-            end,
-
             CollisionEnter = function(entity)
                 local index = findIndex(collisions, entity)
-                if index == nil then
-                    table.insert(collisions, index)
-                end
+                if index == nil then table.insert(collisions, index) end
             end,
 
             CollisionExit = function(entity)
                 local index = findIndex(collisions, entity)
-                if index ~= nil then
-                    table.remove(collisions, index)
-                end
+                if index ~= nil then table.remove(collisions, index) end
             end,
 
             SetState = function(state)
@@ -73,8 +55,10 @@ return {
             Position = function() return x, y end,
             Update = function(dt) InternalUpdate(dt) end,
             Collisions = function() return collisions end,
-            Move = function(dx, dy) transform = transform:translate(dx, dy) end,
-            Draw = function() currentAnimation.Draw(transform, direction == -1) end,
+            Move = function(dx, dy) x, y = x + dx, y + dy end,
+            InternalUpdate = function(dt) currentAnimation.Update(dt) end,
+            Draw = function() currentAnimation.Draw(x, y, direction == -1) end,
+            SetDirection = function(dir) if direction ~= dir then direction = dir end end,
         }
     end
 }
