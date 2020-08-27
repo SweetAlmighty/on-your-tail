@@ -4,14 +4,10 @@ local Entity = require 'src/entities/entity'
 return {
     new = function()
         local speed = 2
-        local state = EntityStates.Idle
         local entity = Entity.new(EntityTypes.Player)
 
         entity.Type = function() return EntityTypes.Player end
-
-        entity.Move = function(dx, dy)
-            entity.InternalMove(dx, dy)
-        end
+        entity.Move = function(dx, dy) entity.InternalMove(dx, dy) end
 
         entity.StartInteraction = function()
             if #entity.Collisions() > 0 then
@@ -23,8 +19,7 @@ return {
 
         entity.EndInteraction = function()
             if state == EntityStates.Action then
-                state = EntityStates.Idle
-                entity.SetState('idle')
+                entity.SetState(EntityStates.Idle)
             end
         end
 
@@ -33,7 +28,7 @@ return {
 
             if love.keyboard.isDown(InputMap.b)then entity.StartInteraction() end
 
-            if state ~= EntityStates.Action then
+            if entity.State() ~= EntityStates.Action then
                 if love.keyboard.isDown(InputMap.up) then dy = -speed end
                 if love.keyboard.isDown(InputMap.down) then dy = speed end
                 if love.keyboard.isDown(InputMap.right) then dx = speed entity.SetDirection(1) end
@@ -41,10 +36,9 @@ return {
 
                 if dx ~= 0 or dy ~= 0 then
                     entity.Move(dx, dy)
-                    entity.SetState('move')
+                    entity.SetState(EntityStates.Moving)
                 else
-                    state = EntityStates.Idle
-                    entity.SetState('idle')
+                    entity.SetState(EntityStates.Idle)
                 end
             end
 

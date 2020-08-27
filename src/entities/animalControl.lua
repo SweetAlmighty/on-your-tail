@@ -1,135 +1,84 @@
---[[
-require 'src/entities/entity'
+local Entity = require 'src/entities/entity'
 
-AnimalControl = class('AnimalControl', Entity)
+return {
+    new = function()
+        local x, y = 0, 0
+        local deltaTime = 0
+        local direction = 1
+        local destination = { }
+        local chasingPlayer = false
+        local startX, startY = 0, 0
+        local moveTime = lume.random(0.5, 1)
+        local idleTime = lume.random(0.5, 1)
+        local speed = lume.random(0.001, 0.01)
+        local entity = Entity.new(EntityTypes.Enemy)
 
-animalControlType = { 1, 2 }
+        local setDestination = function(_x, _y)
+            if destination.x ~= _x or destination.y ~= _y then
+                deltaTime = 0
+                startX, startY =  x, y
+                destination = { x = _x, y = _y }
 
-local time = 0
-local processMovement = function(animalControl)
-    local _x = (animalControl.x + (animalControl.speed * animalControl.direction.x))
-    local _y = (animalControl.y + (animalControl.speed * animalControl.direction.y))
-
-    if animalControl.state == EntityStates.IDLE then
-        -- Maintain Idle position
-        _x = moveCamera and (animalControl.x - speed) or (animalControl.x)
-        _y = animalControl.y
-    else
-        -- Move relative to the player, if the camera is moving
-        if moveCamera then
-            local deltaX = (animalControl.direction.x * player.delta.x)
-            if animalControl.direction.x ~= -1 then deltaX = -player.delta.x end
-            _x = _x + deltaX
-        end
-    end
-
-    Entity.move(animalControl, _x, _y)
-    if animalControl.x < (-animalControl.width) then animalControl:reset() end
-end
-
-local processAnims = function(dt, animalControl)
-    if not animalControl.alerted then
-        time = time + dt
-
-        if time > 1 then
-            time = 0
-            animalControl.state = lume.randomchoice({EntityStates.IDLE, EntityStates.MOVING})
-            if animalControl.state == EntityStates.MOVING then
-                animalControl.direction = lume.randomchoice(DirectionsIndices)
+                if destination.x < x and direction == 1 then
+                    direction = entity.SetDirection(-1)
+                elseif destination.x > x and direction == -1 then
+                    direction = entity.SetDirection(1)
+                end
             end
-            shouldUpdate = true
         end
 
-        if shouldUpdate then
-            animalControl.state = EntityStates.INTERACT
-            Entity.resetAnim(animalControl, animalControl.state)
-            shouldUpdate = false
+        local checkForPlayer = function()
+            local _x, _y = PLAYER.Position()
+
+            local p = { x = _x, y = _y }
+            local a = { x =  x, y =  y }
+            local b = { x = a.x + (170 * direction), y = a.y + 20 }
+            local c = { x = a.x + (170 * direction), y = a.y - 20 }
+
+            return pointInTriangle(p, a, b, c)
         end
-    elseif not animalControl.interacting then
-        local _x, _y = (player.x - animalControl.x), (player.y - animalControl.y)
-        local denominator = math.sqrt((_x * _x) + (_y * _y))
-        animalControl.direction = {
-            x = _x/denominator,
-            y = _y/denominator
-        }
-    end
-end
 
-function randomPosition()
-    return { love.math.random(screenWidth, screenWidth * 2),
-        love.math.random(playableArea.y, playableArea.height) }
-end
+        entity.Type = function() return EntityTypes.Enemy end
+        entity.Move = function(dx, dy) entity.InternalMove(dx, dy) end
+        entity.StartInteraction = function() entity.SetState('action') end
 
-function AnimalControl:initialize()
-    Entity.initialize(self, EntityTypes.ANIMALCONTROL, EntityStates.IDLE, 1)
-    Entity.setPosition(self, {50, 150})
-
-    local type = lume.randomchoice(animalControlType)
-    local info = animateFactory:CreateAnimationSet('animalControl')
-    local animats = info[type]
-
-    Entity.setAnims(self, {
-        animats[1],
-        animats[2],
-        animats[3],
-        info[1].Colliders
-    })
-end
-
-function AnimalControl:startInteraction()
-    self.interacting = true
-    self.state = EntityStates.INTERACT
-    Entity.resetAnim(self, self.state)
-end
-
-function AnimalControl:endInteraction()
-    self.interacting = false
-    self.state = EntityStates.MOVING
-    Entity.resetAnim(self, self.state)
-end
-
-function AnimalControl:update(dt)
-    Entity.update(self, dt)
-
-    if not self.interacting then
-        processMovement(self)
-    end
-
-    processAnims(dt, self)
-
-    if not self.alerted then
-        if self.direction.x == -1 and player.x < self.x then
-            self.alerted = true
-            self.state = EntityStates.MOVING
-            Entity.resetAnim(self, self.state)
-        elseif self.direction.x == 1 and player.x > self.x then
-            self.alerted = true
-            self.state = EntityStates.MOVING
-            Entity.resetAnim(self, self.state)
+        entity.EndInteraction = function()
+            if state == EntityStates.Action then
+                entity.SetState(EntityStates.Idle)
+            end
         end
+
+        entity.Update = function(dt)
+            x, y = entity.Position()
+
+            if checkForPlayer(x, y) and not chasingPlayer then chasingPlayer = true end
+
+            if chasingPlayer then
+                local _x, _y = PLAYER.Position()
+                setDestination(_x, _y)
+            end
+
+            if entity.State() == EntityStates.Moving then
+                deltaTime = deltaTime + speed
+                if deltaTime < moveTime then
+                    entity.Move(lume.lerp(startX, destination.x, deltaTime) - x,
+                                lume.lerp(startY, destination.y, deltaTime) - y)
+                else
+                    deltaTime = 0
+                    chasingPlayer = false
+                    entity.SetState(EntityStates.Idle)
+                end
+            elseif entity.State() == EntityStates.Idle then
+                deltaTime = deltaTime + dt
+                if deltaTime >= idleTime then
+                    entity.SetState(EntityStates.Moving)
+                    setDestination(lume.random(0, 320), lume.random(0, 240))
+                end
+            end
+
+            entity.InternalUpdate(dt)
+        end
+
+        return entity
     end
-end
-
-function AnimalControl:finishInteraction()
-    self.interacting = false
-    self.interactable = false
-end
-
-function AnimalControl:resetSelf()
-    self.alerted = false
-    Entity.reset(self, randomPosition(self))
-end
-
-function AnimalControl:collisionEnter(other)
-    Entity.collisionEnter(self, other)
-    if other.type == EntityTypes.PLAYER then
-        AnimalControl.startInteraction(self)
-    end
-end
-
-function AnimalControl:draw() Entity.draw(self) end
-function AnimalControl:reset()
-    Entity.reset(self, randomPosition())
-    AnimalControl.endInteraction(self)
-end
-]]
+}

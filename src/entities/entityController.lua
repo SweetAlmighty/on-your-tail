@@ -1,13 +1,16 @@
 require 'src/entities/entity'
 local Cat = require 'src/entities/cat'
 local Player = require 'src/entities/player'
+local Enemy = require 'src/entities/animalControl'
+
+PLAYER = nil
 
 local entities = { }
 
 -- Logic for the sort function for draw order sorting
 local sortFunction = function(a, b)
-    local _, ay = a.entity.Position()
-    local _, by = b.entity.Position()
+    local ay = a.entity.DrawY()
+    local by = b.entity.DrawY()
 
     if ay == by then
         if a.entity.Type() == EntityTypes.Player or b.entity.Type() == EntityTypes.Player then
@@ -81,18 +84,27 @@ end
 EntityController = {
     Draw = function()
         sortDrawOrder()
-        for i=1, #entities, 1 do entities[i].Draw() drawDebugInfo(entities[i]) end
+        for i=1, #entities, 1 do
+            entities[i].Draw()
+            drawDebugInfo(entities[i])
+        end
     end,
 
     Update = function(dt)
         checkCollisions()
-        for i=1, #entities, 1 do if entities[i] ~= nil then entities[i].Update(dt) end end
+        for i=1, #entities, 1 do
+            entities[i].Update(dt)
+        end
     end,
 
     AddEntity = function(type)
         local entity = nil
-        if type == EntityTypes.Player then entity = Player.new()
-        elseif type == EntityTypes.Cat then entity = Cat.new() end
+        if type == EntityTypes.Cat then entity = Cat.new()
+        elseif type == EntityTypes.Enemy then entity = Enemy.new()
+        elseif type == EntityTypes.Player then
+            entity = Player.new()
+            PLAYER = entity
+        end
         entities[#entities+1] = entity
     end,
 

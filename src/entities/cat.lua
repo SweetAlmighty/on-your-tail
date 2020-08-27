@@ -13,53 +13,49 @@ return {
         local speed = lume.random(0.001, 0.01)
         local entity = Entity.new(EntityTypes.Cat)
 
+        local setDestination = function(_x, _y)
+            if destination.x ~= _x or destination.y ~= _y then
+                deltaTime = 0
+                startX, startY =  x, y
+                destination = { x = _x, y = _y }
+
+                if destination.x < x and direction == 1 then
+                    direction = entity.SetDirection(-1)
+                elseif destination.x > x and direction == -1 then
+                    direction = entity.SetDirection(1)
+                end
+            end
+        end
+
         entity.Type = function() return EntityTypes.Cat end
-
-        entity.Move = function(dx, dy)
-            entity.InternalMove(dx, dy)
-        end
-
-        entity.StartInteraction = function()
-            entity.SetState('action')
-        end
+        entity.Move = function(dx, dy) entity.InternalMove(dx, dy) end
+        entity.StartInteraction = function() entity.SetState('action') end
 
         entity.EndInteraction = function()
             if state == EntityStates.Action then
-                state = EntityStates.Idle
-                entity.SetState('idle')
+                entity.SetState(EntityStates.Idle)
             end
         end
 
         entity.Update = function(dt)
             x, y = entity.Position()
 
-            if state == EntityStates.Moving then
+            if entity.State() == EntityStates.Moving then
                 deltaTime = deltaTime + speed
 
-                if deltaTime >= moveTime then
-                    deltaTime = 0
-                    entity.SetState('action')
-                    state = EntityStates.Action
+                if deltaTime < moveTime then
+                    entity.Move(lume.lerp(startX, destination.x, deltaTime) - x,
+                                lume.lerp(startY, destination.y, deltaTime) - y)
                 else
-                    local dx = lume.lerp(startX, destination.x, deltaTime)-x
-                    local dy = lume.lerp(startY, destination.y, deltaTime)-y
-                    entity.Move(dx, dy)
+                    deltaTime = 0
+                    entity.SetState(EntityStates.Action)
                 end
-            elseif state == EntityStates.Action then
+            elseif entity.State() == EntityStates.Action then
                 deltaTime = deltaTime + dt
                 if deltaTime >= idleTime then
                     deltaTime = 0
-                    entity.SetState('move')
-                    state = EntityStates.Moving
-
-                    startX, startY =  x, y
-                    destination = { x = lume.random(0, 320), y = lume.random(0, 240) }
-
-                    if destination.x < x and direction == 1 then
-                        direction = entity.SetDirection(-1)
-                    elseif destination.x > x and direction == -1 then
-                        direction = entity.SetDirection(1)
-                    end
+                    entity.SetState(EntityStates.Moving)
+                    setDestination(lume.random(0, 320), lume.random(0, 240))
                 end
             end
 

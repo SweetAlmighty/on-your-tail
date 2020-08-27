@@ -485,20 +485,17 @@ function lume.combine(...)
   end
 end
 
-
 function lume.call(fn, ...)
   if fn then
     return fn(...)
   end
 end
 
-
 function lume.time(fn, ...)
   local start = os.clock()
   local rtn = {fn(...)}
   return (os.clock() - start), unpack(rtn)
 end
-
 
 local lambda_cache = {}
 
