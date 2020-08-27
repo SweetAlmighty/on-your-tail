@@ -4,6 +4,7 @@ return {
     new = function()
         local x, y = 0, 0
         local deltaTime = 0
+        local direction = 1
         local destination = nil
         local startX, startY = 0, 0
         local state = EntityStates.Action
@@ -13,6 +14,21 @@ return {
         local entity = Entity.new(EntityTypes.Cat)
 
         entity.Type = function() return EntityTypes.Cat end
+
+        entity.Move = function(dx, dy)
+            entity.InternalMove(dx, dy)
+        end
+
+        entity.StartInteraction = function()
+            entity.SetState('action')
+        end
+
+        entity.EndInteraction = function()
+            if state == EntityStates.Action then
+                state = EntityStates.Idle
+                entity.SetState('idle')
+            end
+        end
 
         entity.Update = function(dt)
             x, y = entity.Position()
@@ -38,6 +54,12 @@ return {
 
                     startX, startY =  x, y
                     destination = { x = lume.random(0, 320), y = lume.random(0, 240) }
+
+                    if destination.x < x and direction == 1 then
+                        direction = entity.SetDirection(-1)
+                    elseif destination.x > x and direction == -1 then
+                        direction = entity.SetDirection(1)
+                    end
                 end
             end
 

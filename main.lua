@@ -5,13 +5,13 @@ require 'src/tools/resources'
 require 'src/states/stateMachine'
 require 'src/tools/animationFactory'
 
-lume = require 'src/lib/lume'
-local tick = require 'src/lib/tick'
-lovesize = require 'src/lib/lovesize'
-
 screenWidth = 320
 screenHeight = 240
 local color = 50/255
+
+lume = require 'src/lib/lume'
+local tick = require 'src/lib/tick'
+lovesize = require 'src/lib/lovesize'
 
 function love.load(arg)
     Data.Initialize()

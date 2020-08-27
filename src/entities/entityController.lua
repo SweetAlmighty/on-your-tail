@@ -12,9 +12,7 @@ local sortFunction = function(a, b)
     if ay == by then
         if a.entity.Type() == EntityTypes.Player or b.entity.Type() == EntityTypes.Player then
             return a.entity.Type() == EntityTypes.Player
-        else
-            return a.index < b.index
-        end
+        else return a.index < b.index end
     else return ay < by end
 end
 
@@ -83,8 +81,7 @@ end
 EntityController = {
     Draw = function()
         sortDrawOrder()
-        for i=1, #entities, 1 do entities[i].Draw() end
-        --drawDebugInfo(entities[1])
+        for i=1, #entities, 1 do entities[i].Draw() drawDebugInfo(entities[i]) end
     end,
 
     Update = function(dt)
