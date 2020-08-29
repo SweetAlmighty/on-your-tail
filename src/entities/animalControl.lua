@@ -27,20 +27,25 @@ return {
             end
         end
 
-        local checkForPlayer = function()
-            local _x, _y = PLAYER.Position()
-
+        local lookForPlayer = function(_x, _y)
             local p = { x = _x, y = _y }
             local a = { x =  x, y =  y }
             local b = { x = a.x + (170 * direction), y = a.y + 20 }
             local c = { x = a.x + (170 * direction), y = a.y - 20 }
-
             return pointInTriangle(p, a, b, c)
         end
 
+        local checkForPlayer = function()
+            local _x, _y = PLAYER.Position()
+            if lookForPlayer(_x, _y) and not chasingPlayer then chasingPlayer = true end
+            if chasingPlayer then setDestination(_x, _y) end
+        end
+
+        entity.SetPosition(200, 200)
         entity.Type = function() return EntityTypes.Enemy end
         entity.Move = function(dx, dy) entity.InternalMove(dx, dy) end
-        entity.StartInteraction = function() entity.SetState('action') end
+        entity.StartInteraction = function() entity.SetState(EntityStates.Action) end
+        entity.CollisionExit = function(other) entity.InternalCollisionExit(other) end
 
         entity.EndInteraction = function()
             if state == EntityStates.Action then
@@ -48,29 +53,33 @@ return {
             end
         end
 
+        entity.CollisionEnter = function(other)
+            if entity.InternalCollisionEnter(other) then
+                if other.Type() == EntityTypes.Player then
+                    entity.StartInteraction()
+                end
+            end
+        end
+
         entity.Update = function(dt)
             x, y = entity.Position()
 
-            if checkForPlayer(x, y) and not chasingPlayer then chasingPlayer = true end
-
-            if chasingPlayer then
-                local _x, _y = PLAYER.Position()
-                setDestination(_x, _y)
-            end
+            checkForPlayer()
 
             if entity.State() == EntityStates.Moving then
                 deltaTime = deltaTime + speed
-                if deltaTime < moveTime then
-                    entity.Move(lume.lerp(startX, destination.x, deltaTime) - x,
-                                lume.lerp(startY, destination.y, deltaTime) - y)
-                else
+                if deltaTime >= moveTime then
                     deltaTime = 0
                     chasingPlayer = false
                     entity.SetState(EntityStates.Idle)
+                else
+                    entity.Move(lume.lerp(startX, destination.x, deltaTime) - x,
+                                lume.lerp(startY, destination.y, deltaTime) - y)
                 end
             elseif entity.State() == EntityStates.Idle then
                 deltaTime = deltaTime + dt
                 if deltaTime >= idleTime then
+                    deltaTime = 0
                     entity.SetState(EntityStates.Moving)
                     setDestination(lume.random(0, 320), lume.random(0, 240))
                 end

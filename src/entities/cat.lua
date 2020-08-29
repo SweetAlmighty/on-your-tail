@@ -1,17 +1,18 @@
 local Entity = require 'src/entities/entity'
 
 return {
-    new = function()
+    new = function(type)
         local x, y = 0, 0
         local deltaTime = 0
         local direction = 1
-        local destination = nil
+        local pettingLimit = 30
+        local destination = { }
         local startX, startY = 0, 0
-        local state = EntityStates.Action
+        local entity = Entity.new(type)
+        local currentLimit = pettingLimit
         local moveTime = lume.random(0.5, 1)
         local idleTime = lume.random(0.5, 1)
         local speed = lume.random(0.001, 0.01)
-        local entity = Entity.new(EntityTypes.Cat)
 
         local setDestination = function(_x, _y)
             if destination.x ~= _x or destination.y ~= _y then
@@ -27,12 +28,14 @@ return {
             end
         end
 
-        entity.Type = function() return EntityTypes.Cat end
-        entity.Move = function(dx, dy) entity.InternalMove(dx, dy) end
-        entity.StartInteraction = function() entity.SetState('action') end
+        entity.StartInteraction = function()
+            if currentLimit ~= 0 then
+                entity.SetState(EntityStates.Action)
+            end
+        end
 
         entity.EndInteraction = function()
-            if state == EntityStates.Action then
+            if entity.State() == EntityStates.Action then
                 entity.SetState(EntityStates.Idle)
             end
         end
@@ -42,25 +45,36 @@ return {
 
             if entity.State() == EntityStates.Moving then
                 deltaTime = deltaTime + speed
-
-                if deltaTime < moveTime then
+                if deltaTime >= moveTime then
+                    deltaTime = 0
+                    entity.SetState(EntityStates.Idle)
+                else
                     entity.Move(lume.lerp(startX, destination.x, deltaTime) - x,
                                 lume.lerp(startY, destination.y, deltaTime) - y)
-                else
-                    deltaTime = 0
-                    entity.SetState(EntityStates.Action)
                 end
-            elseif entity.State() == EntityStates.Action then
+            elseif entity.State() == EntityStates.Idle then
                 deltaTime = deltaTime + dt
                 if deltaTime >= idleTime then
                     deltaTime = 0
                     entity.SetState(EntityStates.Moving)
                     setDestination(lume.random(0, 320), lume.random(0, 240))
                 end
+            else
+                currentLimit = currentLimit - (dt * 10)
+                if currentLimit < 0 then
+                    currentLimit = 0
+                    entity.SetState(EntityStates.Moving)
+                    setDestination(-80, y)
+                end
             end
 
             entity.InternalUpdate(dt)
         end
+
+        entity.Type = function() return EntityTypes.Cat end
+        entity.Move = function(dx, dy) entity.InternalMove(dx, dy) end
+        entity.CollisionExit = function(other) entity.InternalCollisionExit(other) end
+        entity.CollisionEnter = function(other) entity.InternalCollisionEnter(other) end
 
         return entity
     end

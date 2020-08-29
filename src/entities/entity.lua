@@ -12,24 +12,6 @@ EntityStates = {
     Fail   = 4
 }
 
-
---t = nil
---po = false
-
---local color = po and { 1, 0, 0 } or { 1, 1, 1 }
---love.graphics.setColor(color[1], color[2], color[3])
---love.graphics.polygon('line', t)
---love.graphics.setColor(1, 1, 1)
-
---t = { a.x, a.y, b.x, b.y, c.x, c.y }
-
-local stateNames = {
-    'idle',
-    'move',
-    'action',
-    'fail'
-}
-
 local sheetNames = {
     'character',
     'cats',
@@ -40,11 +22,11 @@ local sheetNames = {
 local createAnimations = function(type)
     local info = AnimationFactory.CreateAnimationSet(sheetNames[type])[1]
     if type == EntityTypes.Player then
-        return { idle = info[1], move = info[2], action = info[3], fail = info[4] }
+        return { info[1], info[2], info[3], info[4] }
     elseif type == EntityTypes.Enemy then
-        return { idle = info[1], move = info[2], action = info[3] }
-    elseif type == EntityTypes.Cat then
-        return { idle = info[3], move = info[2], action = info[3] }
+        return { info[1], info[2], info[3] }
+    elseif type == EntityTypes.Cat or type == EntityTypes.Kitten then
+        return { info[3], info[2], info[3] }
     end
 end
 
@@ -55,7 +37,7 @@ return {
         local collisions = { }
         local state = EntityStates.Idle
         local animations = createAnimations(type)
-        local currentAnimation = animations.idle
+        local currentAnimation = animations[state]
 
         return {
             SetDirection = function(dir)
@@ -68,24 +50,21 @@ return {
                 return { x = col.x + x, y = col.y + y, w = col.w, h = col.h }
             end,
 
-            CollisionEnter = function(entity)
+            InternalCollisionEnter = function(entity)
                 local index = lume.find(collisions, entity)
-                if index == nil then table.insert(collisions, entity) end
+                if index == nil then table.insert(collisions, entity) return true end
             end,
 
-            CollisionExit = function(entity)
+            InternalCollisionExit = function(entity)
                 local index = lume.find(collisions, entity)
-                if index ~= nil then table.remove(collisions, index) end
-                if #collisions == 0 then entity.EndInteraction() end
+                if index ~= nil then table.remove(collisions, index) return true end
             end,
 
             SetState = function(s)
-                local name = stateNames[s]
-                print(s, name)
-                if currentAnimation ~= animations[name] then
+                if currentAnimation ~= animations[s] then
                     state = s
                     currentAnimation.Reset()
-                    currentAnimation = animations[name]
+                    currentAnimation = animations[s]
                 end
             end,
 
@@ -93,6 +72,7 @@ return {
             Position = function() return x, y end,
             Update = function(dt) InternalUpdate(dt) end,
             Collisions = function() return collisions end,
+            SetPosition = function(_x, _y) x, y = _x, _y end,
             InternalUpdate = function(dt) currentAnimation.Update(dt) end,
             Draw = function() currentAnimation.Draw(x, y, direction == -1) end,
             DrawY = function() return y + currentAnimation.CurrentFrame().dimensions.h end,

@@ -53,7 +53,7 @@ Menu = {
 				return self.selected
 			end,
 			Input = function(self, key)
-				if key == 'up' then
+				if key == InputMap.up then
 					if self.selected > 1 then
 						self.selected = self.selected - 1
 						--self.animOffset = self.animOffset + 1
@@ -61,7 +61,7 @@ Menu = {
 						self.selected = #self.items
 						--self.animOffset = self.animOffset - (#self.items-1)
 					end
-				elseif key == 'down' then
+				elseif key == InputMap.down then
 					if self.selected < #self.items then
 						self.selected = self.selected + 1
 						--self.animOffset = self.animOffset - 1
@@ -69,7 +69,7 @@ Menu = {
 						self.selected = 1
 						--self.animOffset = self.animOffset + (#self.items-1)
 					end
-				elseif key == 'return' then
+				elseif key == InputMap.a then
 					if self.items[self.selected].action then
 						self.items[self.selected]:action()
 					end

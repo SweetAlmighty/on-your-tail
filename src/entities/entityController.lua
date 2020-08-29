@@ -86,7 +86,7 @@ EntityController = {
         sortDrawOrder()
         for i=1, #entities, 1 do
             entities[i].Draw()
-            drawDebugInfo(entities[i])
+            --drawDebugInfo(entities[i])
         end
     end,
 
@@ -99,11 +99,13 @@ EntityController = {
 
     AddEntity = function(type)
         local entity = nil
-        if type == EntityTypes.Cat then entity = Cat.new()
-        elseif type == EntityTypes.Enemy then entity = Enemy.new()
+        if type == EntityTypes.Enemy then
+            entity = Enemy.new()
         elseif type == EntityTypes.Player then
             entity = Player.new()
             PLAYER = entity
+        elseif type == EntityTypes.Cat or type == EntityTypes.Kitten then
+            entity = Cat.new(type)
         end
         entities[#entities+1] = entity
     end,

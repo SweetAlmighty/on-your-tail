@@ -1,3 +1,13 @@
+--t = nil
+--po = false
+
+--local color = po and { 1, 0, 0 } or { 1, 1, 1 }
+--love.graphics.setColor(color[1], color[2], color[3])
+--love.graphics.polygon('line', t)
+--love.graphics.setColor(1, 1, 1)
+
+--t = { a.x, a.y, b.x, b.y, c.x, c.y }
+
 function findIndex(table, entry)
     for i=1, #table, 1 do if table[i] == entry then return i end end
     return nil
