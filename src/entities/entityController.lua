@@ -71,7 +71,7 @@ local checkCollisions = function()
     for i=1, #entities, 1 do
         local collisions = { }
         for j=1, #entities, 1 do
-            if i ~= j then
+            if i ~= j and entities[i].State() ~= EntityStates.Fail then
                 if checkCollision(i, j) then
                     collisions[#collisions+1] = entities[j]
                 end
@@ -82,6 +82,14 @@ local checkCollisions = function()
 end
 
 EntityController = {
+    Count = function() return #entities end,
+    Clear = function() for _=1, #entities, 1 do entities[#entities] = nil end end,
+
+    RemoveEntity = function(entity)
+        local index = findIndex(entities, entity)
+        if index ~= nil then table.remove(entities, index) end
+    end,
+
     Draw = function()
         sortDrawOrder()
         for i=1, #entities, 1 do
@@ -92,9 +100,15 @@ EntityController = {
 
     Update = function(dt)
         checkCollisions()
+        local remove = {}
         for i=1, #entities, 1 do
             entities[i].Update(dt)
+            local x, _ = entities[i].Position()
+            -- Shouldn't be hard-coded
+            if x <= -60 then table.insert(remove, entities[i]) end
         end
+
+        for i=1, #remove, 1 do EntityController.RemoveEntity(remove[i]) end
     end,
 
     AddEntity = function(type)
@@ -109,17 +123,4 @@ EntityController = {
         end
         entities[#entities+1] = entity
     end,
-
-    RemoveEntity = function(entity)
-        local newEntities = {}
-        for i=1, #entities, 1 do
-            if entities[i] ~= entity then
-                newEntities[#newEntities+1] = entities[i]
-            end
-        end
-        entities = newEntities
-    end,
-
-    Count = function() return #entities end,
-    Clear = function() for _=1, #entities, 1 do entities[#entities] = nil end end
 }

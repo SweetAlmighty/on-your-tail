@@ -1,23 +1,7 @@
-EntityTypes = {
-    Player = 1,
-    Cat    = 2,
-    Kitten = 3,
-    Enemy  = 4
-}
+EntityTypes = { Player = 1, Cat = 2, Kitten = 3, Enemy = 4 }
+EntityStates = { Idle = 1, Moving = 2, Action = 3, Fail = 4 }
 
-EntityStates = {
-    Idle   = 1,
-    Moving = 2,
-    Action = 3,
-    Fail   = 4
-}
-
-local sheetNames = {
-    'character',
-    'cats',
-    'kittens',
-    'animalControl'
-}
+local sheetNames = { 'character', 'cats', 'kittens', 'animalControl' }
 
 local createAnimations = function(type)
     local info = AnimationFactory.CreateAnimationSet(sheetNames[type])[1]
@@ -26,7 +10,7 @@ local createAnimations = function(type)
     elseif type == EntityTypes.Enemy then
         return { info[1], info[2], info[3] }
     elseif type == EntityTypes.Cat or type == EntityTypes.Kitten then
-        return { info[3], info[2], info[3] }
+        return { info[3], info[2], info[3], info[2] }
     end
 end
 
@@ -35,11 +19,21 @@ return {
         local x, y = 0, 0
         local direction = 1
         local collisions = { }
-        local state = EntityStates.Idle
+        local entityState = EntityStates.Idle
         local animations = createAnimations(type)
-        local currentAnimation = animations[state]
+        local currentAnimation = animations[entityState]
 
         return {
+            State = function() return entityState end,
+            Position = function() return x, y end,
+            Update = function(dt) InternalUpdate(dt) end,
+            Collisions = function() return collisions end,
+            SetPosition = function(_x, _y) x, y = _x, _y end,
+            InternalUpdate = function(dt) currentAnimation.Update(dt) end,
+            Draw = function() currentAnimation.Draw(x, y, direction == -1) end,
+            DrawY = function() return y + currentAnimation.CurrentFrame().dimensions.h end,
+            InternalMove = function(dx, dy) x, y = math.floor((x + dx) + 0.5), math.floor((y + dy) + 0.5) end,
+
             SetDirection = function(dir)
                 if direction ~= dir then direction = math.min(1, math.max(-1, dir)) end
                 return direction
@@ -60,23 +54,13 @@ return {
                 if index ~= nil then table.remove(collisions, index) return true end
             end,
 
-            SetState = function(s)
-                if currentAnimation ~= animations[s] then
-                    state = s
+            SetState = function(state)
+                if currentAnimation ~= animations[state] then
+                    entityState = state
                     currentAnimation.Reset()
-                    currentAnimation = animations[s]
+                    currentAnimation = animations[state]
                 end
             end,
-
-            State = function() return state end,
-            Position = function() return x, y end,
-            Update = function(dt) InternalUpdate(dt) end,
-            Collisions = function() return collisions end,
-            SetPosition = function(_x, _y) x, y = _x, _y end,
-            InternalUpdate = function(dt) currentAnimation.Update(dt) end,
-            Draw = function() currentAnimation.Draw(x, y, direction == -1) end,
-            DrawY = function() return y + currentAnimation.CurrentFrame().dimensions.h end,
-            InternalMove = function(dx, dy) x, y = math.floor((x + dx) + 0.5), math.floor((y + dy) + 0.5) end,
         }
     end
 }

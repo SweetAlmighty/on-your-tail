@@ -28,6 +28,11 @@ return {
             end
         end
 
+        entity.Type = function() return EntityTypes.Cat end
+        entity.Move = function(dx, dy) entity.InternalMove(dx, dy) end
+        entity.CollisionExit = function(other) entity.InternalCollisionExit(other) end
+        entity.CollisionEnter = function(other) entity.InternalCollisionEnter(other) end
+
         entity.StartInteraction = function()
             if currentLimit ~= 0 then
                 entity.SetState(EntityStates.Action)
@@ -43,38 +48,34 @@ return {
         entity.Update = function(dt)
             x, y = entity.Position()
 
-            if entity.State() == EntityStates.Moving then
-                deltaTime = deltaTime + speed
-                if deltaTime >= moveTime then
-                    deltaTime = 0
-                    entity.SetState(EntityStates.Idle)
-                else
-                    entity.Move(lume.lerp(startX, destination.x, deltaTime) - x,
-                                lume.lerp(startY, destination.y, deltaTime) - y)
-                end
-            elseif entity.State() == EntityStates.Idle then
+            if entity.State() == EntityStates.Idle then
                 deltaTime = deltaTime + dt
                 if deltaTime >= idleTime then
                     deltaTime = 0
                     entity.SetState(EntityStates.Moving)
                     setDestination(lume.random(0, 320), lume.random(0, 240))
                 end
-            else
+            elseif entity.State() == EntityStates.Action then
                 currentLimit = currentLimit - (dt * 10)
                 if currentLimit < 0 then
                     currentLimit = 0
-                    entity.SetState(EntityStates.Moving)
+                    entity.SetState(EntityStates.Fail)
                     setDestination(-80, y)
+                end
+            else
+                deltaTime = deltaTime + speed
+                if deltaTime >= moveTime then
+                    deltaTime = 0
+                    entity.SetState(EntityStates.Idle)
+                else
+                    local newX = lume.lerp(startX, destination.x, deltaTime)
+                    if entity.State() == EntityStates.Fail then print(newX) end
+                    entity.Move(newX - x, lume.lerp(startY, destination.y, deltaTime) - y)
                 end
             end
 
             entity.InternalUpdate(dt)
         end
-
-        entity.Type = function() return EntityTypes.Cat end
-        entity.Move = function(dx, dy) entity.InternalMove(dx, dy) end
-        entity.CollisionExit = function(other) entity.InternalCollisionExit(other) end
-        entity.CollisionEnter = function(other) entity.InternalCollisionEnter(other) end
 
         return entity
     end
