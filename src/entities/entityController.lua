@@ -71,7 +71,7 @@ local checkCollisions = function()
     for i=1, #entities, 1 do
         local collisions = { }
         for j=1, #entities, 1 do
-            if i ~= j and entities[i].State() ~= EntityStates.Fail then
+            if i ~= j then
                 if checkCollision(i, j) then
                     collisions[#collisions+1] = entities[j]
                 end

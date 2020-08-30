@@ -46,9 +46,10 @@ local Animation = {
             Reset = function() frameCount = 1 end,
             CurrentFrame = function() return frames[frameCount] end,
             Draw = function(x, y, mirror)
-                local sx, ox = 1, 0
-                if mirror then sx, ox = -1, frames[frameCount].dimensions.w end
-                love.graphics.draw(image, frames[frameCount].quad, x, y, 0, sx, 1, ox)
+                local frame = frames[frameCount]
+                local xScale = mirror and -1 or 1
+                local offset = frame.offset ~= nil and frame.offset or { x = 0, y = 0 }
+                love.graphics.draw(image, frame.quad, x, y, 0, xScale, 1, offset.x, offset.y)
             end,
 
             AddFrame = function(x, y, w, h)

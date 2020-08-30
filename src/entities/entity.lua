@@ -22,17 +22,17 @@ return {
         local entityState = EntityStates.Idle
         local animations = createAnimations(type)
         local currentAnimation = animations[entityState]
+        local playableArea = { x = 15, y = 150, width = screenWidth/2, height = screenHeight }
 
         return {
-            State = function() return entityState end,
             Position = function() return x, y end,
+            State = function() return entityState end,
             Update = function(dt) InternalUpdate(dt) end,
             Collisions = function() return collisions end,
             SetPosition = function(_x, _y) x, y = _x, _y end,
             InternalUpdate = function(dt) currentAnimation.Update(dt) end,
             Draw = function() currentAnimation.Draw(x, y, direction == -1) end,
             DrawY = function() return y + currentAnimation.CurrentFrame().dimensions.h end,
-            InternalMove = function(dx, dy) x, y = math.floor((x + dx) + 0.5), math.floor((y + dy) + 0.5) end,
 
             SetDirection = function(dir)
                 if direction ~= dir then direction = math.min(1, math.max(-1, dir)) end
@@ -60,6 +60,16 @@ return {
                     currentAnimation.Reset()
                     currentAnimation = animations[state]
                 end
+            end,
+
+            InternalMove = function(dx, dy)
+                x = math.floor((x + dx) + 0.5)
+                if type == EntityTypes.Player then
+                    x = math.min(playableArea.width, math.max(playableArea.x, x))
+                end
+
+                local _y = math.floor((y + dy) + 0.5)
+                y = math.min(playableArea.height, math.max(playableArea.y, _y))
             end,
         }
     end

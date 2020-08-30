@@ -34,7 +34,7 @@ return {
         entity.CollisionEnter = function(other) entity.InternalCollisionEnter(other) end
 
         entity.StartInteraction = function()
-            if currentLimit ~= 0 then
+            if currentLimit > 0 then
                 entity.SetState(EntityStates.Action)
             end
         end
@@ -60,17 +60,16 @@ return {
                 if currentLimit < 0 then
                     currentLimit = 0
                     entity.SetState(EntityStates.Fail)
-                    setDestination(-80, y)
+                    setDestination(-100, y)
                 end
             else
                 deltaTime = deltaTime + speed
-                if deltaTime >= moveTime then
+                if deltaTime >= moveTime and entity.State() == EntityStates.Moving then
                     deltaTime = 0
                     entity.SetState(EntityStates.Idle)
                 else
-                    local newX = lume.lerp(startX, destination.x, deltaTime)
-                    if entity.State() == EntityStates.Fail then print(newX) end
-                    entity.Move(newX - x, lume.lerp(startY, destination.y, deltaTime) - y)
+                    entity.Move(lume.lerp(startX, destination.x, deltaTime) - x,
+                                lume.lerp(startY, destination.y, deltaTime) - y)
                 end
             end
 

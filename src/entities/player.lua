@@ -4,8 +4,9 @@ local Entity = require 'src/entities/entity'
 return {
     new = function()
         local speed = 2
-        local pause = false
-        local pauseTime = 0
+        local failTime = 1.5
+        local startFailTime = 0
+        local startFailState = false
         local entity = Entity.new(EntityTypes.Player)
 
         entity.Type = function() return EntityTypes.Player end
@@ -14,15 +15,23 @@ return {
 
         entity.StartInteraction = function()
             if #entity.Collisions() > 0 then
-                entity.SetState(EntityStates.Action)
-                for _, v in ipairs(entity.Collisions()) do v.StartInteraction() end
+                local valid = 0
+
+                for _, v in ipairs(entity.Collisions()) do
+                    if v.State() ~= EntityStates.Fail then
+                        valid = valid + 1
+                        v.StartInteraction()
+                    end
+                end
+
+                if valid ~= 0 then entity.SetState(EntityStates.Action) end
             end
         end
 
         entity.CollisionEnter = function(other)
             if entity.InternalCollisionEnter(other) then
                 if other.Type() == EntityTypes.Enemy then
-                    pause = true
+                    startFailState = true
                     entity.SetState(EntityStates.Fail)
                 end
             end
@@ -38,12 +47,15 @@ return {
             local dx, dy = 0, 0
 
             if entity.State() == EntityStates.Fail then
-                if pause then
-                    pauseTime = pauseTime + dt
-                    if pauseTime > 1.5 then StateMachine.Push(GameStates.FailMenu) end
+                if startFailState then
+                    startFailTime = startFailTime + dt
+                    if startFailTime > failTime then
+                        startFailState = false
+                        StateMachine.Push(GameStates.FailMenu)
+                    end
                 end
             else
-                if love.keyboard.isDown(InputMap.b)then entity.StartInteraction() end
+                if love.keyboard.isDown(InputMap.b) then entity.StartInteraction() end
 
                 if entity.State() ~= EntityStates.Action then
                     if love.keyboard.isDown(InputMap.up) then dy = -speed end
