@@ -16,9 +16,9 @@ lovesize = require 'src/lib/lovesize'
 function love.load(arg)
     Data.Initialize()
     tick.framerate = 60
+    love.math.setRandomSeed(os.time())
     lovesize.set(screenWidth, screenHeight)
     StateMachine.Push(GameStates.SplashMenu)
-    love.math.setRandomSeed(os.time())
 end
 
 function love.draw()

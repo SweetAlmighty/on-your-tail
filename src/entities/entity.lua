@@ -27,17 +27,14 @@ return {
         return {
             Position = function() return x, y end,
             State = function() return entityState end,
+            Direction = function() return direction end,
             Update = function(dt) InternalUpdate(dt) end,
             Collisions = function() return collisions end,
             SetPosition = function(_x, _y) x, y = _x, _y end,
             InternalUpdate = function(dt) currentAnimation.Update(dt) end,
             Draw = function() currentAnimation.Draw(x, y, direction == -1) end,
             DrawY = function() return y + currentAnimation.CurrentFrame().dimensions.h end,
-
-            SetDirection = function(dir)
-                if direction ~= dir then direction = math.min(1, math.max(-1, dir)) end
-                return direction
-            end,
+            SetDirection = function(dir) if direction ~= dir then direction = math.min(1, math.max(-1, dir)) end end,
 
             Collider = function()
                 local col = currentAnimation.CurrentFrame().collider
