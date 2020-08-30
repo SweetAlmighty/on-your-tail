@@ -13,7 +13,6 @@ return {
             end,
             Enter = function()
                 EntityController.AddEntity(EntityTypes.Cat)
-                EntityController.AddEntity(EntityTypes.Enemy)
                 EntityController.AddEntity(EntityTypes.Player)
                 EntityController.AddEntity(EntityTypes.Kitten)
             end,

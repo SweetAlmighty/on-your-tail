@@ -11,6 +11,8 @@ return {
         local idleTime = lume.random(0.5, 1)
         local speed = lume.random(0.001, 0.01)
 
+        entity.SetPosition(lume.random(0, 320), lume.random(playableArea.y, playableArea.height))
+
         local lerpMove = function()
             local _x = lume.lerp(startX, destination.x, deltaTime) - x
             local _y = lume.lerp(startY, destination.y, deltaTime) - y
@@ -50,7 +52,7 @@ return {
                 if deltaTime >= idleTime then
                     deltaTime = 0
                     entity.SetState(EntityStates.Moving)
-                    entity.SetDestination(lume.random(0, 320), lume.random(0, 240))
+                    entity.SetDestination(lume.random(0, 320), lume.random(playableArea.y, playableArea.height))
                 end
             elseif entity.State() == EntityStates.Action then
                 entity.ActionUpdate(dt)

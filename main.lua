@@ -13,12 +13,15 @@ lume = require 'src/lib/lume'
 local tick = require 'src/lib/tick'
 lovesize = require 'src/lib/lovesize'
 
+menuFont = Resources.LoadFont('8bitOperatorPlusSC-Bold', 15)
+
 function love.load(arg)
     Data.Initialize()
     tick.framerate = 60
-    love.math.setRandomSeed(os.time())
+    love.graphics.setFont(menuFont)
     lovesize.set(screenWidth, screenHeight)
     StateMachine.Push(GameStates.SplashMenu)
+    math.randomseed(os.time() + tonumber(tostring({}):sub(8)))
 end
 
 function love.draw()

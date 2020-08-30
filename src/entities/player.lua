@@ -4,11 +4,13 @@ local Entity = require 'src/entities/entity'
 return {
     new = function()
         local speed = 2
+        local deltaX = 0
         local failTime = 1.5
         local startFailTime = 0
         local startFailState = false
         local entity = Entity.new(EntityTypes.Player)
 
+        entity.DeltaX = function() return deltaX end
         entity.Type = function() return EntityTypes.Player end
         entity.Move = function(dx, dy) entity.InternalMove(dx, dy) end
         entity.EndInteraction = function() entity.SetState(EntityStates.Idle) end
@@ -66,6 +68,9 @@ return {
                     if dx ~= 0 or dy ~= 0 then
                         entity.Move(dx, dy)
                         entity.SetState(EntityStates.Moving)
+
+                        local _x = entity.Position()
+                        deltaX = _x == screenWidth/2 and dx or 0
                     else
                         entity.SetState(EntityStates.Idle)
                     end

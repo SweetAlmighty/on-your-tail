@@ -1,6 +1,6 @@
 EntityTypes = { Player = 1, Cat = 2, Kitten = 3, Enemy = 4 }
 EntityStates = { Idle = 1, Moving = 2, Action = 3, Fail = 4 }
-
+playableArea = { x = 15, y = 150, width = 320/2, height = 240 }
 local sheetNames = { 'character', 'cats', 'kittens', 'animalControl' }
 
 local createAnimations = function(type)
@@ -22,7 +22,6 @@ return {
         local entityState = EntityStates.Idle
         local animations = createAnimations(type)
         local currentAnimation = animations[entityState]
-        local playableArea = { x = 15, y = 150, width = screenWidth/2, height = screenHeight }
 
         return {
             Position = function() return x, y end,

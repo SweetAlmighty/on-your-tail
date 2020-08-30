@@ -22,7 +22,6 @@ return {
             if chasingPlayer then entity.SetDestination(_x, _y) end
         end
 
-        entity.SetPosition(200, 200)
         entity.Type = function() return EntityTypes.Enemy end
         entity.CollisionExit = function(other) entity.InternalCollisionExit(other) end
 
