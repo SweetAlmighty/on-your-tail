@@ -37,8 +37,13 @@ return {
             SetDirection = function(dir) if direction ~= dir then direction = math.min(1, math.max(-1, dir)) end end,
 
             Collider = function()
-                local col = currentAnimation.CurrentFrame().collider
-                return { x = col.x + x, y = col.y + y, w = col.w, h = col.h }
+                local frame = currentAnimation.CurrentFrame()
+                return {
+                    x = frame.collider.x + (x - frame.offset.x),
+                    y = frame.collider.y + (y - frame.offset.y),
+                    w = frame.collider.w,
+                    h = frame.collider.h
+                }
             end,
 
             InternalCollisionEnter = function(entity)

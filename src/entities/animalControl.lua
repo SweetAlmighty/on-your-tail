@@ -2,21 +2,23 @@ local NPC = require 'src/entities/npc'
 
 return {
     new = function()
-        local x, y = 0, 0
         local chasingPlayer = false
+        local halfWidth = screenWidth/2
         local entity = NPC.new(EntityTypes.Enemy)
 
         local lookForPlayer = function(_x, _y)
+            local x, y = entity.Position()
             local p = { x = _x, y = _y }
-            local a = { x =  x, y =  y }
-            local b = { x = a.x + (170 * entity.Direction()), y = a.y + 20 }
-            local c = { x = a.x + (170 * entity.Direction()), y = a.y - 20 }
+            local a = { x =  x, y =  y - 80 }
+            local b = { x = a.x + (halfWidth * entity.Direction()), y = a.y + 20 }
+            local c = { x = a.x + (halfWidth * entity.Direction()), y = a.y - 20 }
+            --t = { a.x, a.y, b.x, b.y, c.x, c.y }
             return pointInTriangle(p, a, b, c)
         end
 
         local checkForPlayer = function()
             local _x, _y = PLAYER.Position()
-            if lookForPlayer(_x, _y) and not chasingPlayer then chasingPlayer = true end
+            if lookForPlayer(_x, _y - 80) and not chasingPlayer then chasingPlayer = true end
             if chasingPlayer then entity.SetDestination(_x, _y) end
         end
 
