@@ -14,7 +14,7 @@ return {
             Draw = function()
                 love.graphics.draw(background, 0, 0)
                 title.Draw(34, 0)
-                menu.Draw(0, 0)
+                menu.Draw(nil, screenHeight - 30)
             end,
             Enter = function()
                 menu = Menu.new('', 'center')

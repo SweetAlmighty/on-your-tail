@@ -7,7 +7,7 @@ return {
             Update = function(dt) menu.Update(dt) end,
             Input = function(key) menu.Input(key) end,
             Draw = function()
-                menu.Draw(screenWidth / 2, screenHeight - 30)
+                menu.Draw(nil, screenHeight - 30)
                 love.graphics.print('', (screenWidth/2) - 110, (screenHeight/2) - 25)
             end,
             Enter = function()

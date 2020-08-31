@@ -16,19 +16,19 @@ lovesize = require 'src/lib/lovesize'
 menuFont = Resources.LoadFont('8bitOperatorPlusSC-Bold', 15)
 titleFont = Resources.LoadFont('8bitOperatorPlusSC-Bold', 50)
 
+function love.draw()
+    love.graphics.clear(color, color, color)
+    lovesize.begin()
+        StateMachine.Draw()
+    lovesize.finish()
+end
+
 function love.load(arg)
     Data.Initialize()
     tick.framerate = 60
     lovesize.set(screenWidth, screenHeight)
     StateMachine.Push(GameStates.SplashMenu)
     math.randomseed(os.time() + tonumber(tostring({}):sub(8)))
-end
-
-function love.draw()
-    love.graphics.clear(color, color, color)
-    lovesize.begin()
-        StateMachine.Draw()
-    lovesize.finish()
 end
 
 function love.quit() Data.Save() end

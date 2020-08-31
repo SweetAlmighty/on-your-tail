@@ -13,22 +13,22 @@ local accept = { x = isGameshell and 225 or 10, y = isGameshell and 180 or 125 }
 return {
     new = function()
 		return {
+            Exit = function() end,
+            Update = function(dt) menu.Update(dt) end,
+            Input = function(key) menu.Input(key) end,
             Enter = function()
                 menu = Menu.new('CONTROLS', 'center')
                 quad = isGameshell and gameshell or pc
-                menu:AddItem{ name = 'Back', action = function() StateMachine.Pop() end }
+                menu.AddItem{ name = 'Back', action = function() StateMachine.Pop() end }
             end,
-            Update = function(dt) menu:Update(dt) end,
             Draw = function()
-                menu:Draw(screenWidth / 2, screenHeight - 30)
+                menu.Draw(nil, screenHeight - 30)
                 love.graphics.draw(image, quad, startPos.x, startPos.y)
                 love.graphics.print('Pause', pause.x, pause.y)
                 love.graphics.print('Move', move.x, move.y)
                 love.graphics.print('Pet', pet.x, pet.y)
                 love.graphics.print('Accept', accept.x, accept.y)
             end,
-            Input = function(key) menu:Input(key) end,
-            Exit = function() end
         }
     end
 }

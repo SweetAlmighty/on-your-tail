@@ -3,7 +3,7 @@ return {
     new = function()
 		return {
             Exit = function() end,
-            Draw = function() menu.Draw(0, 0) end,
+            Draw = function() menu.Draw() end,
             Update = function(dt) menu.Update(dt) end,
             Input = function(key) menu.Input(key) end,
             Enter = function()

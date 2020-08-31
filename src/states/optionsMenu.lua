@@ -44,20 +44,10 @@ end
 return {
     new = function()
 		return {
-            Enter = function()
-                setText()
-                menu = Menu.new('OPTIONS', 'center')
-                menu.AddItem{ name = 'Volume:', action = function() end }
-                menu.AddItem{ name = 'Resolution:', action = function() end }
-                menu.AddItem{ name = 'Fullscreen:', action = function() setFullscreen() end }
-                menu.AddItem{ name = 'Back', action = function()
-                    Data.Save()
-                    StateMachine.Pop()
-                end }
-            end,
+            Exit = function() end,
             Update = function(dt) menu.Update(dt) end,
             Draw = function()
-                menu.Draw(0, 0)
+                menu.Draw()
                 love.graphics.print(volumeText, 225, optionHeight(1))
                 love.graphics.print(resolutionText, 225, optionHeight(2))
                 love.graphics.print(fullscreenText, 225, optionHeight(3))
@@ -71,7 +61,14 @@ return {
                 end
                 menu.Input(key)
             end,
-            Exit = function() end
+            Enter = function()
+                setText()
+                menu = Menu.new('OPTIONS', 'center')
+                menu.AddItem{ name = 'Volume:', action = function() end }
+                menu.AddItem{ name = 'Resolution:', action = function() end }
+                menu.AddItem{ name = 'Fullscreen:', action = function() setFullscreen() end }
+                menu.AddItem{ name = 'Back', action = function() Data.Save() StateMachine.Pop() end }
+            end,
         }
     end
 }
