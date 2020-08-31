@@ -9,35 +9,41 @@ Public Domain - feel free to hack and redistribute this as much as you want.
 ]]--
 
 Menu = {
-	new = function(align)
+	new = function(title, align)
+		local width = 0
+		local items = { }
+		local selected = 1
+		local alignment = align or 'left'
+		local menuTitle = love.graphics.newText(titleFont, title)
 		return {
-			width = 0,
-			items = { },
-			selected = 1,
-			alignment = align or 'left',
 			--animOffset = 0,
-			AddItem = function(self, item)
+			AddItem = function(item)
 				item.name = love.graphics.newText(menuFont, item.name)
-				if self.width < item.name:getWidth() then self.width = item.name:getWidth() end
-				table.insert(self.items, item)
+				if width < item.name:getWidth() then width = item.name:getWidth() end
+				table.insert(items, item)
 			end,
-			Update = function(self, dt)
-				--self.animOffset = self.animOffset / (1 + dt*10)
+			Update = function(dt)
+				--animOffset = animOffset / (1 + dt*10)
 			end,
-			Draw = function(self, x, y)
+			Draw = function(x, y)
 				local height = 20
+
+				love.graphics.setColor(1, 1, 1, 1)
+				love.graphics.draw(menuTitle,
+					(screenWidth/2) - menuTitle:getWidth()/2,
+					(screenHeight/2) - ((menuTitle:getHeight()*2) - 10))
 
 				-- TODO: Implement custom draw function to show selection
 
-				for i, item in ipairs(self.items) do
-					love.graphics.setColor(1, 1, 1, self.selected == i and 1 or 0.5)
+				for i, item in ipairs(items) do
+					love.graphics.setColor(1, 1, 1, selected == i and 1 or 0.5)
 
 					local _x = x + 5
 
-					if align == 'right' then
-						_x = _x + (self.width-item.name:getWidth())
-					elseif align == 'center' then
-						_x = _x + (self.width-item.name:getWidth())/2
+					if alignment == 'right' then
+						_x = _x + (width-item.name:getWidth())
+					elseif alignment == 'center' then
+						_x = _x + (width-item.name:getWidth())/2
 					end
 
 					love.graphics.draw(item.name, _x, y + height*(i-1) + 5)
@@ -46,29 +52,29 @@ Menu = {
 				-- Reset to avoid alpha values outside of menu
 				love.graphics.setColor(1, 1, 1)
 			end,
-			Selected = function(self)
-				return self.selected
+			Selected = function()
+				return selected
 			end,
-			Input = function(self, key)
+			Input = function(key)
 				if key == InputMap.up then
-					if self.selected > 1 then
-						self.selected = self.selected - 1
-						--self.animOffset = self.animOffset + 1
+					if selected > 1 then
+						selected = selected - 1
+						--animOffset = animOffset + 1
 					else
-						self.selected = #self.items
-						--self.animOffset = self.animOffset - (#self.items-1)
+						selected = #items
+						--animOffset = animOffset - (#items-1)
 					end
 				elseif key == InputMap.down then
-					if self.selected < #self.items then
-						self.selected = self.selected + 1
-						--self.animOffset = self.animOffset - 1
+					if selected < #items then
+						selected = selected + 1
+						--animOffset = animOffset - 1
 					else
-						self.selected = 1
-						--self.animOffset = self.animOffset + (#self.items-1)
+						selected = 1
+						--animOffset = animOffset + (#items-1)
 					end
 				elseif key == InputMap.a then
-					if self.items[self.selected].action then
-						self.items[self.selected]:action()
+					if items[selected].action then
+						items[selected]:action()
 					end
 				end
 			end

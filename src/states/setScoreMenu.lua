@@ -60,13 +60,13 @@ return {
                 name = table.concat(name)..' ----------- '..string.format('%.2f', currTime)..'\n'
                 for i=65, 90, 1 do table.insert(letters, string.char(i)) end
 
-                menu = Menu.new('center')
-                menu:AddItem{ name = 'Play Again', action = function() if index == 2 then StateMachine.Pop() end end }
-                menu:AddItem{ name = 'Main Menu', action = function() if index == 2 then StateMachine.Clear() end end }
+                menu = Menu.new('SCORES', 'center')
+                menu.AddItem{ name = 'Play Again', action = function() if index == 2 then StateMachine.Pop() end end }
+                menu.AddItem{ name = 'Main Menu', action = function() if index == 2 then StateMachine.Clear() end end }
             end,
-            Update = function(dt) menu:Update(dt) end,
+            Update = function(dt) menu.Update(dt) end,
             Draw = function()
-                menu:Draw(0, 0)
+                menu.Draw(0, 0)
                 love.graphics.print('_', (screenWidth / 2) - (127 - (12 * currX)), (screenHeight / 2.5) + 8)
             end,
             Input = function(key)
@@ -78,7 +78,7 @@ return {
                     elseif key == InputMap.a then index = 2
                     end
                 else
-                    menu:Input(key)
+                    menu.Input(key)
                 end
             end,
             Exit = function() end

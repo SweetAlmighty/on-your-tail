@@ -46,18 +46,18 @@ return {
 		return {
             Enter = function()
                 setText()
-                menu = Menu.new('center')
-                menu:AddItem{ name = 'Volume:', action = function() end }
-                menu:AddItem{ name = 'Resolution:', action = function() end }
-                menu:AddItem{ name = 'Fullscreen:', action = function() setFullscreen() end }
-                menu:AddItem{ name = 'Back', action = function()
+                menu = Menu.new('OPTIONS', 'center')
+                menu.AddItem{ name = 'Volume:', action = function() end }
+                menu.AddItem{ name = 'Resolution:', action = function() end }
+                menu.AddItem{ name = 'Fullscreen:', action = function() setFullscreen() end }
+                menu.AddItem{ name = 'Back', action = function()
                     Data.Save()
                     StateMachine.Pop()
                 end }
             end,
-            Update = function(dt) menu:Update(dt) end,
+            Update = function(dt) menu.Update(dt) end,
             Draw = function()
-                menu:Draw(0, 0)
+                menu.Draw(0, 0)
                 love.graphics.print(volumeText, 225, optionHeight(1))
                 love.graphics.print(resolutionText, 225, optionHeight(2))
                 love.graphics.print(fullscreenText, 225, optionHeight(3))
@@ -69,7 +69,7 @@ return {
                     if key == InputMap.left then left()
                     elseif key == InputMap.right then right() end
                 end
-                menu:Input(key)
+                menu.Input(key)
             end,
             Exit = function() end
         }

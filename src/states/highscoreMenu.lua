@@ -4,15 +4,15 @@ return {
     new = function()
 		return {
             Exit = function() end,
-            Update = function(dt) menu:Update(dt) end,
-            Input = function(key) menu:Input(key) end,
+            Update = function(dt) menu.Update(dt) end,
+            Input = function(key) menu.Input(key) end,
             Draw = function()
-                menu:Draw(screenWidth / 2, screenHeight - 30)
+                menu.Draw(screenWidth / 2, screenHeight - 30)
                 love.graphics.print('', (screenWidth/2) - 110, (screenHeight/2) - 25)
             end,
             Enter = function()
-                menu = Menu.new('center')
-                menu:AddItem{ name = 'Back', action = function() StateMachine.Pop() end }
+                menu = Menu.new('SCORES', 'center')
+                menu.AddItem{ name = 'Back', action = function() StateMachine.Pop() end }
 
                 local scores = Data.GetScores()
                 for i=1, #scores, 1 do

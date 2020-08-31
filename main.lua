@@ -14,11 +14,11 @@ local tick = require 'src/lib/tick'
 lovesize = require 'src/lib/lovesize'
 
 menuFont = Resources.LoadFont('8bitOperatorPlusSC-Bold', 15)
+titleFont = Resources.LoadFont('8bitOperatorPlusSC-Bold', 50)
 
 function love.load(arg)
     Data.Initialize()
     tick.framerate = 60
-    love.graphics.setFont(menuFont)
     lovesize.set(screenWidth, screenHeight)
     StateMachine.Push(GameStates.SplashMenu)
     math.randomseed(os.time() + tonumber(tostring({}):sub(8)))
