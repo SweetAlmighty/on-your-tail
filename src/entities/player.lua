@@ -1,16 +1,16 @@
-require 'src/tools/input'
-local Entity = require 'src/entities/entity'
+require "src/tools/input"
+local Entity = require "src/entities/entity"
 
 return {
     new = function()
         local speed = 2
-        local deltaX = 0
-        local failTime = 1.5
-        local startFailTime = 0
-        local startFailState = false
+        local delta_x = 0
+        local fail_time = 1.5
+        local start_fail_time = 0
+        local start_fail_state = false
         local entity = Entity.new(EntityTypes.Player)
 
-        entity.DeltaX = function() return deltaX end
+        entity.delta_x = function() return delta_x end
         entity.Type = function() return EntityTypes.Player end
         entity.Move = function(dx, dy) entity.InternalMove(dx, dy) end
         entity.EndInteraction = function() entity.SetState(EntityStates.Idle) end
@@ -33,7 +33,7 @@ return {
         entity.CollisionEnter = function(other)
             if entity.InternalCollisionEnter(other) then
                 if other.Type() == EntityTypes.Enemy then
-                    startFailState = true
+                    start_fail_state = true
                     entity.SetState(EntityStates.Fail)
                 end
             end
@@ -49,10 +49,10 @@ return {
             local dx, dy = 0, 0
 
             if entity.State() == EntityStates.Fail then
-                if startFailState then
-                    startFailTime = startFailTime + dt
-                    if startFailTime > failTime then
-                        startFailState = false
+                if start_fail_state then
+                    start_fail_time = start_fail_time + dt
+                    if start_fail_time > fail_time then
+                        start_fail_state = false
                         StateMachine.Push(GameStates.FailMenu)
                     end
                 end
@@ -70,7 +70,7 @@ return {
                         entity.SetState(EntityStates.Moving)
 
                         local _x = entity.Position()
-                        deltaX = _x == screenWidth/2 and dx or 0
+                        delta_x = _x == screenWidth/2 and dx or 0
                     else
                         entity.SetState(EntityStates.Idle)
                     end

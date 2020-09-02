@@ -1,7 +1,7 @@
-local SpriteSheet = {
+local sprite_sheet = {
     new = function(image)
         local frames = { }
-        local totalFrames = 0
+        local total_frames = 0
 
         return {
             GetFrame = function(frame) return frames[frame] end,
@@ -12,8 +12,8 @@ local SpriteSheet = {
 
             AddFrame = function(frame)
                 local dim = frame.Dimensions
-                totalFrames = totalFrames + 1
-                frames[totalFrames] = {
+                total_frames = total_frames + 1
+                frames[total_frames] = {
                     dimensions = dims,
                     properties = frame.Properties,
                     quad = love.graphics.newQuad(dim.x, dim.y, dim.w, dim.h, image:getDimensions())
@@ -34,27 +34,27 @@ local SpriteSheet = {
     end
 }
 
-local Animation = {
+local animation = {
     new = function(image)
         local frames = { }
         local duration = 10
-        local frameTime = 0
-        local frameCount = 1
-        local totalFrames = 0
+        local frame_time = 0
+        local frame_count = 1
+        local total_frames = 0
 
         return {
-            Reset = function() frameCount = 1 end,
-            CurrentFrame = function() return frames[frameCount] end,
+            Reset = function() frame_count = 1 end,
+            CurrentFrame = function() return frames[frame_count] end,
             Draw = function(x, y, mirror)
-                local frame = frames[frameCount]
-                local xScale = mirror and -1 or 1
-                local offset = frame.offset ~= nil and frame.offset or { x = 0, y = 0 }
-                love.graphics.draw(image, frame.quad, x, y, 0, xScale, 1, offset.x, offset.y)
+                local frame = frames[frame_count]
+                local scale_x = mirror and -1 or 1
+                local offset = frame.offset and frame.offset or { x = 0, y = 0 }
+                love.graphics.draw(image, frame.quad, x, y, 0, scale_x, 1, offset.x, offset.y)
             end,
 
             AddFrame = function(x, y, w, h)
-                totalFrames = totalFrames + 1
-                frames[totalFrames] = {
+                total_frames = total_frames + 1
+                frames[total_frames] = {
                     --duration = data.Duration,
                     quad = love.graphics.newQuad(x, y, w, h, image:getDimensions())
                 }
@@ -67,14 +67,14 @@ local Animation = {
                 for i = 1, #data.Properties do
                     local property = data.Properties[i]
 
-                    if property.Name == 'Collider' and collider == nil then
+                    if property.Name == "Collider" and collider == nil then
                         collider = property.Value
                     end
                 end
 
                 local dim = data.Dimensions
-                totalFrames = totalFrames + 1
-                frames[totalFrames] = {
+                total_frames = total_frames + 1
+                frames[total_frames] = {
                     offset = offset,
                     dimensions = dim,
                     collider = collider,
@@ -84,15 +84,15 @@ local Animation = {
             end,
 
             Update = function(dt)
-                if frameTime > (1 / duration) then
-                    frameCount = frameCount + 1
-                    if frameCount > totalFrames then
-                        frameCount = 1
-                        --duration = frames[frameCount].duration
+                if frame_time > (1 / duration) then
+                    frame_count = frame_count + 1
+                    if frame_count > total_frames then
+                        frame_count = 1
+                        --duration = frames[frame_count].duration
                     end
-                    frameTime = frameTime - (1 / duration)
+                    frame_time = frame_time - (1 / duration)
                 else
-                    frameTime = frameTime + dt
+                    frame_time = frame_time + dt
                 end
             end,
         }
@@ -102,7 +102,7 @@ local Animation = {
 AnimationFactory = {
     CreateAnimationSet = function(filename)
         local file = Resources.LoadAnim(filename)
-        if file ~= nil then
+        if file then
             local types = { }
             local image = Resources.LoadImage(filename)
 
@@ -110,7 +110,7 @@ AnimationFactory = {
                 local animats = { }
 
                 for j = 1, #file.Types[i].Animations do
-                    local anim = Animation.new(image)
+                    local anim = animation.new(image)
                     for k = 1, #file.Types[i].Animations[j].Frames do
                         anim.AddFrameWithData(file.Types[i].Animations[j].Frames[k])
                     end
@@ -128,9 +128,9 @@ AnimationFactory = {
 
     CreateTileSet = function(filename)
         local file = Resources.LoadSheet(filename)
-        if file ~= nil then
+        if file then
             local image = Resources.LoadImage(filename)
-            local sheet = SpriteSheet.new(image)
+            local sheet = sprite_sheet.new(image)
 
             for i = 1, #file.Frames do sheet.AddFrame(file.Frames[i]) end
 

@@ -14,8 +14,8 @@ Menu = {
 		local width = 0
 		local items = { }
 		local selected = 1
-		local alignment = align or 'left'
-		local menuTitle = love.graphics.newText(titleFont, title)
+		local alignment = align or "left"
+		--local menuTitle = love.graphics.newText(titleFont, title)
 		return {
 			Selected = function() return selected end,
 			Update = function(dt) --[[animOffset = animOffset / (1 + dt*10)]] end,
@@ -30,16 +30,16 @@ Menu = {
 				x = x == nil and (screenWidth - width)/2 or x
 				y = y == nil and screenHeight/2 or y
 
-				love.graphics.setColor(1, 1, 1, 1)
-				love.graphics.draw(menuTitle,
-					(screenWidth/2) - menuTitle:getWidth()/2,
-					(screenHeight/2) - ((menuTitle:getHeight()*2) - 10))
+				--love.graphics.setColor(1, 1, 1, 1)
+				--love.graphics.draw(menuTitle,
+				--	(screenWidth/2) - menuTitle:getWidth()/2,
+				--	(screenHeight/2) - ((menuTitle:getHeight()*2) - 10))
 
 				-- TODO: Implement custom draw function to show selection
 
 				for i, item in ipairs(items) do
 					love.graphics.setColor(1, 1, 1, selected == i and 1 or 0.5)
-					local _x = x + (width-item.name:getWidth()) / (alignment == 'center' and 2 or 1)
+					local _x = x + (width-item.name:getWidth()) / (alignment == "center" and 2 or 1)
 					love.graphics.draw(item.name, _x, y + height*(i-1) + 5)
 				end
 

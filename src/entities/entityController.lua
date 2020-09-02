@@ -1,14 +1,14 @@
-require 'src/entities/entity'
-local Cat = require 'src/entities/cat'
-local Player = require 'src/entities/player'
-local Enemy = require 'src/entities/animalControl'
+require "src/entities/entity"
+local Cat = require "src/entities/cat"
+local Player = require "src/entities/player"
+local Enemy = require "src/entities/animalControl"
 
 PLAYER = nil
 
 local entities = { }
 
 -- Logic for the sort function for draw order sorting
-local sortFunction = function(a, b)
+local function sort_function(a, b)
     local ay = a.entity.DrawY()
     local by = b.entity.DrawY()
 
@@ -20,29 +20,29 @@ local sortFunction = function(a, b)
 end
 
 -- Sorts the entities by their Y to mock draw order
-local sortDrawOrder = function()
-    local newTable = { }
-    for i=1, #entities, 1 do newTable[#newTable+1] = { index = i, entity = entities[i] } end
-    table.sort(newTable, sortFunction)
+local function sort_draw_order()
+    local new_table = { }
+    for i=1, #entities, 1 do new_table[#new_table+1] = { index = i, entity = entities[i] } end
+    table.sort(new_table, sort_function)
     entities = { }
-    for i=1, #newTable, 1 do entities[#entities+1] = newTable[i].entity end
+    for i=1, #new_table, 1 do entities[#entities+1] = new_table[i].entity end
 end
 
-local checkCollision = function(one, two)
-    local colOne = entities[one].Collider()
-    local colTwo = entities[two].Collider()
-    return colOne.x < colTwo.x + colTwo.w and
-           colTwo.x < colOne.x + colOne.w and
-           colOne.y < colTwo.y + colTwo.h and
-           colTwo.y < colOne.y + colOne.h
+local function check_collision(one, two)
+    local col_one = entities[one].Collider()
+    local col_two = entities[two].Collider()
+    return col_one.x < col_two.x + col_two.w and
+           col_two.x < col_one.x + col_one.w and
+           col_one.y < col_two.y + col_two.h and
+           col_two.y < col_one.y + col_one.h
 end
 
-local handleCollisions = function(entity, collisions)
-    local entityCollisions = entity.Collisions()
+local function handle_collisions(entity, collisions)
+    local entity_collisions = entity.Collisions()
 
     -- Process new collisions
     for i=1, #collisions, 1 do
-        local index = findIndex(entityCollisions, collisions[i])
+        local index = find_index(entity_collisions, collisions[i])
         if index == nil then
             -- Enter
             collisions[i].CollisionEnter(entity)
@@ -52,10 +52,10 @@ local handleCollisions = function(entity, collisions)
 
     -- Find collisions to remove
     local remove = {}
-    for i=1, #entityCollisions, 1 do
-        local index = findIndex(collisions, entityCollisions[i])
+    for i=1, #entity_collisions, 1 do
+        local index = find_index(collisions, entity_collisions[i])
         if index == nil then
-            remove[#remove+1] = entityCollisions[i]
+            remove[#remove+1] = entity_collisions[i]
         end
     end
 
@@ -67,17 +67,17 @@ local handleCollisions = function(entity, collisions)
     end
 end
 
-local checkCollisions = function()
+local function check_collisions()
     for i=1, #entities, 1 do
         local collisions = { }
         for j=1, #entities, 1 do
             if i ~= j then
-                if checkCollision(i, j) then
+                if check_collision(i, j) then
                     collisions[#collisions+1] = entities[j]
                 end
             end
         end
-        handleCollisions(entities[i], collisions)
+        handle_collisions(entities[i], collisions)
     end
 end
 
@@ -86,25 +86,25 @@ EntityController = {
     Clear = function() for _=1, #entities, 1 do entities[#entities] = nil end end,
 
     RemoveEntity = function(entity)
-        local index = findIndex(entities, entity)
-        if index ~= nil then table.remove(entities, index) end
+        local index = find_index(entities, entity)
+        if index then table.remove(entities, index) end
     end,
 
     Draw = function()
-        sortDrawOrder()
+        sort_draw_order()
         for i=1, #entities, 1 do
             entities[i].Draw()
-            --drawDebugInfo(entities[i])
+            --draw_debug_info(entities[i])
         end
     end,
 
     Update = function(dt)
-        checkCollisions()
+        check_collisions()
         local remove = {}
         for i=1, #entities, 1 do
             entities[i].Update(dt)
             local x, _ = entities[i].Position()
-            -- Shouldn't be hard-coded
+            -- Shouldn"t be hard-coded
             if x <= -60 then table.insert(remove, entities[i]) end
         end
 

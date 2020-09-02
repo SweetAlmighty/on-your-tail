@@ -1,5 +1,5 @@
 --[[
-BackgroundHandler = class('BackgroundHandler')
+BackgroundHandler = class("BackgroundHandler")
 
 local props = { }
 local lightPos = 2
@@ -33,7 +33,7 @@ local getPropPositionOnBuilding = function(building, prop)
 end
 
 local initializeBuildings = function()
-    local buildingTiles = animateFactory:CreateTileSet('Buildings')
+    local buildingTiles = animateFactory:CreateTileSet("Buildings")
 
     buildingProps = { }
     buildingFrames = { }
@@ -51,7 +51,7 @@ local initializeBuildings = function()
 end
 
 local initializeProps = function()
-    local propTiles = animateFactory:CreateTileSet('Props')
+    local propTiles = animateFactory:CreateTileSet("Props")
 
     currentProps = { }
 
@@ -83,7 +83,7 @@ local updateBuildings = function()
             index = love.math.random(2, 8)
             local prop = props[index]
             local propPos = getPropPositionOnBuilding(building, prop)
-            if propPos ~= nil then
+            if propPos then
                 buildingProps[i] = {
                     type = index,
                     width = prop.dimensions.w,
@@ -95,7 +95,7 @@ local updateBuildings = function()
         else
             currentBuildings[i].pos = newX
 
-            if buildingProps[i] ~= nil then
+            if buildingProps[i] then
                 buildingProps[i].pos = buildingProps[i].pos - 2
             end
         end
@@ -142,7 +142,7 @@ local resetBuildings = function()
         index = love.math.random(2, 8)
         local prop = props[index]
         local propPos = getPropPositionOnBuilding(building, prop)
-        if propPos ~= nil then
+        if propPos then
             buildingProps[i] = {
                 type = index,
                 width = prop.dimensions.w,
@@ -180,7 +180,7 @@ function BackgroundHandler:draw()
     end
 
     for i=1, #buildingProps, 1 do
-        if buildingProps[i] ~= nil then
+        if buildingProps[i] then
             self.propTiles.Draw(buildingProps[i].type, buildingProps[i].pos, 85)
         end
     end
