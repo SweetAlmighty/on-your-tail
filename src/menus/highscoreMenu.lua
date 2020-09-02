@@ -4,16 +4,16 @@ return {
     new = function()
 		return {
             Exit = function() end,
-            Update = function(dt) menu.Update(dt) end,
-            Input = function(key) menu.Input(key) end,
+            Update = function(dt) menu:update(dt) end,
+            Input = function(key) menu:input(key) end,
             Type = function() return GameStates.HighscoreMenu end,
             Draw = function()
-                menu.Draw(nil, screen_height - 30)
+                menu:draw(nil, screen_height - 30)
                 love.graphics.print("", (screen_width/2) - 110, (screen_height/2) - 25)
             end,
             Enter = function()
                 menu = Menu.new("SCORES", "center")
-                menu.AddItem{ name = "Back", action = function() StateMachine.Pop() end }
+                menu:add_item{ name = "Back", action = function() StateMachine.Pop() end }
 
                 local scores = Data.GetScores()
                 for i=1, #scores, 1 do

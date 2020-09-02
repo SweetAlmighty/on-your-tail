@@ -14,16 +14,16 @@ return {
     new = function()
 		return {
             Exit = function() end,
-            Update = function(dt) menu.Update(dt) end,
-            Input = function(key) menu.Input(key) end,
+            Update = function(dt) menu:update(dt) end,
+            Input = function(key) menu:input(key) end,
             Type = function() return GameStates.ControlsMenu end,
             Enter = function()
                 menu = Menu.new("CONTROLS", "center")
                 quad = is_gameshell and gameshell or pc
-                menu.AddItem{ name = "Back", action = function() StateMachine.Pop() end }
+                menu:add_item{ name = "Back", action = function() StateMachine.Pop() end }
             end,
             Draw = function()
-                menu.Draw(nil, screen_height - 30)
+                menu:draw(nil, screen_height - 30)
                 love.graphics.draw(image, quad, start_pos.x, start_pos.y)
                 love.graphics.print("Pause", pause.x, pause.y)
                 love.graphics.print("Move", move.x, move.y)

@@ -45,10 +45,10 @@ return {
     new = function()
 		return {
             Exit = function() end,
-            Update = function(dt) menu.Update(dt) end,
+            Update = function(dt) menu:update(dt) end,
             Type = function() return GameStates.OptionsMenu end,
             Draw = function()
-                menu.Draw()
+                menu:draw()
                 love.graphics.print(volume_text, 225, option_height(1))
                 love.graphics.print(resolution_text, 225, option_height(2))
                 love.graphics.print(fullscreen_text, 225, option_height(3))
@@ -60,15 +60,15 @@ return {
                     if key == InputMap.left then left()
                     elseif key == InputMap.right then right() end
                 end
-                menu.Input(key)
+                menu:input(key)
             end,
             Enter = function()
                 set_text()
                 menu = Menu.new("OPTIONS", "center")
-                menu.AddItem{ name = "Volume:", action = function() end }
-                menu.AddItem{ name = "Resolution:", action = function() end }
-                menu.AddItem{ name = "Fullscreen:", action = function() set_fullscreen() end }
-                menu.AddItem{ name = "Back", action = function() Data.Save() StateMachine.Pop() end }
+                menu:add_item{ name = "Volume:", action = function() end }
+                menu:add_item{ name = "Resolution:", action = function() end }
+                menu:add_item{ name = "Fullscreen:", action = function() set_fullscreen() end }
+                menu:add_item{ name = "Back", action = function() Data.Save() StateMachine.Pop() end }
             end,
         }
     end

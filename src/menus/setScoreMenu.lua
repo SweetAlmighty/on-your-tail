@@ -57,10 +57,10 @@ return {
     new = function()
 		return {
             Exit = function() end,
-            Update = function(dt) menu.Update(dt) end,
+            Update = function(dt) menu:update(dt) end,
             Type = function() return GameStates.SetScoreMenu end,
             Draw = function()
-                menu.Draw()
+                menu:draw()
                 love.graphics.print("_", (screenWidth / 2) - (127 - (12 * curr_x)), (screenHeight / 2.5) + 8)
             end,
             Enter = function()
@@ -68,8 +68,8 @@ return {
                 for i=65, 90, 1 do table.insert(letters, string.char(i)) end
 
                 menu = Menu.new("SCORES", "center")
-                menu.AddItem{ name = "Play Again", action = function() if index == 2 then StateMachine.Pop() end end }
-                menu.AddItem{ name = "Main Menu", action = function() if index == 2 then StateMachine.Clear() end end }
+                menu:add_item{ name = "Play Again", action = function() if index == 2 then StateMachine.Pop() end end }
+                menu:add_item{ name = "Main Menu", action = function() if index == 2 then StateMachine.Clear() end end }
             end,
             Input = function(key)
                 if index == 1 then
@@ -79,7 +79,7 @@ return {
                     elseif key == InputMap.down then down()
                     elseif key == InputMap.a then index = 2
                     end
-                else menu.Input(key) end
+                else menu:input(key) end
             end,
         }
     end
