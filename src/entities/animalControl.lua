@@ -3,7 +3,7 @@ local NPC = require "src/entities/npc"
 return {
     new = function()
         local chasing_player = false
-        local half_width = screenWidth/2
+        local half_width = screen_width/2
         local entity = NPC.new(EntityTypes.Enemy)
 
         local function look_for_player(_x, _y)

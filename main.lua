@@ -6,8 +6,8 @@ require "src/states/stateMachine"
 require "src/menus/menuStateMachine"
 require "src/tools/animationFactory"
 
-screenWidth = 320
-screenHeight = 240
+screen_width = 320
+screen_height = 240
 local color = 50/255
 
 lume = require "src/lib/lume"
@@ -28,7 +28,7 @@ end
 function love.load(arg)
     Data.Initialize()
     tick.framerate = 60
-    lovesize.set(screenWidth, screenHeight)
+    lovesize.set(screen_width, screen_height)
     StateMachine.Push(GameStates.SplashScreen)
     math.randomseed(os.time() + tonumber(tostring({}):sub(8)))
 end
@@ -39,8 +39,8 @@ function love.update(dt)
 end
 
 function love.keypressed(key)
-    StateMachine.Input(key)
     MenuStateMachine.Input(key)
+    StateMachine.Input(key)
 end
 
 function love.quit() Data.Save() end

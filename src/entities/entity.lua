@@ -33,7 +33,7 @@ return {
             InternalUpdate = function(dt) current_animation.Update(dt) end,
             Draw = function() current_animation.Draw(x, y, direction == -1) end,
             DrawY = function() return y + current_animation.CurrentFrame().dimensions.h end,
-            SetDirection = function(dir) if direction ~= dir then direction = math.min(1, math.max(-1, dir)) end end,
+            SetDirection = function(dir) if direction ~= dir then direction = lume.clamp(dir, -1, 1) end end,
 
             Collider = function()
                 local frame = current_animation.CurrentFrame()
@@ -66,12 +66,12 @@ return {
             InternalMove = function(dx, dy)
                 x = math.floor((x + dx) + 0.5)
                 if type == EntityTypes.Player then
-                    x = math.min(playableArea.width, math.max(playableArea.x, x))
+                    x = lume.clamp(x, playableArea.x, playableArea.width)
                 end
 
-                local _y = math.floor((y + dy) + 0.5)
-                y = math.min(playableArea.height, math.max(playableArea.y, _y))
-            end,
+                y = math.floor((y + dy) + 0.5)
+                y = lume.clamp(y, playableArea.y, playableArea.height)
+            end
         }
     end
 }

@@ -5,16 +5,16 @@ local sprite_sheet = {
 
         return {
             GetFrame = function(frame) return frames[frame] end,
-            GetProperties = function(frame) return frames[frame].properties end,
+            GetProperties = function(frame) return frames[frame].Properties end,
             GetFrameDimensions = function(frame) return frames[frame].dimensions end,
-            GetProperty = function(frame) return frames[frame].properties[1].Value end,
+            GetProperty = function(frame) return frames[frame].Properties[1].Value end,
             SetImageWrap = function(horizontal, vertical) image:setWrap(horizontal, vertical) end,
 
             AddFrame = function(frame)
                 local dim = frame.Dimensions
                 total_frames = total_frames + 1
                 frames[total_frames] = {
-                    dimensions = dims,
+                    dimensions = frame.Dimensions,
                     properties = frame.Properties,
                     quad = love.graphics.newQuad(dim.x, dim.y, dim.w, dim.h, image:getDimensions())
                 }
@@ -29,7 +29,7 @@ local sprite_sheet = {
                 local dims = frames[frame].dimensions
                 frames[frame].quad = love.graphics.newQuad(-pos, dims.y, dims.w, dims.h, image:getDimensions())
                 love.graphics.draw(image, frames[frame].quad, x, y, 0)
-            end,
+            end
         }
     end
 }
@@ -94,7 +94,7 @@ local animation = {
                 else
                     frame_time = frame_time + dt
                 end
-            end,
+            end
         }
     end
 }
@@ -132,7 +132,9 @@ AnimationFactory = {
             local image = Resources.LoadImage(filename)
             local sheet = sprite_sheet.new(image)
 
-            for i = 1, #file.Frames do sheet.AddFrame(file.Frames[i]) end
+            for i = 1, #file.Frames do
+                sheet.AddFrame(file.Frames[i])
+            end
 
             return sheet
         end

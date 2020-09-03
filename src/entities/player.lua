@@ -53,7 +53,7 @@ return {
                     start_fail_time = start_fail_time + dt
                     if start_fail_time > fail_time then
                         start_fail_state = false
-                        StateMachine.Push(GameStates.FailMenu)
+                        MenuStateMachine.Push(GameMenus.FailMenu)
                     end
                 end
             else
@@ -70,7 +70,7 @@ return {
                         entity.SetState(EntityStates.Moving)
 
                         local _x = entity.Position()
-                        delta_x = _x == screenWidth/2 and dx or 0
+                        delta_x = _x == screen_width/2 and dx or 0
                     else
                         entity.SetState(EntityStates.Idle)
                     end

@@ -1,3 +1,5 @@
+local Menu = require "src/menus/menu"
+
 local index = 1
 local menu = nil
 local play_sound = false
@@ -6,10 +8,10 @@ local volume_text, resolution_text, fullscreen_text
 
 local function set_text()
     local settings = Data.GetSettings()
-    volume_text = settings.volume
     fullscreen = settings.fullscreen
-    resolution_text = settings.resolution
-    fullscreen_text = settings.fullscreen and "[X]" or "[ ]"
+    volume_text = love.graphics.newText(menuFont, settings.volume)
+    resolution_text = love.graphics.newText(menuFont, settings.resolution)
+    fullscreen_text = love.graphics.newText(menuFont, settings.fullscreen and "[X]" or "[ ]")
 end
 
 local function set_resolution_setting(value)
@@ -27,8 +29,6 @@ local function set_volume_setting(value)
     set_text()
 end
 
-local function option_height(i) return ((i-1) * 20) end
-
 local function left()
     if index == 1 then set_volume_setting(-1)
     elseif index == 2 then set_resolution_setting(-1) end
@@ -41,35 +41,49 @@ local function right()
     if index ~= 3 and play_sound then play_sound = false end
 end
 
+local function draw()
+    menu:draw()
+    love.graphics.draw(volume_text, 225, 126)
+    love.graphics.draw(resolution_text, 225, 146)
+    love.graphics.draw(fullscreen_text, 225, 166)
+end
+
+local function input(key)
+    if key == InputMap.up then index = lume.clamp(index-1, 1, 4)
+    elseif key == InputMap.down then index = lume.clamp(index+1, 1, 4) end
+    if index < 3 then
+        if key == InputMap.left then left()
+        elseif key == InputMap.right then right() end
+    end
+    menu:input(key)
+end
+
+local function back()
+    Data.Save()
+    MenuStateMachine.Pop()
+end
+
+local function enter()
+    set_text()
+    index = 1
+    menu = Menu.new("center")
+    menu:add_item{ name = "Volume:", action = nil }
+    menu:add_item{ name = "Resolution:", action = nil }
+    menu:add_item{ name = "Fullscreen:", action = set_fullscreen }
+    menu:add_item{ name = "Back", action = back}
+end
+
+local function update(dt) menu:update(dt) end
+local function type() return GameMenus.OptionsMenu end
+
 return {
     new = function()
 		return {
-            Exit = function() end,
-            Update = function(dt) menu:update(dt) end,
-            Type = function() return GameStates.OptionsMenu end,
-            Draw = function()
-                menu:draw()
-                love.graphics.print(volume_text, 225, option_height(1))
-                love.graphics.print(resolution_text, 225, option_height(2))
-                love.graphics.print(fullscreen_text, 225, option_height(3))
-            end,
-            Input = function(key)
-                if key == InputMap.up then index = math.min(4, math.max(1, index-1))
-                elseif key == InputMap.down then index = math.min(4, math.max(1, index+1)) end
-                if index < 3 then
-                    if key == InputMap.left then left()
-                    elseif key == InputMap.right then right() end
-                end
-                menu:input(key)
-            end,
-            Enter = function()
-                set_text()
-                menu = Menu.new("OPTIONS", "center")
-                menu:add_item{ name = "Volume:", action = function() end }
-                menu:add_item{ name = "Resolution:", action = function() end }
-                menu:add_item{ name = "Fullscreen:", action = function() set_fullscreen() end }
-                menu:add_item{ name = "Back", action = function() Data.Save() StateMachine.Pop() end }
-            end,
+            Type = type,
+            Draw = draw,
+            Enter = enter,
+            Input = input,
+            Update = update
         }
     end
 }

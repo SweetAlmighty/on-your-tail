@@ -1,80 +1,75 @@
---[[
-BackgroundHandler = class("BackgroundHandler")
-
 local props = { }
-local lightPos = 2
-local propCount = 9
-local totalProps = 9
-local buildingCount = 4
-local currentProps = { }
-local buildingProps = { }
-local totalBuildings = 10
-local lightOffset = false
-local buildingFrames = { }
-local currentBuildings = { }
+local light_pos = 2
+local prop_count = 9
+local total_props = 9
+local prop_tiles = { }
+local building_count = 4
+local current_props = { }
+local building_props = { }
+local building_tiles = { }
+local total_buildings = 10
+local light_offset = false
+local building_frames = { }
+local current_buildings = { }
 
-local getNextPosition = function(index)
-    local prev = index - 1 < 1 and buildingCount or index - 1
-    return currentBuildings[prev].pos + (currentBuildings[prev].width + love.math.random(-20, 150))
+local function get_next_position(index)
+    local prev = index - 1 < 1 and building_count or index - 1
+    return current_buildings[prev].pos + (current_buildings[prev].width + love.math.random(-20, 150))
 end
 
-local getPropPositionOnBuilding = function(building, prop)
-    local propWidth = prop.dimensions.w
-    local propAreas = building.properties
+local function get_prop_position_on_building(building, prop)
+    local prop_width = prop.dimensions.w
+    local prop_areas = building.properties
 
-    for i=1, #propAreas, 1 do
-        local area = propAreas[i].Value
-        if area.w > propWidth then
-            return love.math.random(area.x, (area.x + area.w) - propWidth)
+    for i=1, #prop_areas, 1 do
+        local area = prop_areas[i].Value
+        if area.w > prop_width then
+            return love.math.random(area.x, (area.x + area.w) - prop_width)
         end
     end
 
     return nil
 end
 
-local initializeBuildings = function()
-    local buildingTiles = animateFactory:CreateTileSet("Buildings")
+local function initialize_buildings()
+    building_tiles = AnimationFactory.CreateTileSet("buildings")
 
-    buildingProps = { }
-    buildingFrames = { }
-    currentBuildings = { }
+    building_props = { }
+    building_frames = { }
+    current_buildings = { }
 
-    for i=1, totalBuildings, 1 do
-        buildingFrames[#buildingFrames+1] = buildingTiles.GetFrame(i)
-        if i <= buildingCount then
-            buildingProps[#buildingProps+1] = { }
-            currentBuildings[#currentBuildings+1] = { }
+    for i=1, total_buildings, 1 do
+        building_frames[#building_frames+1] = building_tiles.GetFrame(i)
+        if i <= building_count then
+            building_props[#building_props+1] = { }
+            current_buildings[#current_buildings+1] = { }
         end
     end
-
-    return buildingTiles
 end
 
-local initializeProps = function()
-    local propTiles = animateFactory:CreateTileSet("Props")
+local function initialize_props()
+    prop_tiles = AnimationFactory.CreateTileSet("props")
 
-    currentProps = { }
+    current_props = { }
 
-    for i=1, totalProps, 1 do
-        props[#props+1] = propTiles.GetFrame(i)
-        if i <= propCount then currentProps[#currentProps+1] = { } end
+    for i=1, total_props, 1 do
+        props[#props+1] = prop_tiles.GetFrame(i)
+        if i <= prop_count then current_props[#current_props+1] = { } end
     end
-
-    return propTiles
 end
 
-local updateBuildings = function()
-    for i=1, #currentBuildings, 1 do
-        local newX = currentBuildings[i].pos - 2
-        local threshold = (currentBuildings[i].width + 1)
-        local offscreen = newX < -threshold
+local function update_buildings()
+    for i=1, #current_buildings, 1 do
+        local new_x = current_buildings[i].pos - 2
+        local threshold = (current_buildings[i].width + 1)
+        local offscreen = new_x < -threshold
 
         if offscreen then
             -- Change Building
-            local index = love.math.random(1, totalBuildings)
-            local building = buildingFrames[index]
-            currentBuildings[i] = {
-                pos = getNextPosition(i),
+            local index = love.math.random(1, total_buildings)
+            local building = building_frames[index]
+            current_buildings[i] = {
+                pos = get_next_position(i),
                 type = index,
                 width = building.dimensions.w
             }
@@ -82,120 +77,126 @@ local updateBuildings = function()
             -- Change Building Prop
             index = love.math.random(2, 8)
             local prop = props[index]
-            local propPos = getPropPositionOnBuilding(building, prop)
-            if propPos then
-                buildingProps[i] = {
+            local prop_pos = get_prop_position_on_building(building, prop)
+            if prop_pos then
+                building_props[i] = {
                     type = index,
                     width = prop.dimensions.w,
-                    pos = currentBuildings[i].pos + getPropPositionOnBuilding(building, prop)
+                    pos = current_buildings[i].pos + get_prop_position_on_building(building, prop)
                 }
             else
-                buildingProps[i] = nil
+                building_props[i] = nil
             end
         else
-            currentBuildings[i].pos = newX
+            current_buildings[i].pos = new_x
 
-            if buildingProps[i] then
-                buildingProps[i].pos = buildingProps[i].pos - 2
+            if building_props[i] then
+                building_props[i].pos = building_props[i].pos - 2
             end
         end
     end
 end
 
-local updateLampPost = function()
-    if currentProps[1].pos == nil then
-        currentProps[1].pos = currentBuildings[2].pos
+local function update_hydrant()
+    if current_props[9].pos == nil then
+        current_props[9].pos = current_buildings[2].pos
     end
 
-    if currentProps[1].pos < -(currentProps[1].width + 1) then
-        lightOffset = not lightOffset
-        lightPos = lightOffset and 4 or 2
+    current_props[9].pos = current_buildings[1].pos
+end
+
+local function update_lamp_post()
+    if current_props[1].pos == nil then
+        current_props[1].pos = current_buildings[2].pos
     end
 
-    currentProps[1].pos = currentBuildings[lightPos].pos
-end
-
-local updateHydrant = function()
-    if currentProps[9].pos == nil then
-        currentProps[9].pos = currentBuildings[2].pos
+    if current_props[1].pos < -(current_props[1].width + 1) then
+        light_offset = not light_offset
+        light_pos = light_offset and 4 or 2
     end
 
-    currentProps[9].pos = currentBuildings[1].pos
+    current_props[1].pos = current_buildings[light_pos].pos
 end
 
-local updateProps = function()
-    updateHydrant()
-    updateLampPost()
+local function update_props()
+    update_hydrant()
+    update_lamp_post()
 end
 
-local resetBuildings = function()
-    for i=1, buildingCount, 1 do
-        local index = love.math.random(1, totalBuildings)
-        local building = buildingFrames[index]
-        currentBuildings[i] = {
-            type = index,
-            width = building.dimensions.w,
-            pos = i == 1 and 0 or getNextPosition(i)
-        }
-
-        -- Change Building Prop
-        index = love.math.random(2, 8)
-        local prop = props[index]
-        local propPos = getPropPositionOnBuilding(building, prop)
-        if propPos then
-            buildingProps[i] = {
-                type = index,
-                width = prop.dimensions.w,
-                pos = currentBuildings[i].pos + getPropPositionOnBuilding(building, prop)
-            }
-        else
-            buildingProps[i] = nil
-        end
-    end
-end
-
-local resetProps = function()
-    for i=1, propCount, 1 do
+local function reset_props()
+    for i=1, prop_count, 1 do
         local index = i
         local prop = props[index]
-        currentProps[i] = {
+        current_props[i] = {
             pos = nil,
             type = index,
             width = prop.dimensions.w
         }
     end
 
-    updateProps()
+    update_props()
 end
 
-function BackgroundHandler:initialize()
-    self.buildingTiles = initializeBuildings()
-    self.propTiles = initializeProps()
-    self:reset()
+local function reset_buildings()
+    for i=1, building_count, 1 do
+        local index = love.math.random(1, total_buildings)
+        local building = building_frames[index]
+        current_buildings[i] = {
+            type = index,
+            width = building.dimensions.w,
+            pos = i == 1 and 0 or get_next_position(i)
+        }
+
+        -- Change Building Prop
+        index = love.math.random(2, 8)
+        local prop = props[index]
+        local prop_pos = get_prop_position_on_building(building, prop)
+        if prop_pos then
+            building_props[i] = {
+                type = index,
+                width = prop.dimensions.w,
+                pos = current_buildings[i].pos + get_prop_position_on_building(building, prop)
+            }
+        else
+            building_props[i] = nil
+        end
+    end
 end
 
-function BackgroundHandler:draw()
-    for i=1, #currentBuildings, 1 do
-        self.buildingTiles.Draw(currentBuildings[i].type, currentBuildings[i].pos, 0)
+local function draw()
+    for i=1, #current_buildings, 1 do
+        building_tiles.Draw(current_buildings[i].type, current_buildings[i].pos, 0)
     end
 
-    for i=1, #buildingProps, 1 do
-        if buildingProps[i] then
-            self.propTiles.Draw(buildingProps[i].type, buildingProps[i].pos, 85)
+    for i=1, #building_props, 1 do
+        if building_props[i] then
+            prop_tiles.Draw(building_props[i].type, building_props[i].pos, 85)
         end
     end
 
-    self.propTiles.Draw(currentProps[1].type, currentProps[1].pos, 12)
-    self.propTiles.Draw(currentProps[9].type, currentProps[9].pos, 115)
+    prop_tiles.Draw(current_props[1].type, current_props[1].pos, 12)
+    prop_tiles.Draw(current_props[9].type, current_props[9].pos, 115)
 end
 
-function BackgroundHandler:reset()
-    resetBuildings()
-    resetProps()
+local function reset()
+    reset_buildings()
+    reset_props()
 end
 
-function BackgroundHandler:update()
-    updateBuildings()
-    updateProps()
+local function update()
+    update_buildings()
+    update_props()
 end
-]]
+
+local function initialize()
+    initialize_props()
+    initialize_buildings()
+    reset()
+end
+
+BackgroundHandler = {
+    Draw = draw,
+    Reset = reset,
+    Update = update,
+    Initialize = initialize
+}

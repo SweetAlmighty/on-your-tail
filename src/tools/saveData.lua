@@ -53,7 +53,7 @@ Data = {
     end,
 
     SetVolume = function(volume)
-        local value = math.max(0, math.min(data.settings.volume + volume, 10))
+        local value = lume.clamp(data.settings.resolution + volume, 1, 10)
 
         if value ~= data.settings.volume then
             love.audio.setVolume(value / 10)
@@ -67,7 +67,7 @@ Data = {
     SetResolution = function(index, fullscreen)
         local change = false
         local resolution = resolutions[data.settings.resolution]
-        local value = math.max(1, math.min(data.settings.resolution + index, #resolutions))
+        local value = lume.clamp(data.settings.resolution + index, 1, #resolutions)
 
         if fullscreen ~= data.settings.fullscreen then
             change = true

@@ -23,7 +23,38 @@ GameMenus = {
 }
 
 MenuStateMachine = {
-    Input = function(key) stack[#stack].Input(key) end,
+    Input = function(key)
+        if #stack ~= 0 then stack[#stack].Input(key) end
+    end,
+
+    Draw = function()
+        if #stack ~= 0 then
+            love.graphics.setColor(0, 0, 0)
+            love.graphics.rectangle("line", 34, 85, 248, 150)
+
+            love.graphics.setColor(0, 0, 0, 0.75)
+            love.graphics.rectangle("fill", 34, 85, 248, 150)
+
+            love.graphics.setColor(1, 1, 1)
+            stack[#stack].Draw()
+        end
+    end,
+
+    Update = function(dt)
+        if #stack ~= 0 then stack[#stack].Update(dt) end
+    end,
+
+    Pop = function()
+        stack[#stack] = nil
+    end,
+
+    Clear = function()
+        local count = #stack
+        while(count > 1) do
+            MenuStateMachine.Pop()
+            count = count - 1
+        end
+    end,
 
     Push = function(type)
         local state = nil
@@ -48,26 +79,5 @@ MenuStateMachine = {
                 background = stack[i]
             end
         end
-    end,
-
-    Pop = function()
-        stack[#stack].Exit()
-        stack[#stack] = nil
-    end,
-
-    Clear = function()
-        local count = #stack
-        while(count > 2) do
-            StateMachine.Pop()
-            count = count - 1
-        end
-    end,
-
-    Draw = function()
-        if #stack ~= 0 then stack[#stack].Draw() end
-    end,
-
-    Update = function(dt)
-        if #stack ~= 0 then stack[#stack].Update(dt) end
     end
 }

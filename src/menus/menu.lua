@@ -1,7 +1,7 @@
 local menu = { }
 local Menu = { }
 
-function menu.new(title, align)
+function menu.new(align)
 	local self = {
 		width = 0,
 		items = { },
@@ -15,7 +15,9 @@ end
 
 function Menu:update(dt) end
 
-function Menu:selected() return self.selected end
+function Menu:selected()
+	return self.selected
+end
 
 function Menu:add_item(item)
 	item.name = love.graphics.newText(menuFont, item.name)
@@ -26,8 +28,8 @@ end
 function Menu:draw(x, y)
 	local height = 20
 
-	x = x == nil and (screenWidth - self.width)/2 or x
-	y = y == nil and screenHeight/2 or y
+	x = x == nil and (screen_width - self.width)/2 or x
+	y = y == nil and screen_height/2 or y
 
 	-- TODO: Implement custom draw function to show selection
 

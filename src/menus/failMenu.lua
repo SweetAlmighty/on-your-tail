@@ -1,33 +1,33 @@
+local Menu = require "src/menus/menu"
+local menu = nil
+
+local function update(dt) menu:update(dt) end
+local function input(key) menu:input(key) end
+local function type() return GameMenus.FailMenu end
+local function draw() menu:draw() end
+
+local function play_again()
+    MenuStateMachine.Clear()
+    MenuStateMachine.Push(GameMenus.Gameplay)
+end
+local function main_menu() MenuStateMachine.Clear() end
+local function add_score() MenuStateMachine.Push(GameMenus.SetScoreMenu) end
+
+local function enter()
+    menu = Menu.new("center")
+    menu:add_item({ name = "Play Again", action = play_again })
+    menu:add_item({ name = "Add Score", action = add_score })
+    menu:add_item({ name = "Main Menu", action = main_menu })
+end
+
 return {
     new = function()
-        local menu = Menu.new("GAME OVER", "center")
 		return {
-            Exit = function() end,
-            Draw = function() menu:draw() end,
-            Update = function(dt) menu:update(dt) end,
-            Input = function(key) menu:input(key) end,
-            Type = function() return GameStates.FailMenu end,
-            Enter = function()
-                menu:add_item({
-                    name = "Play Again",
-                    action = function()
-                        StateMachine.Clear()
-                        StateMachine.Push(GameStates.Gameplay)
-                    end
-                })
-                menu:add_item({
-                    name = "Add Score",
-                    action = function()
-                        StateMachine.Push(GameStates.SetScoreMenu)
-                    end 
-                })
-                menu:add_item({
-                    name = "Main Menu",
-                    action = function()
-                        StateMachine.Clear()
-                    end
-                })
-            end,
+            Draw = draw,
+            Type = type,
+            Input = input,
+            Enter = enter,
+            Update = update
         }
     end
 }
