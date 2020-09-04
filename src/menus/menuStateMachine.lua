@@ -40,7 +40,7 @@ end
 
 function MenuStateMachine:clear()
     local count = #self.stack
-    while(count > 1) do
+    while(count > 0) do
         MenuStateMachine:pop()
         count = count - 1
     end

@@ -6,7 +6,6 @@ local SplashScreen = {
 }
 
 function SplashScreen:update(dt) self.title.Update(dt) end
-
 function SplashScreen:type() return GameStates.SplashScreen end
 
 function SplashScreen:draw()
@@ -21,11 +20,15 @@ function SplashScreen:enter()
 end
 
 function SplashScreen:input(key)
-    if key == InputMap.a then
-        if not self.pause then
+    if not self.pause then
+        if key == InputMap.a then
             self.pause = true
             self.accept_sfx:play()
             MenuStateMachine:push(GameMenus.MainMenu)
+        end
+    else
+        if self.pause and MenuStateMachine:count() == 0 then
+            self.pause = false
         end
     end
 end

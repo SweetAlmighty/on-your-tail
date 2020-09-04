@@ -3,7 +3,7 @@ local SplashScreen = require "src/states/splashScreen"
 
 local StateMachine = { stack = { } }
 
-GameStates = { Gameplay = 1, SplashScreen = 2 }
+GameStates = { SplashScreen = 1, Gameplay = 2 }
 
 function StateMachine:draw() self.stack[#self.stack]:draw() end
 function StateMachine:input(key) self.stack[#self.stack]:input(key) end
@@ -15,11 +15,8 @@ function StateMachine:pop()
 end
 
 function StateMachine:clear()
-    local count = #self.stack
-    while(count > 1) do
-        StateMachine:pop()
-        count = count - 1
-    end
+    while(#self.stack > 0) do StateMachine:pop() end
+    StateMachine:push(GameStates.SplashScreen)
 end
 
 function StateMachine:push(type)
