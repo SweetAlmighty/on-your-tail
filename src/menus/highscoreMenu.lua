@@ -10,7 +10,7 @@ local function draw()
     love.graphics.print("", (screen_width/2) - 110, (screen_height/2) - 25)
 end
 
-local function back() MenuStateMachine.Pop() end
+local function back() MenuStateMachine:pop() end
 
 local function enter()
     menu = Menu.new("center")

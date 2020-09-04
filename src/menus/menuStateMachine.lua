@@ -8,8 +8,6 @@ local ControlsMenu = require "src/menus/controlsMenu"
 local SetScoreMenu = require "src/menus/setScoreMenu"
 local HighscoreMenu = require "src/menus/highscoreMenu"
 
-local stack = { }
-
 GameMenus = {
     MainMenu = 1,
     PauseMenu = 2,
@@ -22,62 +20,62 @@ GameMenus = {
     OptionsMenu = 9,
 }
 
-MenuStateMachine = {
-    Input = function(key)
-        if #stack ~= 0 then stack[#stack].Input(key) end
-    end,
+local MenuStateMachine = { stack = { } }
 
-    Draw = function()
-        if #stack ~= 0 then
-            love.graphics.setColor(0, 0, 0)
-            love.graphics.rectangle("line", 34, 85, 248, 150)
+function MenuStateMachine:count() return #self.stack end
 
-            love.graphics.setColor(0, 0, 0, 0.75)
-            love.graphics.rectangle("fill", 34, 85, 248, 150)
+function MenuStateMachine:pop() self.stack[#self.stack] = nil end
 
-            love.graphics.setColor(1, 1, 1)
-            stack[#stack].Draw()
-        end
-    end,
-
-    Update = function(dt)
-        if #stack ~= 0 then stack[#stack].Update(dt) end
-    end,
-
-    Pop = function()
-        stack[#stack] = nil
-    end,
-
-    Clear = function()
-        local count = #stack
-        while(count > 1) do
-            MenuStateMachine.Pop()
-            count = count - 1
-        end
-    end,
-
-    Push = function(type)
-        local state = nil
-        if type == GameMenus.MainMenu then state = MainMenu.new()
-        elseif type == GameMenus.FailMenu then state = FailMenu.new()
-        elseif type == GameMenus.PauseMenu then state = PauseMenu.new()
-        elseif type == GameMenus.ExtrasMenu then state = ExtrasMenu.new()
-        elseif type == GameMenus.CreditsMenu then state = CreditsMenu.new()
-        elseif type == GameMenus.OptionsMenu then state = OptionsMenu.new()
-        elseif type == GameMenus.ControlsMenu then state = ControlsMenu.new()
-        elseif type == GameMenus.SetScoreMenu then state = SetScoreMenu.new()
-        elseif type == GameMenus.HighscoreMenu then state = HighscoreMenu.new()
-        end
-
-        if state then
-            table.insert(stack, state)
-            stack[#stack].Enter()
-        end
-
-        for i=1, #stack, 1 do
-            if stack[i].Type() == GameStates.Gameplay or stack[i].Type() == GameStates.SplashMenu then
-                background = stack[i]
-            end
-        end
+function MenuStateMachine:input(key)
+    if #self.stack ~= 0 then
+        self.stack[#self.stack].Input(key)
     end
-}
+end
+
+function MenuStateMachine:update(dt)
+    if #self.stack ~= 0 then
+        self.stack[#self.stack].Update(dt)
+    end
+end
+
+function MenuStateMachine:clear()
+    local count = #self.stack
+    while(count > 1) do
+        MenuStateMachine:pop()
+        count = count - 1
+    end
+end
+
+function MenuStateMachine:draw()
+    if #self.stack ~= 0 then
+        love.graphics.setColor(0, 0, 0)
+        love.graphics.rectangle("line", 34, 85, 248, 150)
+
+        love.graphics.setColor(0, 0, 0, 0.75)
+        love.graphics.rectangle("fill", 34, 85, 248, 150)
+
+        love.graphics.setColor(1, 1, 1)
+        self.stack[#self.stack].Draw()
+    end
+end
+
+function MenuStateMachine:push(type)
+    local state = nil
+    if type == GameMenus.MainMenu then state = MainMenu.new()
+    elseif type == GameMenus.FailMenu then state = FailMenu.new()
+    elseif type == GameMenus.PauseMenu then state = PauseMenu.new()
+    elseif type == GameMenus.ExtrasMenu then state = ExtrasMenu.new()
+    elseif type == GameMenus.CreditsMenu then state = CreditsMenu.new()
+    elseif type == GameMenus.OptionsMenu then state = OptionsMenu.new()
+    elseif type == GameMenus.ControlsMenu then state = ControlsMenu.new()
+    elseif type == GameMenus.SetScoreMenu then state = SetScoreMenu.new()
+    elseif type == GameMenus.HighscoreMenu then state = HighscoreMenu.new()
+    end
+
+    if state then
+        table.insert(self.stack, state)
+        self.stack[#self.stack].Enter()
+    end
+end
+
+return MenuStateMachine

@@ -4,6 +4,7 @@ local index = 1
 local menu = nil
 local play_sound = false
 local fullscreen = false
+local move_sfx = Resources.LoadSFX("move")
 local volume_text, resolution_text, fullscreen_text
 
 local function set_text()
@@ -32,13 +33,19 @@ end
 local function left()
     if index == 1 then set_volume_setting(-1)
     elseif index == 2 then set_resolution_setting(-1) end
-    if index ~= 3 and play_sound then play_sound = false end
+    if index ~= 3 and play_sound then
+        play_sound = false
+        move_sfx:play()
+    end
 end
 
 local function right()
     if index == 1 then set_volume_setting(1)
     elseif index == 2 then set_resolution_setting(1) end
-    if index ~= 3 and play_sound then play_sound = false end
+    if index ~= 3 and play_sound then
+        play_sound = false
+        move_sfx:play()
+    end
 end
 
 local function draw()
@@ -60,7 +67,7 @@ end
 
 local function back()
     Data.Save()
-    MenuStateMachine.Pop()
+    MenuStateMachine:pop()
 end
 
 local function enter()

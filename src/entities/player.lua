@@ -53,7 +53,7 @@ return {
                     start_fail_time = start_fail_time + dt
                     if start_fail_time > fail_time then
                         start_fail_state = false
-                        MenuStateMachine.Push(GameMenus.FailMenu)
+                        MenuStateMachine:push(GameMenus.FailMenu)
                     end
                 end
             else

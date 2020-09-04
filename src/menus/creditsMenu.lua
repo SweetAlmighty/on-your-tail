@@ -17,7 +17,7 @@ local function draw()
     love.graphics.draw(credits, 34, 85)
 end
 
-local function back() MenuStateMachine.Pop() end
+local function back() MenuStateMachine:pop() end
 local function enter()
     menu = Menu.new("center")
     menu:add_item{ name = "Back", action = back }

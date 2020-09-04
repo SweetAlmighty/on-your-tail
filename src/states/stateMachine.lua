@@ -1,50 +1,39 @@
 local Gameplay = require "src/states/gameplay"
 local SplashScreen = require "src/states/splashScreen"
 
-local stack = { }
+local StateMachine = { stack = { } }
 
-GameStates = {
-    Gameplay = 1,
-    SplashScreen = 2
-}
+GameStates = { Gameplay = 1, SplashScreen = 2 }
 
-StateMachine = {
-    Input = function(key)
-        stack[#stack].Input(key)
-    end,
+function StateMachine:draw() self.stack[#self.stack]:draw() end
+function StateMachine:input(key) self.stack[#self.stack]:input(key) end
+function StateMachine:update(dt) self.stack[#self.stack]:update(dt) end
 
-    Push = function(type)
-        local state = nil
-        if type == GameStates.Gameplay then
-            state = Gameplay.new()
-        elseif type == GameStates.SplashScreen then
-            state = SplashScreen.new()
-        end
+function StateMachine:pop()
+    self.stack[#self.stack]:exit()
+    self.stack[#self.stack] = nil
+end
 
-        if state then
-            table.insert(stack, state)
-            stack[#stack].Enter()
-        end
-    end,
-
-    Pop = function()
-        stack[#stack].Exit()
-        stack[#stack] = nil
-    end,
-
-    Clear = function()
-        local count = #stack
-        while(count > 2) do
-            StateMachine.Pop()
-            count = count - 1
-        end
-    end,
-
-    Draw = function()
-        stack[#stack].Draw()
-    end,
-
-    Update = function(dt)
-        stack[#stack].Update(dt)
+function StateMachine:clear()
+    local count = #self.stack
+    while(count > 1) do
+        StateMachine:pop()
+        count = count - 1
     end
-}
+end
+
+function StateMachine:push(type)
+    local state = nil
+    if type == GameStates.Gameplay then
+        state = Gameplay
+    elseif type == GameStates.SplashScreen then
+        state = SplashScreen
+    end
+
+    if state then
+        table.insert(self.stack, state)
+        self.stack[#self.stack]:enter()
+    end
+end
+
+return StateMachine

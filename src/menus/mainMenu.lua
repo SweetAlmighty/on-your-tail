@@ -7,12 +7,12 @@ local function update(dt) menu:update(dt) end
 local function input(key) menu:input(key) end
 local function type() return GameMenus.MainMenu end
 
-local function extras() MenuStateMachine.Push(GameMenus.ExtrasMenu) end
-local function credits() MenuStateMachine.Push(GameMenus.CreditsMenu) end
+local function extras() MenuStateMachine:push(GameMenus.ExtrasMenu) end
+local function credits() MenuStateMachine:push(GameMenus.CreditsMenu) end
 local function quit() love.event.quit() end
 local function start_game()
-    StateMachine.Push(GameStates.Gameplay)
-    MenuStateMachine.Pop()
+    StateMachine:push(GameStates.Gameplay)
+    MenuStateMachine:pop()
 end
 
 local function enter()

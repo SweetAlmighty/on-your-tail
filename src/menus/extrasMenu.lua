@@ -8,10 +8,10 @@ local function update(dt) menu:update(dt) end
 local function input(key) menu:input(key) end
 local function type() return GameMenus.ExtrasMenu end
 
-local function back() MenuStateMachine.Pop() end
-local function options() MenuStateMachine.Push(GameMenus.OptionsMenu) end
-local function scores() MenuStateMachine.Push(GameMenus.HighscoreMenu) end
-local function controls() MenuStateMachine.Push(GameMenus.ControlsMenu) end
+local function back() MenuStateMachine:pop() end
+local function options() MenuStateMachine:push(GameMenus.OptionsMenu) end
+local function scores() MenuStateMachine:push(GameMenus.HighscoreMenu) end
+local function controls() MenuStateMachine:push(GameMenus.ControlsMenu) end
 
 local function enter()
     menu = Menu.new("center")

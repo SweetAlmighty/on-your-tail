@@ -1,35 +1,33 @@
-local title = nil
-local pause = false
-local background = nil
+local SplashScreen = {
+    title = nil,
+    pause = false,
+    background = nil,
+    accept_sfx = Resources.LoadSFX("accept"),
+}
 
-local function update(dt) title.Update(dt) end
-local function type() return GameStates.SplashScreen end
-local function draw()
-    love.graphics.draw(background, 0, 0)
-    title.Draw(34, 0)
+function SplashScreen:update(dt) self.title.Update(dt) end
+
+function SplashScreen:type() return GameStates.SplashScreen end
+
+function SplashScreen:draw()
+    love.graphics.draw(self.background, 0, 0)
+    self.title.Draw(34, 0)
 end
-local function input(key)
+
+function SplashScreen:enter()
+    self.pause = false
+    self.background = Resources.LoadImage("titleScreen")
+    self.title = AnimationFactory.CreateAnimationSet("title")[1][1]
+end
+
+function SplashScreen:input(key)
     if key == InputMap.a then
-        if not pause then
-            pause = true
-            MenuStateMachine.Push(GameMenus.MainMenu)
+        if not self.pause then
+            self.pause = true
+            self.accept_sfx:play()
+            MenuStateMachine:push(GameMenus.MainMenu)
         end
     end
 end
 
-local function enter()
-    background = Resources.LoadImage("titleScreen")
-    title = AnimationFactory.CreateAnimationSet("title")[1][1]
-end
-
-return {
-    new = function()
-		return {
-            Type = type,
-            Draw = draw,
-            Enter = enter,
-            Input = input,
-            Update = update
-        }
-    end
-}
+return SplashScreen

@@ -7,11 +7,11 @@ local function type() return GameMenus.FailMenu end
 local function draw() menu:draw() end
 
 local function play_again()
-    MenuStateMachine.Clear()
-    MenuStateMachine.Push(GameMenus.Gameplay)
+    MenuStateMachine:clear()
+    MenuStateMachine:push(GameMenus.Gameplay)
 end
-local function main_menu() MenuStateMachine.Clear() end
-local function add_score() MenuStateMachine.Push(GameMenus.SetScoreMenu) end
+local function main_menu() MenuStateMachine:clear() end
+local function add_score() MenuStateMachine:push(GameMenus.SetScoreMenu) end
 
 local function enter()
     menu = Menu.new("center")

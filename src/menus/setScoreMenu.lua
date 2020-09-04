@@ -72,8 +72,8 @@ local function input(key)
     else menu:input(key) end
 end
 
-local function play_again() if index == 2 then MenuStateMachine.Pop() end end
-local function main_menu() if index == 2 then MenuStateMachine.Clear() end end
+local function play_again() if index == 2 then MenuStateMachine:pop() end end
+local function main_menu() if index == 2 then MenuStateMachine:clear() end end
 
 local function enter()
     name = table.concat(name).." ----------- "..string.format("%.2f", currTime).."\n"

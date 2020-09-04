@@ -29,7 +29,7 @@ local function draw()
     love.graphics.draw(accept_text, accept.x, accept.y)
 end
 
-local function back() MenuStateMachine.Pop() end
+local function back() MenuStateMachine:pop() end
 
 local function enter()
     menu = Menu.new("center")

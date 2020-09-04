@@ -53,7 +53,7 @@ Data = {
     end,
 
     SetVolume = function(volume)
-        local value = lume.clamp(data.settings.resolution + volume, 1, 10)
+        local value = lume.clamp(data.settings.volume + volume, 1, 10)
 
         if value ~= data.settings.volume then
             love.audio.setVolume(value / 10)

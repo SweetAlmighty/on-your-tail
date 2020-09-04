@@ -8,6 +8,8 @@ function menu.new(align)
 		selected = 1,
 		--animOffset = 0,
 		alignment = align or "left",
+		move_sfx = Resources.LoadSFX("move"),
+		accept_sfx = Resources.LoadSFX("accept")
 	}
 	setmetatable(self, { __index = Menu })
 	return self
@@ -46,6 +48,7 @@ end
 function Menu:input(key)
 	if key == InputMap.up then
 		if self.selected > 1 then
+			self.move_sfx:play()
 			self.selected = self.selected - 1
 			--animOffset = animOffset + 1
 		else
@@ -54,6 +57,7 @@ function Menu:input(key)
 		end
 	elseif key == InputMap.down then
 		if self.selected < #self.items then
+			self.move_sfx:play()
 			self.selected = self.selected + 1
 			--animOffset = animOffset - 1
 		else
@@ -62,6 +66,7 @@ function Menu:input(key)
 		end
 	elseif key == InputMap.a then
 		if self.items[self.selected].action then
+			self.accept_sfx:play()
 			self.items[self.selected]:action()
 		end
 	end
