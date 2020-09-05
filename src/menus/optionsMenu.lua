@@ -1,7 +1,7 @@
 local Menu = require "src/menus/menu"
+local OptionsMenu = { menu = nil }
 
 local index = 1
-local menu = nil
 local play_sound = false
 local fullscreen = false
 local move_sfx = Resources.LoadSFX("move")
@@ -48,51 +48,43 @@ local function right()
     end
 end
 
-local function draw()
-    menu:draw()
+local function back()
+    Data.Save()
+    MenuStateMachine:pop()
+end
+
+function OptionsMenu:update(dt) self.menu:update(dt) end
+function OptionsMenu:type() return GameMenus.OptionsMenu end
+
+function OptionsMenu:draw()
+    self.menu:draw()
     love.graphics.draw(volume_text,     225, 117)
     love.graphics.draw(resolution_text, 225, 137)
     love.graphics.draw(fullscreen_text, 225, 157)
 end
 
-local function input(key)
+function OptionsMenu:input(key)
     if key == InputMap.up then index = lume.clamp(index-1, 1, 4)
     elseif key == InputMap.down then index = lume.clamp(index+1, 1, 4) end
     if index < 3 then
         if key == InputMap.left then left()
         elseif key == InputMap.right then right() end
     end
-    menu:input(key)
+    self.menu:input(key)
 end
 
-local function back()
-    Data.Save()
-    MenuStateMachine:pop()
-end
-
-local function enter()
-    set_text()
+function OptionsMenu:enter()
     index = 1
+    set_text()
 
-    menu = Menu.new()
-    menu:set_offset(0, -45)
-    menu:add_item{ name = "Volume:", action = nil }
-    menu:add_item{ name = "Resolution:", action = nil }
-    menu:add_item{ name = "Fullscreen:", action = set_fullscreen }
-    menu:add_item{ name = "Back", action = back}
+    if self.menu == nil then
+        self.menu = Menu.new()
+        self.menu:set_offset(0, -45)
+        self.menu:add_item{ name = "Volume:", action = nil }
+        self.menu:add_item{ name = "Resolution:", action = nil }
+        self.menu:add_item{ name = "Fullscreen:", action = set_fullscreen }
+        self.menu:add_item{ name = "Back", action = back }
+    end
 end
 
-local function update(dt) menu:update(dt) end
-local function type() return GameMenus.OptionsMenu end
-
-return {
-    new = function()
-		return {
-            Type = type,
-            Draw = draw,
-            Enter = enter,
-            Input = input,
-            Update = update
-        }
-    end
-}
+return OptionsMenu

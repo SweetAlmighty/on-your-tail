@@ -10,20 +10,19 @@ local HighscoreMenu = require "src/menus/highscoreMenu"
 
 GameMenus = {
     MainMenu = 1,
-    PauseMenu = 2,
-    HighscoreMenu = 3,
-    ControlsMenu = 4,
-    FailMenu = 5,
-    SetScoreMenu = 6,
-    ExtrasMenu = 7,
-    CreditsMenu = 8,
-    OptionsMenu = 9,
+    FailMenu = 2,
+    PauseMenu = 3,
+    ExtrasMenu = 4,
+    CreditsMenu = 5,
+    OptionsMenu = 6,
+    ControlsMenu = 7,
+    SetScoreMenu = 8,
+    HighscoreMenu = 9
 }
 
 local MenuStateMachine = { stack = { } }
 
 function MenuStateMachine:count() return #self.stack end
-
 function MenuStateMachine:pop() self.stack[#self.stack] = nil end
 
 function MenuStateMachine:clear()
@@ -34,38 +33,38 @@ end
 
 function MenuStateMachine:input(key)
     if #self.stack ~= 0 then
-        self.stack[#self.stack].Input(key)
+        self.stack[#self.stack]:input(key)
     end
 end
 
 function MenuStateMachine:update(dt)
     if #self.stack ~= 0 then
-        self.stack[#self.stack].Update(dt)
+        self.stack[#self.stack]:update(dt)
     end
 end
 
 function MenuStateMachine:draw()
     if #self.stack ~= 0 then
-        self.stack[#self.stack].Draw()
+        self.stack[#self.stack]:draw()
     end
 end
 
 function MenuStateMachine:push(type)
     local state = nil
-    if type == GameMenus.MainMenu then state = MainMenu.new()
-    elseif type == GameMenus.FailMenu then state = FailMenu.new()
-    elseif type == GameMenus.PauseMenu then state = PauseMenu.new()
-    elseif type == GameMenus.ExtrasMenu then state = ExtrasMenu.new()
-    elseif type == GameMenus.CreditsMenu then state = CreditsMenu.new()
-    elseif type == GameMenus.OptionsMenu then state = OptionsMenu.new()
-    elseif type == GameMenus.ControlsMenu then state = ControlsMenu.new()
-    elseif type == GameMenus.SetScoreMenu then state = SetScoreMenu.new()
-    elseif type == GameMenus.HighscoreMenu then state = HighscoreMenu.new()
+    if type == GameMenus.MainMenu then state = MainMenu
+    elseif type == GameMenus.FailMenu then state = FailMenu
+    elseif type == GameMenus.PauseMenu then state = PauseMenu
+    elseif type == GameMenus.ExtrasMenu then state = ExtrasMenu
+    elseif type == GameMenus.CreditsMenu then state = CreditsMenu
+    elseif type == GameMenus.OptionsMenu then state = OptionsMenu
+    elseif type == GameMenus.ControlsMenu then state = ControlsMenu
+    elseif type == GameMenus.SetScoreMenu then state = SetScoreMenu
+    elseif type == GameMenus.HighscoreMenu then state = HighscoreMenu
     end
 
     if state then
         table.insert(self.stack, state)
-        self.stack[#self.stack].Enter()
+        self.stack[#self.stack]:enter()
     end
 end
 

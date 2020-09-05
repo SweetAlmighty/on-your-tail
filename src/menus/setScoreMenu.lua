@@ -1,8 +1,8 @@
 local Menu = require "src/menus/menu"
+local SetScoreMenu = { menu = nil }
 
 local index = 1
 local name = ""
-local menu = nil
 local curr_x = 1
 local curr_y = 1
 local letters = {}
@@ -55,13 +55,13 @@ local function right()
     end
 end
 
-local function update(dt) menu:update(dt) end
-local function type() return GameMenus.SetScoreMenu end
-local function draw()
-    menu:draw()
+function SetScoreMenu:update(dt) self.menu:update(dt) end
+function SetScoreMenu:type() return GameMenus.SetScoreMenu end
+function SetScoreMenu:draw()
+    self.menu:draw()
     love.graphics.print("_", (screen_width / 2) - (127 - (12 * curr_x)), (screen_height / 2.5) + 8)
 end
-local function input(key)
+function SetScoreMenu:input(key)
     if index == 1 then
         if key == InputMap.left then left()
         elseif key == InputMap.up then up()
@@ -69,29 +69,21 @@ local function input(key)
         elseif key == InputMap.down then down()
         elseif key == InputMap.a then index = 2
         end
-    else menu:input(key) end
+    else self.menu:input(key) end
 end
 
 local function play_again() if index == 2 then MenuStateMachine:pop() end end
 local function main_menu() if index == 2 then MenuStateMachine:clear() end end
 
-local function enter()
-    name = table.concat(name).." ----------- "..string.format("%.2f", currTime).."\n"
-    for i=65, 90, 1 do table.insert(letters, string.char(i)) end
+function SetScoreMenu:enter()
+    if self.menu == nil then
+        name = table.concat(name).." ----------- "..string.format("%.2f", currTime).."\n"
+        for i=65, 90, 1 do table.insert(letters, string.char(i)) end
 
-    menu = Menu.new()
-    menu:add_item{ name = "Play Again", action = play_again }
-    menu:add_item{ name = "Main Menu", action = main_menu }
+        self.menu = Menu.new()
+        self.menu:add_item{ name = "Play Again", action = play_again }
+        self.menu:add_item{ name = "Main Menu", action = main_menu }
+    end
 end
 
-return {
-    new = function()
-		return {
-            Type = type,
-            Draw = draw,
-            Enter = enter,
-            Input = input,
-            Update = update
-        }
-    end
-}
+return SetScoreMenu

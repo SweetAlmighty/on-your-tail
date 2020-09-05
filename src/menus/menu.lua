@@ -108,25 +108,29 @@ function Menu:draw(x, y)
 end
 
 function Menu:input(key)
-	if key == InputMap.up then
-		self.move_sfx:play()
-		if self.selected > 1 then
-			self.selected = self.selected - 1
-			--animOffset = animOffset + 1
-		else
-			self.selected = #self.items
-			--animOffset = animOffset - (#items-1)
+	if #self.items > 1 then
+		if key == InputMap.up then
+			self.move_sfx:play()
+			if self.selected > 1 then
+				self.selected = self.selected - 1
+				--animOffset = animOffset + 1
+			else
+				self.selected = #self.items
+				--animOffset = animOffset - (#items-1)
+			end
+		elseif key == InputMap.down then
+			self.move_sfx:play()
+			if self.selected < #self.items then
+				self.selected = self.selected + 1
+				--animOffset = animOffset - 1
+			else
+				self.selected = 1
+				--animOffset = animOffset + (#items-1)
+			end
 		end
-	elseif key == InputMap.down then
-		self.move_sfx:play()
-		if self.selected < #self.items then
-			self.selected = self.selected + 1
-			--animOffset = animOffset - 1
-		else
-			self.selected = 1
-			--animOffset = animOffset + (#items-1)
-		end
-	elseif key == InputMap.a then
+	end
+
+	if key == InputMap.a then
 		if self.items[self.selected].action then
 			if self.selected == #self.items then
 				self.decline_sfx:play()

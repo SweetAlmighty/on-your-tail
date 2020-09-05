@@ -1,39 +1,30 @@
 local Menu = require "src/menus/menu"
-local menu = nil
-
-local function draw() menu:draw() end
-local function update(dt) menu:update(dt) end
-local function input(key) menu:input(key) end
-local function type() return GameMenus.MainMenu end
+local MainMenu = { menu = nil }
 
 local function extras() MenuStateMachine:push(GameMenus.ExtrasMenu) end
 local function credits() MenuStateMachine:push(GameMenus.CreditsMenu) end
 local function quit() love.event.quit() end
-
 local function start_game()
     StateMachine:push(GameStates.Gameplay)
     MenuStateMachine:pop()
 end
 
-local function enter()
-    menu = Menu.new()
-    menu:set_offset(0, -45)
-    menu:set_background(34, 85, 248, 150)
-    menu:set_start(MenuQuadrants.BottomMiddle)
-    menu:add_item{ name = "Start Game", action = start_game }
-    menu:add_item{ name = "Extras", action = extras }
-    menu:add_item{ name = "Credits", action = credits }
-    menu:add_item{ name = "Quit", action = quit }
+function MainMenu:draw() self.menu:draw() end
+function MainMenu:update(dt) self.menu:update(dt) end
+function MainMenu:input(key) self.menu:input(key) end
+function MainMenu:type() return GameMenus.MainMenu end
+function MainMenu:enter()
+    if self.menu == nil then
+        self.menu = Menu.new()
+        self.menu:set_offset(0, -45)
+        self.menu:set_background(30, 85, 260, 150)
+        self.menu:set_start(MenuQuadrants.BottomMiddle)
+        self.menu:add_item{ name = "Start Game", action = start_game }
+        self.menu:add_item{ name = "Extras", action = extras }
+        self.menu:add_item{ name = "Credits", action = credits }
+        self.menu:add_item{ name = "Quit", action = quit }
+    end
 end
 
-return {
-    new = function()
-		return {
-            Draw = draw,
-            Type = type,
-            Input = input,
-            Enter = enter,
-            Update = update
-        }
-    end
-}
+
+return MainMenu

@@ -1,38 +1,35 @@
 local Menu = require "src/menus/menu"
+local CreditsMenu = { menu = nil, credits = nil }
 
-local menu = nil
-local credits = nil
-local credit_text =
-    "Programmer: Brian Sweet\n" ..
-    "Artist:          Shelby Merrill\n" ..
-    "Made With:     LÖVE\n" ..
-    "Utilizing:     tick, lovesize,\n" ..
-    "                      lume, json.lua"
-
-local function update(dt) menu:update(dt) end
-local function input(key) menu:input(key) end
-local function type() return GameMenus.CreditsMenu end
-local function draw()
-    menu:draw()
-    love.graphics.draw(credits, 34, 85)
-end
+local text = "Programmer:\tBrian Sweet\n" ..
+            "Artist:\t\t\t Shelby Merrill\n" ..
+            "Made With:\t\tLÖVE\n" ..
+            "Utilizing:\t\tlovesize, boon,\n" ..
+            "\t\t\t\t\t\t tick, json.lua,\n" ..
+            "\t\t\t\t\t\t\t\t\tand lume\n"
 
 local function back() MenuStateMachine:pop() end
-local function enter()
-    menu = Menu.new()
-    menu:set_offset(0, 50)
-    menu:add_item{ name = "Back", action = back }
-    credits = love.graphics.newText(menuFont, credit_text)
+
+function CreditsMenu:update(dt) self.menu:update(dt) end
+function CreditsMenu:input(key) self.menu:input(key) end
+function CreditsMenu:type() return GameMenus.CreditsMenu end
+
+function CreditsMenu:draw()
+    self.menu:draw()
+    love.graphics.draw(self.credits, 30, 85)
 end
 
-return {
-    new = function()
-		return {
-            Type = type,
-            Draw = draw,
-            Input = input,
-            Enter = enter,
-            Update = update
-        }
+function CreditsMenu:enter()
+    if self.menu == nil then
+        self.menu = Menu.new()
+        self.menu:add_item{ name = "Back", action = back }
     end
-}
+
+    if self.credits == nil then
+        self.credits = love.graphics.newText(menuFont, text)
+    end
+
+    self.menu:set_offset(0, 50)
+end
+
+return CreditsMenu
