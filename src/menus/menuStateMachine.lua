@@ -26,6 +26,12 @@ function MenuStateMachine:count() return #self.stack end
 
 function MenuStateMachine:pop() self.stack[#self.stack] = nil end
 
+function MenuStateMachine:clear()
+    while(#self.stack > 0) do
+        MenuStateMachine:pop()
+    end
+end
+
 function MenuStateMachine:input(key)
     if #self.stack ~= 0 then
         self.stack[#self.stack].Input(key)
@@ -38,23 +44,8 @@ function MenuStateMachine:update(dt)
     end
 end
 
-function MenuStateMachine:clear()
-    local count = #self.stack
-    while(count > 0) do
-        MenuStateMachine:pop()
-        count = count - 1
-    end
-end
-
 function MenuStateMachine:draw()
     if #self.stack ~= 0 then
-        love.graphics.setColor(0, 0, 0)
-        love.graphics.rectangle("line", 34, 85, 248, 150)
-
-        love.graphics.setColor(0, 0, 0, 0.75)
-        love.graphics.rectangle("fill", 34, 85, 248, 150)
-
-        love.graphics.setColor(1, 1, 1)
         self.stack[#self.stack].Draw()
     end
 end

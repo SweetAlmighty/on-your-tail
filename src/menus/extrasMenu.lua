@@ -14,7 +14,9 @@ local function scores() MenuStateMachine:push(GameMenus.HighscoreMenu) end
 local function controls() MenuStateMachine:push(GameMenus.ControlsMenu) end
 
 local function enter()
-    menu = Menu.new("center")
+    menu = Menu.new()
+    menu:set_offset(0, -45)
+
     if not is_gameshell then menu:add_item{ name = "Options", action = options } end
     menu:add_item{ name = "Controls", action = controls }
     menu:add_item{ name = "Scores", action = scores }

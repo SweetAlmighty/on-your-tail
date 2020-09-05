@@ -21,7 +21,7 @@ local function update(dt) menu:update(dt) end
 local function input(key) menu:input(key) end
 local function type() return GameMenus.ControlsMenu end
 local function draw()
-    menu:draw(nil, screen_height - 30)
+    menu:draw()
     love.graphics.draw(image, quad, start_pos.x, start_pos.y)
     love.graphics.draw(pause_text, pause.x, pause.y)
     love.graphics.draw(move_text, move.x, move.y)
@@ -32,7 +32,8 @@ end
 local function back() MenuStateMachine:pop() end
 
 local function enter()
-    menu = Menu.new("center")
+    menu = Menu.new()
+    menu:set_offset(0, 50)
 
     control_font = Resources.LoadFont("8bitOperatorPlusSC-Bold", 12)
 

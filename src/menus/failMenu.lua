@@ -14,7 +14,7 @@ local function main_menu() MenuStateMachine:clear() end
 local function add_score() MenuStateMachine:push(GameMenus.SetScoreMenu) end
 
 local function enter()
-    menu = Menu.new("center")
+    menu = Menu.new()
     menu:add_item({ name = "Play Again", action = play_again })
     menu:add_item({ name = "Add Score", action = add_score })
     menu:add_item({ name = "Main Menu", action = main_menu })

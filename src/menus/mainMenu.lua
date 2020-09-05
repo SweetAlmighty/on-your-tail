@@ -1,5 +1,4 @@
 local Menu = require "src/menus/menu"
-
 local menu = nil
 
 local function draw() menu:draw() end
@@ -10,13 +9,17 @@ local function type() return GameMenus.MainMenu end
 local function extras() MenuStateMachine:push(GameMenus.ExtrasMenu) end
 local function credits() MenuStateMachine:push(GameMenus.CreditsMenu) end
 local function quit() love.event.quit() end
+
 local function start_game()
     StateMachine:push(GameStates.Gameplay)
     MenuStateMachine:pop()
 end
 
 local function enter()
-    menu = Menu.new("center")
+    menu = Menu.new()
+    menu:set_offset(0, -45)
+    menu:set_background(34, 85, 248, 150)
+    menu:set_start(MenuQuadrants.BottomMiddle)
     menu:add_item{ name = "Start Game", action = start_game }
     menu:add_item{ name = "Extras", action = extras }
     menu:add_item{ name = "Credits", action = credits }

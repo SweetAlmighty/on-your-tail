@@ -15,7 +15,9 @@ local function exit()
 end
 
 local function enter()
-    menu = Menu.new("center")
+    menu = Menu.new()
+    menu:set_background(0, 0, 319, 239)
+    menu:set_start(MenuQuadrants.MiddleMiddle)
     menu:add_item{ name = "Resume",  action = resume }
     menu:add_item{ name = "Options", action = options }
     menu:add_item{ name = "Exit",    action = exit }

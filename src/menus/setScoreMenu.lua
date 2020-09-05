@@ -79,7 +79,7 @@ local function enter()
     name = table.concat(name).." ----------- "..string.format("%.2f", currTime).."\n"
     for i=65, 90, 1 do table.insert(letters, string.char(i)) end
 
-    menu = Menu.new("center")
+    menu = Menu.new()
     menu:add_item{ name = "Play Again", action = play_again }
     menu:add_item{ name = "Main Menu", action = main_menu }
 end

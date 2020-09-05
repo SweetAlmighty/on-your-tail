@@ -50,9 +50,9 @@ end
 
 local function draw()
     menu:draw()
-    love.graphics.draw(volume_text, 225, 126)
-    love.graphics.draw(resolution_text, 225, 146)
-    love.graphics.draw(fullscreen_text, 225, 166)
+    love.graphics.draw(volume_text,     225, 117)
+    love.graphics.draw(resolution_text, 225, 137)
+    love.graphics.draw(fullscreen_text, 225, 157)
 end
 
 local function input(key)
@@ -73,7 +73,9 @@ end
 local function enter()
     set_text()
     index = 1
-    menu = Menu.new("center")
+
+    menu = Menu.new()
+    menu:set_offset(0, -45)
     menu:add_item{ name = "Volume:", action = nil }
     menu:add_item{ name = "Resolution:", action = nil }
     menu:add_item{ name = "Fullscreen:", action = set_fullscreen }

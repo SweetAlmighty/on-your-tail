@@ -6,14 +6,15 @@ local function update(dt) menu:update(dt) end
 local function input(key) menu:input(key) end
 local function type() return GameMenus.HighscoreMenu end
 local function draw()
-    menu:draw(nil, screen_height - 30)
+    menu:draw()
     love.graphics.print("", (screen_width/2) - 110, (screen_height/2) - 25)
 end
 
 local function back() MenuStateMachine:pop() end
 
 local function enter()
-    menu = Menu.new("center")
+    menu = Menu.new()
+    menu:set_offset(0, 50)
     menu:add_item{ name = "Back", action = back }
 
     local scores = Data.GetScores()
