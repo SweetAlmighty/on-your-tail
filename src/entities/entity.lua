@@ -1,7 +1,7 @@
 EntityTypes = { Player = 1, Cat = 2, Kitten = 3, Enemy = 4 }
 EntityStates = { Idle = 1, Moving = 2, Action = 3, Fail = 4 }
-playableArea = { x = 15, y = 150, width = 320/2, height = 240 }
-local sheet_names = { "character", "cats", "kittens", "animalControl" }
+playable_area = { x = 15, y = 150, width = 320/2, height = 240 }
+local sheet_names = { "character", "cats", "kittens", "enemy" }
 
 local function create_animations(type)
     local info = AnimationFactory.CreateAnimationSet(sheet_names[type])[1]
@@ -66,11 +66,11 @@ return {
             InternalMove = function(dx, dy)
                 x = math.floor((x + dx) + 0.5)
                 if type == EntityTypes.Player then
-                    x = lume.clamp(x, playableArea.x, playableArea.width)
+                    x = lume.clamp(x, playable_area.x, playable_area.width)
                 end
 
                 y = math.floor((y + dy) + 0.5)
-                y = lume.clamp(y, playableArea.y, playableArea.height)
+                y = lume.clamp(y, playable_area.y, playable_area.height)
             end
         }
     end

@@ -2,10 +2,10 @@ require "src/menus/menu"
 require "src/tools/utility"
 require "src/tools/saveData"
 require "src/tools/resources"
-require "src/tools/animationFactory"
+require "src/tools/animationfactory"
 
-StateMachine = require "src/states/stateMachine"
-MenuStateMachine = require "src/menus/menuStateMachine"
+StateMachine = require "src/states/statemachine"
+MenuStateMachine = require "src/menus/menustatemachine"
 
 screen_width = 320
 screen_height = 240

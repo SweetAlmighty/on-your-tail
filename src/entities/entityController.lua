@@ -1,7 +1,7 @@
 require "src/entities/entity"
 local Cat = require "src/entities/cat"
+local Enemy = require "src/entities/enemy"
 local Player = require "src/entities/player"
-local Enemy = require "src/entities/animalControl"
 
 local entities = { }
 
@@ -85,7 +85,7 @@ EntityController = {
 
     RemoveEntity = function(entity)
         local index = find_index(entities, entity)
-        if index then entities[index] = nil end
+        if index then table.remove(entities, index)end
     end,
 
     Draw = function()
