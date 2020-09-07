@@ -26,13 +26,13 @@ return {
         return {
             Position = function() return x, y end,
             State = function() return entity_state end,
+            OutOfBounds = function() return x < -60 end,
             Direction = function() return direction end,
             Update = function(dt) InternalUpdate(dt) end,
             Collisions = function() return collisions end,
             SetPosition = function(_x, _y) x, y = _x, _y end,
             InternalUpdate = function(dt) current_animation.Update(dt) end,
             Draw = function() current_animation.Draw(x, y, direction == -1) end,
-            DrawY = function() return y + current_animation.CurrentFrame().dimensions.h end,
             SetDirection = function(dir) if direction ~= dir then direction = lume.clamp(dir, -1, 1) end end,
 
             Collider = function()

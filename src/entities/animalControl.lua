@@ -12,7 +12,6 @@ return {
             local a = { x =  x, y =  y - 80 }
             local b = { x = a.x + (half_width * entity.Direction()), y = a.y + 20 }
             local c = { x = a.x + (half_width * entity.Direction()), y = a.y - 20 }
-            --t = { a.x, a.y, b.x, b.y, c.x, c.y }
             return point_in_triangle(p, a, b, c)
         end
 

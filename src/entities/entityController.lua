@@ -3,14 +3,12 @@ local Cat = require "src/entities/cat"
 local Player = require "src/entities/player"
 local Enemy = require "src/entities/animalControl"
 
-PLAYER = nil
-
 local entities = { }
 
 -- Logic for the sort function for draw order sorting
 local function sort_function(a, b)
-    local ay = a.entity.DrawY()
-    local by = b.entity.DrawY()
+    local _, ay = a.entity.Position()
+    local _, by = b.entity.Position()
 
     if ay == by then
         if a.entity.Type() == EntityTypes.Player or b.entity.Type() == EntityTypes.Player then
@@ -87,7 +85,7 @@ EntityController = {
 
     RemoveEntity = function(entity)
         local index = find_index(entities, entity)
-        if index then table.remove(entities, index) end
+        if index then entities[index] = nil end
     end,
 
     Draw = function()
@@ -102,10 +100,11 @@ EntityController = {
         check_collisions()
         local remove = {}
         for i=1, #entities, 1 do
-            entities[i].Update(dt)
-            local x, _ = entities[i].Position()
-            -- Shouldn"t be hard-coded
-            if x <= -60 then table.insert(remove, entities[i]) end
+            if entities[i].OutOfBounds() then
+                remove[#remove+1] = entities[i]
+            else
+                entities[i].Update(dt)
+            end
         end
 
         for i=1, #remove, 1 do EntityController.RemoveEntity(remove[i]) end
@@ -117,7 +116,7 @@ EntityController = {
             entity = Enemy.new()
         elseif type == EntityTypes.Player then
             entity = Player.new()
-            PLAYER = entity
+            player = entity
         elseif type == EntityTypes.Cat or type == EntityTypes.Kitten then
             entity = Cat.new(type)
         end
