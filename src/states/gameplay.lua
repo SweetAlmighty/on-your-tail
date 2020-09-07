@@ -1,6 +1,8 @@
 require "src/tools/backgroundHandler"
 require "src/entities/entityController"
 
+moving = false
+
 local Gameplay = {
     street = { },
     pause = false,
@@ -10,10 +12,19 @@ local Gameplay = {
     background_music = Resources.LoadMusic("PP_Silly_Goose_FULL_Loop")
 }
 
+local function update_background(self)
+    BackgroundHandler.Update()
+    self.street_position = self.street_position - 2
+    self.background_position = self.background_position - 1
+end
+
 function Gameplay:update(dt)
     if not self.pause then
-        --BackgroundHandler.Update()
         EntityController.Update(dt)
+    end
+
+    if moving then
+        update_background(self)
     end
 end
 
@@ -45,7 +56,7 @@ function Gameplay:enter()
 
     EntityController.AddEntity(EntityTypes.Cat)
     EntityController.AddEntity(EntityTypes.Player)
-    EntityController.AddEntity(EntityTypes.Kitten)
+    --EntityController.AddEntity(EntityTypes.Kitten)
 end
 
 function Gameplay:input(key)
