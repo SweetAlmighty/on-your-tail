@@ -1,4 +1,4 @@
-local Menu = require "src/menus/menu"
+local Menu = require("src/menus/menu")
 local PauseMenu = { menu = nil }
 
 local function resume() MenuStateMachine:pop() end

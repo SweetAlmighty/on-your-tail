@@ -1,20 +1,20 @@
-require "src/entities/entity"
-local Cat = require "src/entities/cat"
-local Enemy = require "src/entities/enemy"
-local Player = require "src/entities/player"
+require("src/entities/entity")
+local Cat = require("src/entities/cat")
+local Enemy = require("src/entities/enemy")
+local Player = require("src/entities/player")
 
 local entities = { }
 
 -- Logic for the sort function for draw order sorting
 local function sort_function(a, b)
-    local _, ay = a.entity.Position()
-    local _, by = b.entity.Position()
+    local a_pos = a.entity.position
+    local b_pos = b.entity.position
 
-    if ay == by then
-        if a.entity.Type() == EntityTypes.Player or b.entity.Type() == EntityTypes.Player then
-            return a.entity.Type() == EntityTypes.Player
+    if a_pos.y == b_pos.y then
+        if a.entity.type == EntityTypes.Player or b.entity.type == EntityTypes.Player then
+            return a.entity.type == EntityTypes.Player
         else return a.index < b.index end
-    else return ay < by end
+    else return a_pos.y < b_pos.y end
 end
 
 -- Sorts the entities by their Y to mock draw order
@@ -27,8 +27,8 @@ local function sort_draw_order()
 end
 
 local function check_collision(one, two)
-    local col_one = entities[one].Collider()
-    local col_two = entities[two].Collider()
+    local col_one = entities[one]:collider()
+    local col_two = entities[two]:collider()
     return col_one.x < col_two.x + col_two.w and
            col_two.x < col_one.x + col_one.w and
            col_one.y < col_two.y + col_two.h and
@@ -36,15 +36,17 @@ local function check_collision(one, two)
 end
 
 local function handle_collisions(entity, collisions)
-    local entity_collisions = entity.Collisions()
+    local entity_collisions = entity.collisions
 
     -- Process new collisions
     for i=1, #collisions, 1 do
         local index = find_index(entity_collisions, collisions[i])
         if index == nil then
+            print(entity.type)
+            print(collisions[i].type)
             -- Enter
-            collisions[i].CollisionEnter(entity)
-            entity.CollisionEnter(collisions[i])
+            collisions[i]:collision_enter(entity)
+            entity:collision_enter(collisions[i])
         end
     end
 
@@ -60,8 +62,8 @@ local function handle_collisions(entity, collisions)
     -- Process collisions that are no longer valid
     for i=1, #remove, 1 do
         -- Exit
-        remove[i].CollisionExit(entity)
-        entity.CollisionExit(remove[i])
+        remove[i]:collision_exit(entity)
+        entity:collision_exit(remove[i])
     end
 end
 
@@ -91,7 +93,7 @@ EntityController = {
     Draw = function()
         sort_draw_order()
         for i=1, #entities, 1 do
-            entities[i].Draw()
+            entities[i]:draw()
             --draw_debug_info(entities[i])
         end
     end,
@@ -100,10 +102,10 @@ EntityController = {
         check_collisions()
         local remove = {}
         for i=1, #entities, 1 do
-            if entities[i].OutOfBounds() then
+            if entities[i]:is_out_of_bounds() then
                 remove[#remove+1] = entities[i]
             else
-                entities[i].Update(dt)
+                entities[i]:update(dt)
             end
         end
 

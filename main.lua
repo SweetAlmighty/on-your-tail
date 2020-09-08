@@ -1,19 +1,19 @@
-require "src/menus/menu"
-require "src/tools/utility"
-require "src/tools/saveData"
-require "src/tools/resources"
-require "src/tools/animationfactory"
+require("src/menus/menu")
+require("src/tools/utility")
+require("src/tools/saveData")
+require("src/tools/resources")
+require("src/tools/animationfactory")
 
-StateMachine = require "src/states/statemachine"
-MenuStateMachine = require "src/menus/menustatemachine"
+StateMachine = require("src/states/statemachine")
+MenuStateMachine = require("src/menus/menustatemachine")
 
 screen_width = 320
 screen_height = 240
 local color = 50/255
 
-lume = require "src/lib/lume"
-local tick = require "src/lib/tick"
-lovesize = require "src/lib/lovesize"
+lume = require("src/lib/lume")
+local tick = require("src/lib/tick")
+lovesize = require("src/lib/lovesize")
 
 menuFont = Resources.LoadFont("8bitOperatorPlusSC-Bold", 15)
 titleFont = Resources.LoadFont("8bitOperatorPlusSC-Bold", 50)

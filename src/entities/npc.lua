@@ -1,74 +1,82 @@
-local Entity = require "src/entities/entity"
+local Entity = require("src/entities/entity")
+
+local function internal_end_interaction(self)
+    if self.current_state == EntityStates.Action then
+        self:set_state(EntityStates.Idle)
+    end
+end
+
+local function internal_set_destination(self, _x, _y)
+    if self.destination.x ~= _x or self.destination.y ~= _y then
+        self.delta_time = 0
+        self.destination = { x = _x, y = _y }
+        self.start = { x = self.position.x, y = self.position.y }
+
+        if self.destination.x < self.position.x and self.direction == 1 then
+            self:set_direction(-1)
+        elseif self.destination.x > self.position.x and self.direction == -1 then
+            self:set_direction(1)
+        end
+    end
+end
+
+local function internal_npc_update(self, dt)
+    if self.current_state == EntityStates.Idle then
+        self.delta_time = self.delta_time + dt
+        if self.delta_time >= self.idle_time then
+            self.delta_time = 0
+            self:set_state(EntityStates.Moving)
+            self:set_destination(lume.random(0, 320), lume.random(playable_area.y, playable_area.height))
+        end
+    elseif self.current_state == EntityStates.Action then
+        self:action_update(dt)
+    else
+        self.delta_time = self.delta_time + self.speed
+        if self.delta_time >= self.move_time and self.current_state == EntityStates.Moving then
+            self.delta_time = 0
+            self:set_state(EntityStates.Idle)
+        else
+            local _x = lume.lerp(self.start.x, self.destination.x, self.delta_time) - self.position.x
+            local _y = lume.lerp(self.start.y, self.destination.y, self.delta_time) - self.position.y
+            self:move(_x, _y)
+        end
+    end
+
+    self:internal_update(dt)
+end
+
+local function internal_start_interaction(self)
+    self:set_state(EntityStates.Action)
+end
+
+local function internal_collision_exit(self)
+    self:internal_collision_exit()
+end
+
+local function internal_collision_enter(self)
+    self:internal_collision_enter()
+end
 
 return {
     new = function(type)
-        local x, y = 0, 0
-        local delta_time = 0
-        local destination = { }
-        local start_x, start_y = 0, 0
-        local entity = Entity.new(type)
-        local move_time = lume.random(0.5, 1)
-        local idle_time = lume.random(0.5, 1)
-        local speed = lume.random(0.001, 0.01)
+        local npc = Entity.new(type)
 
-        entity.SetPosition(lume.random(0, 320), lume.random(playable_area.y, playable_area.height))
+        npc.delta_time = 0
+        npc.destination = { }
+        npc.start = { x = 0, y = 0 }
+        npc.move_time = lume.random(0.5, 1)
+        npc.idle_time = lume.random(0.5, 1)
+        npc.speed = lume.random(0.001, 0.01)
+        npc.action_update = function(dt) end
+        npc.npc_update = internal_npc_update
+        npc.collision_exit = internal_collision_exit
+        npc.set_destination = internal_set_destination
+        npc.end_interaction = internal_end_interaction
+        npc.collision_enter = internal_collision_enter
+        npc.start_interaction = internal_start_interaction
 
-        local function lerp_move()
-            local _x = lume.lerp(start_x, destination.x, delta_time) - x
-            local _y = lume.lerp(start_y, destination.y, delta_time) - y
-            entity.Move(_x, _y)
-        end
+        npc:set_position(lume.random(0, 320), lume.random(playable_area.y, playable_area.height))
 
-        entity.ActionUpdate = function(dt) end
-        entity.Move = function(dx, dy) entity.InternalMove(dx, dy) end
-        entity.StartInteraction = function() entity.SetState(EntityStates.Action) end
-        entity.CollisionExit = function(other) entity.InternalCollisionExit(other) end
-
-        entity.EndInteraction = function()
-            if entity.State() == EntityStates.Action then
-                entity.SetState(EntityStates.Idle)
-            end
-        end
-
-        entity.SetDestination = function(_x, _y)
-            if destination.x ~= _x or destination.y ~= _y then
-                delta_time = 0
-                start_x, start_y =  x, y
-                destination = { x = _x, y = _y }
-
-                if destination.x < x and entity.Direction() == 1 then
-                    entity.SetDirection(-1)
-                elseif destination.x > x and entity.Direction() == -1 then
-                    entity.SetDirection(1)
-                end
-            end
-        end
-
-        entity.NPCUpdate = function(dt)
-            x, y = entity.Position()
-
-            if entity.State() == EntityStates.Idle then
-                delta_time = delta_time + dt
-                if delta_time >= idle_time then
-                    delta_time = 0
-                    entity.SetState(EntityStates.Moving)
-                    entity.SetDestination(lume.random(0, 320), lume.random(playable_area.y, playable_area.height))
-                end
-            elseif entity.State() == EntityStates.Action then
-                entity.ActionUpdate(dt)
-            else
-                delta_time = delta_time + speed
-                if delta_time >= move_time and entity.State() == EntityStates.Moving then
-                    delta_time = 0
-                    entity.SetState(EntityStates.Idle)
-                else
-                    lerp_move()
-                end
-            end
-
-            entity.InternalUpdate(dt)
-        end
-
-        return entity
+        return npc
     end
 }

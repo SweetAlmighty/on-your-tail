@@ -1,4 +1,4 @@
-local Menu = require "src/menus/menu"
+local Menu = require("src/menus/menu")
 local FailMenu = { menu = nil }
 
 local function main_menu() MenuStateMachine:clear() end

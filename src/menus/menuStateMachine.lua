@@ -1,12 +1,12 @@
-local MainMenu = require "src/menus/mainmenu"
-local FailMenu = require "src/menus/failmenu"
-local PauseMenu = require "src/menus/pausemenu"
-local ExtrasMenu = require "src/menus/extrasmenu"
-local CreditsMenu = require "src/menus/creditsmenu"
-local OptionsMenu = require "src/menus/optionsmenu"
-local ControlsMenu = require "src/menus/controlsmenu"
-local SetScoreMenu = require "src/menus/setScoremenu"
-local HighscoreMenu = require "src/menus/highscoremenu"
+local MainMenu = require("src/menus/mainmenu")
+local FailMenu = require("src/menus/failmenu")
+local PauseMenu = require("src/menus/pausemenu")
+local ExtrasMenu = require("src/menus/extrasmenu")
+local CreditsMenu = require("src/menus/creditsmenu")
+local OptionsMenu = require("src/menus/optionsmenu")
+local ControlsMenu = require("src/menus/controlsmenu")
+local SetScoreMenu = require("src/menus/setScoremenu")
+local HighscoreMenu = require("src/menus/highscoremenu")
 
 GameMenus = {
     MainMenu = 1,

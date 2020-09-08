@@ -1,4 +1,4 @@
-local Menu = require "src/menus/menu"
+local Menu = require("src/menus/menu")
 local ExtrasMenu = { menu = nil, is_gameshell = love.system.getOS() == "Linux" }
 
 local function back() MenuStateMachine:pop() end

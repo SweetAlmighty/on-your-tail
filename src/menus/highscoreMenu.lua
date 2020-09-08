@@ -1,4 +1,4 @@
-local Menu = require "src/menus/menu"
+local Menu = require("src/menus/menu")
 local HighscoreMenu = { menu = nil, times = nil }
 
 local function back() MenuStateMachine:pop() end

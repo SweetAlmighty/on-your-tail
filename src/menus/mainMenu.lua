@@ -1,4 +1,4 @@
-local Menu = require "src/menus/menu"
+local Menu = require("src/menus/menu")
 local MainMenu = { menu = nil }
 
 local function extras() MenuStateMachine:push(GameMenus.ExtrasMenu) end

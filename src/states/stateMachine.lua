@@ -1,5 +1,5 @@
-local Gameplay = require "src/states/gameplay"
-local SplashScreen = require "src/states/splashScreen"
+local Gameplay = require("src/states/gameplay")
+local SplashScreen = require("src/states/splashScreen")
 
 local StateMachine = { stack = { } }
 

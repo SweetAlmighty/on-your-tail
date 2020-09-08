@@ -1,4 +1,4 @@
-local Menu = require "src/menus/menu"
+local Menu = require("src/menus/menu")
 local ControlsMenu = { menu = nil }
 
 local quad = nil

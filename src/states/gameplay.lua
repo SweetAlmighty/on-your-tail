@@ -1,5 +1,5 @@
-require "src/tools/backgroundHandler"
-require "src/entities/entityController"
+require("src/tools/backgroundHandler")
+require("src/entities/entityController")
 
 moving = false
 

@@ -1,4 +1,4 @@
-local json = require "src/lib/json"
+local json = require("src/lib/json")
 
 local fonts = { }
 local font_type = ".ttf"

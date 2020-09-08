@@ -1,25 +1,28 @@
-local NPC = require "src/entities/npc"
+local NPC = require("src/entities/npc")
+
+local function internal_update(self, dt)
+    self:npc_update(dt)
+end
+
+local function internal_action_update(self, dt)
+    self.current_limit = self.current_limit - (dt * 10)
+    if self.current_limit < 0 then
+        self.current_limit = 0
+        self:set_destination(-100, self.position.y)
+        self:set_state(EntityStates.Fail)
+    end
+end
 
 return {
     new = function(type)
-        local y = 0
-        local petting_limit = 30
-        local entity = NPC.new(type)
-        local current_limit = petting_limit
+        local cat = NPC.new(type)
 
-        entity.ActionUpdate = function(dt)
-            current_limit = current_limit - (dt * 10)
-            if current_limit < 0 then
-                current_limit = 0
-                entity.SetDestination(-100, y)
-                entity.SetState(EntityStates.Fail)
-            end
-        end
+        cat.petting_limit = 30
+        cat.current_limit = cat.petting_limit
 
-        entity.Type = function() return EntityTypes.Cat end
-        entity.Update = function(dt) entity.NPCUpdate(dt) end
-        entity.CollisionEnter = function(other) entity.InternalCollisionEnter(other) end
+        cat.update = internal_update
+        cat.action_update = internal_action_update
 
-        return entity
+        return cat
     end
 }

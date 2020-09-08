@@ -1,4 +1,4 @@
-local Menu = require "src/menus/menu"
+local Menu = require("src/menus/menu")
 local CreditsMenu = { menu = nil, credits = nil }
 
 local text = "Programmer:\tBrian Sweet\n" ..

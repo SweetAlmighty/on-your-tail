@@ -1,9 +1,9 @@
 EntityTypes = { Player = 1, Cat = 2, Kitten = 3, Enemy = 4 }
 EntityStates = { Idle = 1, Moving = 2, Action = 3, Fail = 4 }
 playable_area = { x = 15, y = 150, width = 320/2, height = 240 }
-local sheet_names = { "character", "cats", "kittens", "enemy" }
 
 local function create_animations(type)
+    local sheet_names = { "character", "cats", "kittens", "enemy" }
     local info = AnimationFactory.CreateAnimationSet(sheet_names[type])[1]
     if type == EntityTypes.Player then
         return { info[1], info[2], info[3], info[4] }
@@ -14,64 +14,80 @@ local function create_animations(type)
     end
 end
 
+local function internal_collider(self)
+    local frame = self.current_animation.CurrentFrame()
+    return {
+        x = frame.collider.x + (self.position.x - frame.offset.x),
+        y = frame.collider.y + (self.position.y - frame.offset.y),
+        w = frame.collider.w,
+        h = frame.collider.h
+    }
+end
+
+local function internal_collision_enter(self, other)
+    local index = lume.find(self.collisions, other)
+    if index == nil then table.insert(self.collisions, other) return true end
+end
+
+local function internal_collision_exit(self, other)
+    local index = lume.find(self.collisions, other)
+    if index then table.remove(self.collisions, index) return true end
+end
+
+local function internal_set_state(self, state)
+    if self.current_animation ~= self.animations[state] then
+        self.current_state = state
+        self.current_animation.Reset()
+        self.current_animation = self.animations[state]
+    end
+end
+
+local function internal_move(self, dx, dy)
+    self.position.x = math.floor((self.position.x + dx) + 0.5)
+    if self.type == EntityTypes.Player then
+        self.position.x = lume.clamp(self.position.x, playable_area.x, playable_area.width)
+    end
+
+    local _y = math.floor((self.position.y + dy) + 0.5)
+    self.position.y = lume.clamp(_y, playable_area.y, playable_area.height)
+end
+
+local function internal_draw(self)
+    self.current_animation.Draw(self.position.x, self.position.y, self.direction == -1)
+end
+
+local function internal_set_direction(self, dir)
+    if self.direction ~= dir then self.direction = lume.clamp(dir, -1, 1) end
+end
+
+local function internal_update(self, dt) self.current_animation.Update(dt) end
+local function internal_is_out_of_bounds(self) return self.position.x < -60 end
+local function internal_set_position(self, _x, _y) self.position = { x = _x, y = _y } end
+
 return {
     new = function(type)
-        local x, y = 0, 0
-        local direction = 1
-        local collisions = { }
-        local entity_state = EntityStates.Idle
-        local animations = create_animations(type)
-        local current_animation = animations[entity_state]
+        local entity = {
+            type = type,
+            direction = 1,
+            collisions = { },
+            position = { x = 0, y = 0 },
+            current_state = EntityStates.Idle,
+            animations = create_animations(type),
 
-        return {
-            Position = function() return x, y end,
-            State = function() return entity_state end,
-            OutOfBounds = function() return x < -60 end,
-            Direction = function() return direction end,
-            Update = function(dt) InternalUpdate(dt) end,
-            Collisions = function() return collisions end,
-            SetPosition = function(_x, _y) x, y = _x, _y end,
-            InternalUpdate = function(dt) current_animation.Update(dt) end,
-            Draw = function() current_animation.Draw(x, y, direction == -1) end,
-            SetDirection = function(dir) if direction ~= dir then direction = lume.clamp(dir, -1, 1) end end,
-
-            Collider = function()
-                local frame = current_animation.CurrentFrame()
-                return {
-                    x = frame.collider.x + (x - frame.offset.x),
-                    y = frame.collider.y + (y - frame.offset.y),
-                    w = frame.collider.w,
-                    h = frame.collider.h
-                }
-            end,
-
-            InternalCollisionEnter = function(entity)
-                local index = lume.find(collisions, entity)
-                if index == nil then table.insert(collisions, entity) return true end
-            end,
-
-            InternalCollisionExit = function(entity)
-                local index = lume.find(collisions, entity)
-                if index then table.remove(collisions, index) return true end
-            end,
-
-            SetState = function(state)
-                if current_animation ~= animations[state] then
-                    entity_state = state
-                    current_animation.Reset()
-                    current_animation = animations[state]
-                end
-            end,
-
-            InternalMove = function(dx, dy)
-                x = math.floor((x + dx) + 0.5)
-                if type == EntityTypes.Player then
-                    x = lume.clamp(x, playable_area.x, playable_area.width)
-                end
-
-                y = math.floor((y + dy) + 0.5)
-                y = lume.clamp(y, playable_area.y, playable_area.height)
-            end
+            move = internal_move,
+            draw = internal_draw,
+            collider = internal_collider,
+            set_state = internal_set_state,
+            internal_update = internal_update,
+            set_position = internal_set_position,
+            set_direction = internal_set_direction,
+            is_out_of_bounds = internal_is_out_of_bounds,
+            internal_collision_exit = internal_collision_exit,
+            internal_collision_enter = internal_collision_enter,
         }
+
+        entity.current_animation = entity.animations[entity.current_state]
+
+        return entity
     end
 }
