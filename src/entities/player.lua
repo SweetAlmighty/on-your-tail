@@ -1,13 +1,41 @@
 require("src/tools/input")
-local Entity = require("src/entities/entity")
+local Player = require("src/entities/entity"):extend()
 
+local interacting = false
 local current_delta = 0
 local current_points = 0
 
-local function internal_end_interaction(self)
+function Player:new()
+    Player.super.new(self, EntityTypes.Player)
+
+    self.speed = 2
+    self.fail_time = 1.5
+    self.start_fail_time = 0
+    self.start_fail_state = false
+end
+
+function Player:collision_enter(other)
+    if Player.super.collision_enter(self, other) then
+        if other.type == EntityTypes.Enemy then
+            self.start_fail_state = true
+            self:set_state(EntityStates.Fail)
+        end
+    end
+end
+
+function Player:collision_exit(other)
+    if Player.super.collision_exit(self, other) then
+        if #self.collisions == 0 and self.state == EntityStates.Action then
+            self:end_interaction()
+        end
+    end
+end
+
+function Player:end_interaction(dt)
     points = points + current_points
     current_delta = 0
     current_points = 0
+
     self:set_state(EntityStates.Idle)
 
     for _, v in ipairs(self.collisions) do
@@ -17,13 +45,12 @@ local function internal_end_interaction(self)
     end
 end
 
-local function internal_interact(self, dt)
+function Player:interact(dt)
     if #self.collisions > 0 then
         local valid = 0
 
         current_delta = current_delta - (dt * 10)
         local value = 1 - math.fmod(current_delta, 1)
-        print(value)
 
         for _, v in ipairs(self.collisions) do
             if v.current_state ~= EntityStates.Fail then
@@ -42,24 +69,7 @@ local function internal_interact(self, dt)
     end
 end
 
-local function internal_collision_enter(self, other)
-    if self:internal_collision_enter(other) then
-        if other.type == EntityTypes.Enemy then
-            self.start_fail_state = true
-            self:set_state(EntityStates.Fail)
-        end
-    end
-end
-
-local function internal_collision_exit(self, other)
-    if self:internal_collision_exit(other) then
-        if #self.collisions == 0 and self.state == EntityStates.Action then
-            self:end_interaction()
-        end
-    end
-end
-
-local function internal_update(self, dt)
+function Player:update(dt)
     local dx, dy = 0, 0
 
     if self.current_state == EntityStates.Fail then
@@ -71,10 +81,13 @@ local function internal_update(self, dt)
             end
         end
     else
-        if love.keyboard.isDown(InputMap.b) then self:interact(dt) end
-
-        if love.keyboard.isDown(InputMap.b) then self:interact(dt)
-        elseif self.current_state == EntityStates.Action then self:end_interaction() end
+        if love.keyboard.isDown(InputMap.b) then
+            interacting = true
+            self:interact(dt)
+        elseif interacting then
+            interacting = false
+            self:end_interaction()
+        end
 
         if self.current_state ~= EntityStates.Action then
             if love.keyboard.isDown(InputMap.up) then dy = -self.speed
@@ -97,24 +110,7 @@ local function internal_update(self, dt)
         moving = (pos.x == screen_width/2 and dx ~= 0)
     end
 
-    self:internal_update(dt)
+    Player.super.update(self, dt)
 end
 
-return {
-    new = function()
-        local player = Entity.new(EntityTypes.Player)
-
-        player.speed = 2
-        player.fail_time = 1.5
-        player.start_fail_time = 0
-        player.start_fail_state = false
-
-        player.update = internal_update
-        player.interact = internal_interact
-        player.collision_exit = internal_collision_exit
-        player.end_interaction = internal_end_interaction
-        player.collision_enter = internal_collision_enter
-
-        return player
-    end
-}
+return Player

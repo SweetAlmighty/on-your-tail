@@ -1,4 +1,4 @@
-local NPC = require("src/entities/npc")
+local Enemy = require("src/entities/npc"):extend()
 
 local half_width = 320/2
 
@@ -17,15 +17,13 @@ local function check_for_player(self)
     if self.chasing_player then self:set_destination(_x, _y) end
 end
 
-local function internal_collision_enter(self, other)
-    if self:collision_enter(other) then
-        if other.type == EntityTypes.Player then
-            self:interact()
-        end
-    end
+function Enemy:new()
+    Enemy.super.new(self, EntityTypes.Enemy)
+
+    self.chasing_player = false
 end
 
-local function internal_update(self, dt)
+function Enemy:update(dt)
     check_for_player(self)
     self:npc_update(dt)
 
@@ -34,16 +32,17 @@ local function internal_update(self, dt)
     end
 end
 
-return {
-    new = function()
-        local enemy = NPC.new(EntityTypes.Enemy)
+function Enemy:action_update(dt)
+    self.current_limit = self.current_limit - (dt * 10)
+    if self.current_limit < 0 then self:end_interaction() end
+end
 
-        enemy.chasing_player = false
-        enemy.type = EntityTypes.Enemy
-        enemy.update = internal_update
-        enemy.collision_enter = internal_collision_enter
-        enemy.end_interaction = self.internal_end_interaction
-
-        return enemy
+function Enemy:collision_enter(other)
+    if Enemy.super.collision_enter(self, other) then
+        if other.type == EntityTypes.Player then
+            self:interact()
+        end
     end
-}
+end
+
+return Enemy

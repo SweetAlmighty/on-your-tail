@@ -113,12 +113,12 @@ EntityController = {
     AddEntity = function(type)
         local entity = nil
         if type == EntityTypes.Enemy then
-            entity = Enemy.new()
+            entity = Enemy()
         elseif type == EntityTypes.Player then
-            entity = Player.new()
+            entity = Player()
             player = entity
         elseif type == EntityTypes.Cat or type == EntityTypes.Kitten then
-            entity = Cat.new(type)
+            entity = Cat(type)
         end
         entities[#entities+1] = entity
     end,

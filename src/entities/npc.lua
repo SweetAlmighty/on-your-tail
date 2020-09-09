@@ -1,26 +1,24 @@
-local Entity = require("src/entities/entity")
+local NPC = require("src/entities/entity"):extend()
 
-local function internal_end_interaction(self)
-    if self.current_state == EntityStates.Action then
-        self:set_state(EntityStates.Idle)
-    end
+function NPC:new(type)
+    NPC.super.new(self, type)
+
+    self.delta_time = 0
+    self.destination = { }
+    self.start = { x = 0, y = 0 }
+    self.move_time = lume.random(0.5, 1)
+    self.idle_time = lume.random(0.5, 1)
+    self.speed = lume.random(0.001, 0.01)
 end
 
-local function internal_set_destination(self, _x, _y)
-    if self.destination.x ~= _x or self.destination.y ~= _y then
-        self.delta_time = 0
-        self.destination = { x = _x, y = _y }
-        self.start = { x = self.position.x, y = self.position.y }
-
-        if self.destination.x < self.position.x and self.direction == 1 then
-            self:set_direction(-1)
-        elseif self.destination.x > self.position.x and self.direction == -1 then
-            self:set_direction(1)
-        end
-    end
+function NPC:interact()
+    self:set_state(EntityStates.Action)
 end
 
-local function internal_npc_update(self, dt)
+function NPC:action_update(dt)
+end
+
+function NPC:npc_update(dt)
     if self.current_state == EntityStates.Idle then
         self.delta_time = self.delta_time + dt
         if self.delta_time >= self.idle_time then
@@ -42,42 +40,35 @@ local function internal_npc_update(self, dt)
         end
     end
 
-    self:internal_update(dt)
+    self:update(dt)
 end
 
-local function internal_interact(self)
-    self:set_state(EntityStates.Action)
+function NPC:collision_exit(other)
+    NPC.super.collision_exit(self, other)
 end
 
-local function internal_collision_exit(self)
-    self:internal_collision_exit()
-end
+function NPC:set_destination(x, y)
+    if self.destination.x ~= x or self.destination.y ~= y then
+        self.delta_time = 0
+        self.destination = { x = x, y = y }
+        self.start = { x = self.position.x, y = self.position.y }
 
-local function internal_collision_enter(self)
-    self:internal_collision_enter()
-end
-
-return {
-    new = function(type)
-        local npc = Entity.new(type)
-
-        npc.delta_time = 0
-        npc.destination = { }
-        npc.start = { x = 0, y = 0 }
-        npc.move_time = lume.random(0.5, 1)
-        npc.idle_time = lume.random(0.5, 1)
-        npc.speed = lume.random(0.001, 0.01)
-
-        npc.interact = internal_interact
-        npc.action_update = function(dt) end
-        npc.npc_update = internal_npc_update
-        npc.collision_exit = internal_collision_exit
-        npc.set_destination = internal_set_destination
-        npc.collision_enter = internal_collision_enter
-        npc.internal_end_interaction = internal_end_interaction
-
-        npc:set_position(lume.random(0, 320), lume.random(playable_area.y, playable_area.height))
-
-        return npc
+        if self.destination.x < self.position.x and self.direction == 1 then
+            self:set_direction(-1)
+        elseif self.destination.x > self.position.x and self.direction == -1 then
+            self:set_direction(1)
+        end
     end
-}
+end
+
+function NPC:collision_enter(other)
+    NPC.super.collision_enter(self, other)
+end
+
+function NPC:end_interaction()
+    if self.current_state == EntityStates.Action then
+        self:set_state(EntityStates.Idle)
+    end
+end
+
+return NPC
