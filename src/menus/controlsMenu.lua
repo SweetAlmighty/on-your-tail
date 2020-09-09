@@ -21,7 +21,6 @@ local function back() MenuStateMachine:pop() end
 
 function ControlsMenu:update(dt) self.menu:update(dt) end
 function ControlsMenu:input(key) self.menu:input(key) end
-function ControlsMenu:type() return GameMenus.ControlsMenu end
 function ControlsMenu:draw()
     self.menu:draw()
     love.graphics.draw(image, quad, start_pos.x, start_pos.y)

@@ -9,7 +9,6 @@ local function controls() MenuStateMachine:push(GameMenus.ControlsMenu) end
 function ExtrasMenu:draw() self.menu:draw() end
 function ExtrasMenu:update(dt) self.menu:update(dt) end
 function ExtrasMenu:input(key) self.menu:input(key) end
-function ExtrasMenu:type() return GameMenus.ExtrasMenu end
 function ExtrasMenu:enter()
     if self.menu == nil then
         self.menu = Menu.new()

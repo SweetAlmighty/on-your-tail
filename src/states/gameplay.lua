@@ -1,6 +1,7 @@
 require("src/tools/backgroundHandler")
 require("src/entities/entityController")
 
+points = 0
 moving = false
 
 local Gameplay = {
@@ -33,13 +34,16 @@ function Gameplay:exit()
     EntityController.Clear()
 end
 
-function Gameplay:type() return GameStates.Gameplay end
+function Gameplay:draw_ui()
+    love.graphics.print(points, screen_width - 75, 5)
+end
 
 function Gameplay:draw()
     self.background.DrawScroll(1, 0, 0, self.background_position)
     self.street.DrawScroll(1, 0, 126, self.street_position)
     BackgroundHandler.Draw()
     EntityController.Draw()
+    self:draw_ui()
 end
 
 function Gameplay:enter()

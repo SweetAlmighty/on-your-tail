@@ -54,7 +54,6 @@ local function back()
 end
 
 function OptionsMenu:update(dt) self.menu:update(dt) end
-function OptionsMenu:type() return GameMenus.OptionsMenu end
 
 function OptionsMenu:draw()
     self.menu:draw()

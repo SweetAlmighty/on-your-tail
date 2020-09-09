@@ -42,8 +42,6 @@ local function handle_collisions(entity, collisions)
     for i=1, #collisions, 1 do
         local index = find_index(entity_collisions, collisions[i])
         if index == nil then
-            print(entity.type)
-            print(collisions[i].type)
             -- Enter
             collisions[i]:collision_enter(entity)
             entity:collision_enter(collisions[i])

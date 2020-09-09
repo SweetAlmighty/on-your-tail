@@ -45,7 +45,7 @@ local function internal_npc_update(self, dt)
     self:internal_update(dt)
 end
 
-local function internal_start_interaction(self)
+local function internal_interact(self)
     self:set_state(EntityStates.Action)
 end
 
@@ -67,13 +67,14 @@ return {
         npc.move_time = lume.random(0.5, 1)
         npc.idle_time = lume.random(0.5, 1)
         npc.speed = lume.random(0.001, 0.01)
+
+        npc.interact = internal_interact
         npc.action_update = function(dt) end
         npc.npc_update = internal_npc_update
         npc.collision_exit = internal_collision_exit
         npc.set_destination = internal_set_destination
-        npc.end_interaction = internal_end_interaction
         npc.collision_enter = internal_collision_enter
-        npc.start_interaction = internal_start_interaction
+        npc.internal_end_interaction = internal_end_interaction
 
         npc:set_position(lume.random(0, 320), lume.random(playable_area.y, playable_area.height))
 

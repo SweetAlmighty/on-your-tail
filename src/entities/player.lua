@@ -1,22 +1,44 @@
 require("src/tools/input")
 local Entity = require("src/entities/entity")
 
+local current_delta = 0
+local current_points = 0
+
 local function internal_end_interaction(self)
+    points = points + current_points
+    current_delta = 0
+    current_points = 0
     self:set_state(EntityStates.Idle)
+
+    for _, v in ipairs(self.collisions) do
+        if v.current_state ~= EntityStates.Fail then
+            v:end_interaction()
+        end
+    end
 end
 
-local function internal_start_interaction(self)
+local function internal_interact(self, dt)
     if #self.collisions > 0 then
         local valid = 0
+
+        current_delta = current_delta - (dt * 10)
+        local value = 1 - math.fmod(current_delta, 1)
+        print(value)
 
         for _, v in ipairs(self.collisions) do
             if v.current_state ~= EntityStates.Fail then
                 valid = valid + 1
-                v:start_interaction()
+                v:interact()
+
+                if value < 0.1 or value == 1 then
+                    current_points = current_points + 1
+                end
             end
         end
 
-        if valid ~= 0 then self:set_state(EntityStates.Action) end
+        if valid ~= 0 then
+            self:set_state(EntityStates.Action)
+        end
     end
 end
 
@@ -31,7 +53,9 @@ end
 
 local function internal_collision_exit(self, other)
     if self:internal_collision_exit(other) then
-        if #self.collisions == 0 then self:end_interaction() end
+        if #self.collisions == 0 and self.state == EntityStates.Action then
+            self:end_interaction()
+        end
     end
 end
 
@@ -47,20 +71,26 @@ local function internal_update(self, dt)
             end
         end
     else
-        if love.keyboard.isDown(InputMap.b) then self:start_interaction() end
+        if love.keyboard.isDown(InputMap.b) then self:interact(dt) end
+
+        if love.keyboard.isDown(InputMap.b) then self:interact(dt)
+        elseif self.current_state == EntityStates.Action then self:end_interaction() end
 
         if self.current_state ~= EntityStates.Action then
-            if love.keyboard.isDown(InputMap.up) then dy = -self.speed end
-            if love.keyboard.isDown(InputMap.down) then dy = self.speed end
-            if love.keyboard.isDown(InputMap.right) then dx = self.speed self:set_direction(1) end
-            if love.keyboard.isDown(InputMap.left) then dx = -self.speed self:set_direction(-1) end
+            if love.keyboard.isDown(InputMap.up) then dy = -self.speed
+            elseif love.keyboard.isDown(InputMap.down) then dy = self.speed end
 
-            if dx ~= 0 or dy ~= 0 then
-                self:move(dx, dy)
-                self:set_state(EntityStates.Moving)
-            else
-                self:set_state(EntityStates.Idle)
+            if love.keyboard.isDown(InputMap.right) then
+                dx = self.speed
+                self:set_direction(1)
+            elseif love.keyboard.isDown(InputMap.left) then
+                dx = -self.speed
+                self:set_direction(-1)
             end
+
+            local shouldMove = dx ~= 0 or dy ~= 0
+            if shouldMove then self:move(dx, dy) end
+            self:set_state(shouldMove and EntityStates.Moving or EntityStates.Idle)
         end
 
         local pos = self.position
@@ -80,10 +110,10 @@ return {
         player.start_fail_state = false
 
         player.update = internal_update
+        player.interact = internal_interact
         player.collision_exit = internal_collision_exit
         player.end_interaction = internal_end_interaction
         player.collision_enter = internal_collision_enter
-        player.start_interaction = internal_start_interaction
 
         return player
     end

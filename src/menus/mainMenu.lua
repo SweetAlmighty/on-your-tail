@@ -12,7 +12,6 @@ end
 function MainMenu:draw() self.menu:draw() end
 function MainMenu:update(dt) self.menu:update(dt) end
 function MainMenu:input(key) self.menu:input(key) end
-function MainMenu:type() return GameMenus.MainMenu end
 function MainMenu:enter()
     if self.menu == nil then
         self.menu = Menu.new()

@@ -10,7 +10,6 @@ end
 
 function FailMenu:update(dt) self.menu:update(dt) end
 function FailMenu:input(key) self.menu:input(key) end
-function FailMenu:type() return GameMenus.FailMenu end
 function FailMenu:draw() self.menu:draw() end
 function FailMenu:enter()
     if self.menu == nil then

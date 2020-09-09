@@ -6,7 +6,6 @@ local SplashScreen = {
 }
 
 function SplashScreen:update(dt) self.title.Update(dt) end
-function SplashScreen:type() return GameStates.SplashScreen end
 
 function SplashScreen:draw()
     love.graphics.draw(self.background, 0, 0)

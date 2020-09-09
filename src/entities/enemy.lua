@@ -20,7 +20,7 @@ end
 local function internal_collision_enter(self, other)
     if self:collision_enter(other) then
         if other.type == EntityTypes.Player then
-            self:start_interaction()
+            self:interact()
         end
     end
 end
@@ -38,10 +38,11 @@ return {
     new = function()
         local enemy = NPC.new(EntityTypes.Enemy)
 
-        enemy.type = EntityTypes.Enemy
         enemy.chasing_player = false
+        enemy.type = EntityTypes.Enemy
         enemy.update = internal_update
         enemy.collision_enter = internal_collision_enter
+        enemy.end_interaction = self.internal_end_interaction
 
         return enemy
     end

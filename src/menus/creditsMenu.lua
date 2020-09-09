@@ -12,7 +12,6 @@ local function back() MenuStateMachine:pop() end
 
 function CreditsMenu:update(dt) self.menu:update(dt) end
 function CreditsMenu:input(key) self.menu:input(key) end
-function CreditsMenu:type() return GameMenus.CreditsMenu end
 
 function CreditsMenu:draw()
     self.menu:draw()

@@ -11,7 +11,6 @@ end
 function PauseMenu:draw() self.menu:draw() end
 function PauseMenu:update(dt) self.menu:update(dt) end
 function PauseMenu:input(key) self.menu:input(key) end
-function PauseMenu:type() return GameMenus.PauseMenu end
 function PauseMenu:enter()
     if self.menu == nil then
         self.menu = Menu.new()

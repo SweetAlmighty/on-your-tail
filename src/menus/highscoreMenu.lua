@@ -5,7 +5,6 @@ local function back() MenuStateMachine:pop() end
 
 function HighscoreMenu:update(dt) self.menu:update(dt) end
 function HighscoreMenu:input(key) self.menu:input(key) end
-function HighscoreMenu:type() return GameMenus.HighscoreMenu end
 function HighscoreMenu:draw()
     self.menu:draw()
     love.graphics.draw(self.times, (screen_width/2) - 110, (screen_height/2) - 25)

@@ -56,7 +56,6 @@ local function right()
 end
 
 function SetScoreMenu:update(dt) self.menu:update(dt) end
-function SetScoreMenu:type() return GameMenus.SetScoreMenu end
 function SetScoreMenu:draw()
     self.menu:draw()
     love.graphics.print("_", (screen_width / 2) - (127 - (12 * curr_x)), (screen_height / 2.5) + 8)
