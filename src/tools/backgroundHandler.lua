@@ -83,7 +83,7 @@ local function update_buildings()
                     type = index,
                     width = prop.dimensions.w,
                     pos = current_buildings[i].pos + get_prop_position_on_building(building, prop)
-                }
+               }
             else
                 building_props[i] = nil
             end
@@ -156,7 +156,7 @@ local function reset_buildings()
                 type = index,
                 width = prop.dimensions.w,
                 pos = current_buildings[i].pos + get_prop_position_on_building(building, prop)
-            }
+           }
         else
             building_props[i] = nil
         end

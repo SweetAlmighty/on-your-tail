@@ -42,7 +42,6 @@ end
 
 function Entity:collider()
     local frame = self.current_animation.CurrentFrame()
-    print(self.type, frame.collider.x, self.position.x, frame.offset.x)
     return {
         x = frame.collider.x + (self.position.x - frame.offset.x),
         y = frame.collider.y + (self.position.y - frame.offset.y),

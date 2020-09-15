@@ -21,7 +21,7 @@ end
 function CreditsMenu:enter()
     if self.menu == nil then
         self.menu = Menu.new()
-        self.menu:add_item{ name = "Back", action = back }
+        self.menu:add_item({ name = "Back", action = back })
     end
 
     if self.credits == nil then

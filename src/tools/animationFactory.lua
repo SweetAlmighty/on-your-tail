@@ -17,7 +17,7 @@ local sprite_sheet = {
                     dimensions = frame.Dimensions,
                     properties = frame.Properties,
                     quad = love.graphics.newQuad(dim.x, dim.y, dim.w, dim.h, image:getDimensions())
-                }
+               }
             end,
 
             Draw = function(frame, x, y)
@@ -57,7 +57,7 @@ local animation = {
                 frames[total_frames] = {
                     --duration = data.Duration,
                     quad = love.graphics.newQuad(x, y, w, h, image:getDimensions())
-                }
+               }
             end,
 
             AddFrameWithData = function(data)
@@ -80,7 +80,7 @@ local animation = {
                     collider = collider,
                     duration = data.Duration,
                     quad = love.graphics.newQuad(dim.x, dim.y, dim.w, dim.h, image:getDimensions())
-                }
+               }
             end,
 
             Update = function(dt)

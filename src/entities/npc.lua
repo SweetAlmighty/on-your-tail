@@ -40,7 +40,7 @@ function NPC:npc_update(dt)
         end
     end
 
-    self:update(dt)
+    NPC.super.update(self, dt)
 end
 
 function NPC:collision_exit(other)

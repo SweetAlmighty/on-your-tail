@@ -80,8 +80,8 @@ function SetScoreMenu:enter()
         for i=65, 90, 1 do table.insert(letters, string.char(i)) end
 
         self.menu = Menu.new()
-        self.menu:add_item{ name = "Play Again", action = play_again }
-        self.menu:add_item{ name = "Main Menu", action = main_menu }
+        self.menu:add_item({ name = "Play Again", action = play_again })
+        self.menu:add_item({ name = "Main Menu", action = main_menu })
     end
 end
 

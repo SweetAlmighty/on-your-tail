@@ -41,7 +41,7 @@ function ControlsMenu:enter()
         pause_text = love.graphics.newText(control_font, "Pause")
         accept_text = love.graphics.newText(control_font, "Accept")
         quad = is_gameshell and gameshell or pc
-        self.menu:add_item{ name = "Back", action = back }
+        self.menu:add_item({ name = "Back", action = back })
     end
 
     self.menu:set_offset(0, 50)

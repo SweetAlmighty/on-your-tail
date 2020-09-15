@@ -79,10 +79,10 @@ function OptionsMenu:enter()
     if self.menu == nil then
         self.menu = Menu.new()
         self.menu:set_offset(0, -45)
-        self.menu:add_item{ name = "Volume:", action = nil }
-        self.menu:add_item{ name = "Resolution:", action = nil }
-        self.menu:add_item{ name = "Fullscreen:", action = set_fullscreen }
-        self.menu:add_item{ name = "Back", action = back }
+        self.menu:add_item({ name = "Volume:", action = nil })
+        self.menu:add_item({ name = "Resolution:", action = nil })
+        self.menu:add_item({ name = "Fullscreen:", action = set_fullscreen })
+        self.menu:add_item({ name = "Back", action = back })
     end
 end
 

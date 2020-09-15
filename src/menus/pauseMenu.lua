@@ -16,9 +16,9 @@ function PauseMenu:enter()
         self.menu = Menu.new()
         self.menu:set_background(0, 0, 319, 239)
         self.menu:set_start(MenuQuadrants.MiddleMiddle)
-        self.menu:add_item{ name = "Resume",  action = resume }
-        self.menu:add_item{ name = "Options", action = options }
-        self.menu:add_item{ name = "Exit",    action = exit }
+        self.menu:add_item({ name = "Resume",  action = resume })
+        self.menu:add_item({ name = "Options", action = options })
+        self.menu:add_item({ name = "Exit",    action = exit })
     end
 end
 

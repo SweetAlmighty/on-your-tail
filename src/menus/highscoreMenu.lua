@@ -13,7 +13,7 @@ end
 function HighscoreMenu:enter()
     if self.menu == nil then
         self.menu = Menu.new()
-        self.menu:add_item{ name = "Back", action = back }
+        self.menu:add_item({ name = "Back", action = back })
     end
 
     self.menu:set_offset(0, 50)
