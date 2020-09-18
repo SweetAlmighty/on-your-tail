@@ -60,7 +60,7 @@ function Gameplay:enter()
 
     EntityController.AddEntity(EntityTypes.Cat)
     EntityController.AddEntity(EntityTypes.Player)
-    --EntityController.AddEntity(EntityTypes.Kitten)
+    EntityController.AddEntity(EntityTypes.Enemy)
 end
 
 function Gameplay:input(key)

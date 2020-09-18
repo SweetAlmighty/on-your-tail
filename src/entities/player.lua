@@ -1,9 +1,9 @@
 require("src/tools/input")
 local Player = require("src/entities/entity"):extend()
 
-local interacting = false
 local current_delta = 0
 local current_points = 0
+local interacting = false
 
 function Player:new()
     Player.super.new(self, EntityTypes.Player)
@@ -12,11 +12,13 @@ function Player:new()
     self.fail_time = 1.5
     self.start_fail_time = 0
     self.start_fail_state = false
+    self.position = { x = playable_area.x, y = 180 }
 end
 
 function Player:collision_enter(other)
     if Player.super.collision_enter(self, other) then
         if other.type == EntityTypes.Enemy then
+            moving = false
             self.start_fail_state = true
             self:set_state(EntityStates.Fail)
         end

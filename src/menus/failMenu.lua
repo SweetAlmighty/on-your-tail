@@ -1,11 +1,17 @@
 local Menu = require("src/menus/menu")
 local FailMenu = { menu = nil }
 
-local function main_menu() MenuStateMachine:clear() end
 local function add_score() MenuStateMachine:push(GameMenus.SetScoreMenu) end
+
+local function main_menu()
+    StateMachine:pop()
+    MenuStateMachine:clear()
+end
+
 local function play_again()
     MenuStateMachine:clear()
-    MenuStateMachine:push(GameMenus.Gameplay)
+    StateMachine:pop()
+    StateMachine:push(GameStates.Gameplay)
 end
 
 function FailMenu:update(dt) self.menu:update(dt) end

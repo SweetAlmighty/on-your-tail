@@ -20,12 +20,19 @@ GameMenus = {
     HighscoreMenu = 9
 }
 
+local pause = false
+
 local MenuStateMachine = { stack = { } }
 
+function MenuStateMachine:pause() return pause end
 function MenuStateMachine:count() return #self.stack end
-function MenuStateMachine:pop() self.stack[#self.stack] = nil end
+function MenuStateMachine:pop()
+    pause = false
+    self.stack[#self.stack] = nil
+end
 
 function MenuStateMachine:clear()
+    pause = false
     while(#self.stack > 0) do
         MenuStateMachine:pop()
     end
@@ -61,6 +68,8 @@ function MenuStateMachine:push(type)
     elseif type == GameMenus.SetScoreMenu then state = SetScoreMenu
     elseif type == GameMenus.HighscoreMenu then state = HighscoreMenu
     end
+
+    pause = type == GameMenus.FailMenu and true or false
 
     if state then
         table.insert(self.stack, state)

@@ -20,7 +20,6 @@ function Entity:new(type)
     self.type = type
     self.direction = 1
     self.collisions = { }
-    self.position = { x = 0, y = 0 }
     self.current_state = EntityStates.Idle
     self.animations = create_animations(type)
     self.current_animation = self.animations[self.current_state]

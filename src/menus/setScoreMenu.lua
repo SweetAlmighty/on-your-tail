@@ -2,10 +2,10 @@ local Menu = require("src/menus/menu")
 local SetScoreMenu = { menu = nil }
 
 local index = 1
-local name = ""
 local curr_x = 1
 local curr_y = 1
 local letters = {}
+local name = { "A", "A", "A" }
 local current_time = { "", " ----------- ", "", "\n" }
 
 local function get_letter_index(value)
