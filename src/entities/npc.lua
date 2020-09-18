@@ -43,6 +43,7 @@ function NPC:npc_update(dt)
             self:set_state(EntityStates.Moving)
             self:set_destination(lume.random(0, 320), lume.random(playable_area.y, playable_area.height))
         end
+        self:move(moving and -2 or 0, 0)
     elseif self.current_state == EntityStates.Action then
         self:action_update(dt)
     else

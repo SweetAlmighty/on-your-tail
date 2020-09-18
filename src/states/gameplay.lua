@@ -4,6 +4,15 @@ require("src/entities/entityController")
 points = 0
 moving = false
 
+local totalCats = 8
+local kittenMod = 0
+local currentCats = 0
+local totalEnemies = 4
+local currentEnemies = 0
+local animalControlMod = 0
+local kittenFactor = love.math.random(5, 15)
+local animalControlFactor = love.math.random(1, 5)
+
 local Gameplay = {
     street = { },
     pause = false,
@@ -19,8 +28,37 @@ local function update_background(self)
     self.background_position = self.background_position - 1
 end
 
+local function checkForKittenSpawn(dt)
+    kittenMod = kittenMod + dt
+    local integral, _ = math.modf(kittenMod)
+    if integral == kittenFactor then
+        kittenMod = 0
+        if currentCats ~= totalCats then
+            currentCats = currentCats + 1
+            kittenFactor = love.math.random(5, 15)
+            EntityController.AddEntity(EntityTypes.Kitten)
+        end
+    end
+end
+
+local function checkForAnimalControlSpawn(dt)
+    print(animalControlMod)
+    animalControlMod = animalControlMod + dt
+    local integral, _ = math.modf(animalControlMod)
+    if integral == animalControlFactor then
+        animalControlMod = 0
+        if currentEnemies ~= totalEnemies then
+            currentEnemies = currentEnemies + 1
+            animalControlFactor = love.math.random(1, 5)
+            EntityController.AddEntity(EntityTypes.Enemy)
+        end
+    end
+end
+
 function Gameplay:update(dt)
     if not self.pause then
+        checkForKittenSpawn(dt)
+        checkForAnimalControlSpawn(dt)
         EntityController.Update(dt)
     end
 
@@ -58,9 +96,12 @@ function Gameplay:enter()
     self.background = AnimationFactory.CreateTileSet("Background")
     self.background.SetImageWrap("repeat", "clampzero")
 
-    EntityController.AddEntity(EntityTypes.Cat)
     EntityController.AddEntity(EntityTypes.Player)
-    EntityController.AddEntity(EntityTypes.Enemy)
+
+    for _=1, totalCats, 1 do
+        currentCats = currentCats + 1
+        EntityController.AddEntity(EntityTypes.Cat)
+    end
 end
 
 function Gameplay:input(key)
