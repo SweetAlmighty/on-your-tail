@@ -31,19 +31,15 @@ function ControlsMenu:draw()
 end
 
 function ControlsMenu:enter()
-    if self.menu == nil then
-        self.menu = Menu.new()
+    control_font = Resources.LoadFont("8bitOperatorPlusSC-Bold", 12)
+    pet_text = love.graphics.newText(control_font, "Pet")
+    move_text = love.graphics.newText(control_font, "Move")
+    pause_text = love.graphics.newText(control_font, "Pause")
+    accept_text = love.graphics.newText(control_font, "Accept")
+    quad = is_gameshell and gameshell or pc
 
-        control_font = Resources.LoadFont("8bitOperatorPlusSC-Bold", 12)
-
-        pet_text = love.graphics.newText(control_font, "Pet")
-        move_text = love.graphics.newText(control_font, "Move")
-        pause_text = love.graphics.newText(control_font, "Pause")
-        accept_text = love.graphics.newText(control_font, "Accept")
-        quad = is_gameshell and gameshell or pc
-        self.menu:add_item({ name = "Back", action = back })
-    end
-
+    self.menu = Menu.new()
+    self.menu:add_item({ name = "Back", action = back })
     self.menu:set_offset(0, 50)
 end
 

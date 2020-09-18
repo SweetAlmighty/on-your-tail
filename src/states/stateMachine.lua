@@ -25,10 +25,8 @@ end
 
 function StateMachine:push(type)
     local state = nil
-    if type == GameStates.Gameplay then
-        state = Gameplay
-    elseif type == GameStates.SplashScreen then
-        state = SplashScreen
+    if type == GameStates.Gameplay then state = Gameplay
+    elseif type == GameStates.SplashScreen then state = SplashScreen
     end
 
     if state then

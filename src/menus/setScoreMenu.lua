@@ -4,7 +4,9 @@ local SetScoreMenu = { menu = nil }
 local index = 1
 local curr_x = 1
 local curr_y = 1
-local letters = {}
+local letters = { }
+local underscore = nil
+local display_name = nil
 local name = { "A", "A", "A" }
 local current_time = { "", " ----------- ", "", "\n" }
 
@@ -15,8 +17,8 @@ end
 local function update_name()
     name[curr_x] = letters[curr_y]
     current_time[1] = table.concat(name)
-    current_time[3] = string.format("%.2f", currTime)
-    name = table.concat(current_time)
+    current_time[3] = string.format("%.2f", points)
+    display_name = love.graphics.newText(menuFont, table.concat(current_time))
 end
 
 local function up()
@@ -58,7 +60,8 @@ end
 function SetScoreMenu:update(dt) self.menu:update(dt) end
 function SetScoreMenu:draw()
     self.menu:draw()
-    love.graphics.print("_", (screen_width / 2) - (127 - (12 * curr_x)), (screen_height / 2.5) + 8)
+    love.graphics.draw(display_name, (screen_width / 2) - (127 - (12)), (screen_height / 2.5))
+    love.graphics.draw(underscore, (screen_width / 2) - (127 - (12 * curr_x)), (screen_height / 2.5) + 8)
 end
 function SetScoreMenu:input(key)
     if index == 1 then
@@ -75,14 +78,15 @@ local function play_again() if index == 2 then MenuStateMachine:pop() end end
 local function main_menu() if index == 2 then MenuStateMachine:clear() end end
 
 function SetScoreMenu:enter()
-    if self.menu == nil then
-        name = table.concat(name).." ----------- "..string.format("%.2f", currTime).."\n"
-        for i=65, 90, 1 do table.insert(letters, string.char(i)) end
+    for i=65, 90, 1 do table.insert(letters, string.char(i)) end
 
-        self.menu = Menu.new()
-        self.menu:add_item({ name = "Play Again", action = play_again })
-        self.menu:add_item({ name = "Main Menu", action = main_menu })
-    end
+    update_name()
+
+    underscore = love.graphics.newText(menuFont, "_")
+
+    self.menu = Menu.new()
+    self.menu:add_item({ name = "Play Again", action = play_again })
+    self.menu:add_item({ name = "Main Menu", action = main_menu })
 end
 
 return SetScoreMenu

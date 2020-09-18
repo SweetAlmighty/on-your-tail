@@ -11,11 +11,8 @@ function HighscoreMenu:draw()
 end
 
 function HighscoreMenu:enter()
-    if self.menu == nil then
-        self.menu = Menu.new()
-        self.menu:add_item({ name = "Back", action = back })
-    end
-
+    self.menu = Menu.new()
+    self.menu:add_item({ name = "Back", action = back })
     self.menu:set_offset(0, 50)
 
     local current_time = ""

@@ -69,7 +69,7 @@ function MenuStateMachine:push(type)
     elseif type == GameMenus.HighscoreMenu then state = HighscoreMenu
     end
 
-    pause = type == GameMenus.FailMenu and true or false
+    pause = (type == GameMenus.FailMenu or type == GameMenus.SetScoreMenu) and true or false
 
     if state then
         table.insert(self.stack, state)

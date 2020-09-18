@@ -18,12 +18,10 @@ function FailMenu:update(dt) self.menu:update(dt) end
 function FailMenu:input(key) self.menu:input(key) end
 function FailMenu:draw() self.menu:draw() end
 function FailMenu:enter()
-    if self.menu == nil then
-        self.menu = Menu.new()
-        self.menu:add_item({ name = "Play Again", action = play_again })
-        self.menu:add_item({ name = "Add Score", action = add_score })
-        self.menu:add_item({ name = "Main Menu", action = main_menu })
-    end
+    self.menu = Menu.new()
+    self.menu:add_item({ name = "Play Again", action = play_again })
+    self.menu:add_item({ name = "Add Score", action = add_score })
+    self.menu:add_item({ name = "Main Menu", action = main_menu })
 end
 
 return FailMenu

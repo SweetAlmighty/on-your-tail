@@ -19,10 +19,8 @@ function CreditsMenu:draw()
 end
 
 function CreditsMenu:enter()
-    if self.menu == nil then
-        self.menu = Menu.new()
-        self.menu:add_item({ name = "Back", action = back })
-    end
+    self.menu = Menu.new()
+    self.menu:add_item({ name = "Back", action = back })
 
     if self.credits == nil then
         self.credits = love.graphics.newText(menuFont, text)
