@@ -7,6 +7,11 @@ function Cat:new(type)
     self.current_limit = self.petting_limit
 end
 
+function Cat:reset()
+    Cat.super.reset(self)
+    self.current_limit = self.petting_limit
+end
+
 function Cat:update(dt)
     self:npc_update(dt)
 end

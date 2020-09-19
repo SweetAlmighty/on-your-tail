@@ -4,14 +4,14 @@ require("src/entities/entityController")
 points = 0
 moving = false
 
-local totalCats = 8
-local kittenMod = 0
-local currentCats = 0
-local totalEnemies = 4
-local currentEnemies = 0
-local animalControlMod = 0
-local kittenFactor = love.math.random(5, 15)
-local animalControlFactor = love.math.random(1, 5)
+local enemy_mod = 0
+local total_cats = 8
+local kitten_mod = 0
+local current_cats = 0
+local total_enemies = 2
+local current_enemies = 0
+local enemy_factor = love.math.random(1, 5)
+local kitten_factor = love.math.random(5, 15)
 
 local Gameplay = {
     street = { },
@@ -29,26 +29,26 @@ local function update_background(self)
 end
 
 local function checkForKittenSpawn(dt)
-    kittenMod = kittenMod + dt
-    local integral, _ = math.modf(kittenMod)
-    if integral == kittenFactor then
-        kittenMod = 0
-        if currentCats ~= totalCats then
-            currentCats = currentCats + 1
-            kittenFactor = love.math.random(5, 15)
+    kitten_mod = kitten_mod + dt
+    local integral, _ = math.modf(kitten_mod)
+    if integral == kitten_factor then
+        kitten_mod = 0
+        if current_cats ~= total_cats then
+            current_cats = current_cats + 1
+            kitten_factor = love.math.random(5, 15)
             EntityController.AddEntity(EntityTypes.Kitten)
         end
     end
 end
 
 local function checkForAnimalControlSpawn(dt)
-    animalControlMod = animalControlMod + dt
-    local integral, _ = math.modf(animalControlMod)
-    if integral == animalControlFactor then
-        animalControlMod = 0
-        if currentEnemies ~= totalEnemies then
-            currentEnemies = currentEnemies + 1
-            animalControlFactor = love.math.random(1, 5)
+    enemy_mod = enemy_mod + dt
+    local integral, _ = math.modf(enemy_mod)
+    if integral == enemy_factor then
+        enemy_mod = 0
+        if current_enemies ~= total_enemies then
+            current_enemies = current_enemies + 1
+            enemy_factor = love.math.random(1, 5)
             EntityController.AddEntity(EntityTypes.Enemy)
         end
     end
@@ -97,8 +97,8 @@ function Gameplay:enter()
 
     EntityController.AddEntity(EntityTypes.Player)
 
-    for _=1, totalCats, 1 do
-        currentCats = currentCats + 1
+    for _=1, total_cats, 1 do
+        current_cats = current_cats + 1
         EntityController.AddEntity(EntityTypes.Cat)
     end
 end

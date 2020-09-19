@@ -22,6 +22,11 @@ function Enemy:new()
     self.chasing_player = false
 end
 
+function Enemy:reset()
+    Enemy.super.reset(self)
+    self.chasing_player = false
+end
+
 function Enemy:update(dt)
     check_for_player(self)
     self:npc_update(dt)
