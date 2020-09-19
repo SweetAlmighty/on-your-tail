@@ -29,6 +29,20 @@ function NPC:interact()
     self:set_state(EntityStates.Action)
 end
 
+function NPC:reset()
+    self.delta_time = 0
+    self.destination = { }
+    self.start = { x = 0, y = 0 }
+    self:set_state(EntityStates.Idle)
+    self.move_time = lume.random(0.5, 1)
+    self.idle_time = lume.random(0.5, 1)
+    self.speed = lume.random(0.001, 0.01)
+    self.position = {
+        x = lume.random(playable_area.width*2, playable_area.width*4),
+        y = lume.random(playable_area.y, playable_area.height)
+    }
+end
+
 function NPC:end_interaction()
     if self.current_state == EntityStates.Action then
         self:set_state(EntityStates.Idle)
@@ -36,14 +50,16 @@ function NPC:end_interaction()
 end
 
 function NPC:npc_update(dt)
+    local delta_x = moving and -2 or 0
     if self.current_state == EntityStates.Idle then
         self.delta_time = self.delta_time + dt
         if self.delta_time >= self.idle_time then
             self.delta_time = 0
             self:set_state(EntityStates.Moving)
-            self:set_destination(lume.random(0, 320), lume.random(playable_area.y, playable_area.height))
+            self:set_destination(lume.random(0, playable_area.width * 3),
+                lume.random(playable_area.y, playable_area.height))
         end
-        self:move(moving and -2 or 0, 0)
+        self:move(delta_x, 0)
     elseif self.current_state == EntityStates.Action then
         self:action_update(dt)
     else
@@ -52,10 +68,8 @@ function NPC:npc_update(dt)
             self.delta_time = 0
             self:set_state(EntityStates.Idle)
         else
-            local deltaX = moving and -2 or 0
-
-            self.start.x = self.start.x + deltaX
-            self.destination.x = self.destination.x + deltaX
+            self.start.x = self.start.x + delta_x
+            self.destination.x = self.destination.x + delta_x
 
             local _x = lume.lerp(self.start.x, self.destination.x, self.delta_time) - self.position.x
             local _y = lume.lerp(self.start.y, self.destination.y, self.delta_time) - self.position.y

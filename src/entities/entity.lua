@@ -4,9 +4,21 @@ EntityTypes = { Player = 1, Cat = 2, Kitten = 3, Enemy = 4 }
 EntityStates = { Idle = 1, Moving = 2, Action = 3, Fail = 4 }
 playable_area = { x = 15, y = 150, width = 320/2, height = 240 }
 
+local enemy_type = { 1, 2 }
+local cat_type = { 1, 2, 3, 4, 5, 6, 7, 8 }
+
 local function create_animations(type)
     local sheet_names = { "character", "cats", "kittens", "enemy" }
-    local info = AnimationFactory.CreateAnimationSet(sheet_names[type])[1]
+
+    local real_type = 1
+    if type == EntityTypes.Enemy then
+        real_type = lume.randomchoice(enemy_type)
+    elseif type == EntityTypes.Cat or type == EntityTypes.Kitten then
+        real_type = lume.randomchoice(cat_type)
+    end
+
+    local info = AnimationFactory.CreateAnimationSet(sheet_names[type])[real_type]
+
     if type == EntityTypes.Player then
         return { info[1], info[2], info[3], info[4] }
     elseif type == EntityTypes.Enemy then

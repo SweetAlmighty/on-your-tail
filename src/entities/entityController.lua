@@ -98,16 +98,13 @@ EntityController = {
 
     Update = function(dt)
         check_collisions()
-        local remove = {}
         for i=1, #entities, 1 do
             if entities[i]:is_out_of_bounds() then
-                remove[#remove+1] = entities[i]
-            else
-                entities[i]:update(dt)
+                entities[i]:reset()
             end
-        end
 
-        for i=1, #remove, 1 do EntityController.RemoveEntity(remove[i]) end
+            entities[i]:update(dt)
+        end
     end,
 
     AddEntity = function(type)

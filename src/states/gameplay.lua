@@ -42,7 +42,6 @@ local function checkForKittenSpawn(dt)
 end
 
 local function checkForAnimalControlSpawn(dt)
-    print(animalControlMod)
     animalControlMod = animalControlMod + dt
     local integral, _ = math.modf(animalControlMod)
     if integral == animalControlFactor then
