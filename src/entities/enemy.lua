@@ -36,15 +36,10 @@ function Enemy:update(dt)
     end
 end
 
-function Enemy:action_update(dt)
-    self.current_limit = self.current_limit - (dt * 10)
-    if self.current_limit < 0 then self:end_interaction() end
-end
-
 function Enemy:collision_enter(other)
     if Enemy.super.collision_enter(self, other) then
         if other.type == EntityTypes.Player then
-            self:interact()
+            Enemy.super.interact(self)
         end
     end
 end

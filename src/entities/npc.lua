@@ -18,11 +18,11 @@ end
 function NPC:action_update(dt) end
 
 function NPC:collision_enter(other)
-    NPC.super.collision_enter(self, other)
+    return NPC.super.collision_enter(self, other)
 end
 
 function NPC:collision_exit(other)
-    NPC.super.collision_exit(self, other)
+    return NPC.super.collision_exit(self, other)
 end
 
 function NPC:interact()
