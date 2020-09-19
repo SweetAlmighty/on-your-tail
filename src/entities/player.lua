@@ -34,6 +34,7 @@ function Player:collision_exit(other)
 end
 
 function Player:end_interaction(dt)
+    interacting = false
     points = points + current_points
     current_delta = 0
     current_points = 0
@@ -48,7 +49,9 @@ function Player:end_interaction(dt)
 end
 
 function Player:interact(dt)
-    if #self.collisions > 0 then
+    local should_interact = #self.collisions > 0
+
+    if should_interact then
         local valid = 0
 
         current_delta = current_delta - (dt * 10)
@@ -64,10 +67,14 @@ function Player:interact(dt)
                 end
             end
         end
+    end
 
-        if valid ~= 0 then
-            self:set_state(EntityStates.Action)
-        end
+    if should_interact and not interacting then
+        interacting = true
+        self:set_state(EntityStates.Action)
+    elseif not should_interact and interacting then
+        interacting = false
+        self:set_state(EntityStates.Idle)
     end
 end
 
@@ -84,10 +91,8 @@ function Player:update(dt)
         end
     else
         if love.keyboard.isDown(InputMap.b) then
-            interacting = true
             self:interact(dt)
         elseif interacting then
-            interacting = false
             self:end_interaction()
         end
 
