@@ -95,6 +95,7 @@ function Gameplay:enter()
     self.background = AnimationFactory.CreateTileSet("Background")
     self.background.SetImageWrap("repeat", "clampzero")
 
+    points = 0
     enemy_mod = 0
     total_cats = 8
     kitten_mod = 0

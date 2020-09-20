@@ -46,9 +46,9 @@ Data = {
     end,
 
     AddScore = function(score)
-        scores[#scores+1] = score
-        table.sort(scores, function(a, b) return a[2] > b[2] end)
-        table.remove(scores, #scores)
+        data.scores[#data.scores+1] = score
+        table.sort(data.scores, function(a, b) return a[2] > b[2] end)
+        table.remove(data.scores, #data.scores)
         Data.Save()
     end,
 

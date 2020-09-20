@@ -12,13 +12,13 @@ end
 
 function HighscoreMenu:enter()
     self.menu = Menu.new()
-    self.menu:add_item({ name = "Back", action = back })
     self.menu:set_offset(0, 50)
+    self.menu:add_item({ name = "Back", action = back })
 
     local current_time = ""
     local scores = Data.GetScores()
     for i=1, #scores, 1 do
-        current_time = current_time..scores[i][1].." ----------- "..string.format("%.2f", scores[i][2]).."\n"
+        current_time = current_time..scores[i][1].." ----------- "..scores[i][2].."\n"
     end
 
     self.times = love.graphics.newText(menuFont, current_time)

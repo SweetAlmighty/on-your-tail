@@ -89,7 +89,9 @@ function SetScoreMenu:input(key)
         elseif key == InputMap.up then up()
         elseif key == InputMap.right then right()
         elseif key == InputMap.down then down()
-        elseif key == InputMap.a then index = 2
+        elseif key == InputMap.a then
+            index = 2
+            Data.AddScore({table.concat(name), points})
         end
     else self.menu:input(key) end
 end
