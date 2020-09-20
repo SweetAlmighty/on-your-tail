@@ -1,13 +1,15 @@
 local Menu = require("src/menus/menu")
 local HighscoreMenu = { menu = nil, times = nil }
 
+local width = 0
+
 local function back() MenuStateMachine:pop() end
 
 function HighscoreMenu:update(dt) self.menu:update(dt) end
 function HighscoreMenu:input(key) self.menu:input(key) end
 function HighscoreMenu:draw()
     self.menu:draw()
-    love.graphics.draw(self.times, (screen_width/2) - 110, (screen_height/2) - 25)
+    love.graphics.draw(self.times, (screen_width/2) - (width/2), (screen_height/2))
 end
 
 function HighscoreMenu:enter()
@@ -22,6 +24,8 @@ function HighscoreMenu:enter()
     end
 
     self.times = love.graphics.newText(menuFont, current_time)
+
+    width = self.times:getWidth()
 end
 
 return HighscoreMenu

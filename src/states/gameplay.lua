@@ -71,16 +71,12 @@ function Gameplay:exit()
     EntityController.Clear()
 end
 
-function Gameplay:draw_ui()
-    love.graphics.draw(love.graphics.newText(menuFont, points), screen_width - 75, 5)
-end
-
 function Gameplay:draw()
     self.background.DrawScroll(1, 0, 0, self.background_position)
     self.street.DrawScroll(1, 0, 126, self.street_position)
     BackgroundHandler.Draw()
     EntityController.Draw()
-    self:draw_ui()
+    love.graphics.draw(love.graphics.newText(menuFont, "Score: "..points), 5, 0)
 end
 
 function Gameplay:enter()
