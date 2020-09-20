@@ -6,6 +6,7 @@ function NPC:new(type)
     self.speed = 1
     self.delta_time = 0
     self.destination = { }
+    self.delta = { x = 0, y = 0 }
     self.move_time = lume.random(1, 5)
     self.idle_time = lume.random(1, 5)
     self.position = {
@@ -18,29 +19,23 @@ function NPC:fail_update(dt) end
 function NPC:action_update(dt) end
 
 function NPC:idle_update(dt)
-    local delta_x = moving and -2 or 0
     if self.delta_time >= self.idle_time then
         self.delta_time = 0
         self:set_state(EntityStates.Moving)
         self:set_destination(lume.random(0, playable_area.width * 3),
             lume.random(playable_area.y, playable_area.height))
     end
-    self:move(delta_x, 0)
 end
 
 function NPC:moving_update(dt)
-    local delta_x = moving and -2 or 0
     if self.delta_time >= self.move_time and self.current_state == EntityStates.Moving then
         self.delta_time = 0
         self:set_state(EntityStates.Idle)
     else
         local _x, _y = self.destination.x - self.position.x, self.destination.y - self.position.y
-
         local c = math.sqrt(_x*_x + _y*_y)
-        _x = ((_x/c) * self.speed) + delta_x
-        _y = ((_y/c) * self.speed)
-
-        self:move(_x, _y)
+        self.delta.x = ((_x/c) * self.speed) + self.delta.x
+        self.delta.y = ((_y/c) * self.speed)
     end
 end
 
@@ -61,6 +56,7 @@ function NPC:reset()
     self.speed = 1
     self.delta_time = 0
     self.destination = { }
+    self.delta = { x = 0, y = 0 }
     self:set_state(EntityStates.Idle)
     self.move_time = lume.random(0.5, 1)
     self.idle_time = lume.random(0.5, 1)
@@ -77,6 +73,8 @@ function NPC:end_interaction()
 end
 
 function NPC:npc_update(dt)
+    self.delta.y = 0
+    self.delta.x = moving and -2 or 0
     self.delta_time = self.delta_time + dt
 
     if self.current_state == EntityStates.Idle then
@@ -85,6 +83,10 @@ function NPC:npc_update(dt)
         self:action_update(dt)
     else
         self:moving_update(dt)
+    end
+
+    if self.delta.x ~= 0 or self.delta.y ~= 0 then
+        self:move(self.delta.x, self.delta.y)
     end
 
     NPC.super.update(self, dt)
