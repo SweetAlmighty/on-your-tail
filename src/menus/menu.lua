@@ -12,8 +12,6 @@ MenuQuadrants = {
 }
 
 local align = 2
-local quad_width = 320/3
-local quad_height = 240/3
 local start = { x = 0, y = 0 }
 local background = { x = 0, y = 0, w = 0, h = 0 }
 
@@ -51,6 +49,9 @@ function Menu:set_alignment(alignment)
 end
 
 function Menu:set_start(alignment)
+	local quad_width = screen_width/3
+	local quad_height = screen_height/3
+
     if     alignment == MenuQuadrants.TopLeft      then start = { x = 0,              y = 0 }
     elseif alignment == MenuQuadrants.TopMiddle    then start = { x = quad_width,     y = 0 }
     elseif alignment == MenuQuadrants.TopRight     then start = { x = quad_width * 2, y = 0 }
@@ -76,8 +77,8 @@ function Menu:add_item(item)
 
 	self.height = self.height + item.name:getHeight()
 
-	self.width_offset = quad_width - self.width
-	self.height_offset = quad_height - self.height
+	self.width_offset = (screen_width/3) - self.width
+	self.height_offset = (screen_height/3) - self.height
 
 	table.insert(self.items, item)
 end

@@ -1,13 +1,11 @@
 local Enemy = require("src/entities/npc"):extend()
 
-local half_width = 320/2
-
 local function look_for_player(self, _x, _y)
     local pos = self.position
     local p = { x = _x, y = _y }
     local a = { x =  pos.x, y =  pos.y - 80 }
-    local b = { x = a.x + (half_width * self.direction), y = a.y + 20 }
-    local c = { x = a.x + (half_width * self.direction), y = a.y - 20 }
+    local b = { x = a.x + ((screen_width/2) * self.direction), y = a.y + 20 }
+    local c = { x = a.x + ((screen_width/2) * self.direction), y = a.y - 20 }
     return point_in_triangle(p, a, b, c)
 end
 

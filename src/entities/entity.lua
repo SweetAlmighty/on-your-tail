@@ -38,12 +38,12 @@ function Entity:new(type)
 end
 
 function Entity:move(dx, dy)
-    self.position.x = math.floor((self.position.x + dx) + 0.5)
+    self.position.x = self.position.x + dx--math.floor((self.position.x + dx) + 0.5)
     if self.type == EntityTypes.Player then
         self.position.x = lume.clamp(self.position.x, playable_area.x, playable_area.width)
     end
 
-    local _y = math.floor((self.position.y + dy) + 0.5)
+    local _y = self.position.y + dy--math.floor((self.position.y + dy) + 0.5)
     self.position.y = lume.clamp(_y, playable_area.y, playable_area.height)
 end
 

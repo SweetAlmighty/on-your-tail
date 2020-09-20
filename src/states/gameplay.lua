@@ -28,7 +28,7 @@ local function update_background(self)
     self.background_position = self.background_position - 1
 end
 
-local function checkForKittenSpawn(dt)
+local function check_for_kitten_spawn(dt)
     kitten_mod = kitten_mod + dt
     local integral, _ = math.modf(kitten_mod)
     if integral == kitten_factor then
@@ -41,7 +41,7 @@ local function checkForKittenSpawn(dt)
     end
 end
 
-local function checkForAnimalControlSpawn(dt)
+local function check_for_enemy_spawn(dt)
     enemy_mod = enemy_mod + dt
     local integral, _ = math.modf(enemy_mod)
     if integral == enemy_factor then
@@ -56,8 +56,8 @@ end
 
 function Gameplay:update(dt)
     if not self.pause then
-        checkForKittenSpawn(dt)
-        checkForAnimalControlSpawn(dt)
+        check_for_kitten_spawn(dt)
+        check_for_enemy_spawn(dt)
         EntityController.Update(dt)
     end
 
@@ -94,6 +94,15 @@ function Gameplay:enter()
 
     self.background = AnimationFactory.CreateTileSet("Background")
     self.background.SetImageWrap("repeat", "clampzero")
+
+    enemy_mod = 0
+    total_cats = 8
+    kitten_mod = 0
+    current_cats = 0
+    total_enemies = 2
+    current_enemies = 0
+    enemy_factor = love.math.random(1, 5)
+    kitten_factor = love.math.random(5, 15)
 
     EntityController.AddEntity(EntityTypes.Player)
 
