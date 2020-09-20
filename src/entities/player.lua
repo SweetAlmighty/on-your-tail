@@ -1,16 +1,13 @@
 require("src/tools/input")
 local Player = require("src/entities/entity"):extend()
 
-local current_delta = 0
-local current_points = 0
-local interacting = false
-
 function Player:new()
     Player.super.new(self, EntityTypes.Player)
 
     self.speed = 2
     self.fail_time = 1.5
     self.start_fail_time = 0
+    self.interacting = false
     self.start_fail_state = false
     self.position = { x = playable_area.x, y = 180 }
 end
@@ -34,13 +31,9 @@ function Player:collision_exit(other)
 end
 
 function Player:end_interaction(dt)
-    interacting = false
-    points = points + current_points
-    current_delta = 0
     current_points = 0
-
+    self.interacting = false
     self:set_state(EntityStates.Idle)
-
     for _, v in ipairs(self.collisions) do
         if v.current_state ~= EntityStates.Fail then
             v:end_interaction()
@@ -49,31 +42,25 @@ function Player:end_interaction(dt)
 end
 
 function Player:interact(dt)
-    local should_interact = #self.collisions > 0
-
-    if should_interact then
-        local valid = 0
-
-        current_delta = current_delta - (dt * 10)
-        local value = 1 - math.fmod(current_delta, 1)
-
+    local valid = 0
+    if #self.collisions > 0 then
         for _, v in ipairs(self.collisions) do
             if v.current_state ~= EntityStates.Fail then
                 valid = valid + 1
                 v:interact()
-
-                if value < 0.1 or value == 1 then
-                    current_points = current_points + 1
-                end
             end
         end
+
+        points = points + valid
     end
 
-    if should_interact and not interacting then
-        interacting = true
+    local should_interact = (valid ~= 0)
+
+    if should_interact and not self.interacting then
+        self.interacting = true
         self:set_state(EntityStates.Action)
-    elseif not should_interact and interacting then
-        interacting = false
+    elseif not should_interact and self.interacting then
+        self.interacting = false
         self:set_state(EntityStates.Idle)
     end
 end
@@ -92,7 +79,7 @@ function Player:update(dt)
     else
         if love.keyboard.isDown(InputMap.b) then
             self:interact(dt)
-        elseif interacting then
+        elseif self.interacting then
             self:end_interaction()
         end
 

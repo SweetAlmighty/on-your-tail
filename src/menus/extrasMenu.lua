@@ -11,11 +11,11 @@ function ExtrasMenu:update(dt) self.menu:update(dt) end
 function ExtrasMenu:input(key) self.menu:input(key) end
 function ExtrasMenu:enter()
     self.menu = Menu.new()
+    self.menu:set_offset(0, -45)
     if not self.is_gameshell then self.menu:add_item({ name = "Options", action = options }) end
     self.menu:add_item({ name = "Controls", action = controls })
     self.menu:add_item({ name = "Scores", action = scores })
     self.menu:add_item({ name = "Back", action = back })
-    self.menu:set_offset(0, -45)
 end
 
 return ExtrasMenu

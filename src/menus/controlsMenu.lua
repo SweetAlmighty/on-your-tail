@@ -39,8 +39,8 @@ function ControlsMenu:enter()
     quad = is_gameshell and gameshell or pc
 
     self.menu = Menu.new()
-    self.menu:add_item({ name = "Back", action = back })
     self.menu:set_offset(0, 50)
+    self.menu:add_item({ name = "Back", action = back })
 end
 
 return ControlsMenu

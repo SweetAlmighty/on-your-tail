@@ -1,6 +1,8 @@
 local Menu = require("src/menus/menu")
 local SetScoreMenu = { menu = nil }
 
+local _x = 0
+local _y = 0
 local index = 1
 local curr_x = 1
 local curr_y = 1
@@ -16,9 +18,12 @@ end
 
 local function update_name()
     name[curr_x] = letters[curr_y]
+    current_time[3] = points
     current_time[1] = table.concat(name)
-    current_time[3] = string.format("%.2f", points)
     display_name = love.graphics.newText(menuFont, table.concat(current_time))
+
+    _y = (screen_height / 2.5)
+    _x = (screen_width / 2) - (display_name:getWidth() / 2)
 end
 
 local function up()
@@ -60,8 +65,8 @@ end
 function SetScoreMenu:update(dt) self.menu:update(dt) end
 function SetScoreMenu:draw()
     self.menu:draw()
-    love.graphics.draw(display_name, (screen_width / 2) - (127 - (12)), (screen_height / 2.5))
-    love.graphics.draw(underscore, (screen_width / 2) - (127 - (12 * curr_x)), (screen_height / 2.5) + 8)
+    love.graphics.draw(display_name, _x, _y)
+    love.graphics.draw(underscore, _x + (12 * (curr_x - 1)), _y + 8)
 end
 function SetScoreMenu:input(key)
     if index == 1 then
@@ -79,9 +84,7 @@ local function main_menu() if index == 2 then MenuStateMachine:clear() end end
 
 function SetScoreMenu:enter()
     for i=65, 90, 1 do table.insert(letters, string.char(i)) end
-
     update_name()
-
     underscore = love.graphics.newText(menuFont, "_")
 
     self.menu = Menu.new()

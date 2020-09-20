@@ -72,7 +72,7 @@ function Gameplay:exit()
 end
 
 function Gameplay:draw_ui()
-    love.graphics.print(points, screen_width - 75, 5)
+    love.graphics.draw(love.graphics.newText(menuFont, points), screen_width - 75, 5)
 end
 
 function Gameplay:draw()

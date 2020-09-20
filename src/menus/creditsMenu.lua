@@ -20,13 +20,12 @@ end
 
 function CreditsMenu:enter()
     self.menu = Menu.new()
+    self.menu:set_offset(0, 50)
     self.menu:add_item({ name = "Back", action = back })
 
     if self.credits == nil then
         self.credits = love.graphics.newText(menuFont, text)
     end
-
-    self.menu:set_offset(0, 50)
 end
 
 return CreditsMenu
