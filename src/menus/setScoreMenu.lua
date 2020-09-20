@@ -62,6 +62,21 @@ local function right()
     end
 end
 
+local function main_menu()
+    if index == 2 then
+        StateMachine:clear()
+        MenuStateMachine:clear()
+    end
+end
+
+local function play_again()
+    if index == 2 then
+        StateMachine:pop()
+        MenuStateMachine:clear()
+        StateMachine:push(GameStates.Gameplay)
+    end
+end
+
 function SetScoreMenu:update(dt) self.menu:update(dt) end
 function SetScoreMenu:draw()
     self.menu:draw()
@@ -78,10 +93,6 @@ function SetScoreMenu:input(key)
         end
     else self.menu:input(key) end
 end
-
-local function play_again() if index == 2 then MenuStateMachine:pop() end end
-local function main_menu() if index == 2 then MenuStateMachine:clear() end end
-
 function SetScoreMenu:enter()
     for i=65, 90, 1 do table.insert(letters, string.char(i)) end
     update_name()

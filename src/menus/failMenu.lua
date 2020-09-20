@@ -4,13 +4,13 @@ local FailMenu = { menu = nil }
 local function add_score() MenuStateMachine:push(GameMenus.SetScoreMenu) end
 
 local function main_menu()
-    StateMachine:pop()
+    StateMachine:clear()
     MenuStateMachine:clear()
 end
 
 local function play_again()
-    MenuStateMachine:clear()
     StateMachine:pop()
+    MenuStateMachine:clear()
     StateMachine:push(GameStates.Gameplay)
 end
 

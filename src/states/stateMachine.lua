@@ -19,7 +19,7 @@ function StateMachine:pop()
 end
 
 function StateMachine:clear()
-    while(#self.stack > 0) do StateMachine:pop() end
+    while(#self.stack > 1) do StateMachine:pop() end
     StateMachine:push(GameStates.SplashScreen)
 end
 
