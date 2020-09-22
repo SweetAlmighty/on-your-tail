@@ -33,10 +33,6 @@ end
 function Enemy:update(dt)
     check_for_player(self)
     self:npc_update(dt)
-
-    if self.current_state == EntityStates.Idle and self.chasing_player then
-        self.chasing_player = false
-    end
 end
 
 function Enemy:collision_enter(other)

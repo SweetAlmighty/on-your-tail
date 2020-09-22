@@ -27,16 +27,16 @@ function draw_path_info(entity)
 end
 
 function draw_debug_info(entity)
-    local col = entity.Collider()
-    local x, y = entity.Position()
+    local col = entity:collider()
+    local pos = entity.position
 
-    local color = #entity.Collisions() == 0 and {1, 1, 1} or {1, 0, 0}
+    local color = #entity.collisions == 0 and {1, 1, 1} or {1, 0, 0}
 
     love.graphics.setColor(color[1], color[2], color[3])
     love.graphics.rectangle("line", col.x, col.y, col.w, col.h)
 
     love.graphics.setColor(0, 0, 0)
-    love.graphics.points(x, y)
+    love.graphics.points(pos.x, pos.y)
 
     love.graphics.setColor(1, 1, 1)
 end
