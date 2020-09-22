@@ -23,8 +23,9 @@ end
 
 function Cat:end_interaction()
     self.current_limit = 0
+    self:set_direction(-1)
     self:set_state(EntityStates.Fail)
-    self:set_destination(-100, self.position.y)
+    self.destination = { x = -100, y = self.position.y }
 end
 
 return Cat

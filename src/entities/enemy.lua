@@ -11,8 +11,13 @@ end
 
 local function check_for_player(self)
     local pos = player.position
-    if look_for_player(self, pos.x, pos.y - 80) and not self.chasing_player then self.chasing_player = true end
-    if self.chasing_player then self:set_destination(pos.x, pos.y) end
+    if look_for_player(self, pos.x, pos.y - 80) and not self.chasing_player then
+        self.chasing_player = true
+    end
+
+    if self.chasing_player then
+        self.destination = { x = pos.x, y = pos.y }
+    end
 end
 
 function Enemy:new()

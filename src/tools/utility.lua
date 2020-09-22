@@ -14,6 +14,18 @@ function point_in_triangle(p, p0, p1, p2)
     return ((d1 == d2) and (d2 == d3))
 end
 
+function draw_path_info(entity)
+    love.graphics.line(entity.position.x, entity.position.y, entity.destination.x, entity.destination.y)
+
+    love.graphics.setColor(0, 1, 0)
+    love.graphics.points(entity.position.x, entity.position.y)
+
+    love.graphics.setColor(1, 0, 0)
+    love.graphics.points(entity.destination.x, entity.destination.y)
+
+    love.graphics.setColor(1, 1, 1)
+end
+
 function draw_debug_info(entity)
     local col = entity.Collider()
     local x, y = entity.Position()
