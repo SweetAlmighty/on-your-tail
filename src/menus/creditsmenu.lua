@@ -15,12 +15,13 @@ function CreditsMenu:input(key) self.menu:input(key) end
 
 function CreditsMenu:draw()
     self.menu:draw()
-    love.graphics.draw(self.credits, 30, 85)
+    love.graphics.draw(self.credits, 29, 85)
 end
 
 function CreditsMenu:enter()
     self.menu = Menu.new()
     self.menu:set_offset(0, 50)
+    self.menu:set_background(28, 85, 262, 150)
     self.menu:add_item({ name = "Back", action = back })
 
     if self.credits == nil then
