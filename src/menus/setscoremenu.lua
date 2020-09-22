@@ -10,6 +10,8 @@ local letters = { }
 local underscore = nil
 local display_name = nil
 local name = { "A", "A", "A" }
+local move_sfx = Resources.LoadSFX("move")
+local accept_sfx = Resources.LoadSFX("accept")
 local current_time = { "", " ----------- ", "", "\n" }
 
 local function get_letter_index(value)
@@ -29,6 +31,7 @@ end
 local function up()
     if index == 1 then
         curr_y = (curr_y - 1 < 1) and 26 or curr_y - 1
+        move_sfx:play()
         update_name()
     end
 end
@@ -36,6 +39,7 @@ end
 local function down()
     if index == 1 then
         curr_y = (curr_y + 1 > 26) and 1 or curr_y + 1
+        move_sfx:play()
         update_name()
     end
 end
@@ -44,8 +48,9 @@ local function left()
     if index == 1 then
         local x = curr_x - 1
         if x < 1 then x = 1 else
-            x = curr_x - 1
+            move_sfx:play()
         end
+
         curr_x = x
         curr_y = get_letter_index(name[curr_x])
     end
@@ -55,8 +60,9 @@ local function right()
     if index == 1 then
         local x = curr_x + 1
         if x > 3 then x = 3 else
-            x = curr_x + 1
+            move_sfx:play()
         end
+
         curr_x = x
         curr_y = get_letter_index(name[curr_x])
     end
@@ -91,6 +97,7 @@ function SetScoreMenu:input(key)
         elseif key == InputMap.down then down()
         elseif key == InputMap.a then
             index = 2
+            accept_sfx:play()
             Data.AddScore({table.concat(name), points})
         end
     else self.menu:input(key) end

@@ -21,7 +21,7 @@ function NPC:new(type)
     self.idle_time = lume.random(1, 5)
     self.destination = { x = 0, y = 0 }
     self.position = {
-        x = lume.random(playable_area.width*2, playable_area.width*4),
+        x = lume.random(playable_area.width*2, playable_area.width*5),
         y = lume.random(playable_area.y, playable_area.height)
     }
 end
@@ -99,7 +99,11 @@ function NPC:npc_update(dt)
 end
 
 function NPC:set_destination(x, y)
-    local destination = determine_new_destination(self)
+    local destination = { x = x, y = y }
+
+    if x == nil and y == nil then
+        destination = determine_new_destination(self)
+    end
 
     self.delta_time = 0
     self.destination = { x = destination.x, y = destination.y }

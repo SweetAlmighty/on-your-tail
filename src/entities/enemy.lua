@@ -16,7 +16,7 @@ local function check_for_player(self)
     end
 
     if self.chasing_player then
-        self.destination = { x = pos.x, y = pos.y }
+        self:set_destination(pos.x,  pos.y)
     end
 end
 

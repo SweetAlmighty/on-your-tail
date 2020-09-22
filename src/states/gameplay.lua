@@ -8,9 +8,9 @@ local enemy_mod = 0
 local total_cats = 8
 local kitten_mod = 0
 local current_cats = 0
-local total_enemies = 2
+local total_enemies = 3
 local current_enemies = 0
-local enemy_factor = love.math.random(1, 5)
+local enemy_factor = love.math.random(1, 3)
 local kitten_factor = love.math.random(5, 15)
 
 local Gameplay = {
@@ -47,7 +47,7 @@ local function check_for_enemy_spawn(dt)
         enemy_mod = 0
         if current_enemies ~= total_enemies then
             current_enemies = current_enemies + 1
-            enemy_factor = love.math.random(1, 5)
+            enemy_factor = love.math.random(1, 3)
             EntityController.AddEntity(EntityTypes.Enemy)
         end
     end
