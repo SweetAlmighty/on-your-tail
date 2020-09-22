@@ -88,7 +88,7 @@ function Menu:draw(x, y)
 
 	-- Background
 	love.graphics.setColor(0, 0, 0)
-	love.graphics.rectangle("line", background.x, background.y, background.w, background.h)
+	love.graphics.rectangle("line", background.x + 1, background.y, background.w - 2, background.h - 1)
 
 	love.graphics.setColor(0, 0, 0, 0.75)
 	love.graphics.rectangle("fill", background.x, background.y, background.w, background.h)

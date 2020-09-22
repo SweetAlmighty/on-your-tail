@@ -13,7 +13,7 @@ function PauseMenu:update(dt) self.menu:update(dt) end
 function PauseMenu:input(key) self.menu:input(key) end
 function PauseMenu:enter()
     self.menu = Menu.new()
-    self.menu:set_background(0, 0, 319, 239)
+    self.menu:set_background(0, 0, 320, 240)
     self.menu:set_start(MenuQuadrants.MiddleMiddle)
     self.menu:add_item({ name = "Resume",  action = resume })
     self.menu:add_item({ name = "Options", action = options })

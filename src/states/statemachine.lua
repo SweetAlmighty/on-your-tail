@@ -5,6 +5,7 @@ GameStates = { SplashScreen = 1, Gameplay = 2 }
 
 local StateMachine = { stack = { } }
 
+function StateMachine:count() return #self.stack end
 function StateMachine:draw() self.stack[#self.stack]:draw() end
 function StateMachine:input(key) self.stack[#self.stack]:input(key) end
 function StateMachine:update(dt)

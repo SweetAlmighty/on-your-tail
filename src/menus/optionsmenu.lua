@@ -4,6 +4,7 @@ local OptionsMenu = { menu = nil }
 local index = 1
 local play_sound = false
 local fullscreen = false
+local start_height = 82
 local move_sfx = Resources.LoadSFX("move")
 local volume_text, resolution_text, fullscreen_text
 
@@ -57,9 +58,9 @@ function OptionsMenu:update(dt) self.menu:update(dt) end
 
 function OptionsMenu:draw()
     self.menu:draw()
-    love.graphics.draw(volume_text,     225, 117)
-    love.graphics.draw(resolution_text, 225, 137)
-    love.graphics.draw(fullscreen_text, 225, 157)
+    love.graphics.draw(volume_text,     225, start_height)
+    love.graphics.draw(resolution_text, 225, start_height + 20)
+    love.graphics.draw(fullscreen_text, 225, start_height + 40)
 end
 
 function OptionsMenu:input(key)
@@ -77,7 +78,12 @@ function OptionsMenu:enter()
     set_text()
 
     self.menu = Menu.new()
-    self.menu:set_offset(0, -45)
+
+    if StateMachine:count() == 1 then
+        start_height = 117
+        self.menu:set_offset(0, -45)
+    end
+
     self.menu:add_item({ name = "Volume:", action = nil })
     self.menu:add_item({ name = "Resolution:", action = nil })
     self.menu:add_item({ name = "Fullscreen:", action = set_fullscreen })
