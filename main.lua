@@ -1,51 +1,48 @@
-require "src/backend/input"
-require "src/backend/require"
-require "src/backend/saveData"
-require "src/backend/resources"
-require "src/states/stateMachine"
-require "src/backend/animateFactory"
+require("src/menus/menu")
+require("src/tools/utility")
+require("src/tools/saveData")
+require("src/tools/resources")
+require("src/tools/animationfactory")
 
+StateMachine = require("src/states/statemachine")
+MenuStateMachine = require("src/menus/menustatemachine")
+
+screen_width = 320
+screen_height = 240
+local color = 50/255
+
+lume = require("src/lib/lume")
+local tick = require("src/lib/tick")
 lovesize = require("src/lib/lovesize")
 
-speed = 2
-currTime = 0
-screenWidth = 320
-screenHeight = 240
-local color = 50/255
-local input = Input:new()
-resources = Resources:new()
-stateMachine = StateMachine:new()
-animateFactory = AnimateFactory:new()
-menuFont = resources:LoadFont("8bitOperatorPlusSC-Bold", 15)
-titleFont = resources:LoadFont("8bitOperatorPlusSC-Bold", 50)
-playableArea = { x = 0, y = 150, width = screenWidth/2, height = screenHeight }
-
-function love.load()
-    lovesize.set(screenWidth, screenHeight)
-    stateMachine:push(States.MainMenu)
-    love.math.setRandomSeed(os.time())
-    initializeData()
-end
-
-function love.resize(width, height)
-    lovesize.resize(width, height)
-end
-
-function love.update(dt)
-    local state = stateMachine:current()
-    state:update(dt)
-    if state.type == States.Gameplay then
-        input:process(dt)
-     end
-end
-
-function love.quit()
-    saveData()
-end
+menuFont = Resources.LoadFont("8bitOperatorPlusSC-Bold", 15)
+titleFont = Resources.LoadFont("8bitOperatorPlusSC-Bold", 50)
 
 function love.draw()
     love.graphics.clear(color, color, color)
     lovesize.begin()
-        stateMachine:draw()
+        StateMachine:draw()
+        MenuStateMachine:draw()
     lovesize.finish()
 end
+
+function love.load(arg)
+    Data.Initialize()
+    tick.framerate = 60
+    lovesize.set(screen_width, screen_height)
+    StateMachine:push(GameStates.SplashScreen)
+    math.randomseed(os.time() + tonumber(tostring({}):sub(8)))
+end
+
+function love.update(dt)
+    StateMachine:update(dt)
+    MenuStateMachine:update(dt)
+end
+
+function love.keypressed(key)
+    MenuStateMachine:input(key)
+    StateMachine:input(key)
+end
+
+function love.quit() Data.Save() end
+function love.resize(width, height) lovesize.resize(width, height) end

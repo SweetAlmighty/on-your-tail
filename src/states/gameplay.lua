@@ -1,161 +1,127 @@
-require "src/states/state"
-require "src/entities/cat"
-require "src/entities/kitten"
-require "src/entities/player"
-require "src/backend/require"
-require "src/entities/animalControl"
-require "src/backend/backgroundHandler"
-require "src/entities/entityController"
+require("src/tools/backgroundHandler")
+require("src/entities/entityController")
 
-Gameplay = class("Gameplay", Gameplay)
+points = 0
+moving = false
 
-local animalControlMod = 0
-local kittenMod = 0
-local pause = false
-local pauseTime = 0
-local unpause = false
-local animalControlFactor = love.math.random(1, 5)
-local kittenFactor = love.math.random(5, 15)
-local entityController = EntityController:new()
+local enemy_mod = 0
+local total_cats = 8
+local kitten_mod = 0
+local current_cats = 0
+local total_enemies = 2
+local current_enemies = 0
+local enemy_factor = love.math.random(1, 5)
+local kitten_factor = love.math.random(5, 15)
 
-local checkForKittenSpawn = function(scene)
-    local integral, _ = math.modf(kittenMod)
-    if integral == kittenFactor then
-        kittenMod = 0
-        if entityController:count() - 1 == scene.totalCats then
-            kittenFactor = love.math.random(5, 15)
-            entityController:addEntity(Kitten:new())
+local Gameplay = {
+    street = { },
+    pause = false,
+    background = { },
+    street_position = 0,
+    background_position = 0,
+    background_music = Resources.LoadMusic("PP_Silly_Goose_FULL_Loop")
+}
+
+local function update_background(self)
+    BackgroundHandler.Update()
+    self.street_position = self.street_position - 2
+    self.background_position = self.background_position - 1
+end
+
+local function check_for_kitten_spawn(dt)
+    kitten_mod = kitten_mod + dt
+    local integral, _ = math.modf(kitten_mod)
+    if integral == kitten_factor then
+        kitten_mod = 0
+        if current_cats ~= total_cats then
+            current_cats = current_cats + 1
+            kitten_factor = love.math.random(5, 15)
+            EntityController.AddEntity(EntityTypes.Kitten)
         end
     end
 end
 
-local checkForAnimalControlSpawn = function(scene)
-    local integral, _ = math.modf(animalControlMod)
-    if integral == animalControlFactor then
-        animalControlMod = 0
-        if entityController:count() - 1 == scene.totalCats then
-            animalControlFactor = love.math.random(1, 5)
-            entityController:addEntity(AnimalControl:new())
-        end
-    end
-end
-
-function Gameplay:initialize()
-    self.time = { }
-    self.speed = 2
-    self.totalCats = 8
-    self.entities = { }
-    self.elapsedTime = 0
-    self.streetPosition = 0
-    self.backgroundPosition = 0
-    self.width = screenWidth
-    self.height = screenHeight
-    self.type = States.Gameplay
-    self.threshold = -(self.width - 1)
-
-    self.street = animateFactory:CreateTileSet("Street")
-    self.street.SetImageWrap('repeat', 'clampzero')
-
-    self.background = animateFactory:CreateTileSet('Background')
-    self.background.SetImageWrap('repeat', 'clampzero')
-
-    self.bar = love.graphics.newQuad(0, 0, 122, 20, 122, 42)
-    self.barbg = love.graphics.newQuad(0, 21, 122, 20, 122, 42)
-
-    self.bgMusic = resources:LoadMusic("PP_Silly_Goose_FULL_Loop")
-    self.bgMusic:setLooping(true)
-    self.bgMusic:play()
-
-    self.backgroundHandler = BackgroundHandler:new()
-
-    Gameplay.createEntities(self)
-    love.graphics.setFont(menuFont)
-end
-
-function Gameplay:draw()
-    self.background.DrawScroll(1, 0, 0, self.backgroundPosition)
-    self.street.DrawScroll(1, 0, 126, self.streetPosition)
-    self.backgroundHandler:draw()
-    self:drawEntities()
-    self:drawUI()
-end
-
-function Gameplay:createEntities()
-    player = Player:new()
-    entityController:addEntity(player)
-    for _=1, self.totalCats, 1 do entityController:addEntity(Cat:new()) end
-end
-
-function Gameplay:reset()
-    pause = false
-    unpause = false
-    player:reset()
-    entityController:reset()
-    self.backgroundHandler:reset()
-end
-
-function Gameplay:drawUI()
-    love.graphics.setColor(0, 0, 0)
-    love.graphics.print(table.concat(self.time), self.width - 75, 5)
-    love.graphics.setColor(1, 1, 1)
-end
-
-function Gameplay:updateBackground(dt)
-    self.backgroundHandler:update()
-    self.streetPosition = self.streetPosition - self.speed
-    self.backgroundPosition = self.backgroundPosition - 1
-end
-
-function Gameplay:checkForReset(dt)
-    kittenMod = kittenMod + dt
-    animalControlMod = animalControlMod + dt
-    self.elapsedTime = self.elapsedTime + dt
-end
-
-function Gameplay:Fail()
-    pause = true
-end
-
-function Gameplay:checkPauseState(dt)
-    if pause and unpause then self:reset() end
-
-    if pause then
-        pauseTime = pauseTime + dt
-        if pauseTime > 1.5 then
-            unpause = true
-            pauseTime = 0
-
-            currTime = self.elapsedTime
-            self.elapsedTime = 0
-
-            self.bgMusic:stop()
-            StateMachine:push(States.FailMenu)
+local function check_for_enemy_spawn(dt)
+    enemy_mod = enemy_mod + dt
+    local integral, _ = math.modf(enemy_mod)
+    if integral == enemy_factor then
+        enemy_mod = 0
+        if current_enemies ~= total_enemies then
+            current_enemies = current_enemies + 1
+            enemy_factor = love.math.random(1, 5)
+            EntityController.AddEntity(EntityTypes.Enemy)
         end
     end
 end
 
 function Gameplay:update(dt)
-    self:checkPauseState(dt)
-    self:checkForReset(dt)
+    if not self.pause then
+        check_for_kitten_spawn(dt)
+        check_for_enemy_spawn(dt)
+        EntityController.Update(dt)
+    end
 
-    self.time = { string.format("%.2f", self.elapsedTime), "s" }
-
-    checkForAnimalControlSpawn(self)
-    checkForKittenSpawn(self)
-
-    if moveCamera then self:updateBackground(dt) end
-
-    entityController:update(dt)
+    if moving then
+        update_background(self)
+    end
 end
 
 function Gameplay:exit()
-    self.bgMusic:stop()
-    entityController:clear()
+    self.background_music:stop()
+    EntityController.Clear()
 end
 
-function Gameplay:enter() self.bgMusic:play() end
-function Gameplay:pause() self.bgMusic:pause() end
-function Gameplay:unpause() self.bgMusic:play() end
-function Gameplay:drawEntities() entityController:draw() end
-function Gameplay:drawBackground() love.graphics.draw(self.batch) end
-function Gameplay:removeKitten(kitten) entityController:removeEntity(kitten) end
+function Gameplay:draw()
+    self.background.DrawScroll(1, 0, 0, self.background_position)
+    self.street.DrawScroll(1, 0, 126, self.street_position)
+    BackgroundHandler.Draw()
+    EntityController.Draw()
+    love.graphics.draw(love.graphics.newText(menuFont, "Score: "..points), 5, 0)
+end
+
+function Gameplay:enter()
+    BackgroundHandler.Initialize()
+
+    self.background_music:setLooping(true)
+    self.background_music:play()
+
+    self.street = AnimationFactory.CreateTileSet("Street")
+    self.street.SetImageWrap("repeat", "clampzero")
+
+    self.background = AnimationFactory.CreateTileSet("Background")
+    self.background.SetImageWrap("repeat", "clampzero")
+
+    points = 0
+    enemy_mod = 0
+    total_cats = 8
+    kitten_mod = 0
+    current_cats = 0
+    total_enemies = 2
+    current_enemies = 0
+    enemy_factor = love.math.random(1, 5)
+    kitten_factor = love.math.random(5, 15)
+
+    EntityController.AddEntity(EntityTypes.Player)
+
+    for _=1, total_cats, 1 do
+        current_cats = current_cats + 1
+        EntityController.AddEntity(EntityTypes.Cat)
+    end
+end
+
+function Gameplay:input(key)
+    if not self.pause then
+        if key == InputMap.menu then
+            self.pause = true
+            self.background_music:pause()
+            MenuStateMachine:push(GameMenus.PauseMenu)
+        end
+    else
+        if self.pause and MenuStateMachine:count() == 0 then
+            self.pause = false
+            self.background_music:play()
+        end
+    end
+end
+
+return Gameplay

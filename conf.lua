@@ -4,7 +4,7 @@ function love.conf(t)
     t.window.width = 320
     t.window.height = 240
     t.window.title = "On Your Tail"
-    t.window.icon = "data/sprites/images/game.png"
+    t.window.icon = "data/images/game.png"
 
     t.modules.touch = false
     t.modules.video = false

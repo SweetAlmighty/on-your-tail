@@ -1,122 +1,110 @@
+require("src/tools/input")
+local Player = require("src/entities/entity"):extend()
 
-Player = class('Player', Entity)
+function Player:new()
+    Player.super.new(self, EntityTypes.Player)
 
-moveCamera = false
+    self.speed = 2
+    self.fail_time = 1.5
+    self.start_fail_time = 0
+    self.interacting = false
+    self.start_fail_state = false
+    self.position = { x = playable_area.x, y = 180 }
+end
 
-local setState = function(player, state)
-    if player.state ~= state then
-        player.state = state
+function Player:collision_enter(other)
+    if Player.super.collision_enter(self, other) then
+        if other.type == EntityTypes.Enemy then
+            moving = false
+            self.start_fail_state = true
+            self:set_state(EntityStates.Fail)
+        end
     end
 end
 
-local previousState = nil
-local processAnims = function(dt, player)
-    if previousState ~= player.state then
-        Entity.resetAnim(player, player.state)
-        previousState = player.state
+function Player:collision_exit(other)
+    if Player.super.collision_exit(self, other) then
+        if #self.collisions == 0 and self.state == EntityStates.Action then
+            self:end_interaction()
+        end
     end
 end
 
-function Player:initialize()
-    Entity.initialize(self, EntityTypes.PLAYER, EntityStates.IDLE, 120)
-    Entity.setPosition(self, {50, 150})
+function Player:end_interaction(dt)
+    current_points = 0
+    self.interacting = false
+    self:set_state(EntityStates.Idle)
+    for _, v in ipairs(self.collisions) do
+        if v.current_state ~= EntityStates.Fail then
+            v:end_interaction()
+        end
+    end
+end
 
-    local info = animateFactory:CreateAnimationSet("character")
-    local animats = info[1]
+function Player:interact(dt)
+    local valid = 0
+    if #self.collisions > 0 then
+        for _, v in ipairs(self.collisions) do
+            if v.current_state ~= EntityStates.Fail then
+                valid = valid + 1
+                v:interact()
+            end
+        end
 
-    self.failState = animats[4]
+        points = points + valid
+    end
 
-    Entity.setAnims(self, {
-        animats[1],
-        animats[2],
-        animats[3],
-        animats[4],
-        info[1].Colliders
-    })
+    local should_interact = (valid ~= 0)
 
-    self.delta = { x = 0, y = 0 }
+    if should_interact and not self.interacting then
+        self.interacting = true
+        self:set_state(EntityStates.Action)
+    elseif not should_interact and self.interacting then
+        self.interacting = false
+        self:set_state(EntityStates.Idle)
+    end
 end
 
 function Player:update(dt)
-    speed = (self.interacting) and 0 or 2
-    self.speed = (self.interacting) and 0 or 120
-    moveCamera = ((self.x == playableArea.width) and allowCameraMove)
+    local dx, dy = 0, 0
 
-    processAnims(dt, self)
-
-    Entity.update(self, dt)
-end
-
-function Player:move(x, y)
-    if self.state == EntityStates.FAIL then return end
-
-    if self.interacting then
-        allowCameraMove = false
-        return
-    end
-
-    allowCameraMove = (x ~= 0)
-    if x ~= 0 then self.direction = (x < 0) and Directions.W or Directions.E end
-
-    local moving = x ~= 0 or y ~= 0
-    setState(self, moving and EntityStates.MOVING or EntityStates.IDLE)
-
-    self.delta.x = self.speed * x
-    self.delta.y = self.speed * y
-
-    if moving then Entity.move(self, self.x + self.delta.x, self.y + self.delta.y) end
-end
-
-function Player:reset()
-    setState(self, EntityStates.IDLE)
-    Entity.reset(self, { 50, 150 })
-end
-
-function Player:petCats(dt)
-    if self.state == EntityStates.FAIL then return end
-
-    if #self.collisions ~= 0 then
-        self:startInteraction();
-        for i=1, #self.collisions, 1 do
-            self.collisions[i]:startInteraction()
+    if self.current_state == EntityStates.Fail then
+        if self.start_fail_state then
+            self.start_fail_time = self.start_fail_time + dt
+            if self.start_fail_time > self.fail_time then
+                self.start_fail_state = false
+                MenuStateMachine:push(GameMenus.FailMenu)
+            end
         end
-    end
-end
-
-function Player:stopPettingCats(dt)
-    if self.state == EntityStates.FAIL then return end
-
-    if #self.collisions ~= 0 then
-        self:finishInteraction();
-        for i=1, #self.collisions, 1 do
-            self.collisions[i]:finishInteraction()
+    else
+        if love.keyboard.isDown(InputMap.b) then
+            self:interact(dt)
+        elseif self.interacting then
+            self:end_interaction()
         end
+
+        if self.current_state ~= EntityStates.Action then
+            if love.keyboard.isDown(InputMap.up) then dy = -self.speed
+            elseif love.keyboard.isDown(InputMap.down) then dy = self.speed end
+
+            if love.keyboard.isDown(InputMap.right) then
+                dx = self.speed
+                self:set_direction(1)
+            elseif love.keyboard.isDown(InputMap.left) then
+                dx = -self.speed
+                self:set_direction(-1)
+            end
+
+            local shouldMove = dx ~= 0 or dy ~= 0
+            if shouldMove then self:move(dx, dy) end
+            self:set_state(shouldMove and EntityStates.Moving or EntityStates.Idle)
+        end
+
+        local pos = self.position
+        moving = (pos.x == screen_width/2 and dx ~= 0)
     end
+
+    Player.super.update(self, dt)
 end
 
-function Player:setFailState()
-    allowCameraMove = false
-    setState(self, EntityStates.FAIL)
-end
-
-function Player:startInteraction()
-    self.interacting = true
-    setState(player, EntityStates.INTERACT)
-end
-
-function Player:finishInteraction()
-    if #self.collisions == 0 then
-        self.interacting = false
-        setState(player, EntityStates.IDLE)
-    end
-end
-
-function Player:draw() Entity.draw(self) end
-
-function Player:collisionEnter(other)
-    Entity.collisionEnter(self, other)
-    if other.type == EntityTypes.ANIMALCONTROL then
-        StateMachine:current().Fail()
-        self:setFailState()
-    end
-end
+return Player

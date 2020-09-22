@@ -1,135 +1,31 @@
-require "src/entities/entity"
-require "src/gameplay/interactButton"
+local Cat = require("src/entities/npc"):extend()
 
-Cat = class("Cat", Entity)
+function Cat:new(type)
+    Cat.super.new(self, type)
 
-local time = 0
-local shouldUpdate = false
-
-catType = { 1, 2, 3, 4, 5, 6, 7, 8 }
-
-local processMovement = function(cat)
-    local _x = (cat.x + (cat.speed * cat.direction.x))
-    local _y = (cat.y + (cat.speed * cat.direction.y))
-
-    if cat.state == EntityStates.INTERACT then
-        -- Maintain sitting position
-        _x = moveCamera and (cat.x - speed) or (cat.x)
-        _y = cat.y
-    else
-        -- Move relative to the player, if the camera is moving
-        if moveCamera then
-            local deltaX = (cat.direction.x * player.delta.x)
-            if cat.direction.x ~= -1 then deltaX = -player.delta.x end
-            _x = _x + deltaX
-        end
-    end
-
-    Entity.move(cat, _x, _y)
-    if cat.x < (-cat.width) then
-        if cat.type == EntityTypes.KITTEN then
-            StateMachine:current():removeKitten(cat)
-        else
-            cat:reset()
-        end
-    end
-end
-
-local beginOffscreenTransition = function (cat)
-    cat.limit = -1
-    cat.state = EntityStates.MOVING
-    Entity.resetAnim(cat, cat.state)
-    cat.direction = Directions.W
-end
-
-local beingPettingTransition = function (cat)
-    cat.state = EntityStates.INTERACT
-    Entity.resetAnim(cat, cat.state)
-end
-
-local processAnims = function(dt, cat)
-    if not cat.interacting then
-        time = time + dt
-
-        if time > 1 and cat.limit > 0 then
-            time = 0
-            cat.state = lume.randomchoice({EntityStates.INTERACT, EntityStates.MOVING})
-            if cat.state == EntityStates.MOVING then
-                cat.direction = lume.randomchoice(DirectionsIndices)
-            end
-            shouldUpdate = true
-        end
-
-        if shouldUpdate then
-            Entity.resetAnim(cat, cat.state)
-            shouldUpdate = false
-        end
-    end
-end
-
-function randomPosition()
-    return { love.math.random(screenWidth, screenWidth * 2),
-        love.math.random(playableArea.y, playableArea.height) }
-end
-
-function Cat:initialize()
-    Entity.initialize(self, EntityTypes.CAT, EntityStates.IDLE, 1)
-    Entity.setPosition(self, randomPosition())
-
-    local type = lume.randomchoice(catType)
-    local info = animateFactory:CreateAnimationSet("cats")
-    local animats = info[type]
-
-    Entity.setAnims(self, {
-        animats[1],
-        animats[2],
-        animats[3],
-        info[type].Colliders
-    })
-
-    self.limit = catLimit
-    self.button = InteractButton:new()
-end
-
-function Cat:draw()
-    Entity.draw(self)
-    local currFrame = self.currentAnim.CurrentFrame()
-    local offset = currFrame.offset == nil and { x=0, y=0 } or currFrame.offset
-    if self.interactable and self.limit > 0 then
-        self.button:draw(self.x - offset.x, self.y - offset.y)
-    end
+    self.petting_limit = 30
+    self.current_limit = self.petting_limit
 end
 
 function Cat:reset()
-    self.limit = catLimit
-    Entity.reset(self, randomPosition())
+    Cat.super.reset(self)
+    self.current_limit = self.petting_limit
 end
 
 function Cat:update(dt)
-    if self.interacting then
-        self.button:update(dt)
-        self.limit = self.limit - (dt * 10)
-        if self.limit < 0 and self.interacting then
-            self.limit = 0
-            self:finishInteraction()
-            self.interactable = false
-            self.skipCollisions = true
-        end
-    else processMovement(self) end
-
-    processAnims(dt, self)
-
-    Entity.update(self, dt)
+    self:npc_update(dt)
 end
 
-function Cat:startInteraction()
-    self.interacting = true
-    beingPettingTransition(self)
+function Cat:action_update(dt)
+    self.current_limit = self.current_limit - (dt * 10)
+    if self.current_limit < 0 then self:end_interaction() end
 end
 
-function Cat:finishInteraction()
-    self.button:reset()
-    self.interacting = false
-    self.interactable = false
-    beginOffscreenTransition(self)
+function Cat:end_interaction()
+    self.current_limit = 0
+    self:set_direction(-1)
+    self:set_state(EntityStates.Fail)
+    self.destination = { x = -100, y = self.position.y }
 end
+
+return Cat
