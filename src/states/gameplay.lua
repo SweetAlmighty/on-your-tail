@@ -1,5 +1,5 @@
-require("src/tools/backgroundHandler")
-require("src/entities/entityController")
+require("src/tools/backgroundhandler")
+require("src/entities/entitycontroller")
 
 points = 0
 moving = false
@@ -19,7 +19,6 @@ local Gameplay = {
     background = { },
     street_position = 0,
     background_position = 0,
-    background_music = Resources.LoadMusic("PP_Silly_Goose_FULL_Loop")
 }
 
 local function update_background(self)
@@ -67,7 +66,7 @@ function Gameplay:update(dt)
 end
 
 function Gameplay:exit()
-    self.background_music:stop()
+    background_music:stop()
     EntityController.Clear()
 end
 
@@ -82,13 +81,12 @@ end
 function Gameplay:enter()
     BackgroundHandler.Initialize()
 
-    self.background_music:setLooping(true)
-    self.background_music:play()
+    background_music:play()
 
-    self.street = AnimationFactory.CreateTileSet("Street")
+    self.street = AnimationFactory.CreateTileSet("street")
     self.street.SetImageWrap("repeat", "clampzero")
 
-    self.background = AnimationFactory.CreateTileSet("Background")
+    self.background = AnimationFactory.CreateTileSet("background")
     self.background.SetImageWrap("repeat", "clampzero")
 
     points = 0
@@ -113,13 +111,13 @@ function Gameplay:input(key)
     if not self.pause then
         if key == InputMap.menu then
             self.pause = true
-            self.background_music:pause()
+            background_music:pause()
             MenuStateMachine:push(GameMenus.PauseMenu)
         end
     else
         if self.pause and MenuStateMachine:count() == 0 then
             self.pause = false
-            self.background_music:play()
+            background_music:play()
         end
     end
 end

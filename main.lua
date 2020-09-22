@@ -1,6 +1,6 @@
 require("src/menus/menu")
 require("src/tools/utility")
-require("src/tools/saveData")
+require("src/tools/savedata")
 require("src/tools/resources")
 require("src/tools/animationfactory")
 
@@ -18,6 +18,8 @@ lovesize = require("src/lib/lovesize")
 menuFont = Resources.LoadFont("8bitOperatorPlusSC-Bold", 15)
 titleFont = Resources.LoadFont("8bitOperatorPlusSC-Bold", 50)
 
+background_music = Resources.LoadMusic("PP_Silly_Goose_FULL_Loop")
+
 function love.draw()
     love.graphics.clear(color, color, color)
     lovesize.begin()
@@ -29,6 +31,7 @@ end
 function love.load(arg)
     Data.Initialize()
     tick.framerate = 60
+    background_music:setLooping(true)
     lovesize.set(screen_width, screen_height)
     StateMachine:push(GameStates.SplashScreen)
     math.randomseed(os.time() + tonumber(tostring({}):sub(8)))

@@ -1,5 +1,5 @@
 local Gameplay = require("src/states/gameplay")
-local SplashScreen = require("src/states/splashScreen")
+local SplashScreen = require("src/states/splashscreen")
 
 GameStates = { SplashScreen = 1, Gameplay = 2 }
 

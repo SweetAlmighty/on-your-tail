@@ -72,6 +72,7 @@ function Player:update(dt)
         if self.start_fail_state then
             self.start_fail_time = self.start_fail_time + dt
             if self.start_fail_time > self.fail_time then
+                background_music:pause()
                 self.start_fail_state = false
                 MenuStateMachine:push(GameMenus.FailMenu)
             end

@@ -5,7 +5,7 @@ local ExtrasMenu = require("src/menus/extrasmenu")
 local CreditsMenu = require("src/menus/creditsmenu")
 local OptionsMenu = require("src/menus/optionsmenu")
 local ControlsMenu = require("src/menus/controlsmenu")
-local SetScoreMenu = require("src/menus/setScoremenu")
+local SetScoreMenu = require("src/menus/setscoremenu")
 local HighscoreMenu = require("src/menus/highscoremenu")
 
 GameMenus = {
